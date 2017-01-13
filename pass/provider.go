@@ -1,6 +1,8 @@
 package pass
 
 import (
+	"os"
+
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 )
@@ -16,8 +18,16 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 
+		ConfigureFunc: providerConfigure,
+
 		DataSourcesMap: map[string]*schema.Resource{
 			"pass_password": passwordDataSource(),
 		},
 	}
+}
+
+func providerConfigure(d *schema.ResourceData) (interface{}, error) {
+	os.Setenv("PASSWORD_STORE_DIR", d.Get("store_dir").(string))
+
+	return nil, nil
 }
