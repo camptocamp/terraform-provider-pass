@@ -47,6 +47,8 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	data_raw := string(output)
 
+	d.SetId(path)
+
 	d.Set("data_row", data_raw)
 
 	var data map[string]string
@@ -55,7 +57,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("error unmarshaling data_row")
 	}
 	d.Set("data", data)
-	log.Printf("[DEBUG] data = %v", d.Get("data"))
+	log.Printf("[DEBUG] data (id=%s) = %v", d.Id(), d.Get("data"))
 
 	return nil
 }
