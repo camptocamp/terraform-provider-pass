@@ -55,6 +55,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 		return fmt.Errorf("error unmarshaling data_row")
 	}
 	d.Set("data", data)
+	log.Printf("[DEBUG] data = %v", d.Get("data"))
 
 	return nil
 }
