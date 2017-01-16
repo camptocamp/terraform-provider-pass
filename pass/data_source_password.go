@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -38,6 +39,7 @@ func passwordDataSource() *schema.Resource {
 func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
+	log.Printf("[DEBUG] Using PASSWORD_STORE_DIR=%v", os.Getenv("PASSWORD_STORE_DIR"))
 	log.Printf("[DEBUG] Reading %s from Pass", path)
 	output, err := exec.Command("pass", path).Output()
 	if err != nil {
