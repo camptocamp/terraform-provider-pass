@@ -1,6 +1,7 @@
 package pass
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os/exec"
@@ -38,12 +39,19 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
 	log.Printf("[DEBUG] Reading %s from Pass", path)
-	password, err := exec.Command("pass", path).Output()
+	output, err := exec.Command("pass", path).Output()
 	if err != nil {
 		return fmt.Errorf("error reading from Pass: %s", err)
 	}
-	d.Set("data_row", string(password))
+	data_raw := string(output)
 
+	d.Set("data_row", data_raw)
+
+	var data map[string]interface{}
+
+	if err := json.Unmarshal(output, &data); err != nil {
+		return fmt.Errorf("error unmarshaling data_row")
+	}
 
 	return nil
 }
