@@ -47,7 +47,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("data_row", data_raw)
 
-	var data map[string]interface{}
+	var data map[string]string
 
 	if err := json.Unmarshal(output, &data); err != nil {
 		return fmt.Errorf("error unmarshaling data_row")
