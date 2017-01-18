@@ -50,6 +50,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	d.SetId(path)
 
 	d.Set("data_row", data_raw)
+	log.Printf("[DEBUG] data_row (id=%s) = %v", d.Id(), d.Get("data_row"))
 
 	var data map[string]string
 
