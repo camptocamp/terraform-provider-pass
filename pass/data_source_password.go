@@ -21,7 +21,7 @@ func passwordDataSource() *schema.Resource {
 				Description: "Full path from which a password will be read.",
 			},
 
-			"data_row": &schema.Schema{
+			"data_raw": &schema.Schema{
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "String read from Pass.",
@@ -49,14 +49,14 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(path)
 
-	d.Set("data_row", data_raw)
-	log.Printf("[DEBUG] data_row (id=%s) = %v", d.Id(), d.Get("data_row"))
+	d.Set("data_raw", data_raw)
+	log.Printf("[DEBUG] data_raw (id=%s) = %v", d.Id(), d.Get("data_raw"))
 
 	var data map[string]string
 
 	if err := json.Unmarshal(output, &data); err != nil {
-		log.Printf("[WARNING] error unmarshaling data_row")
-		d.Set("data", d.Get("data_row"))
+		log.Printf("[WARNING] error unmarshaling data_raw")
+		d.Set("data", d.Get("data_raw"))
 	} else {
 		d.Set("data", data)
 	}
