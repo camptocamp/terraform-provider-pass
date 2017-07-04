@@ -1,3 +1,9 @@
+## 0.1.4 (Jul 4, 2017)
+
+FEATURES:
+
+* provider: refresh password store by default
+
 ## 0.1.3 (Jul 4, 2017)
 
 FEATURES:
