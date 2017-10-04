@@ -47,7 +47,7 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 
 	st := meta.(*root.Store)
 
-	passwd := d.Get("passwd").(string)
+	passwd := d.Get("password").(string)
 
 	data := d.Get("data").(map[string]interface{})
 	dataYaml, err := yaml.Marshal(&data)
