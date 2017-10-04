@@ -2,6 +2,7 @@ package pass
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"gopkg.in/yaml.v2"
@@ -55,7 +56,7 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 		return errors.Wrapf(err, "failed to marshal data as YAML for %s", path)
 	}
 
-	sec := secret.New(passwd, string(dataYaml))
+	sec := secret.New(passwd, fmt.Sprintf("---\n%s", dataYaml))
 	err = st.Set(context.Background(), path, sec)
 	if err != nil {
 		return errors.Wrapf(err, "failed to write secret at %s", path)
