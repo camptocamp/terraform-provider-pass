@@ -29,9 +29,10 @@ var testResourcePassword_initialConfig = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
-    data = <<EOT
-{"zip": "zap"}
-EOT
+	password = "0123456789"
+    data = {
+        zip = "zap"
+	}
 }
 
 `
@@ -63,9 +64,10 @@ var testResourcePassword_updateConfig = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
-    data = <<EOT
-{"zip": "zoop"}
-EOT
+	password = "012345678"
+    data = {
+        zip = "zoop"
+	}
 }
 
 `

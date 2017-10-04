@@ -2,7 +2,6 @@ package pass
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 
 	"github.com/hashicorp/terraform/helper/schema"
@@ -21,16 +20,16 @@ func passwordDataSource() *schema.Resource {
 				Description: "Full path from which a password will be read.",
 			},
 
-			"data_raw": &schema.Schema{
+			"password": &schema.Schema{
 				Type:        schema.TypeString,
 				Computed:    true,
-				Description: "String read from Pass.",
+				Description: "secret password.",
 			},
 
 			"data": &schema.Schema{
 				Type:        schema.TypeMap,
 				Computed:    true,
-				Description: "Map of strings read from Pass.",
+				Description: "additional secret data.",
 			},
 		},
 	}
@@ -47,22 +46,10 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 		return errors.Wrapf(err, "failed to read password at %s", path)
 	}
 
-	data_raw := sec.String()
-
 	d.SetId(path)
 
-	d.Set("data_raw", data_raw)
-	log.Printf("[DEBUG] data_raw (id=%s) = %v", d.Id(), d.Get("data_raw"))
-
-	var data map[string]string
-
-	if err := json.Unmarshal([]byte(data_raw), &data); err != nil {
-		log.Printf("[WARNING] error unmarshaling data_raw")
-		d.Set("data", d.Get("data_raw"))
-	} else {
-		d.Set("data", data)
-	}
-	log.Printf("[DEBUG] data (id=%s) = %v", d.Id(), d.Get("data"))
+	d.Set("password", sec.Password())
+	d.Set("data", sec.Data())
 
 	return nil
 }

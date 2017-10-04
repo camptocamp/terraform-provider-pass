@@ -4,6 +4,8 @@ import (
 	"context"
 	"log"
 
+	"gopkg.in/yaml.v2"
+
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/justwatchcom/gopass/store/root"
 	"github.com/justwatchcom/gopass/store/secret"
@@ -22,15 +24,19 @@ func passPasswordResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Full path where the pass password will be written.",
+				Description: "Full path where the pass data will be written.",
 			},
 
-			// Data is passed as JSON so that an arbitrary structure is
-			// possible, rather than forcing e.g. all values to be strings.
-			"data": &schema.Schema{
+			"password": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "JSON-encoded secret data to write.",
+				Description: "secret password.",
+			},
+
+			"data": &schema.Schema{
+				Type:        schema.TypeMap,
+				Optional:    true,
+				Description: "additional secret data.",
 			},
 		},
 	}
@@ -40,9 +46,14 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
 	st := meta.(*root.Store)
-	data := d.Get("data").(string)
-	sec := secret.New("", data)
-	err := st.Set(context.Background(), path, sec)
+
+	passwd := d.Get("passwd").(string)
+
+	data := d.Get("data").(map[string]interface{})
+	dataYaml, err := yaml.Marshal(&data)
+
+	sec := secret.New(passwd, string(dataYaml))
+	err = st.Set(context.Background(), path, sec)
 	if err != nil {
 		return errors.Wrapf(err, "failed to write secret at %s", path)
 	}
@@ -74,7 +85,8 @@ func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
 		errors.Wrapf(err, "failed to retrieve password at %s", path)
 	}
 
-	d.Set("data", sec.Body())
+	d.Set("password", sec.Password())
+	d.Set("data", sec.Data())
 
 	return nil
 }
