@@ -1,13 +1,13 @@
 package pass
 
 import (
+	"context"
 	"encoding/json"
-	"fmt"
 	"log"
-	"os"
-	"os/exec"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/justwatchcom/gopass/store/root"
+	"github.com/pkg/errors"
 )
 
 func passwordDataSource() *schema.Resource {
@@ -39,13 +39,15 @@ func passwordDataSource() *schema.Resource {
 func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
-	log.Printf("[DEBUG] Using PASSWORD_STORE_DIR=%v", os.Getenv("PASSWORD_STORE_DIR"))
+	st := meta.(*root.Store)
 	log.Printf("[DEBUG] Reading %s from Pass", path)
-	output, err := exec.Command("pass", path).Output()
+
+	sec, err := st.Get(context.Background(), path)
 	if err != nil {
-		return fmt.Errorf("error reading from Pass: %s", err)
+		return errors.Wrapf(err, "failed to read password at %s", path)
 	}
-	data_raw := string(output)
+
+	data_raw := sec.String()
 
 	d.SetId(path)
 
@@ -54,7 +56,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 
 	var data map[string]string
 
-	if err := json.Unmarshal(output, &data); err != nil {
+	if err := json.Unmarshal([]byte(data_raw), &data); err != nil {
 		log.Printf("[WARNING] error unmarshaling data_raw")
 		d.Set("data", d.Get("data_raw"))
 	} else {

@@ -1,13 +1,13 @@
 package pass
 
 import (
-	"fmt"
-	"io"
+	"context"
 	"log"
-	"os"
-	"os/exec"
 
 	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/justwatchcom/gopass/store/root"
+	"github.com/justwatchcom/gopass/store/secret"
+	"github.com/pkg/errors"
 )
 
 func passPasswordResource() *schema.Resource {
@@ -39,24 +39,13 @@ func passPasswordResource() *schema.Resource {
 func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
-	log.Printf("[DEBUG] Writing pass Password secret to %s", path)
-	subProcess := exec.Command("pass", "insert", "-e", path)
-
-	stdin, err := subProcess.StdinPipe()
+	st := meta.(*root.Store)
+	data := d.Get("data").(string)
+	sec := secret.New("", data)
+	err := st.Set(context.Background(), path, sec)
 	if err != nil {
-		return fmt.Errorf("Fail to acquire stdin : %v", err)
+		return errors.Wrapf(err, "failed to write secret at %s", path)
 	}
-	defer stdin.Close()
-
-	subProcess.Stdout = os.Stdout
-	subProcess.Stderr = os.Stderr
-
-	if err = subProcess.Start(); err != nil {
-		return fmt.Errorf("Fail to run command : %v", err)
-	}
-
-	io.WriteString(stdin, fmt.Sprintf("%s\n", d.Get("data")))
-	subProcess.Wait()
 
 	d.SetId(path)
 
@@ -66,13 +55,26 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
+	st := meta.(*root.Store)
 	log.Printf("[DEBUG] Deleting generic Vault from %s", path)
-	exec.Command("pass", "rm", path)
+	err := st.Delete(context.Background(), path)
+	if err != nil {
+		return errors.Wrapf(err, "failed to delete password at %s", path)
+	}
 
 	return nil
 }
 
 func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[WARN] pass_password does not automatically refresh")
+	path := d.Id()
+
+	st := meta.(*root.Store)
+	sec, err := st.Get(context.Background(), path)
+	if err != nil {
+		errors.Wrapf(err, "failed to retrieve password at %s", path)
+	}
+
+	d.Set("data", sec.Body())
+
 	return nil
 }
