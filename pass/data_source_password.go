@@ -31,6 +31,12 @@ func passwordDataSource() *schema.Resource {
 				Computed:    true,
 				Description: "additional secret data.",
 			},
+
+			"body": &schema.Schema{
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "raw secret data if not YAML.",
+			},
 		},
 	}
 }
@@ -50,6 +56,7 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("password", sec.Password())
 	d.Set("data", sec.Data())
+	d.Set("body", sec.Body())
 
 	return nil
 }
