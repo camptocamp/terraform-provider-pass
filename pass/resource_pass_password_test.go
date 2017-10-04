@@ -29,9 +29,10 @@ var testResourcePassword_initialConfig = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
-    data = <<EOT
-{"zip": "zap"}
-EOT
+	password = "0123456789"
+    data = {
+        zip = "zap"
+	}
 }
 
 `
@@ -56,6 +57,14 @@ func testResourcePassword_initialCheck(s *terraform.State) error {
 		return fmt.Errorf("unexpected secret path")
 	}
 
+	if got, want := instanceState.Attributes["password"], "0123456789"; got != want {
+		return fmt.Errorf("data contains %s; want %s", got, want)
+	}
+
+	if got, want := instanceState.Attributes["data.zip"], "zap"; got != want {
+		return fmt.Errorf("data contains %s; want %s", got, want)
+	}
+
 	return nil
 }
 
@@ -63,9 +72,10 @@ var testResourcePassword_updateConfig = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
-    data = <<EOT
-{"zip": "zoop"}
-EOT
+	password = "012345678"
+    data = {
+        zip = "zoop"
+	}
 }
 
 `

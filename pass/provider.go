@@ -1,13 +1,16 @@
 package pass
 
 import (
-	"fmt"
+	"context"
 	"log"
 	"os"
-	"os/exec"
 
+	"github.com/blang/semver"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
+	"github.com/justwatchcom/gopass/action"
+	"github.com/justwatchcom/gopass/config"
+	"github.com/pkg/errors"
 )
 
 func Provider() terraform.ResourceProvider {
@@ -42,14 +45,17 @@ func Provider() terraform.ResourceProvider {
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	os.Setenv("PASSWORD_STORE_DIR", d.Get("store_dir").(string))
 
+	ctx := context.Background()
+	act := action.New(ctx, config.Load(), semver.Version{})
+	st := act.Store
+
 	if d.Get("refresh_store").(bool) {
 		log.Printf("[DEBUG] Pull pass repository")
-		output, err := exec.Command("pass", "git", "pull").Output()
+		err := st.Git(ctx, "", false, false, "pull")
 		if err != nil {
-			return nil, fmt.Errorf("error refreshing password store: %s", err)
+			return nil, errors.Wrap(err, "error refreshing password store")
 		}
-		log.Printf("[DEBUG] output: %s", string(output))
 	}
 
-	return nil, nil
+	return st, nil
 }

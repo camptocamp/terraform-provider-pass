@@ -24,7 +24,10 @@ var testDataSourcePassword_config = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
-    data = "{\"zip\": \"zap\"}"
+	password = "0123456789"
+    data = {
+	  zip = "zap"
+    }
 }
 
 data "pass_password" "test" {
@@ -44,13 +47,12 @@ func testDataSourcePassword_check(s *terraform.State) error {
 		return fmt.Errorf("resource has no primary instance")
 	}
 
-	wantJson := "{\"zip\": \"zap\"}\n"
-	if got, want := iState.Attributes["data_raw"], wantJson; got != want {
+	if got, want := iState.Attributes["password"], "0123456789"; got != want {
 		return fmt.Errorf("data contains %s; want %s", got, want)
 	}
 
 	if got, want := iState.Attributes["data.zip"], "zap"; got != want {
-		return fmt.Errorf("data[\"zip\"] contains %s; want %s", got, want)
+		return fmt.Errorf("data contains %s; want %s", got, want)
 	}
 
 	return nil
