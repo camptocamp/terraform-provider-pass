@@ -26,7 +26,27 @@ $ make build
 
 Using the provider
 ----------------------
-## Fill in for each provider
+
+```hcl
+provider "pass" {
+  store_dir = "/srv/password-store"    # defaults to $PASSWORD_STORE_DIR
+  refresh_store = false                # do not call `git pull`
+}
+
+
+resource "pass_password" "test" {
+  path = "secret/foo"
+  password = "0123456789"
+  data = {
+    zip = "zap"
+  }
+}
+
+data "pass_password" "test" {
+  path = "${pass_password.test.path}"
+}
+```
+
 
 Developing the Provider
 ---------------------------
