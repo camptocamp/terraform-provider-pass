@@ -46,7 +46,11 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	os.Setenv("PASSWORD_STORE_DIR", d.Get("store_dir").(string))
 
 	ctx := context.Background()
-	act := action.New(ctx, config.Load(), semver.Version{})
+	act, err := action.New(ctx, config.Load(), semver.Version{})
+	if err != nil {
+		return nil, errors.Wrap(err, "error instantiating password store")
+	}
+
 	st := act.Store
 
 	if d.Get("refresh_store").(bool) {
