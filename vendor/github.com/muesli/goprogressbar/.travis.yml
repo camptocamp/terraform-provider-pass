@@ -1,0 +1,27 @@
+language: go
+
+os:
+  - linux
+  - osx
+
+go:
+  - 1.4
+  - 1.5.x
+  - 1.6.x
+  - 1.7.x
+  - 1.8.x
+  - 1.9.x
+  - tip
+
+before_install:
+  - go get github.com/axw/gocov/gocov
+  - go get github.com/mattn/goveralls
+
+script:
+  - go test -v -tags ci ./...
+  - $GOPATH/bin/goveralls -service=travis-ci -ignore="examples/singlebar/single.go,examples/multibar/multi.go"
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
