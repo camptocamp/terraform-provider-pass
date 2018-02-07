@@ -1,6 +1,9 @@
 Pass Terraform Provider
 =======================
 
+[Pass](https://www.passwordstore.org/) is a password store using gpg to encrypt password and git to version.
+[Gopass](https://www.justwatch.com/gopass/) is a rewrite of the pass password manager in Go with the aim of making it cross-platform and adding additional features.
+
 Requirements
 ------------
 
