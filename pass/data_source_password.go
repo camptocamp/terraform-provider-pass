@@ -54,9 +54,18 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.SetId(path)
 
-	d.Set("password", sec.Password())
-	d.Set("data", sec.Data())
-	d.Set("body", sec.Body())
+	if err := d.Set("password", sec.Password()); err != nil {
+		log.Printf("[ERROR] Error when setting password: %v", err)
+		return err
+	}
+	if err := d.Set("data", sec.Data()); err != nil {
+		log.Printf("[ERROR] Error when setting data: %v", err)
+		return err
+	}
+	if err := d.Set("body", sec.Body()); err != nil {
+		log.Printf("[ERROR] Error when setting body: %v", err)
+		return err
+	}
 
 	return nil
 }
