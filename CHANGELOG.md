@@ -1,3 +1,15 @@
+## 1.0.1 (Mar 5, 2018)
+
+BUG FIXES:
+
+* datasource/passwordReturn errors when setter fails
+
+## 1.0.0 (Oct 4, 2017)
+
+IMPROVEMENTS:
+
+* Port to gopass
+
 ## 0.1.4 (Jul 4, 2017)
 
 FEATURES:
