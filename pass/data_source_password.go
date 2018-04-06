@@ -37,6 +37,12 @@ func passwordDataSource() *schema.Resource {
 				Computed:    true,
 				Description: "raw secret data if not YAML.",
 			},
+
+			"full": &schema.Schema{
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "entire secret contents",
+			},
 		},
 	}
 }
@@ -64,6 +70,10 @@ func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	if err := d.Set("body", sec.Body()); err != nil {
 		log.Printf("[ERROR] Error when setting body: %v", err)
+		return err
+	}
+	if err := d.Set("full", sec.String()); err != nil {
+		log.Printf("[ERROR] Error when setting full: %v", err)
 		return err
 	}
 
