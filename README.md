@@ -33,7 +33,7 @@ Installing the provider
 
 After building the provider, install it using the Terraform instructions for [installing a third party provider](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins).
 
-Using the provider
+Example
 ----------------------
 
 ```hcl
@@ -56,6 +56,46 @@ data "pass_password" "test" {
 }
 ```
 
+Usage
+----------------------
+
+### The `pass` provider
+#### Argument Reference
+The provider takes the following arguments:
+- `store_dir` - (Optional) Path to your password store, defaults to `$PASSWORD_STORE_DIR`
+- `refresh_store` - (Optional) Boolean whether to call `git pull` when configuring the provider, defaults to `true`
+
+
+### The `pass_password` resource
+#### Argument Reference
+The resource takes the following arguments:
+- `path` - Full path from which a password will be read
+- `password` - Secret password
+- `data` - (Optional) Additional secret data
+
+#### Attribute Reference
+The following attributes are exported:
+
+- `path` - Full path from which the password was read
+- `password` - Secret password
+- `data` - Additional secret data
+- `body` - Raw secret data if not YAML
+- `full` - Entire secret contents
+
+
+### The `pass_password` data source
+#### Argument Reference
+The data source takes the following arguments:
+ - `path` - Full path from which a password will be read
+
+#### Attribute Reference
+The following attributes are exported:
+
+- `path` - Full path from which the password was read
+- `password` - Secret password
+- `data` - Additional secret data
+- `body` - Raw secret data if not YAML
+- `full` - Entire secret contents
 
 Developing the Provider
 ---------------------------
