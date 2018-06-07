@@ -1,8 +1,9 @@
 Pass Terraform Provider
 =======================
+This provider adds integration between Terraform and [Pass][] and [Gopass][] password stores.
 
-[Pass](https://www.passwordstore.org/) is a password store using gpg to encrypt password and git to version.
-[Gopass](https://www.justwatch.com/gopass/) is a rewrite of the pass password manager in Go with the aim of making it cross-platform and adding additional features.
+[Pass][] is a password store using gpg to encrypt password and git to version.
+[Gopass][] is a rewrite of the pass password manager in Go with the aim of making it cross-platform and adding additional features.
 
 Requirements
 ------------
@@ -26,6 +27,11 @@ $ cd $GOPATH/src/github.com/camptocamp/terraform-provider-pass
 $ dep ensure
 $ make build
 ```
+
+Installing the provider
+-----------------------
+
+After building the provider, install it using the Terraform instructions for [installing a third party provider](https://www.terraform.io/docs/configuration/providers.html#third-party-plugins).
 
 Using the provider
 ----------------------
@@ -78,3 +84,7 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 ```sh
 $ make testacc
 ```
+
+
+[Pass]: https://www.passwordstore.org/
+[Gopass]: https://www.justwatch.com/gopass/
