@@ -67,6 +67,28 @@ func TestInt(t *testing.T) {
 	assert.EqualValues(t, 8, *args.Ptr)
 }
 
+func TestNegativeInt(t *testing.T) {
+	var args struct {
+		Foo int
+	}
+	err := parse("-foo -100", &args)
+	require.NoError(t, err)
+	assert.EqualValues(t, args.Foo, -100)
+}
+
+func TestNegativeIntAndFloatAndTricks(t *testing.T) {
+	var args struct {
+		Foo int
+		Bar float64
+		N   int `arg:"--100"`
+	}
+	err := parse("-foo -100 -bar -60.14 -100 -100", &args)
+	require.NoError(t, err)
+	assert.EqualValues(t, args.Foo, -100)
+	assert.EqualValues(t, args.Bar, -60.14)
+	assert.EqualValues(t, args.N, -100)
+}
+
 func TestUint(t *testing.T) {
 	var args struct {
 		Foo uint
@@ -558,6 +580,60 @@ func TestEnvironmentVariableRequired(t *testing.T) {
 	assert.Equal(t, "bar", args.Foo)
 }
 
+func TestEnvironmentVariableSliceArgumentString(t *testing.T)  {
+	var args struct {
+		Foo []string `arg:"env"`
+	}
+	setenv(t, "FOO", "bar,\"baz, qux\"")
+	MustParse(&args)
+	assert.Equal(t, []string{"bar", "baz, qux"}, args.Foo)
+}
+
+func TestEnvironmentVariableSliceArgumentInteger(t *testing.T)  {
+	var args struct {
+		Foo []int `arg:"env"`
+	}
+	setenv(t, "FOO", "1,99")
+	MustParse(&args)
+	assert.Equal(t, []int{1, 99}, args.Foo)
+}
+
+func TestEnvironmentVariableSliceArgumentFloat(t *testing.T)  {
+	var args struct {
+		Foo []float32 `arg:"env"`
+	}
+	setenv(t, "FOO", "1.1,99.9")
+	MustParse(&args)
+	assert.Equal(t, []float32{1.1, 99.9}, args.Foo)
+}
+
+func TestEnvironmentVariableSliceArgumentBool(t *testing.T)  {
+	var args struct {
+		Foo []bool `arg:"env"`
+	}
+	setenv(t, "FOO", "true,false,0,1")
+	MustParse(&args)
+	assert.Equal(t, []bool{true, false, false, true}, args.Foo)
+}
+
+func TestEnvironmentVariableSliceArgumentWrongCsv(t *testing.T)  {
+	var args struct {
+		Foo []int `arg:"env"`
+	}
+	setenv(t, "FOO", "1,99\"")
+	err := Parse(&args)
+	assert.Error(t, err)
+}
+
+func TestEnvironmentVariableSliceArgumentWrongType(t *testing.T)  {
+	var args struct {
+		Foo []bool `arg:"env"`
+	}
+	setenv(t, "FOO", "one,two")
+	err := Parse(&args)
+	assert.Error(t, err)
+}
+
 type textUnmarshaler struct {
 	val int
 }
@@ -575,6 +651,32 @@ func TestTextUnmarshaler(t *testing.T) {
 	err := parse("--foo abc", &args)
 	require.NoError(t, err)
 	assert.Equal(t, 3, args.Foo.val)
+}
+
+func TestRepeatedTextUnmarshaler(t *testing.T) {
+	// fields that implement TextUnmarshaler should be parsed using that interface
+	var args struct {
+		Foo []*textUnmarshaler
+	}
+	err := parse("--foo abc d ef", &args)
+	require.NoError(t, err)
+	require.Len(t, args.Foo, 3)
+	assert.Equal(t, 3, args.Foo[0].val)
+	assert.Equal(t, 1, args.Foo[1].val)
+	assert.Equal(t, 2, args.Foo[2].val)
+}
+
+func TestPositionalTextUnmarshaler(t *testing.T) {
+	// fields that implement TextUnmarshaler should be parsed using that interface
+	var args struct {
+		Foo []*textUnmarshaler `arg:"positional"`
+	}
+	err := parse("abc d ef", &args)
+	require.NoError(t, err)
+	require.Len(t, args.Foo, 3)
+	assert.Equal(t, 3, args.Foo[0].val)
+	assert.Equal(t, 1, args.Foo[1].val)
+	assert.Equal(t, 2, args.Foo[2].val)
 }
 
 type boolUnmarshaler bool

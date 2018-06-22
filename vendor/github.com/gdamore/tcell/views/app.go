@@ -1,4 +1,4 @@
-// Copyright 2015 The Tcell Authors
+// Copyright 2018 The Tcell Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -121,6 +121,10 @@ func (app *Application) run() {
 		}
 		screen = app.screen
 	}
+	defer func() {
+		screen.Fini()
+		app.wg.Done()
+	}()
 	screen.Init()
 	screen.Clear()
 	widget.SetView(screen)
@@ -150,8 +154,6 @@ loop:
 			widget.HandleEvent(ev)
 		}
 	}
-	screen.Fini()
-	app.wg.Done()
 }
 
 // Start starts the application loop, initializing the screen

@@ -94,6 +94,21 @@ $ NUM_WORKERS=4 ./example
 Workers: 4
 ```
 
+You can provide multiple values using the CSV (RFC 4180) format:
+
+```go
+var args struct {
+    Workers []int `arg:"env"`
+}
+arg.MustParse(&args)
+fmt.Println("Workers:", args.Workers)
+```
+
+```
+$ WORKERS='1,99' ./example
+Workers: [1 99]
+```
+
 ### Usage strings
 ```go
 var args struct {
@@ -265,15 +280,33 @@ func (n *NameDotName) UnmarshalText(b []byte) error {
 	return nil
 }
 
+// optional: implement in case you want to display a default value in the usage string
+func (n *NameDotName) MarshalText() (text []byte, err error) {
+	text = []byte(fmt.Sprintf("%s.%s", n.Head, n.Tail))
+	return
+}
+
 func main() {
 	var args struct {
 		Name *NameDotName
 	}
+	// set default
+	args.Name = &NameDotName{"file", "txt"}
 	arg.MustParse(&args)
 	fmt.Printf("%#v\n", args.Name)
 }
 ```
 ```shell
+$ ./example --help
+Usage: test [--name NAME]
+
+Options:
+  --name NAME [default: file.txt]
+  --help, -h             display this help and exit
+
+$ ./example
+&main.NameDotName{Head:"file", Tail:"txt"}
+
 $ ./example --name=foo.bar
 &main.NameDotName{Head:"foo", Tail:"bar"}
 

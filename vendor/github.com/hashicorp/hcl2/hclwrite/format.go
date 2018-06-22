@@ -49,7 +49,7 @@ func formatIndent(lines []formatLine) {
 
 	// We'll start our indent stack at a reasonable capacity to minimize the
 	// chance of us needing to grow it; 10 here means 10 levels of indent,
-	// which should be more than enough for reasonable zcl uses.
+	// which should be more than enough for reasonable HCL uses.
 	indents := make([]int, 0, 10)
 
 	for i := range lines {
@@ -241,6 +241,9 @@ func spaceAfterToken(subject, before, after *Token) bool {
 
 	case subject.Type == hclsyntax.TokenQuotedLit || subject.Type == hclsyntax.TokenStringLit || subject.Type == hclsyntax.TokenOQuote || subject.Type == hclsyntax.TokenOHeredoc || after.Type == hclsyntax.TokenQuotedLit || after.Type == hclsyntax.TokenStringLit || after.Type == hclsyntax.TokenCQuote || after.Type == hclsyntax.TokenCHeredoc:
 		// No extra spaces within templates
+		return false
+
+	case after.Type == hclsyntax.TokenOBrack && (subject.Type == hclsyntax.TokenIdent || subject.Type == hclsyntax.TokenNumberLit || tokenBracketChange(subject) < 0):
 		return false
 
 	case subject.Type == hclsyntax.TokenMinus:

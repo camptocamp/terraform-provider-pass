@@ -17,7 +17,7 @@ const opAcceptCertificateTransfer = "AcceptCertificateTransfer"
 
 // AcceptCertificateTransferRequest generates a "aws/request.Request" representing the
 // client's request for the AcceptCertificateTransfer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -118,7 +118,7 @@ const opAddThingToThingGroup = "AddThingToThingGroup"
 
 // AddThingToThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the AddThingToThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -203,7 +203,7 @@ const opAssociateTargetsWithJob = "AssociateTargetsWithJob"
 
 // AssociateTargetsWithJobRequest generates a "aws/request.Request" representing the
 // client's request for the AssociateTargetsWithJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -266,7 +266,7 @@ func (c *IoT) AssociateTargetsWithJobRequest(input *AssociateTargetsWithJobInput
 //   The specified resource does not exist.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -299,7 +299,7 @@ const opAttachPolicy = "AttachPolicy"
 
 // AttachPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -368,7 +368,7 @@ func (c *IoT) AttachPolicyRequest(input *AttachPolicyInput) (req *request.Reques
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) AttachPolicy(input *AttachPolicyInput) (*AttachPolicyOutput, error) {
 	req, out := c.AttachPolicyRequest(input)
@@ -395,7 +395,7 @@ const opAttachPrincipalPolicy = "AttachPrincipalPolicy"
 
 // AttachPrincipalPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the AttachPrincipalPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -470,7 +470,7 @@ func (c *IoT) AttachPrincipalPolicyRequest(input *AttachPrincipalPolicyInput) (r
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) AttachPrincipalPolicy(input *AttachPrincipalPolicyInput) (*AttachPrincipalPolicyOutput, error) {
 	req, out := c.AttachPrincipalPolicyRequest(input)
@@ -497,7 +497,7 @@ const opAttachThingPrincipal = "AttachThingPrincipal"
 
 // AttachThingPrincipalRequest generates a "aws/request.Request" representing the
 // client's request for the AttachThingPrincipal operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -588,7 +588,7 @@ const opCancelCertificateTransfer = "CancelCertificateTransfer"
 
 // CancelCertificateTransferRequest generates a "aws/request.Request" representing the
 // client's request for the CancelCertificateTransfer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -694,7 +694,7 @@ const opCancelJob = "CancelJob"
 
 // CancelJobRequest generates a "aws/request.Request" representing the
 // client's request for the CancelJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -775,11 +775,107 @@ func (c *IoT) CancelJobWithContext(ctx aws.Context, input *CancelJobInput, opts 
 	return out, req.Send()
 }
 
+const opCancelJobExecution = "CancelJobExecution"
+
+// CancelJobExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the CancelJobExecution operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelJobExecution for more information on using the CancelJobExecution
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelJobExecutionRequest method.
+//    req, resp := client.CancelJobExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CancelJobExecutionRequest(input *CancelJobExecutionInput) (req *request.Request, output *CancelJobExecutionOutput) {
+	op := &request.Operation{
+		Name:       opCancelJobExecution,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/things/{thingName}/jobs/{jobId}/cancel",
+	}
+
+	if input == nil {
+		input = &CancelJobExecutionInput{}
+	}
+
+	output = &CancelJobExecutionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelJobExecution API operation for AWS IoT.
+//
+// Cancels the execution of a job for a given thing.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CancelJobExecution for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeInvalidStateTransitionException "InvalidStateTransitionException"
+//   An attempt was made to change to an invalid state, for example by deleting
+//   a job or a job execution which is "IN_PROGRESS" without setting the force
+//   parameter.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeVersionConflictException "VersionConflictException"
+//   An exception thrown when the version of an entity specified with the expectedVersion
+//   parameter does not match the latest version in the system.
+//
+func (c *IoT) CancelJobExecution(input *CancelJobExecutionInput) (*CancelJobExecutionOutput, error) {
+	req, out := c.CancelJobExecutionRequest(input)
+	return out, req.Send()
+}
+
+// CancelJobExecutionWithContext is the same as CancelJobExecution with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelJobExecution for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CancelJobExecutionWithContext(ctx aws.Context, input *CancelJobExecutionInput, opts ...request.Option) (*CancelJobExecutionOutput, error) {
+	req, out := c.CancelJobExecutionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opClearDefaultAuthorizer = "ClearDefaultAuthorizer"
 
 // ClearDefaultAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the ClearDefaultAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -870,7 +966,7 @@ const opCreateAuthorizer = "CreateAuthorizer"
 
 // CreateAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -925,7 +1021,7 @@ func (c *IoT) CreateAuthorizerRequest(input *CreateAuthorizerInput) (req *reques
 //   The request is not valid.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -964,7 +1060,7 @@ const opCreateCertificateFromCsr = "CreateCertificateFromCsr"
 
 // CreateCertificateFromCsrRequest generates a "aws/request.Request" representing the
 // client's request for the CreateCertificateFromCsr operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1093,7 +1189,7 @@ const opCreateJob = "CreateJob"
 
 // CreateJobRequest generates a "aws/request.Request" representing the
 // client's request for the CreateJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1151,7 +1247,7 @@ func (c *IoT) CreateJobRequest(input *CreateJobInput) (req *request.Request, out
 //   The resource already exists.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -1184,7 +1280,7 @@ const opCreateKeysAndCertificate = "CreateKeysAndCertificate"
 
 // CreateKeysAndCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the CreateKeysAndCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1272,11 +1368,105 @@ func (c *IoT) CreateKeysAndCertificateWithContext(ctx aws.Context, input *Create
 	return out, req.Send()
 }
 
+const opCreateOTAUpdate = "CreateOTAUpdate"
+
+// CreateOTAUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateOTAUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateOTAUpdate for more information on using the CreateOTAUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateOTAUpdateRequest method.
+//    req, resp := client.CreateOTAUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateOTAUpdateRequest(input *CreateOTAUpdateInput) (req *request.Request, output *CreateOTAUpdateOutput) {
+	op := &request.Operation{
+		Name:       opCreateOTAUpdate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/otaUpdates/{otaUpdateId}",
+	}
+
+	if input == nil {
+		input = &CreateOTAUpdateInput{}
+	}
+
+	output = &CreateOTAUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateOTAUpdate API operation for AWS IoT.
+//
+// Creates an AWS IoT OTAUpdate on a target group of things or groups.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CreateOTAUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   The resource already exists.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+func (c *IoT) CreateOTAUpdate(input *CreateOTAUpdateInput) (*CreateOTAUpdateOutput, error) {
+	req, out := c.CreateOTAUpdateRequest(input)
+	return out, req.Send()
+}
+
+// CreateOTAUpdateWithContext is the same as CreateOTAUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateOTAUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CreateOTAUpdateWithContext(ctx aws.Context, input *CreateOTAUpdateInput, opts ...request.Option) (*CreateOTAUpdateOutput, error) {
+	req, out := c.CreateOTAUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreatePolicy = "CreatePolicy"
 
 // CreatePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1374,7 +1564,7 @@ const opCreatePolicyVersion = "CreatePolicyVersion"
 
 // CreatePolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePolicyVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1478,7 +1668,7 @@ const opCreateRoleAlias = "CreateRoleAlias"
 
 // CreateRoleAliasRequest generates a "aws/request.Request" representing the
 // client's request for the CreateRoleAlias operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1533,7 +1723,7 @@ func (c *IoT) CreateRoleAliasRequest(input *CreateRoleAliasInput) (req *request.
 //   The request is not valid.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -1568,11 +1758,111 @@ func (c *IoT) CreateRoleAliasWithContext(ctx aws.Context, input *CreateRoleAlias
 	return out, req.Send()
 }
 
+const opCreateStream = "CreateStream"
+
+// CreateStreamRequest generates a "aws/request.Request" representing the
+// client's request for the CreateStream operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateStream for more information on using the CreateStream
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateStreamRequest method.
+//    req, resp := client.CreateStreamRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) CreateStreamRequest(input *CreateStreamInput) (req *request.Request, output *CreateStreamOutput) {
+	op := &request.Operation{
+		Name:       opCreateStream,
+		HTTPMethod: "POST",
+		HTTPPath:   "/streams/{streamId}",
+	}
+
+	if input == nil {
+		input = &CreateStreamInput{}
+	}
+
+	output = &CreateStreamOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateStream API operation for AWS IoT.
+//
+// Creates a stream for delivering one or more large files in chunks over MQTT.
+// A stream transports data bytes in chunks or blocks packaged as MQTT messages
+// from a source like S3. You can have one or more files associated with a stream.
+// The total size of a file associated with the stream cannot exceed more than
+// 2 MB. The stream will be created with version 0. If a stream is created with
+// the same streamID as a stream that existed and was deleted within last 90
+// days, we will resurrect that old stream by incrementing the version by 1.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation CreateStream for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   The resource already exists.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+func (c *IoT) CreateStream(input *CreateStreamInput) (*CreateStreamOutput, error) {
+	req, out := c.CreateStreamRequest(input)
+	return out, req.Send()
+}
+
+// CreateStreamWithContext is the same as CreateStream with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateStream for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) CreateStreamWithContext(ctx aws.Context, input *CreateStreamInput, opts ...request.Option) (*CreateStreamOutput, error) {
+	req, out := c.CreateStreamRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateThing = "CreateThing"
 
 // CreateThingRequest generates a "aws/request.Request" representing the
 // client's request for the CreateThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1610,7 +1900,7 @@ func (c *IoT) CreateThingRequest(input *CreateThingInput) (req *request.Request,
 
 // CreateThing API operation for AWS IoT.
 //
-// Creates a thing record in the thing registry.
+// Creates a thing record in the registry.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1666,7 +1956,7 @@ const opCreateThingGroup = "CreateThingGroup"
 
 // CreateThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the CreateThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1751,7 +2041,7 @@ const opCreateThingType = "CreateThingType"
 
 // CreateThingTypeRequest generates a "aws/request.Request" representing the
 // client's request for the CreateThingType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1842,7 +2132,7 @@ const opCreateTopicRule = "CreateTopicRule"
 
 // CreateTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the CreateTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -1934,7 +2224,7 @@ const opDeleteAuthorizer = "DeleteAuthorizer"
 
 // DeleteAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2028,7 +2318,7 @@ const opDeleteCACertificate = "DeleteCACertificate"
 
 // DeleteCACertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCACertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2122,7 +2412,7 @@ const opDeleteCertificate = "DeleteCertificate"
 
 // DeleteCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2222,11 +2512,298 @@ func (c *IoT) DeleteCertificateWithContext(ctx aws.Context, input *DeleteCertifi
 	return out, req.Send()
 }
 
+const opDeleteJob = "DeleteJob"
+
+// DeleteJobRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteJob for more information on using the DeleteJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteJobRequest method.
+//    req, resp := client.DeleteJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteJobRequest(input *DeleteJobInput) (req *request.Request, output *DeleteJobOutput) {
+	op := &request.Operation{
+		Name:       opDeleteJob,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/jobs/{jobId}",
+	}
+
+	if input == nil {
+		input = &DeleteJobInput{}
+	}
+
+	output = &DeleteJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteJob API operation for AWS IoT.
+//
+// Deletes a job and its related job executions.
+//
+// Deleting a job may take time, depending on the number of job executions created
+// for the job and various other factors. While the job is being deleted, the
+// status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to
+// delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will
+// result in an error.
+//
+// Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or
+// a LimitExceededException will occur.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeleteJob for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeInvalidStateTransitionException "InvalidStateTransitionException"
+//   An attempt was made to change to an invalid state, for example by deleting
+//   a job or a job execution which is "IN_PROGRESS" without setting the force
+//   parameter.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeLimitExceededException "LimitExceededException"
+//   A limit has been exceeded.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+func (c *IoT) DeleteJob(input *DeleteJobInput) (*DeleteJobOutput, error) {
+	req, out := c.DeleteJobRequest(input)
+	return out, req.Send()
+}
+
+// DeleteJobWithContext is the same as DeleteJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeleteJobWithContext(ctx aws.Context, input *DeleteJobInput, opts ...request.Option) (*DeleteJobOutput, error) {
+	req, out := c.DeleteJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteJobExecution = "DeleteJobExecution"
+
+// DeleteJobExecutionRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteJobExecution operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteJobExecution for more information on using the DeleteJobExecution
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteJobExecutionRequest method.
+//    req, resp := client.DeleteJobExecutionRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteJobExecutionRequest(input *DeleteJobExecutionInput) (req *request.Request, output *DeleteJobExecutionOutput) {
+	op := &request.Operation{
+		Name:       opDeleteJobExecution,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/things/{thingName}/jobs/{jobId}/executionNumber/{executionNumber}",
+	}
+
+	if input == nil {
+		input = &DeleteJobExecutionInput{}
+	}
+
+	output = &DeleteJobExecutionOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Remove(restjson.UnmarshalHandler)
+	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteJobExecution API operation for AWS IoT.
+//
+// Deletes a job execution.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeleteJobExecution for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeInvalidStateTransitionException "InvalidStateTransitionException"
+//   An attempt was made to change to an invalid state, for example by deleting
+//   a job or a job execution which is "IN_PROGRESS" without setting the force
+//   parameter.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+func (c *IoT) DeleteJobExecution(input *DeleteJobExecutionInput) (*DeleteJobExecutionOutput, error) {
+	req, out := c.DeleteJobExecutionRequest(input)
+	return out, req.Send()
+}
+
+// DeleteJobExecutionWithContext is the same as DeleteJobExecution with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteJobExecution for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeleteJobExecutionWithContext(ctx aws.Context, input *DeleteJobExecutionInput, opts ...request.Option) (*DeleteJobExecutionOutput, error) {
+	req, out := c.DeleteJobExecutionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteOTAUpdate = "DeleteOTAUpdate"
+
+// DeleteOTAUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteOTAUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteOTAUpdate for more information on using the DeleteOTAUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteOTAUpdateRequest method.
+//    req, resp := client.DeleteOTAUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteOTAUpdateRequest(input *DeleteOTAUpdateInput) (req *request.Request, output *DeleteOTAUpdateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteOTAUpdate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/otaUpdates/{otaUpdateId}",
+	}
+
+	if input == nil {
+		input = &DeleteOTAUpdateInput{}
+	}
+
+	output = &DeleteOTAUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteOTAUpdate API operation for AWS IoT.
+//
+// Delete an OTA update.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeleteOTAUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+func (c *IoT) DeleteOTAUpdate(input *DeleteOTAUpdateInput) (*DeleteOTAUpdateOutput, error) {
+	req, out := c.DeleteOTAUpdateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteOTAUpdateWithContext is the same as DeleteOTAUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteOTAUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeleteOTAUpdateWithContext(ctx aws.Context, input *DeleteOTAUpdateInput, opts ...request.Option) (*DeleteOTAUpdateOutput, error) {
+	req, out := c.DeleteOTAUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeletePolicy = "DeletePolicy"
 
 // DeletePolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2332,7 +2909,7 @@ const opDeletePolicyVersion = "DeletePolicyVersion"
 
 // DeletePolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the DeletePolicyVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2431,7 +3008,7 @@ const opDeleteRegistrationCode = "DeleteRegistrationCode"
 
 // DeleteRegistrationCodeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRegistrationCode operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2519,7 +3096,7 @@ const opDeleteRoleAlias = "DeleteRoleAlias"
 
 // DeleteRoleAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteRoleAlias operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2609,11 +3186,105 @@ func (c *IoT) DeleteRoleAliasWithContext(ctx aws.Context, input *DeleteRoleAlias
 	return out, req.Send()
 }
 
+const opDeleteStream = "DeleteStream"
+
+// DeleteStreamRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteStream operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteStream for more information on using the DeleteStream
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteStreamRequest method.
+//    req, resp := client.DeleteStreamRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DeleteStreamRequest(input *DeleteStreamInput) (req *request.Request, output *DeleteStreamOutput) {
+	op := &request.Operation{
+		Name:       opDeleteStream,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/streams/{streamId}",
+	}
+
+	if input == nil {
+		input = &DeleteStreamInput{}
+	}
+
+	output = &DeleteStreamOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DeleteStream API operation for AWS IoT.
+//
+// Deletes a stream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DeleteStream for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeDeleteConflictException "DeleteConflictException"
+//   You can't delete the resource because it is attached to one or more resources.
+//
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+func (c *IoT) DeleteStream(input *DeleteStreamInput) (*DeleteStreamOutput, error) {
+	req, out := c.DeleteStreamRequest(input)
+	return out, req.Send()
+}
+
+// DeleteStreamWithContext is the same as DeleteStream with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteStream for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DeleteStreamWithContext(ctx aws.Context, input *DeleteStreamInput, opts ...request.Option) (*DeleteStreamOutput, error) {
+	req, out := c.DeleteStreamRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteThing = "DeleteThing"
 
 // DeleteThingRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2665,8 +3336,8 @@ func (c *IoT) DeleteThingRequest(input *DeleteThingInput) (req *request.Request,
 //   The specified resource does not exist.
 //
 //   * ErrCodeVersionConflictException "VersionConflictException"
-//   An exception thrown when the version of a thing passed to a command is different
-//   than the version specified with the --version parameter.
+//   An exception thrown when the version of an entity specified with the expectedVersion
+//   parameter does not match the latest version in the system.
 //
 //   * ErrCodeInvalidRequestException "InvalidRequestException"
 //   The request is not valid.
@@ -2708,7 +3379,7 @@ const opDeleteThingGroup = "DeleteThingGroup"
 
 // DeleteThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2760,8 +3431,8 @@ func (c *IoT) DeleteThingGroupRequest(input *DeleteThingGroupInput) (req *reques
 //   The request is not valid.
 //
 //   * ErrCodeVersionConflictException "VersionConflictException"
-//   An exception thrown when the version of a thing passed to a command is different
-//   than the version specified with the --version parameter.
+//   An exception thrown when the version of an entity specified with the expectedVersion
+//   parameter does not match the latest version in the system.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -2794,7 +3465,7 @@ const opDeleteThingType = "DeleteThingType"
 
 // DeleteThingTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteThingType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2889,7 +3560,7 @@ const opDeleteTopicRule = "DeleteTopicRule"
 
 // DeleteTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -2976,7 +3647,7 @@ const opDeleteV2LoggingLevel = "DeleteV2LoggingLevel"
 
 // DeleteV2LoggingLevelRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteV2LoggingLevel operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3060,7 +3731,7 @@ const opDeprecateThingType = "DeprecateThingType"
 
 // DeprecateThingTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DeprecateThingType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3152,7 +3823,7 @@ const opDescribeAuthorizer = "DescribeAuthorizer"
 
 // DescribeAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3243,7 +3914,7 @@ const opDescribeCACertificate = "DescribeCACertificate"
 
 // DescribeCACertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCACertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3334,7 +4005,7 @@ const opDescribeCertificate = "DescribeCertificate"
 
 // DescribeCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3425,7 +4096,7 @@ const opDescribeDefaultAuthorizer = "DescribeDefaultAuthorizer"
 
 // DescribeDefaultAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeDefaultAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3516,7 +4187,7 @@ const opDescribeEndpoint = "DescribeEndpoint"
 
 // DescribeEndpointRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEndpoint operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3601,7 +4272,7 @@ const opDescribeEventConfigurations = "DescribeEventConfigurations"
 
 // DescribeEventConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEventConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3680,7 +4351,7 @@ const opDescribeIndex = "DescribeIndex"
 
 // DescribeIndexRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeIndex operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3771,7 +4442,7 @@ const opDescribeJob = "DescribeJob"
 
 // DescribeJobRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3856,7 +4527,7 @@ const opDescribeJobExecution = "DescribeJobExecution"
 
 // DescribeJobExecutionRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeJobExecution operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -3941,7 +4612,7 @@ const opDescribeRoleAlias = "DescribeRoleAlias"
 
 // DescribeRoleAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeRoleAlias operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4028,11 +4699,102 @@ func (c *IoT) DescribeRoleAliasWithContext(ctx aws.Context, input *DescribeRoleA
 	return out, req.Send()
 }
 
+const opDescribeStream = "DescribeStream"
+
+// DescribeStreamRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeStream operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeStream for more information on using the DescribeStream
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeStreamRequest method.
+//    req, resp := client.DescribeStreamRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) DescribeStreamRequest(input *DescribeStreamInput) (req *request.Request, output *DescribeStreamOutput) {
+	op := &request.Operation{
+		Name:       opDescribeStream,
+		HTTPMethod: "GET",
+		HTTPPath:   "/streams/{streamId}",
+	}
+
+	if input == nil {
+		input = &DescribeStreamInput{}
+	}
+
+	output = &DescribeStreamOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeStream API operation for AWS IoT.
+//
+// Gets information about a stream.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation DescribeStream for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+func (c *IoT) DescribeStream(input *DescribeStreamInput) (*DescribeStreamOutput, error) {
+	req, out := c.DescribeStreamRequest(input)
+	return out, req.Send()
+}
+
+// DescribeStreamWithContext is the same as DescribeStream with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeStream for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) DescribeStreamWithContext(ctx aws.Context, input *DescribeStreamInput, opts ...request.Option) (*DescribeStreamOutput, error) {
+	req, out := c.DescribeStreamRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDescribeThing = "DescribeThing"
 
 // DescribeThingRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4123,7 +4885,7 @@ const opDescribeThingGroup = "DescribeThingGroup"
 
 // DescribeThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4208,7 +4970,7 @@ const opDescribeThingRegistrationTask = "DescribeThingRegistrationTask"
 
 // DescribeThingRegistrationTaskRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeThingRegistrationTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4296,7 +5058,7 @@ const opDescribeThingType = "DescribeThingType"
 
 // DescribeThingTypeRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeThingType operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4387,7 +5149,7 @@ const opDetachPolicy = "DetachPolicy"
 
 // DetachPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4453,7 +5215,7 @@ func (c *IoT) DetachPolicyRequest(input *DetachPolicyInput) (req *request.Reques
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) DetachPolicy(input *DetachPolicyInput) (*DetachPolicyOutput, error) {
 	req, out := c.DetachPolicyRequest(input)
@@ -4480,7 +5242,7 @@ const opDetachPrincipalPolicy = "DetachPrincipalPolicy"
 
 // DetachPrincipalPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DetachPrincipalPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4578,7 +5340,7 @@ const opDetachThingPrincipal = "DetachThingPrincipal"
 
 // DetachThingPrincipalRequest generates a "aws/request.Request" representing the
 // client's request for the DetachThingPrincipal operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4669,7 +5431,7 @@ const opDisableTopicRule = "DisableTopicRule"
 
 // DisableTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the DisableTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4756,7 +5518,7 @@ const opEnableTopicRule = "EnableTopicRule"
 
 // EnableTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the EnableTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4843,7 +5605,7 @@ const opGetEffectivePolicies = "GetEffectivePolicies"
 
 // GetEffectivePoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the GetEffectivePolicies operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -4881,7 +5643,8 @@ func (c *IoT) GetEffectivePoliciesRequest(input *GetEffectivePoliciesInput) (req
 
 // GetEffectivePolicies API operation for AWS IoT.
 //
-// Gets effective policies.
+// Gets a list of the policies that have an effect on the authorization behavior
+// of the specified device when it connects to the AWS IoT device gateway.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4910,7 +5673,7 @@ func (c *IoT) GetEffectivePoliciesRequest(input *GetEffectivePoliciesInput) (req
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) GetEffectivePolicies(input *GetEffectivePoliciesInput) (*GetEffectivePoliciesOutput, error) {
 	req, out := c.GetEffectivePoliciesRequest(input)
@@ -4937,7 +5700,7 @@ const opGetIndexingConfiguration = "GetIndexingConfiguration"
 
 // GetIndexingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the GetIndexingConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5025,7 +5788,7 @@ const opGetJobDocument = "GetJobDocument"
 
 // GetJobDocumentRequest generates a "aws/request.Request" representing the
 // client's request for the GetJobDocument operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5110,7 +5873,7 @@ const opGetLoggingOptions = "GetLoggingOptions"
 
 // GetLoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetLoggingOptions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5188,11 +5951,102 @@ func (c *IoT) GetLoggingOptionsWithContext(ctx aws.Context, input *GetLoggingOpt
 	return out, req.Send()
 }
 
+const opGetOTAUpdate = "GetOTAUpdate"
+
+// GetOTAUpdateRequest generates a "aws/request.Request" representing the
+// client's request for the GetOTAUpdate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetOTAUpdate for more information on using the GetOTAUpdate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetOTAUpdateRequest method.
+//    req, resp := client.GetOTAUpdateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) GetOTAUpdateRequest(input *GetOTAUpdateInput) (req *request.Request, output *GetOTAUpdateOutput) {
+	op := &request.Operation{
+		Name:       opGetOTAUpdate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/otaUpdates/{otaUpdateId}",
+	}
+
+	if input == nil {
+		input = &GetOTAUpdateInput{}
+	}
+
+	output = &GetOTAUpdateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetOTAUpdate API operation for AWS IoT.
+//
+// Gets an OTA update.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation GetOTAUpdate for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+func (c *IoT) GetOTAUpdate(input *GetOTAUpdateInput) (*GetOTAUpdateOutput, error) {
+	req, out := c.GetOTAUpdateRequest(input)
+	return out, req.Send()
+}
+
+// GetOTAUpdateWithContext is the same as GetOTAUpdate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetOTAUpdate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) GetOTAUpdateWithContext(ctx aws.Context, input *GetOTAUpdateInput, opts ...request.Option) (*GetOTAUpdateOutput, error) {
+	req, out := c.GetOTAUpdateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetPolicy = "GetPolicy"
 
 // GetPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the GetPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5284,7 +6138,7 @@ const opGetPolicyVersion = "GetPolicyVersion"
 
 // GetPolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the GetPolicyVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5375,7 +6229,7 @@ const opGetRegistrationCode = "GetRegistrationCode"
 
 // GetRegistrationCodeRequest generates a "aws/request.Request" representing the
 // client's request for the GetRegistrationCode operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5463,7 +6317,7 @@ const opGetTopicRule = "GetTopicRule"
 
 // GetTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the GetTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5548,7 +6402,7 @@ const opGetV2LoggingOptions = "GetV2LoggingOptions"
 
 // GetV2LoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the GetV2LoggingOptions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5630,7 +6484,7 @@ const opListAttachedPolicies = "ListAttachedPolicies"
 
 // ListAttachedPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAttachedPolicies operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5697,7 +6551,7 @@ func (c *IoT) ListAttachedPoliciesRequest(input *ListAttachedPoliciesInput) (req
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) ListAttachedPolicies(input *ListAttachedPoliciesInput) (*ListAttachedPoliciesOutput, error) {
 	req, out := c.ListAttachedPoliciesRequest(input)
@@ -5724,7 +6578,7 @@ const opListAuthorizers = "ListAuthorizers"
 
 // ListAuthorizersRequest generates a "aws/request.Request" representing the
 // client's request for the ListAuthorizers operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5812,7 +6666,7 @@ const opListCACertificates = "ListCACertificates"
 
 // ListCACertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCACertificates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5903,7 +6757,7 @@ const opListCertificates = "ListCertificates"
 
 // ListCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListCertificates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -5994,7 +6848,7 @@ const opListCertificatesByCA = "ListCertificatesByCA"
 
 // ListCertificatesByCARequest generates a "aws/request.Request" representing the
 // client's request for the ListCertificatesByCA operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6082,7 +6936,7 @@ const opListIndices = "ListIndices"
 
 // ListIndicesRequest generates a "aws/request.Request" representing the
 // client's request for the ListIndices operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6170,7 +7024,7 @@ const opListJobExecutionsForJob = "ListJobExecutionsForJob"
 
 // ListJobExecutionsForJobRequest generates a "aws/request.Request" representing the
 // client's request for the ListJobExecutionsForJob operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6255,7 +7109,7 @@ const opListJobExecutionsForThing = "ListJobExecutionsForThing"
 
 // ListJobExecutionsForThingRequest generates a "aws/request.Request" representing the
 // client's request for the ListJobExecutionsForThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6340,7 +7194,7 @@ const opListJobs = "ListJobs"
 
 // ListJobsRequest generates a "aws/request.Request" representing the
 // client's request for the ListJobs operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6421,11 +7275,99 @@ func (c *IoT) ListJobsWithContext(ctx aws.Context, input *ListJobsInput, opts ..
 	return out, req.Send()
 }
 
+const opListOTAUpdates = "ListOTAUpdates"
+
+// ListOTAUpdatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListOTAUpdates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListOTAUpdates for more information on using the ListOTAUpdates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListOTAUpdatesRequest method.
+//    req, resp := client.ListOTAUpdatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListOTAUpdatesRequest(input *ListOTAUpdatesInput) (req *request.Request, output *ListOTAUpdatesOutput) {
+	op := &request.Operation{
+		Name:       opListOTAUpdates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/otaUpdates",
+	}
+
+	if input == nil {
+		input = &ListOTAUpdatesInput{}
+	}
+
+	output = &ListOTAUpdatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListOTAUpdates API operation for AWS IoT.
+//
+// Lists OTA updates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListOTAUpdates for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+func (c *IoT) ListOTAUpdates(input *ListOTAUpdatesInput) (*ListOTAUpdatesOutput, error) {
+	req, out := c.ListOTAUpdatesRequest(input)
+	return out, req.Send()
+}
+
+// ListOTAUpdatesWithContext is the same as ListOTAUpdates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListOTAUpdates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListOTAUpdatesWithContext(ctx aws.Context, input *ListOTAUpdatesInput, opts ...request.Option) (*ListOTAUpdatesOutput, error) {
+	req, out := c.ListOTAUpdatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListOutgoingCertificates = "ListOutgoingCertificates"
 
 // ListOutgoingCertificatesRequest generates a "aws/request.Request" representing the
 // client's request for the ListOutgoingCertificates operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6513,7 +7455,7 @@ const opListPolicies = "ListPolicies"
 
 // ListPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicies operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6601,7 +7543,7 @@ const opListPolicyPrincipals = "ListPolicyPrincipals"
 
 // ListPolicyPrincipalsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicyPrincipals operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6697,7 +7639,7 @@ const opListPolicyVersions = "ListPolicyVersions"
 
 // ListPolicyVersionsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPolicyVersions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6788,7 +7730,7 @@ const opListPrincipalPolicies = "ListPrincipalPolicies"
 
 // ListPrincipalPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the ListPrincipalPolicies operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6885,7 +7827,7 @@ const opListPrincipalThings = "ListPrincipalThings"
 
 // ListPrincipalThingsRequest generates a "aws/request.Request" representing the
 // client's request for the ListPrincipalThings operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -6976,7 +7918,7 @@ const opListRoleAliases = "ListRoleAliases"
 
 // ListRoleAliasesRequest generates a "aws/request.Request" representing the
 // client's request for the ListRoleAliases operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7060,11 +8002,99 @@ func (c *IoT) ListRoleAliasesWithContext(ctx aws.Context, input *ListRoleAliases
 	return out, req.Send()
 }
 
+const opListStreams = "ListStreams"
+
+// ListStreamsRequest generates a "aws/request.Request" representing the
+// client's request for the ListStreams operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListStreams for more information on using the ListStreams
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListStreamsRequest method.
+//    req, resp := client.ListStreamsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) ListStreamsRequest(input *ListStreamsInput) (req *request.Request, output *ListStreamsOutput) {
+	op := &request.Operation{
+		Name:       opListStreams,
+		HTTPMethod: "GET",
+		HTTPPath:   "/streams",
+	}
+
+	if input == nil {
+		input = &ListStreamsInput{}
+	}
+
+	output = &ListStreamsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListStreams API operation for AWS IoT.
+//
+// Lists all of the streams in your AWS account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation ListStreams for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+func (c *IoT) ListStreams(input *ListStreamsInput) (*ListStreamsOutput, error) {
+	req, out := c.ListStreamsRequest(input)
+	return out, req.Send()
+}
+
+// ListStreamsWithContext is the same as ListStreams with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListStreams for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) ListStreamsWithContext(ctx aws.Context, input *ListStreamsInput, opts ...request.Option) (*ListStreamsOutput, error) {
+	req, out := c.ListStreamsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opListTargetsForPolicy = "ListTargetsForPolicy"
 
 // ListTargetsForPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the ListTargetsForPolicy operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7131,7 +8161,7 @@ func (c *IoT) ListTargetsForPolicyRequest(input *ListTargetsForPolicyInput) (req
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) ListTargetsForPolicy(input *ListTargetsForPolicyInput) (*ListTargetsForPolicyOutput, error) {
 	req, out := c.ListTargetsForPolicyRequest(input)
@@ -7158,7 +8188,7 @@ const opListThingGroups = "ListThingGroups"
 
 // ListThingGroupsRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingGroups operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7240,7 +8270,7 @@ const opListThingGroupsForThing = "ListThingGroupsForThing"
 
 // ListThingGroupsForThingRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingGroupsForThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7322,7 +8352,7 @@ const opListThingPrincipals = "ListThingPrincipals"
 
 // ListThingPrincipalsRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingPrincipals operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7413,7 +8443,7 @@ const opListThingRegistrationTaskReports = "ListThingRegistrationTaskReports"
 
 // ListThingRegistrationTaskReportsRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingRegistrationTaskReports operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7498,7 +8528,7 @@ const opListThingRegistrationTasks = "ListThingRegistrationTasks"
 
 // ListThingRegistrationTasksRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingRegistrationTasks operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7583,7 +8613,7 @@ const opListThingTypes = "ListThingTypes"
 
 // ListThingTypesRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingTypes operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7671,7 +8701,7 @@ const opListThings = "ListThings"
 
 // ListThingsRequest generates a "aws/request.Request" representing the
 // client's request for the ListThings operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7762,7 +8792,7 @@ const opListThingsInThingGroup = "ListThingsInThingGroup"
 
 // ListThingsInThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the ListThingsInThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7844,7 +8874,7 @@ const opListTopicRules = "ListTopicRules"
 
 // ListTopicRulesRequest generates a "aws/request.Request" representing the
 // client's request for the ListTopicRules operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -7926,7 +8956,7 @@ const opListV2LoggingLevels = "ListV2LoggingLevels"
 
 // ListV2LoggingLevelsRequest generates a "aws/request.Request" representing the
 // client's request for the ListV2LoggingLevels operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8011,7 +9041,7 @@ const opRegisterCACertificate = "RegisterCACertificate"
 
 // RegisterCACertificateRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterCACertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8081,7 +9111,7 @@ func (c *IoT) RegisterCACertificateRequest(input *RegisterCACertificateInput) (r
 //   The rate exceeds the limit.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeUnauthorizedException "UnauthorizedException"
 //   You are not authorized to perform this operation.
@@ -8117,7 +9147,7 @@ const opRegisterCertificate = "RegisterCertificate"
 
 // RegisterCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8221,7 +9251,7 @@ const opRegisterThing = "RegisterThing"
 
 // RegisterThingRequest generates a "aws/request.Request" representing the
 // client's request for the RegisterThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8316,7 +9346,7 @@ const opRejectCertificateTransfer = "RejectCertificateTransfer"
 
 // RejectCertificateTransferRequest generates a "aws/request.Request" representing the
 // client's request for the RejectCertificateTransfer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8421,7 +9451,7 @@ const opRemoveThingFromThingGroup = "RemoveThingFromThingGroup"
 
 // RemoveThingFromThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the RemoveThingFromThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8506,7 +9536,7 @@ const opReplaceTopicRule = "ReplaceTopicRule"
 
 // ReplaceTopicRuleRequest generates a "aws/request.Request" representing the
 // client's request for the ReplaceTopicRule operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8598,7 +9628,7 @@ const opSearchIndex = "SearchIndex"
 
 // SearchIndexRequest generates a "aws/request.Request" representing the
 // client's request for the SearchIndex operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8695,7 +9725,7 @@ const opSetDefaultAuthorizer = "SetDefaultAuthorizer"
 
 // SetDefaultAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the SetDefaultAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8762,6 +9792,9 @@ func (c *IoT) SetDefaultAuthorizerRequest(input *SetDefaultAuthorizerInput) (req
 //   * ErrCodeInternalFailureException "InternalFailureException"
 //   An unexpected error has occurred.
 //
+//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   The resource already exists.
+//
 func (c *IoT) SetDefaultAuthorizer(input *SetDefaultAuthorizerInput) (*SetDefaultAuthorizerOutput, error) {
 	req, out := c.SetDefaultAuthorizerRequest(input)
 	return out, req.Send()
@@ -8787,7 +9820,7 @@ const opSetDefaultPolicyVersion = "SetDefaultPolicyVersion"
 
 // SetDefaultPolicyVersionRequest generates a "aws/request.Request" representing the
 // client's request for the SetDefaultPolicyVersion operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8883,7 +9916,7 @@ const opSetLoggingOptions = "SetLoggingOptions"
 
 // SetLoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the SetLoggingOptions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -8967,7 +10000,7 @@ const opSetV2LoggingLevel = "SetV2LoggingLevel"
 
 // SetV2LoggingLevelRequest generates a "aws/request.Request" representing the
 // client's request for the SetV2LoggingLevel operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9054,7 +10087,7 @@ const opSetV2LoggingOptions = "SetV2LoggingOptions"
 
 // SetV2LoggingOptionsRequest generates a "aws/request.Request" representing the
 // client's request for the SetV2LoggingOptions operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9138,7 +10171,7 @@ const opStartThingRegistrationTask = "StartThingRegistrationTask"
 
 // StartThingRegistrationTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StartThingRegistrationTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9223,7 +10256,7 @@ const opStopThingRegistrationTask = "StopThingRegistrationTask"
 
 // StopThingRegistrationTaskRequest generates a "aws/request.Request" representing the
 // client's request for the StopThingRegistrationTask operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9311,7 +10344,7 @@ const opTestAuthorization = "TestAuthorization"
 
 // TestAuthorizationRequest generates a "aws/request.Request" representing the
 // client's request for the TestAuthorization operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9349,7 +10382,9 @@ func (c *IoT) TestAuthorizationRequest(input *TestAuthorizationInput) (req *requ
 
 // TestAuthorization API operation for AWS IoT.
 //
-// Test custom authorization.
+// Tests if a specified principal is authorized to perform an AWS IoT action
+// on a specified resource. Use this to test and debug the authorization behavior
+// of devices that connect to the AWS IoT device gateway.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9378,7 +10413,7 @@ func (c *IoT) TestAuthorizationRequest(input *TestAuthorizationInput) (req *requ
 //   An unexpected error has occurred.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 func (c *IoT) TestAuthorization(input *TestAuthorizationInput) (*TestAuthorizationOutput, error) {
 	req, out := c.TestAuthorizationRequest(input)
@@ -9405,7 +10440,7 @@ const opTestInvokeAuthorizer = "TestInvokeAuthorizer"
 
 // TestInvokeAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the TestInvokeAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9443,7 +10478,9 @@ func (c *IoT) TestInvokeAuthorizerRequest(input *TestInvokeAuthorizerInput) (req
 
 // TestInvokeAuthorizer API operation for AWS IoT.
 //
-// Invoke the specified custom authorizer for testing purposes.
+// Tests a custom authorization behavior by invoking a specified custom authorizer.
+// Use this to test and debug the custom authorization behavior of devices that
+// connect to the AWS IoT device gateway.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -9499,7 +10536,7 @@ const opTransferCertificate = "TransferCertificate"
 
 // TransferCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the TransferCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9608,7 +10645,7 @@ const opUpdateAuthorizer = "UpdateAuthorizer"
 
 // UpdateAuthorizerRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAuthorizer operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9663,7 +10700,7 @@ func (c *IoT) UpdateAuthorizerRequest(input *UpdateAuthorizerInput) (req *reques
 //   The request is not valid.
 //
 //   * ErrCodeLimitExceededException "LimitExceededException"
-//   The number of attached entities exceeds the limit.
+//   A limit has been exceeded.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -9702,7 +10739,7 @@ const opUpdateCACertificate = "UpdateCACertificate"
 
 // UpdateCACertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCACertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9795,7 +10832,7 @@ const opUpdateCertificate = "UpdateCertificate"
 
 // UpdateCertificateRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateCertificate operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9897,7 +10934,7 @@ const opUpdateEventConfigurations = "UpdateEventConfigurations"
 
 // UpdateEventConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateEventConfigurations operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -9979,7 +11016,7 @@ const opUpdateIndexingConfiguration = "UpdateIndexingConfiguration"
 
 // UpdateIndexingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateIndexingConfiguration operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -10067,7 +11104,7 @@ const opUpdateRoleAlias = "UpdateRoleAlias"
 
 // UpdateRoleAliasRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRoleAlias operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -10154,11 +11191,102 @@ func (c *IoT) UpdateRoleAliasWithContext(ctx aws.Context, input *UpdateRoleAlias
 	return out, req.Send()
 }
 
+const opUpdateStream = "UpdateStream"
+
+// UpdateStreamRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateStream operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfuly.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateStream for more information on using the UpdateStream
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateStreamRequest method.
+//    req, resp := client.UpdateStreamRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+func (c *IoT) UpdateStreamRequest(input *UpdateStreamInput) (req *request.Request, output *UpdateStreamOutput) {
+	op := &request.Operation{
+		Name:       opUpdateStream,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/streams/{streamId}",
+	}
+
+	if input == nil {
+		input = &UpdateStreamInput{}
+	}
+
+	output = &UpdateStreamOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateStream API operation for AWS IoT.
+//
+// Updates an existing stream. The stream version will be incremented by one.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS IoT's
+// API operation UpdateStream for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   The request is not valid.
+//
+//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   The specified resource does not exist.
+//
+//   * ErrCodeThrottlingException "ThrottlingException"
+//   The rate exceeds the limit.
+//
+//   * ErrCodeUnauthorizedException "UnauthorizedException"
+//   You are not authorized to perform this operation.
+//
+//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   The service is temporarily unavailable.
+//
+//   * ErrCodeInternalFailureException "InternalFailureException"
+//   An unexpected error has occurred.
+//
+func (c *IoT) UpdateStream(input *UpdateStreamInput) (*UpdateStreamOutput, error) {
+	req, out := c.UpdateStreamRequest(input)
+	return out, req.Send()
+}
+
+// UpdateStreamWithContext is the same as UpdateStream with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateStream for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *IoT) UpdateStreamWithContext(ctx aws.Context, input *UpdateStreamInput, opts ...request.Option) (*UpdateStreamOutput, error) {
+	req, out := c.UpdateStreamRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opUpdateThing = "UpdateThing"
 
 // UpdateThingRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -10210,8 +11338,8 @@ func (c *IoT) UpdateThingRequest(input *UpdateThingInput) (req *request.Request,
 //   The request is not valid.
 //
 //   * ErrCodeVersionConflictException "VersionConflictException"
-//   An exception thrown when the version of a thing passed to a command is different
-//   than the version specified with the --version parameter.
+//   An exception thrown when the version of an entity specified with the expectedVersion
+//   parameter does not match the latest version in the system.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -10253,7 +11381,7 @@ const opUpdateThingGroup = "UpdateThingGroup"
 
 // UpdateThingGroupRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateThingGroup operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -10305,8 +11433,8 @@ func (c *IoT) UpdateThingGroupRequest(input *UpdateThingGroupInput) (req *reques
 //   The request is not valid.
 //
 //   * ErrCodeVersionConflictException "VersionConflictException"
-//   An exception thrown when the version of a thing passed to a command is different
-//   than the version specified with the --version parameter.
+//   An exception thrown when the version of an entity specified with the expectedVersion
+//   parameter does not match the latest version in the system.
 //
 //   * ErrCodeThrottlingException "ThrottlingException"
 //   The rate exceeds the limit.
@@ -10342,7 +11470,7 @@ const opUpdateThingGroupsForThing = "UpdateThingGroupsForThing"
 
 // UpdateThingGroupsForThingRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateThingGroupsForThing operation. The "output" return
-// value will be populated with the request's response once the request complets
+// value will be populated with the request's response once the request completes
 // successfuly.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
@@ -10427,7 +11555,8 @@ func (c *IoT) UpdateThingGroupsForThingWithContext(ctx aws.Context, input *Updat
 type AcceptCertificateTransferInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -10511,6 +11640,9 @@ type Action struct {
 
 	// Write to an Amazon Kinesis Firehose stream.
 	Firehose *FirehoseAction `locationName:"firehose" type:"structure"`
+
+	// Sends message data to an AWS IoT Analytics channel.
+	IotAnalytics *IotAnalyticsAction `locationName:"iotAnalytics" type:"structure"`
 
 	// Write data to an Amazon Kinesis stream.
 	Kinesis *KinesisAction `locationName:"kinesis" type:"structure"`
@@ -10652,6 +11784,12 @@ func (s *Action) SetElasticsearch(v *ElasticsearchAction) *Action {
 // SetFirehose sets the Firehose field's value.
 func (s *Action) SetFirehose(v *FirehoseAction) *Action {
 	s.Firehose = v
+	return s
+}
+
+// SetIotAnalytics sets the IotAnalytics field's value.
+func (s *Action) SetIotAnalytics(v *IotAnalyticsAction) *Action {
+	s.IotAnalytics = v
 	return s
 }
 
@@ -11452,6 +12590,15 @@ type CACertificateDescription struct {
 	// The date the CA certificate was created.
 	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
 
+	// The customer version of the CA certificate.
+	CustomerVersion *int64 `locationName:"customerVersion" min:"1" type:"integer"`
+
+	// The generation ID of the CA certificate.
+	GenerationId *string `locationName:"generationId" type:"string"`
+
+	// The date the CA certificate was last modified.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+
 	// The owner of the CA certificate.
 	OwnedBy *string `locationName:"ownedBy" type:"string"`
 
@@ -11499,6 +12646,24 @@ func (s *CACertificateDescription) SetCreationDate(v time.Time) *CACertificateDe
 	return s
 }
 
+// SetCustomerVersion sets the CustomerVersion field's value.
+func (s *CACertificateDescription) SetCustomerVersion(v int64) *CACertificateDescription {
+	s.CustomerVersion = &v
+	return s
+}
+
+// SetGenerationId sets the GenerationId field's value.
+func (s *CACertificateDescription) SetGenerationId(v string) *CACertificateDescription {
+	s.GenerationId = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *CACertificateDescription) SetLastModifiedDate(v time.Time) *CACertificateDescription {
+	s.LastModifiedDate = &v
+	return s
+}
+
 // SetOwnedBy sets the OwnedBy field's value.
 func (s *CACertificateDescription) SetOwnedBy(v string) *CACertificateDescription {
 	s.OwnedBy = &v
@@ -11515,7 +12680,8 @@ func (s *CACertificateDescription) SetStatus(v string) *CACertificateDescription
 type CancelCertificateTransferInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -11567,11 +12733,136 @@ func (s CancelCertificateTransferOutput) GoString() string {
 	return s.String()
 }
 
+type CancelJobExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) The expected current version of the job execution. Each time you
+	// update the job execution, its version is incremented. If the version of the
+	// job execution stored in Jobs does not match, the update is rejected with
+	// a VersionMismatch error, and an ErrorResponse that contains the current job
+	// execution status data is returned. (This makes it unnecessary to perform
+	// a separate DescribeJobExecution request in order to obtain the job execution
+	// status data.)
+	ExpectedVersion *int64 `locationName:"expectedVersion" type:"long"`
+
+	// (Optional) If true the job execution will be canceled if it has status IN_PROGRESS
+	// or QUEUED, otherwise the job execution will be canceled only if it has status
+	// QUEUED. If you attempt to cancel a job execution that is IN_PROGRESS, and
+	// you do not set force to true, then an InvalidStateTransitionException will
+	// be thrown. The default is false.
+	//
+	// Canceling a job execution which is "IN_PROGRESS", will cause the device to
+	// be unable to update the job execution status. Use caution and ensure that
+	// the device is able to recover to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
+	// The ID of the job to be canceled.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// A collection of name/value pairs that describe the status of the job execution.
+	// If not specified, the statusDetails are unchanged. You can specify at most
+	// 10 name/value pairs.
+	StatusDetails map[string]*string `locationName:"statusDetails" type:"map"`
+
+	// The name of the thing whose execution of the job will be canceled.
+	//
+	// ThingName is a required field
+	ThingName *string `location:"uri" locationName:"thingName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelJobExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelJobExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelJobExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelJobExecutionInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.ThingName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExpectedVersion sets the ExpectedVersion field's value.
+func (s *CancelJobExecutionInput) SetExpectedVersion(v int64) *CancelJobExecutionInput {
+	s.ExpectedVersion = &v
+	return s
+}
+
+// SetForce sets the Force field's value.
+func (s *CancelJobExecutionInput) SetForce(v bool) *CancelJobExecutionInput {
+	s.Force = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CancelJobExecutionInput) SetJobId(v string) *CancelJobExecutionInput {
+	s.JobId = &v
+	return s
+}
+
+// SetStatusDetails sets the StatusDetails field's value.
+func (s *CancelJobExecutionInput) SetStatusDetails(v map[string]*string) *CancelJobExecutionInput {
+	s.StatusDetails = v
+	return s
+}
+
+// SetThingName sets the ThingName field's value.
+func (s *CancelJobExecutionInput) SetThingName(v string) *CancelJobExecutionInput {
+	s.ThingName = &v
+	return s
+}
+
+type CancelJobExecutionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelJobExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelJobExecutionOutput) GoString() string {
+	return s.String()
+}
+
 type CancelJobInput struct {
 	_ struct{} `type:"structure"`
 
 	// An optional comment string describing why the job was canceled.
 	Comment *string `locationName:"comment" type:"string"`
+
+	// (Optional) If true job executions with status "IN_PROGRESS" and "QUEUED"
+	// are canceled, otherwise only job executions with status "QUEUED" are canceled.
+	// The default is false.
+	//
+	// Canceling a job which is "IN_PROGRESS", will cause a device which is executing
+	// the job to be unable to update the job execution status. Use caution and
+	// ensure that each device executing a job which is canceled is able to recover
+	// to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
 
 	// The unique identifier you assigned to this job when it was created.
 	//
@@ -11608,6 +12899,12 @@ func (s *CancelJobInput) Validate() error {
 // SetComment sets the Comment field's value.
 func (s *CancelJobInput) SetComment(v string) *CancelJobInput {
 	s.Comment = &v
+	return s
+}
+
+// SetForce sets the Force field's value.
+func (s *CancelJobInput) SetForce(v bool) *CancelJobInput {
+	s.Force = &v
 	return s
 }
 
@@ -11665,7 +12962,8 @@ type Certificate struct {
 	// The ARN of the certificate.
 	CertificateArn *string `locationName:"certificateArn" type:"string"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	CertificateId *string `locationName:"certificateId" min:"64" type:"string"`
 
 	// The date and time the certificate was created.
@@ -11730,6 +13028,12 @@ type CertificateDescription struct {
 	// The date and time the certificate was created.
 	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
 
+	// The customer version of the certificate.
+	CustomerVersion *int64 `locationName:"customerVersion" min:"1" type:"integer"`
+
+	// The generation ID of the certificate.
+	GenerationId *string `locationName:"generationId" type:"string"`
+
 	// The date and time the certificate was last modified.
 	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
@@ -11783,6 +13087,18 @@ func (s *CertificateDescription) SetCertificatePem(v string) *CertificateDescrip
 // SetCreationDate sets the CreationDate field's value.
 func (s *CertificateDescription) SetCreationDate(v time.Time) *CertificateDescription {
 	s.CreationDate = &v
+	return s
+}
+
+// SetCustomerVersion sets the CustomerVersion field's value.
+func (s *CertificateDescription) SetCustomerVersion(v int64) *CertificateDescription {
+	s.CustomerVersion = &v
+	return s
+}
+
+// SetGenerationId sets the GenerationId field's value.
+func (s *CertificateDescription) SetGenerationId(v string) *CertificateDescription {
+	s.GenerationId = &v
 	return s
 }
 
@@ -12027,6 +13343,161 @@ func (s *CloudwatchMetricAction) SetMetricValue(v string) *CloudwatchMetricActio
 // SetRoleArn sets the RoleArn field's value.
 func (s *CloudwatchMetricAction) SetRoleArn(v string) *CloudwatchMetricAction {
 	s.RoleArn = &v
+	return s
+}
+
+// Describes the method to use when code signing a file.
+type CodeSigning struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the AWSSignerJob which was created to sign the file.
+	AwsSignerJobId *string `locationName:"awsSignerJobId" type:"string"`
+
+	// A custom method for code signing a file.
+	CustomCodeSigning *CustomCodeSigning `locationName:"customCodeSigning" type:"structure"`
+}
+
+// String returns the string representation
+func (s CodeSigning) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeSigning) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeSigning) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeSigning"}
+	if s.CustomCodeSigning != nil {
+		if err := s.CustomCodeSigning.Validate(); err != nil {
+			invalidParams.AddNested("CustomCodeSigning", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAwsSignerJobId sets the AwsSignerJobId field's value.
+func (s *CodeSigning) SetAwsSignerJobId(v string) *CodeSigning {
+	s.AwsSignerJobId = &v
+	return s
+}
+
+// SetCustomCodeSigning sets the CustomCodeSigning field's value.
+func (s *CodeSigning) SetCustomCodeSigning(v *CustomCodeSigning) *CodeSigning {
+	s.CustomCodeSigning = v
+	return s
+}
+
+// Describes the certificate chain being used when code signing a file.
+type CodeSigningCertificateChain struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the certificate.
+	CertificateName *string `locationName:"certificateName" type:"string"`
+
+	// A base64 encoded binary representation of the code signing certificate chain.
+	InlineDocument *string `locationName:"inlineDocument" type:"string"`
+
+	// A stream of the certificate chain files.
+	Stream *Stream `locationName:"stream" type:"structure"`
+}
+
+// String returns the string representation
+func (s CodeSigningCertificateChain) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeSigningCertificateChain) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeSigningCertificateChain) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeSigningCertificateChain"}
+	if s.Stream != nil {
+		if err := s.Stream.Validate(); err != nil {
+			invalidParams.AddNested("Stream", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateName sets the CertificateName field's value.
+func (s *CodeSigningCertificateChain) SetCertificateName(v string) *CodeSigningCertificateChain {
+	s.CertificateName = &v
+	return s
+}
+
+// SetInlineDocument sets the InlineDocument field's value.
+func (s *CodeSigningCertificateChain) SetInlineDocument(v string) *CodeSigningCertificateChain {
+	s.InlineDocument = &v
+	return s
+}
+
+// SetStream sets the Stream field's value.
+func (s *CodeSigningCertificateChain) SetStream(v *Stream) *CodeSigningCertificateChain {
+	s.Stream = v
+	return s
+}
+
+// Describes the signature for a file.
+type CodeSigningSignature struct {
+	_ struct{} `type:"structure"`
+
+	// A base64 encoded binary representation of the code signing signature.
+	//
+	// InlineDocument is automatically base64 encoded/decoded by the SDK.
+	InlineDocument []byte `locationName:"inlineDocument" type:"blob"`
+
+	// A stream of the code signing signature.
+	Stream *Stream `locationName:"stream" type:"structure"`
+}
+
+// String returns the string representation
+func (s CodeSigningSignature) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CodeSigningSignature) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CodeSigningSignature) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CodeSigningSignature"}
+	if s.Stream != nil {
+		if err := s.Stream.Validate(); err != nil {
+			invalidParams.AddNested("Stream", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetInlineDocument sets the InlineDocument field's value.
+func (s *CodeSigningSignature) SetInlineDocument(v []byte) *CodeSigningSignature {
+	s.InlineDocument = v
+	return s
+}
+
+// SetStream sets the Stream field's value.
+func (s *CodeSigningSignature) SetStream(v *Stream) *CodeSigningSignature {
+	s.Stream = v
 	return s
 }
 
@@ -12534,6 +14005,199 @@ func (s *CreateKeysAndCertificateOutput) SetKeyPair(v *KeyPair) *CreateKeysAndCe
 	return s
 }
 
+type CreateOTAUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of additional OTA update parameters which are name-value pairs.
+	AdditionalParameters map[string]*string `locationName:"additionalParameters" type:"map"`
+
+	// The description of the OTA update.
+	Description *string `locationName:"description" type:"string"`
+
+	// The files to be streamed by the OTA update.
+	//
+	// Files is a required field
+	Files []*OTAUpdateFile `locationName:"files" min:"1" type:"list" required:"true"`
+
+	// The ID of the OTA update to be created.
+	//
+	// OtaUpdateId is a required field
+	OtaUpdateId *string `location:"uri" locationName:"otaUpdateId" min:"1" type:"string" required:"true"`
+
+	// The IAM role that allows access to the AWS IoT Jobs service.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string" required:"true"`
+
+	// Specifies whether the update will continue to run (CONTINUOUS), or will be
+	// complete after all the things specified as targets have completed the update
+	// (SNAPSHOT). If continuous, the update may also be run on a thing when a change
+	// is detected in a target. For example, an update will run on a thing when
+	// the thing is added to a target group, even after the update was completed
+	// by all things originally in the group. Valid values: CONTINUOUS | SNAPSHOT.
+	TargetSelection *string `locationName:"targetSelection" type:"string" enum:"TargetSelection"`
+
+	// The targeted devices to receive OTA updates.
+	//
+	// Targets is a required field
+	Targets []*string `locationName:"targets" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateOTAUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateOTAUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateOTAUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateOTAUpdateInput"}
+	if s.Files == nil {
+		invalidParams.Add(request.NewErrParamRequired("Files"))
+	}
+	if s.Files != nil && len(s.Files) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Files", 1))
+	}
+	if s.OtaUpdateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OtaUpdateId"))
+	}
+	if s.OtaUpdateId != nil && len(*s.OtaUpdateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OtaUpdateId", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+	if s.Targets == nil {
+		invalidParams.Add(request.NewErrParamRequired("Targets"))
+	}
+	if s.Targets != nil && len(s.Targets) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Targets", 1))
+	}
+	if s.Files != nil {
+		for i, v := range s.Files {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Files", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalParameters sets the AdditionalParameters field's value.
+func (s *CreateOTAUpdateInput) SetAdditionalParameters(v map[string]*string) *CreateOTAUpdateInput {
+	s.AdditionalParameters = v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateOTAUpdateInput) SetDescription(v string) *CreateOTAUpdateInput {
+	s.Description = &v
+	return s
+}
+
+// SetFiles sets the Files field's value.
+func (s *CreateOTAUpdateInput) SetFiles(v []*OTAUpdateFile) *CreateOTAUpdateInput {
+	s.Files = v
+	return s
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *CreateOTAUpdateInput) SetOtaUpdateId(v string) *CreateOTAUpdateInput {
+	s.OtaUpdateId = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateOTAUpdateInput) SetRoleArn(v string) *CreateOTAUpdateInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetTargetSelection sets the TargetSelection field's value.
+func (s *CreateOTAUpdateInput) SetTargetSelection(v string) *CreateOTAUpdateInput {
+	s.TargetSelection = &v
+	return s
+}
+
+// SetTargets sets the Targets field's value.
+func (s *CreateOTAUpdateInput) SetTargets(v []*string) *CreateOTAUpdateInput {
+	s.Targets = v
+	return s
+}
+
+type CreateOTAUpdateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The AWS IoT job ARN associated with the OTA update.
+	AwsIotJobArn *string `locationName:"awsIotJobArn" type:"string"`
+
+	// The AWS IoT job ID associated with the OTA update.
+	AwsIotJobId *string `locationName:"awsIotJobId" type:"string"`
+
+	// The OTA update ARN.
+	OtaUpdateArn *string `locationName:"otaUpdateArn" type:"string"`
+
+	// The OTA update ID.
+	OtaUpdateId *string `locationName:"otaUpdateId" min:"1" type:"string"`
+
+	// The OTA update status.
+	OtaUpdateStatus *string `locationName:"otaUpdateStatus" type:"string" enum:"OTAUpdateStatus"`
+}
+
+// String returns the string representation
+func (s CreateOTAUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateOTAUpdateOutput) GoString() string {
+	return s.String()
+}
+
+// SetAwsIotJobArn sets the AwsIotJobArn field's value.
+func (s *CreateOTAUpdateOutput) SetAwsIotJobArn(v string) *CreateOTAUpdateOutput {
+	s.AwsIotJobArn = &v
+	return s
+}
+
+// SetAwsIotJobId sets the AwsIotJobId field's value.
+func (s *CreateOTAUpdateOutput) SetAwsIotJobId(v string) *CreateOTAUpdateOutput {
+	s.AwsIotJobId = &v
+	return s
+}
+
+// SetOtaUpdateArn sets the OtaUpdateArn field's value.
+func (s *CreateOTAUpdateOutput) SetOtaUpdateArn(v string) *CreateOTAUpdateOutput {
+	s.OtaUpdateArn = &v
+	return s
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *CreateOTAUpdateOutput) SetOtaUpdateId(v string) *CreateOTAUpdateOutput {
+	s.OtaUpdateId = &v
+	return s
+}
+
+// SetOtaUpdateStatus sets the OtaUpdateStatus field's value.
+func (s *CreateOTAUpdateOutput) SetOtaUpdateStatus(v string) *CreateOTAUpdateOutput {
+	s.OtaUpdateStatus = &v
+	return s
+}
+
 // The input for the CreatePolicy operation.
 type CreatePolicyInput struct {
 	_ struct{} `type:"structure"`
@@ -12861,6 +14525,151 @@ func (s *CreateRoleAliasOutput) SetRoleAlias(v string) *CreateRoleAliasOutput {
 // SetRoleAliasArn sets the RoleAliasArn field's value.
 func (s *CreateRoleAliasOutput) SetRoleAliasArn(v string) *CreateRoleAliasOutput {
 	s.RoleAliasArn = &v
+	return s
+}
+
+type CreateStreamInput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The files to stream.
+	//
+	// Files is a required field
+	Files []*StreamFile `locationName:"files" min:"1" type:"list" required:"true"`
+
+	// An IAM role that allows the IoT service principal assumes to access your
+	// S3 files.
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string" required:"true"`
+
+	// The stream ID.
+	//
+	// StreamId is a required field
+	StreamId *string `location:"uri" locationName:"streamId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateStreamInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateStreamInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateStreamInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateStreamInput"}
+	if s.Files == nil {
+		invalidParams.Add(request.NewErrParamRequired("Files"))
+	}
+	if s.Files != nil && len(s.Files) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Files", 1))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+	if s.StreamId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamId"))
+	}
+	if s.StreamId != nil && len(*s.StreamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 1))
+	}
+	if s.Files != nil {
+		for i, v := range s.Files {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Files", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateStreamInput) SetDescription(v string) *CreateStreamInput {
+	s.Description = &v
+	return s
+}
+
+// SetFiles sets the Files field's value.
+func (s *CreateStreamInput) SetFiles(v []*StreamFile) *CreateStreamInput {
+	s.Files = v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *CreateStreamInput) SetRoleArn(v string) *CreateStreamInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *CreateStreamInput) SetStreamId(v string) *CreateStreamInput {
+	s.StreamId = &v
+	return s
+}
+
+type CreateStreamOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The stream ARN.
+	StreamArn *string `locationName:"streamArn" type:"string"`
+
+	// The stream ID.
+	StreamId *string `locationName:"streamId" min:"1" type:"string"`
+
+	// The version of the stream.
+	StreamVersion *int64 `locationName:"streamVersion" type:"integer"`
+}
+
+// String returns the string representation
+func (s CreateStreamOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateStreamOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateStreamOutput) SetDescription(v string) *CreateStreamOutput {
+	s.Description = &v
+	return s
+}
+
+// SetStreamArn sets the StreamArn field's value.
+func (s *CreateStreamOutput) SetStreamArn(v string) *CreateStreamOutput {
+	s.StreamArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *CreateStreamOutput) SetStreamId(v string) *CreateStreamOutput {
+	s.StreamId = &v
+	return s
+}
+
+// SetStreamVersion sets the StreamVersion field's value.
+func (s *CreateStreamOutput) SetStreamVersion(v int64) *CreateStreamOutput {
+	s.StreamVersion = &v
 	return s
 }
 
@@ -13245,6 +15054,77 @@ func (s CreateTopicRuleOutput) GoString() string {
 	return s.String()
 }
 
+// Describes a custom method used to code sign a file.
+type CustomCodeSigning struct {
+	_ struct{} `type:"structure"`
+
+	// The certificate chain.
+	CertificateChain *CodeSigningCertificateChain `locationName:"certificateChain" type:"structure"`
+
+	// The hash algorithm used to code sign the file.
+	HashAlgorithm *string `locationName:"hashAlgorithm" type:"string"`
+
+	// The signature for the file.
+	Signature *CodeSigningSignature `locationName:"signature" type:"structure"`
+
+	// The signature algorithm used to code sign the file.
+	SignatureAlgorithm *string `locationName:"signatureAlgorithm" type:"string"`
+}
+
+// String returns the string representation
+func (s CustomCodeSigning) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CustomCodeSigning) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CustomCodeSigning) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CustomCodeSigning"}
+	if s.CertificateChain != nil {
+		if err := s.CertificateChain.Validate(); err != nil {
+			invalidParams.AddNested("CertificateChain", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Signature != nil {
+		if err := s.Signature.Validate(); err != nil {
+			invalidParams.AddNested("Signature", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCertificateChain sets the CertificateChain field's value.
+func (s *CustomCodeSigning) SetCertificateChain(v *CodeSigningCertificateChain) *CustomCodeSigning {
+	s.CertificateChain = v
+	return s
+}
+
+// SetHashAlgorithm sets the HashAlgorithm field's value.
+func (s *CustomCodeSigning) SetHashAlgorithm(v string) *CustomCodeSigning {
+	s.HashAlgorithm = &v
+	return s
+}
+
+// SetSignature sets the Signature field's value.
+func (s *CustomCodeSigning) SetSignature(v *CodeSigningSignature) *CustomCodeSigning {
+	s.Signature = v
+	return s
+}
+
+// SetSignatureAlgorithm sets the SignatureAlgorithm field's value.
+func (s *CustomCodeSigning) SetSignatureAlgorithm(v string) *CustomCodeSigning {
+	s.SignatureAlgorithm = &v
+	return s
+}
+
 type DeleteAuthorizerInput struct {
 	_ struct{} `type:"structure"`
 
@@ -13304,7 +15184,8 @@ func (s DeleteAuthorizerOutput) GoString() string {
 type DeleteCACertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate to delete.
+	// The ID of the certificate to delete. (The last part of the certificate ARN
+	// contains the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"caCertificateId" min:"64" type:"string" required:"true"`
@@ -13361,7 +15242,8 @@ func (s DeleteCACertificateOutput) GoString() string {
 type DeleteCertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -13419,6 +15301,242 @@ func (s DeleteCertificateOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteCertificateOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteJobExecutionInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the job execution to be deleted. The executionNumber refers to
+	// the execution of a particular job on a particular device.
+	//
+	// Note that once a job execution is deleted, the executionNumber may be reused
+	// by IoT, so be sure you get and use the correct value here.
+	//
+	// ExecutionNumber is a required field
+	ExecutionNumber *int64 `location:"uri" locationName:"executionNumber" type:"long" required:"true"`
+
+	// (Optional) When true, you can delete a job execution which is "IN_PROGRESS".
+	// Otherwise, you can only delete a job execution which is in a terminal state
+	// ("SUCCEEDED", "FAILED", "REJECTED", "REMOVED" or "CANCELED") or an exception
+	// will occur. The default is false.
+	//
+	// Deleting a job execution which is "IN_PROGRESS", will cause the device to
+	// be unable to access job information or update the job execution status. Use
+	// caution and ensure that the device is able to recover to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
+	// The ID of the job whose execution on a particular device will be deleted.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+
+	// The name of the thing whose job execution will be deleted.
+	//
+	// ThingName is a required field
+	ThingName *string `location:"uri" locationName:"thingName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteJobExecutionInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteJobExecutionInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteJobExecutionInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteJobExecutionInput"}
+	if s.ExecutionNumber == nil {
+		invalidParams.Add(request.NewErrParamRequired("ExecutionNumber"))
+	}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+	if s.ThingName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetExecutionNumber sets the ExecutionNumber field's value.
+func (s *DeleteJobExecutionInput) SetExecutionNumber(v int64) *DeleteJobExecutionInput {
+	s.ExecutionNumber = &v
+	return s
+}
+
+// SetForce sets the Force field's value.
+func (s *DeleteJobExecutionInput) SetForce(v bool) *DeleteJobExecutionInput {
+	s.Force = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *DeleteJobExecutionInput) SetJobId(v string) *DeleteJobExecutionInput {
+	s.JobId = &v
+	return s
+}
+
+// SetThingName sets the ThingName field's value.
+func (s *DeleteJobExecutionInput) SetThingName(v string) *DeleteJobExecutionInput {
+	s.ThingName = &v
+	return s
+}
+
+type DeleteJobExecutionOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteJobExecutionOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteJobExecutionOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// (Optional) When true, you can delete a job which is "IN_PROGRESS". Otherwise,
+	// you can only delete a job which is in a terminal state ("COMPLETED" or "CANCELED")
+	// or an exception will occur. The default is false.
+	//
+	// Deleting a job which is "IN_PROGRESS", will cause a device which is executing
+	// the job to be unable to access job information or update the job execution
+	// status. Use caution and ensure that each device executing a job which is
+	// deleted is able to recover to a valid state.
+	Force *bool `location:"querystring" locationName:"force" type:"boolean"`
+
+	// The ID of the job to be deleted.
+	//
+	// After a job deletion is completed, you may reuse this jobId when you create
+	// a new job. However, this is not recommended, and you must ensure that your
+	// devices are not using the jobId to refer to the deleted job.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"jobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetForce sets the Force field's value.
+func (s *DeleteJobInput) SetForce(v bool) *DeleteJobInput {
+	s.Force = &v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *DeleteJobInput) SetJobId(v string) *DeleteJobInput {
+	s.JobId = &v
+	return s
+}
+
+type DeleteJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteJobOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteOTAUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The OTA update ID to delete.
+	//
+	// OtaUpdateId is a required field
+	OtaUpdateId *string `location:"uri" locationName:"otaUpdateId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteOTAUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteOTAUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteOTAUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteOTAUpdateInput"}
+	if s.OtaUpdateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OtaUpdateId"))
+	}
+	if s.OtaUpdateId != nil && len(*s.OtaUpdateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OtaUpdateId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *DeleteOTAUpdateInput) SetOtaUpdateId(v string) *DeleteOTAUpdateInput {
+	s.OtaUpdateId = &v
+	return s
+}
+
+type DeleteOTAUpdateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteOTAUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteOTAUpdateOutput) GoString() string {
 	return s.String()
 }
 
@@ -13630,6 +15748,61 @@ func (s DeleteRoleAliasOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteRoleAliasOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteStreamInput struct {
+	_ struct{} `type:"structure"`
+
+	// The stream ID.
+	//
+	// StreamId is a required field
+	StreamId *string `location:"uri" locationName:"streamId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteStreamInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteStreamInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteStreamInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteStreamInput"}
+	if s.StreamId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamId"))
+	}
+	if s.StreamId != nil && len(*s.StreamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *DeleteStreamInput) SetStreamId(v string) *DeleteStreamInput {
+	s.StreamId = &v
+	return s
+}
+
+type DeleteStreamOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteStreamOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteStreamOutput) GoString() string {
 	return s.String()
 }
 
@@ -14189,7 +16362,8 @@ func (s *DescribeCACertificateOutput) SetRegistrationConfig(v *RegistrationConfi
 type DescribeCertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -14703,6 +16877,70 @@ func (s DescribeRoleAliasOutput) GoString() string {
 // SetRoleAliasDescription sets the RoleAliasDescription field's value.
 func (s *DescribeRoleAliasOutput) SetRoleAliasDescription(v *RoleAliasDescription) *DescribeRoleAliasOutput {
 	s.RoleAliasDescription = v
+	return s
+}
+
+type DescribeStreamInput struct {
+	_ struct{} `type:"structure"`
+
+	// The stream ID.
+	//
+	// StreamId is a required field
+	StreamId *string `location:"uri" locationName:"streamId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeStreamInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeStreamInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeStreamInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeStreamInput"}
+	if s.StreamId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamId"))
+	}
+	if s.StreamId != nil && len(*s.StreamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *DescribeStreamInput) SetStreamId(v string) *DescribeStreamInput {
+	s.StreamId = &v
+	return s
+}
+
+type DescribeStreamOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the stream.
+	StreamInfo *StreamInfo `locationName:"streamInfo" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeStreamOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeStreamOutput) GoString() string {
+	return s.String()
+}
+
+// SetStreamInfo sets the StreamInfo field's value.
+func (s *DescribeStreamOutput) SetStreamInfo(v *StreamInfo) *DescribeStreamOutput {
+	s.StreamInfo = v
 	return s
 }
 
@@ -15879,6 +18117,39 @@ func (s EnableTopicRuleOutput) GoString() string {
 	return s.String()
 }
 
+// Error information.
+type ErrorInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The error code.
+	Code *string `locationName:"code" type:"string"`
+
+	// The error message.
+	Message *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ErrorInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ErrorInfo) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *ErrorInfo) SetCode(v string) *ErrorInfo {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *ErrorInfo) SetMessage(v string) *ErrorInfo {
+	s.Message = &v
+	return s
+}
+
 // Information that explicitly denies authorization.
 type ExplicitDeny struct {
 	_ struct{} `type:"structure"`
@@ -16193,6 +18464,70 @@ func (s *GetLoggingOptionsOutput) SetRoleArn(v string) *GetLoggingOptionsOutput 
 	return s
 }
 
+type GetOTAUpdateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The OTA update ID.
+	//
+	// OtaUpdateId is a required field
+	OtaUpdateId *string `location:"uri" locationName:"otaUpdateId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetOTAUpdateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOTAUpdateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetOTAUpdateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetOTAUpdateInput"}
+	if s.OtaUpdateId == nil {
+		invalidParams.Add(request.NewErrParamRequired("OtaUpdateId"))
+	}
+	if s.OtaUpdateId != nil && len(*s.OtaUpdateId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OtaUpdateId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *GetOTAUpdateInput) SetOtaUpdateId(v string) *GetOTAUpdateInput {
+	s.OtaUpdateId = &v
+	return s
+}
+
+type GetOTAUpdateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The OTA update info.
+	OtaUpdateInfo *OTAUpdateInfo `locationName:"otaUpdateInfo" type:"structure"`
+}
+
+// String returns the string representation
+func (s GetOTAUpdateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetOTAUpdateOutput) GoString() string {
+	return s.String()
+}
+
+// SetOtaUpdateInfo sets the OtaUpdateInfo field's value.
+func (s *GetOTAUpdateOutput) SetOtaUpdateInfo(v *OTAUpdateInfo) *GetOTAUpdateOutput {
+	s.OtaUpdateInfo = v
+	return s
+}
+
 // The input for the GetPolicy operation.
 type GetPolicyInput struct {
 	_ struct{} `type:"structure"`
@@ -16239,8 +18574,17 @@ func (s *GetPolicyInput) SetPolicyName(v string) *GetPolicyInput {
 type GetPolicyOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The date the policy was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
 	// The default policy version ID.
 	DefaultVersionId *string `locationName:"defaultVersionId" type:"string"`
+
+	// The generation ID of the policy.
+	GenerationId *string `locationName:"generationId" type:"string"`
+
+	// The date the policy was last modified.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
 	// The policy ARN.
 	PolicyArn *string `locationName:"policyArn" type:"string"`
@@ -16262,9 +18606,27 @@ func (s GetPolicyOutput) GoString() string {
 	return s.String()
 }
 
+// SetCreationDate sets the CreationDate field's value.
+func (s *GetPolicyOutput) SetCreationDate(v time.Time) *GetPolicyOutput {
+	s.CreationDate = &v
+	return s
+}
+
 // SetDefaultVersionId sets the DefaultVersionId field's value.
 func (s *GetPolicyOutput) SetDefaultVersionId(v string) *GetPolicyOutput {
 	s.DefaultVersionId = &v
+	return s
+}
+
+// SetGenerationId sets the GenerationId field's value.
+func (s *GetPolicyOutput) SetGenerationId(v string) *GetPolicyOutput {
+	s.GenerationId = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *GetPolicyOutput) SetLastModifiedDate(v time.Time) *GetPolicyOutput {
+	s.LastModifiedDate = &v
 	return s
 }
 
@@ -16346,8 +18708,17 @@ func (s *GetPolicyVersionInput) SetPolicyVersionId(v string) *GetPolicyVersionIn
 type GetPolicyVersionOutput struct {
 	_ struct{} `type:"structure"`
 
+	// The date the policy version was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The generation ID of the policy version.
+	GenerationId *string `locationName:"generationId" type:"string"`
+
 	// Specifies whether the policy version is the default.
 	IsDefaultVersion *bool `locationName:"isDefaultVersion" type:"boolean"`
+
+	// The date the policy version was last modified.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
 
 	// The policy ARN.
 	PolicyArn *string `locationName:"policyArn" type:"string"`
@@ -16372,9 +18743,27 @@ func (s GetPolicyVersionOutput) GoString() string {
 	return s.String()
 }
 
+// SetCreationDate sets the CreationDate field's value.
+func (s *GetPolicyVersionOutput) SetCreationDate(v time.Time) *GetPolicyVersionOutput {
+	s.CreationDate = &v
+	return s
+}
+
+// SetGenerationId sets the GenerationId field's value.
+func (s *GetPolicyVersionOutput) SetGenerationId(v string) *GetPolicyVersionOutput {
+	s.GenerationId = &v
+	return s
+}
+
 // SetIsDefaultVersion sets the IsDefaultVersion field's value.
 func (s *GetPolicyVersionOutput) SetIsDefaultVersion(v bool) *GetPolicyVersionOutput {
 	s.IsDefaultVersion = &v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *GetPolicyVersionOutput) SetLastModifiedDate(v time.Time) *GetPolicyVersionOutput {
+	s.LastModifiedDate = &v
 	return s
 }
 
@@ -16630,6 +19019,50 @@ func (s *ImplicitDeny) SetPolicies(v []*Policy) *ImplicitDeny {
 	return s
 }
 
+// Sends messge data to an AWS IoT Analytics channel.
+type IotAnalyticsAction struct {
+	_ struct{} `type:"structure"`
+
+	// (deprecated) The ARN of the IoT Analytics channel to which message data will
+	// be sent.
+	ChannelArn *string `locationName:"channelArn" type:"string"`
+
+	// The name of the IoT Analytics channel to which message data will be sent.
+	ChannelName *string `locationName:"channelName" type:"string"`
+
+	// The ARN of the role which has a policy that grants IoT Analytics permission
+	// to send message data via IoT Analytics (iotanalytics:BatchPutMessage).
+	RoleArn *string `locationName:"roleArn" type:"string"`
+}
+
+// String returns the string representation
+func (s IotAnalyticsAction) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IotAnalyticsAction) GoString() string {
+	return s.String()
+}
+
+// SetChannelArn sets the ChannelArn field's value.
+func (s *IotAnalyticsAction) SetChannelArn(v string) *IotAnalyticsAction {
+	s.ChannelArn = &v
+	return s
+}
+
+// SetChannelName sets the ChannelName field's value.
+func (s *IotAnalyticsAction) SetChannelName(v string) *IotAnalyticsAction {
+	s.ChannelName = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *IotAnalyticsAction) SetRoleArn(v string) *IotAnalyticsAction {
+	s.RoleArn = &v
+	return s
+}
+
 // The Job object contains details about a job.
 type Job struct {
 	_ struct{} `type:"structure"`
@@ -16648,6 +19081,10 @@ type Job struct {
 
 	// The parameters specified for the job document.
 	DocumentParameters map[string]*string `locationName:"documentParameters" type:"map"`
+
+	// Will be true if the job was canceled with the optional force parameter set
+	// to true.
+	ForceCanceled *bool `locationName:"forceCanceled" type:"boolean"`
 
 	// An ARN identifying the job with format "arn:aws:iot:region:account:job/jobId".
 	JobArn *string `locationName:"jobArn" type:"string"`
@@ -16722,6 +19159,12 @@ func (s *Job) SetDocumentParameters(v map[string]*string) *Job {
 	return s
 }
 
+// SetForceCanceled sets the ForceCanceled field's value.
+func (s *Job) SetForceCanceled(v bool) *Job {
+	s.ForceCanceled = &v
+	return s
+}
+
 // SetJobArn sets the JobArn field's value.
 func (s *Job) SetJobArn(v string) *Job {
 	s.JobArn = &v
@@ -16786,6 +19229,10 @@ type JobExecution struct {
 	// which return or update job execution information.
 	ExecutionNumber *int64 `locationName:"executionNumber" type:"long"`
 
+	// Will be true if the job execution was canceled with the optional force parameter
+	// set to true.
+	ForceCanceled *bool `locationName:"forceCanceled" type:"boolean"`
+
 	// The unique identifier you assigned to the job when it was created.
 	JobId *string `locationName:"jobId" min:"1" type:"string"`
 
@@ -16808,6 +19255,10 @@ type JobExecution struct {
 
 	// The ARN of the thing on which the job execution is running.
 	ThingArn *string `locationName:"thingArn" type:"string"`
+
+	// The version of the job execution. Job execution versions are incremented
+	// each time they are updated by a device.
+	VersionNumber *int64 `locationName:"versionNumber" type:"long"`
 }
 
 // String returns the string representation
@@ -16823,6 +19274,12 @@ func (s JobExecution) GoString() string {
 // SetExecutionNumber sets the ExecutionNumber field's value.
 func (s *JobExecution) SetExecutionNumber(v int64) *JobExecution {
 	s.ExecutionNumber = &v
+	return s
+}
+
+// SetForceCanceled sets the ForceCanceled field's value.
+func (s *JobExecution) SetForceCanceled(v bool) *JobExecution {
+	s.ForceCanceled = &v
 	return s
 }
 
@@ -16865,6 +19322,12 @@ func (s *JobExecution) SetStatusDetails(v *JobExecutionStatusDetails) *JobExecut
 // SetThingArn sets the ThingArn field's value.
 func (s *JobExecution) SetThingArn(v string) *JobExecution {
 	s.ThingArn = &v
+	return s
+}
+
+// SetVersionNumber sets the VersionNumber field's value.
+func (s *JobExecution) SetVersionNumber(v int64) *JobExecution {
+	s.VersionNumber = &v
 	return s
 }
 
@@ -17086,7 +19549,9 @@ type JobProcessDetails struct {
 	// The number of things which successfully completed the job.
 	NumberOfSucceededThings *int64 `locationName:"numberOfSucceededThings" type:"integer"`
 
-	// The devices on which the job is executing.
+	// The target devices to which the job execution is being rolled out. This value
+	// will be null after the job execution has finished rolling out to all the
+	// target devices.
 	ProcessingTargets []*string `locationName:"processingTargets" type:"list"`
 }
 
@@ -18270,6 +20735,92 @@ func (s *ListJobsOutput) SetNextToken(v string) *ListJobsOutput {
 	return s
 }
 
+type ListOTAUpdatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of results to return at one time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A token used to retrieve the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+
+	// The OTA update job status.
+	OtaUpdateStatus *string `location:"querystring" locationName:"otaUpdateStatus" type:"string" enum:"OTAUpdateStatus"`
+}
+
+// String returns the string representation
+func (s ListOTAUpdatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOTAUpdatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListOTAUpdatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListOTAUpdatesInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListOTAUpdatesInput) SetMaxResults(v int64) *ListOTAUpdatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOTAUpdatesInput) SetNextToken(v string) *ListOTAUpdatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOtaUpdateStatus sets the OtaUpdateStatus field's value.
+func (s *ListOTAUpdatesInput) SetOtaUpdateStatus(v string) *ListOTAUpdatesInput {
+	s.OtaUpdateStatus = &v
+	return s
+}
+
+type ListOTAUpdatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token to use to get the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of OTA update jobs.
+	OtaUpdates []*OTAUpdateSummary `locationName:"otaUpdates" type:"list"`
+}
+
+// String returns the string representation
+func (s ListOTAUpdatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOTAUpdatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOTAUpdatesOutput) SetNextToken(v string) *ListOTAUpdatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOtaUpdates sets the OtaUpdates field's value.
+func (s *ListOTAUpdatesOutput) SetOtaUpdates(v []*OTAUpdateSummary) *ListOTAUpdatesOutput {
+	s.OtaUpdates = v
+	return s
+}
+
 // The input to the ListOutgoingCertificates operation.
 type ListOutgoingCertificatesInput struct {
 	_ struct{} `type:"structure"`
@@ -18904,6 +21455,92 @@ func (s *ListRoleAliasesOutput) SetNextMarker(v string) *ListRoleAliasesOutput {
 // SetRoleAliases sets the RoleAliases field's value.
 func (s *ListRoleAliasesOutput) SetRoleAliases(v []*string) *ListRoleAliasesOutput {
 	s.RoleAliases = v
+	return s
+}
+
+type ListStreamsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Set to true to return the list of streams in ascending order.
+	AscendingOrder *bool `location:"querystring" locationName:"isAscendingOrder" type:"boolean"`
+
+	// The maximum number of results to return at a time.
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	// A token used to get the next set of results.
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListStreamsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListStreamsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListStreamsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListStreamsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAscendingOrder sets the AscendingOrder field's value.
+func (s *ListStreamsInput) SetAscendingOrder(v bool) *ListStreamsInput {
+	s.AscendingOrder = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListStreamsInput) SetMaxResults(v int64) *ListStreamsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamsInput) SetNextToken(v string) *ListStreamsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListStreamsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token used to get the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of streams.
+	Streams []*StreamSummary `locationName:"streams" type:"list"`
+}
+
+// String returns the string representation
+func (s ListStreamsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListStreamsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListStreamsOutput) SetNextToken(v string) *ListStreamsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStreams sets the Streams field's value.
+func (s *ListStreamsOutput) SetStreams(v []*StreamSummary) *ListStreamsOutput {
+	s.Streams = v
 	return s
 }
 
@@ -20100,6 +22737,265 @@ func (s *LoggingOptionsPayload) SetRoleArn(v string) *LoggingOptionsPayload {
 	return s
 }
 
+// Describes a file to be associated with an OTA update.
+type OTAUpdateFile struct {
+	_ struct{} `type:"structure"`
+
+	// A list of name/attribute pairs.
+	Attributes map[string]*string `locationName:"attributes" type:"map"`
+
+	// The code signing method of the file.
+	CodeSigning *CodeSigning `locationName:"codeSigning" type:"structure"`
+
+	// The name of the file.
+	FileName *string `locationName:"fileName" type:"string"`
+
+	// The source of the file.
+	FileSource *Stream `locationName:"fileSource" type:"structure"`
+
+	// The file version.
+	FileVersion *string `locationName:"fileVersion" type:"string"`
+}
+
+// String returns the string representation
+func (s OTAUpdateFile) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OTAUpdateFile) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *OTAUpdateFile) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "OTAUpdateFile"}
+	if s.CodeSigning != nil {
+		if err := s.CodeSigning.Validate(); err != nil {
+			invalidParams.AddNested("CodeSigning", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.FileSource != nil {
+		if err := s.FileSource.Validate(); err != nil {
+			invalidParams.AddNested("FileSource", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *OTAUpdateFile) SetAttributes(v map[string]*string) *OTAUpdateFile {
+	s.Attributes = v
+	return s
+}
+
+// SetCodeSigning sets the CodeSigning field's value.
+func (s *OTAUpdateFile) SetCodeSigning(v *CodeSigning) *OTAUpdateFile {
+	s.CodeSigning = v
+	return s
+}
+
+// SetFileName sets the FileName field's value.
+func (s *OTAUpdateFile) SetFileName(v string) *OTAUpdateFile {
+	s.FileName = &v
+	return s
+}
+
+// SetFileSource sets the FileSource field's value.
+func (s *OTAUpdateFile) SetFileSource(v *Stream) *OTAUpdateFile {
+	s.FileSource = v
+	return s
+}
+
+// SetFileVersion sets the FileVersion field's value.
+func (s *OTAUpdateFile) SetFileVersion(v string) *OTAUpdateFile {
+	s.FileVersion = &v
+	return s
+}
+
+// Information about an OTA update.
+type OTAUpdateInfo struct {
+	_ struct{} `type:"structure"`
+
+	// A collection of name/value pairs
+	AdditionalParameters map[string]*string `locationName:"additionalParameters" type:"map"`
+
+	// The AWS IoT job ARN associated with the OTA update.
+	AwsIotJobArn *string `locationName:"awsIotJobArn" type:"string"`
+
+	// The AWS IoT job ID associated with the OTA update.
+	AwsIotJobId *string `locationName:"awsIotJobId" type:"string"`
+
+	// The date when the OTA update was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
+	// A description of the OTA update.
+	Description *string `locationName:"description" type:"string"`
+
+	// Error information associated with the OTA update.
+	ErrorInfo *ErrorInfo `locationName:"errorInfo" type:"structure"`
+
+	// The date when the OTA update was last updated.
+	LastModifiedDate *time.Time `locationName:"lastModifiedDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The OTA update ARN.
+	OtaUpdateArn *string `locationName:"otaUpdateArn" type:"string"`
+
+	// A list of files associated with the OTA update.
+	OtaUpdateFiles []*OTAUpdateFile `locationName:"otaUpdateFiles" min:"1" type:"list"`
+
+	// The OTA update ID.
+	OtaUpdateId *string `locationName:"otaUpdateId" min:"1" type:"string"`
+
+	// The status of the OTA update.
+	OtaUpdateStatus *string `locationName:"otaUpdateStatus" type:"string" enum:"OTAUpdateStatus"`
+
+	// Specifies whether the OTA update will continue to run (CONTINUOUS), or will
+	// be complete after all those things specified as targets have completed the
+	// OTA update (SNAPSHOT). If continuous, the OTA update may also be run on a
+	// thing when a change is detected in a target. For example, an OTA update will
+	// run on a thing when the thing is added to a target group, even after the
+	// OTA update was completed by all things originally in the group.
+	TargetSelection *string `locationName:"targetSelection" type:"string" enum:"TargetSelection"`
+
+	// The targets of the OTA update.
+	Targets []*string `locationName:"targets" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s OTAUpdateInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OTAUpdateInfo) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalParameters sets the AdditionalParameters field's value.
+func (s *OTAUpdateInfo) SetAdditionalParameters(v map[string]*string) *OTAUpdateInfo {
+	s.AdditionalParameters = v
+	return s
+}
+
+// SetAwsIotJobArn sets the AwsIotJobArn field's value.
+func (s *OTAUpdateInfo) SetAwsIotJobArn(v string) *OTAUpdateInfo {
+	s.AwsIotJobArn = &v
+	return s
+}
+
+// SetAwsIotJobId sets the AwsIotJobId field's value.
+func (s *OTAUpdateInfo) SetAwsIotJobId(v string) *OTAUpdateInfo {
+	s.AwsIotJobId = &v
+	return s
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *OTAUpdateInfo) SetCreationDate(v time.Time) *OTAUpdateInfo {
+	s.CreationDate = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *OTAUpdateInfo) SetDescription(v string) *OTAUpdateInfo {
+	s.Description = &v
+	return s
+}
+
+// SetErrorInfo sets the ErrorInfo field's value.
+func (s *OTAUpdateInfo) SetErrorInfo(v *ErrorInfo) *OTAUpdateInfo {
+	s.ErrorInfo = v
+	return s
+}
+
+// SetLastModifiedDate sets the LastModifiedDate field's value.
+func (s *OTAUpdateInfo) SetLastModifiedDate(v time.Time) *OTAUpdateInfo {
+	s.LastModifiedDate = &v
+	return s
+}
+
+// SetOtaUpdateArn sets the OtaUpdateArn field's value.
+func (s *OTAUpdateInfo) SetOtaUpdateArn(v string) *OTAUpdateInfo {
+	s.OtaUpdateArn = &v
+	return s
+}
+
+// SetOtaUpdateFiles sets the OtaUpdateFiles field's value.
+func (s *OTAUpdateInfo) SetOtaUpdateFiles(v []*OTAUpdateFile) *OTAUpdateInfo {
+	s.OtaUpdateFiles = v
+	return s
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *OTAUpdateInfo) SetOtaUpdateId(v string) *OTAUpdateInfo {
+	s.OtaUpdateId = &v
+	return s
+}
+
+// SetOtaUpdateStatus sets the OtaUpdateStatus field's value.
+func (s *OTAUpdateInfo) SetOtaUpdateStatus(v string) *OTAUpdateInfo {
+	s.OtaUpdateStatus = &v
+	return s
+}
+
+// SetTargetSelection sets the TargetSelection field's value.
+func (s *OTAUpdateInfo) SetTargetSelection(v string) *OTAUpdateInfo {
+	s.TargetSelection = &v
+	return s
+}
+
+// SetTargets sets the Targets field's value.
+func (s *OTAUpdateInfo) SetTargets(v []*string) *OTAUpdateInfo {
+	s.Targets = v
+	return s
+}
+
+// An OTA update summary.
+type OTAUpdateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date when the OTA update was created.
+	CreationDate *time.Time `locationName:"creationDate" type:"timestamp" timestampFormat:"unix"`
+
+	// The OTA update ARN.
+	OtaUpdateArn *string `locationName:"otaUpdateArn" type:"string"`
+
+	// The OTA update ID.
+	OtaUpdateId *string `locationName:"otaUpdateId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s OTAUpdateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OTAUpdateSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreationDate sets the CreationDate field's value.
+func (s *OTAUpdateSummary) SetCreationDate(v time.Time) *OTAUpdateSummary {
+	s.CreationDate = &v
+	return s
+}
+
+// SetOtaUpdateArn sets the OtaUpdateArn field's value.
+func (s *OTAUpdateSummary) SetOtaUpdateArn(v string) *OTAUpdateSummary {
+	s.OtaUpdateArn = &v
+	return s
+}
+
+// SetOtaUpdateId sets the OtaUpdateId field's value.
+func (s *OTAUpdateSummary) SetOtaUpdateId(v string) *OTAUpdateSummary {
+	s.OtaUpdateId = &v
+	return s
+}
+
 // A certificate that has been transferred but not yet accepted.
 type OutgoingCertificate struct {
 	_ struct{} `type:"structure"`
@@ -20569,10 +23465,12 @@ func (s *RegisterCertificateOutput) SetCertificateId(v string) *RegisterCertific
 type RegisterThingInput struct {
 	_ struct{} `type:"structure"`
 
-	// The parameters for provisioning a thing.
+	// The parameters for provisioning a thing. See Programmatic Provisioning (http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html)
+	// for more information.
 	Parameters map[string]*string `locationName:"parameters" type:"map"`
 
-	// The provisioning template.
+	// The provisioning template. See Programmatic Provisioning (http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html)
+	// for more information.
 	//
 	// TemplateBody is a required field
 	TemplateBody *string `locationName:"templateBody" type:"string" required:"true"`
@@ -20695,7 +23593,8 @@ func (s *RegistrationConfig) SetTemplateBody(v string) *RegistrationConfig {
 type RejectCertificateTransferInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -20983,6 +23882,9 @@ type RoleAliasDescription struct {
 	// The role alias.
 	RoleAlias *string `locationName:"roleAlias" min:"1" type:"string"`
 
+	// The ARN of the role alias.
+	RoleAliasArn *string `locationName:"roleAliasArn" type:"string"`
+
 	// The role ARN.
 	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
 }
@@ -21024,6 +23926,12 @@ func (s *RoleAliasDescription) SetOwner(v string) *RoleAliasDescription {
 // SetRoleAlias sets the RoleAlias field's value.
 func (s *RoleAliasDescription) SetRoleAlias(v string) *RoleAliasDescription {
 	s.RoleAlias = &v
+	return s
+}
+
+// SetRoleAliasArn sets the RoleAliasArn field's value.
+func (s *RoleAliasDescription) SetRoleAliasArn(v string) *RoleAliasDescription {
+	s.RoleAliasArn = &v
 	return s
 }
 
@@ -21107,6 +24015,74 @@ func (s *S3Action) SetKey(v string) *S3Action {
 // SetRoleArn sets the RoleArn field's value.
 func (s *S3Action) SetRoleArn(v string) *S3Action {
 	s.RoleArn = &v
+	return s
+}
+
+// The location in S3 the contains the files to stream.
+type S3Location struct {
+	_ struct{} `type:"structure"`
+
+	// The S3 bucket that contains the file to stream.
+	//
+	// Bucket is a required field
+	Bucket *string `locationName:"bucket" min:"1" type:"string" required:"true"`
+
+	// The name of the file within the S3 bucket to stream.
+	//
+	// Key is a required field
+	Key *string `locationName:"key" min:"1" type:"string" required:"true"`
+
+	// The file version.
+	Version *string `locationName:"version" type:"string"`
+}
+
+// String returns the string representation
+func (s S3Location) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s S3Location) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3Location) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3Location"}
+	if s.Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("Bucket"))
+	}
+	if s.Bucket != nil && len(*s.Bucket) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Bucket", 1))
+	}
+	if s.Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("Key"))
+	}
+	if s.Key != nil && len(*s.Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBucket sets the Bucket field's value.
+func (s *S3Location) SetBucket(v string) *S3Location {
+	s.Bucket = &v
+	return s
+}
+
+// SetKey sets the Key field's value.
+func (s *S3Location) SetKey(v string) *S3Location {
+	s.Key = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *S3Location) SetVersion(v string) *S3Location {
+	s.Version = &v
 	return s
 }
 
@@ -21617,9 +24593,9 @@ func (s SetV2LoggingOptionsOutput) GoString() string {
 type SnsAction struct {
 	_ struct{} `type:"structure"`
 
-	// The message format of the message to publish. Optional. Accepted values are
-	// "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this
-	// setting to determine if the payload should be parsed and relevant platform-specific
+	// (Optional) The message format of the message to publish. Accepted values
+	// are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses
+	// this setting to determine if the payload should be parsed and relevant platform-specific
 	// bits of the payload should be extracted. To read more about SNS message formats,
 	// see http://docs.aws.amazon.com/sns/latest/dg/json-formats.html (http://docs.aws.amazon.com/sns/latest/dg/json-formats.html)
 	// refer to their official documentation.
@@ -21906,6 +24882,238 @@ func (s StopThingRegistrationTaskOutput) String() string {
 // GoString returns the string representation
 func (s StopThingRegistrationTaskOutput) GoString() string {
 	return s.String()
+}
+
+// Describes a group of files that can be streamed.
+type Stream struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of a file associated with a stream.
+	FileId *int64 `locationName:"fileId" type:"integer"`
+
+	// The stream ID.
+	StreamId *string `locationName:"streamId" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s Stream) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Stream) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Stream) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Stream"}
+	if s.StreamId != nil && len(*s.StreamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFileId sets the FileId field's value.
+func (s *Stream) SetFileId(v int64) *Stream {
+	s.FileId = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *Stream) SetStreamId(v string) *Stream {
+	s.StreamId = &v
+	return s
+}
+
+// Represents a file to stream.
+type StreamFile struct {
+	_ struct{} `type:"structure"`
+
+	// The file ID.
+	FileId *int64 `locationName:"fileId" type:"integer"`
+
+	// The location of the file in S3.
+	S3Location *S3Location `locationName:"s3Location" type:"structure"`
+}
+
+// String returns the string representation
+func (s StreamFile) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StreamFile) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StreamFile) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StreamFile"}
+	if s.S3Location != nil {
+		if err := s.S3Location.Validate(); err != nil {
+			invalidParams.AddNested("S3Location", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFileId sets the FileId field's value.
+func (s *StreamFile) SetFileId(v int64) *StreamFile {
+	s.FileId = &v
+	return s
+}
+
+// SetS3Location sets the S3Location field's value.
+func (s *StreamFile) SetS3Location(v *S3Location) *StreamFile {
+	s.S3Location = v
+	return s
+}
+
+// Information about a stream.
+type StreamInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The date when the stream was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp" timestampFormat:"unix"`
+
+	// The description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The files to stream.
+	Files []*StreamFile `locationName:"files" min:"1" type:"list"`
+
+	// The date when the stream was last updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp" timestampFormat:"unix"`
+
+	// An IAM role AWS IoT assumes to access your S3 files.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+
+	// The stream ARN.
+	StreamArn *string `locationName:"streamArn" type:"string"`
+
+	// The stream ID.
+	StreamId *string `locationName:"streamId" min:"1" type:"string"`
+
+	// The stream version.
+	StreamVersion *int64 `locationName:"streamVersion" type:"integer"`
+}
+
+// String returns the string representation
+func (s StreamInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StreamInfo) GoString() string {
+	return s.String()
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *StreamInfo) SetCreatedAt(v time.Time) *StreamInfo {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *StreamInfo) SetDescription(v string) *StreamInfo {
+	s.Description = &v
+	return s
+}
+
+// SetFiles sets the Files field's value.
+func (s *StreamInfo) SetFiles(v []*StreamFile) *StreamInfo {
+	s.Files = v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *StreamInfo) SetLastUpdatedAt(v time.Time) *StreamInfo {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *StreamInfo) SetRoleArn(v string) *StreamInfo {
+	s.RoleArn = &v
+	return s
+}
+
+// SetStreamArn sets the StreamArn field's value.
+func (s *StreamInfo) SetStreamArn(v string) *StreamInfo {
+	s.StreamArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *StreamInfo) SetStreamId(v string) *StreamInfo {
+	s.StreamId = &v
+	return s
+}
+
+// SetStreamVersion sets the StreamVersion field's value.
+func (s *StreamInfo) SetStreamVersion(v int64) *StreamInfo {
+	s.StreamVersion = &v
+	return s
+}
+
+// A summary of a stream.
+type StreamSummary struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The stream ARN.
+	StreamArn *string `locationName:"streamArn" type:"string"`
+
+	// The stream ID.
+	StreamId *string `locationName:"streamId" min:"1" type:"string"`
+
+	// The stream version.
+	StreamVersion *int64 `locationName:"streamVersion" type:"integer"`
+}
+
+// String returns the string representation
+func (s StreamSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StreamSummary) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *StreamSummary) SetDescription(v string) *StreamSummary {
+	s.Description = &v
+	return s
+}
+
+// SetStreamArn sets the StreamArn field's value.
+func (s *StreamSummary) SetStreamArn(v string) *StreamSummary {
+	s.StreamArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *StreamSummary) SetStreamId(v string) *StreamSummary {
+	s.StreamId = &v
+	return s
+}
+
+// SetStreamVersion sets the StreamVersion field's value.
+func (s *StreamSummary) SetStreamVersion(v int64) *StreamSummary {
+	s.StreamVersion = &v
+	return s
 }
 
 type TestAuthorizationInput struct {
@@ -22223,7 +25431,7 @@ type ThingDocument struct {
 	// The attributes.
 	Attributes map[string]*string `locationName:"attributes" type:"map"`
 
-	// The thing shadow.
+	// The shadow.
 	Shadow *string `locationName:"shadow" type:"string"`
 
 	// Thing group names.
@@ -22781,7 +25989,8 @@ func (s *TopicRulePayload) SetSql(v string) *TopicRulePayload {
 type TransferCertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -23143,7 +26352,8 @@ func (s UpdateCACertificateOutput) GoString() string {
 type UpdateCertificateInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ID of the certificate.
+	// The ID of the certificate. (The last part of the certificate ARN contains
+	// the certificate ID.)
 	//
 	// CertificateId is a required field
 	CertificateId *string `location:"uri" locationName:"certificateId" min:"64" type:"string" required:"true"`
@@ -23384,6 +26594,141 @@ func (s *UpdateRoleAliasOutput) SetRoleAlias(v string) *UpdateRoleAliasOutput {
 // SetRoleAliasArn sets the RoleAliasArn field's value.
 func (s *UpdateRoleAliasOutput) SetRoleAliasArn(v string) *UpdateRoleAliasOutput {
 	s.RoleAliasArn = &v
+	return s
+}
+
+type UpdateStreamInput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The files associated with the stream.
+	Files []*StreamFile `locationName:"files" min:"1" type:"list"`
+
+	// An IAM role that allows the IoT service principal assumes to access your
+	// S3 files.
+	RoleArn *string `locationName:"roleArn" min:"20" type:"string"`
+
+	// The stream ID.
+	//
+	// StreamId is a required field
+	StreamId *string `location:"uri" locationName:"streamId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateStreamInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateStreamInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateStreamInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateStreamInput"}
+	if s.Files != nil && len(s.Files) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Files", 1))
+	}
+	if s.RoleArn != nil && len(*s.RoleArn) < 20 {
+		invalidParams.Add(request.NewErrParamMinLen("RoleArn", 20))
+	}
+	if s.StreamId == nil {
+		invalidParams.Add(request.NewErrParamRequired("StreamId"))
+	}
+	if s.StreamId != nil && len(*s.StreamId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StreamId", 1))
+	}
+	if s.Files != nil {
+		for i, v := range s.Files {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Files", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateStreamInput) SetDescription(v string) *UpdateStreamInput {
+	s.Description = &v
+	return s
+}
+
+// SetFiles sets the Files field's value.
+func (s *UpdateStreamInput) SetFiles(v []*StreamFile) *UpdateStreamInput {
+	s.Files = v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *UpdateStreamInput) SetRoleArn(v string) *UpdateStreamInput {
+	s.RoleArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *UpdateStreamInput) SetStreamId(v string) *UpdateStreamInput {
+	s.StreamId = &v
+	return s
+}
+
+type UpdateStreamOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A description of the stream.
+	Description *string `locationName:"description" type:"string"`
+
+	// The stream ARN.
+	StreamArn *string `locationName:"streamArn" type:"string"`
+
+	// The stream ID.
+	StreamId *string `locationName:"streamId" min:"1" type:"string"`
+
+	// The stream version.
+	StreamVersion *int64 `locationName:"streamVersion" type:"integer"`
+}
+
+// String returns the string representation
+func (s UpdateStreamOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateStreamOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateStreamOutput) SetDescription(v string) *UpdateStreamOutput {
+	s.Description = &v
+	return s
+}
+
+// SetStreamArn sets the StreamArn field's value.
+func (s *UpdateStreamOutput) SetStreamArn(v string) *UpdateStreamOutput {
+	s.StreamArn = &v
+	return s
+}
+
+// SetStreamId sets the StreamId field's value.
+func (s *UpdateStreamOutput) SetStreamId(v string) *UpdateStreamOutput {
+	s.StreamId = &v
+	return s
+}
+
+// SetStreamVersion sets the StreamVersion field's value.
+func (s *UpdateStreamOutput) SetStreamVersion(v int64) *UpdateStreamOutput {
+	s.StreamVersion = &v
 	return s
 }
 
@@ -23818,6 +27163,9 @@ const (
 
 	// JobStatusCompleted is a JobStatus enum value
 	JobStatusCompleted = "COMPLETED"
+
+	// JobStatusDeletionInProgress is a JobStatus enum value
+	JobStatusDeletionInProgress = "DELETION_IN_PROGRESS"
 )
 
 const (
@@ -23851,6 +27199,20 @@ const (
 
 	// MessageFormatJson is a MessageFormat enum value
 	MessageFormatJson = "JSON"
+)
+
+const (
+	// OTAUpdateStatusCreatePending is a OTAUpdateStatus enum value
+	OTAUpdateStatusCreatePending = "CREATE_PENDING"
+
+	// OTAUpdateStatusCreateInProgress is a OTAUpdateStatus enum value
+	OTAUpdateStatusCreateInProgress = "CREATE_IN_PROGRESS"
+
+	// OTAUpdateStatusCreateComplete is a OTAUpdateStatus enum value
+	OTAUpdateStatusCreateComplete = "CREATE_COMPLETE"
+
+	// OTAUpdateStatusCreateFailed is a OTAUpdateStatus enum value
+	OTAUpdateStatusCreateFailed = "CREATE_FAILED"
 )
 
 const (

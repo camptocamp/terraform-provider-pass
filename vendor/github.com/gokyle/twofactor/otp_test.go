@@ -69,6 +69,46 @@ func TestURL(t *testing.T) {
 	}
 }
 
+// This test makes sure we can generate codes for padded and non-padded
+// entries
+func TestPaddedURL(t *testing.T) {
+	var urlList = []string{
+		"otpauth://hotp/?secret=ME",
+		"otpauth://hotp/?secret=MEFR",
+		"otpauth://hotp/?secret=MFRGG",
+		"otpauth://hotp/?secret=MFRGGZA",
+		"otpauth://hotp/?secret=a6mryljlbufszudtjdt42nh5by=======",
+		"otpauth://hotp/?secret=a6mryljlbufszudtjdt42nh5by",
+		"otpauth://hotp/?secret=a6mryljlbufszudtjdt42nh5by%3D%3D%3D%3D%3D%3D%3D",
+	}
+	var codeList = []string{
+		"413198",
+		"770938",
+		"670717",
+		"402378",
+		"069864",
+		"069864",
+		"069864",
+	}
+
+	for i := range urlList {
+		if o, id, err := FromURL(urlList[i]); err != nil {
+			fmt.Println("hotp: URL should have parsed successfully")
+			fmt.Printf("\turl was: %s\n", urlList[i])
+			t.FailNow()
+			fmt.Printf("\t%s, %s\n", o.OTP(), id)
+		} else {
+			code2 := o.OTP()
+			if code2 != codeList[i] {
+				fmt.Printf("hotp: mismatched OTPs\n")
+				fmt.Printf("\texpected: %s\n", codeList[i])
+				fmt.Printf("\t  actual: %s\n", code2)
+				t.FailNow()
+			}
+		}
+	}
+}
+
 // This test attempts a variety of invalid urls against the parser
 // to ensure they fail.
 func TestBadURL(t *testing.T) {
@@ -79,10 +119,7 @@ func TestBadURL(t *testing.T) {
 		"foo",
 		"otpauth:/foo/bar/baz",
 		"://",
-		"otpauth://hotp/secret=bar",
-		"otpauth://hotp/?secret=QUJDRA&algorithm=SHA256",
 		"otpauth://hotp/?digits=",
-		"otpauth://hotp/?secret=123",
 		"otpauth://hotp/?secret=MFRGGZDF&digits=ABCD",
 		"otpauth://hotp/?secret=MFRGGZDF&counter=ABCD",
 	}
