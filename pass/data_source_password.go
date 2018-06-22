@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
+	"github.com/gopasspw/gopass/pkg/store/root"
 	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/justwatchcom/gopass/store/root"
 	"github.com/pkg/errors"
 )
 

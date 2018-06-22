@@ -7,9 +7,9 @@ import (
 
 	"gopkg.in/yaml.v2"
 
+	"github.com/gopasspw/gopass/pkg/store/root"
+	"github.com/gopasspw/gopass/pkg/store/secret"
 	"github.com/hashicorp/terraform/helper/schema"
-	"github.com/justwatchcom/gopass/store/root"
-	"github.com/justwatchcom/gopass/store/secret"
 	"github.com/pkg/errors"
 )
 
