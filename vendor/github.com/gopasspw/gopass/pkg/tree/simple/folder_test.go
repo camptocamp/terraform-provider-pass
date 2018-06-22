@@ -1,0 +1,56 @@
+package simple
+
+import (
+	"sort"
+	"testing"
+
+	"github.com/fatih/color"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestFolder(t *testing.T) {
+	root := New("gopass")
+	assert.NoError(t, root.AddFile("foo/bar", "text/plain"))
+	assert.NoError(t, root.AddTemplate("foo"))
+	assert.NoError(t, root.AddFile("foo/baz.b64", "application/octet-stream"))
+	assert.NoError(t, root.AddFile("foo/zab.yml", "text/yaml"))
+	assert.Equal(t, 3, root.Len())
+
+	// test list
+	lst := root.List(0)
+	sort.Strings(lst)
+	wants := []string{
+		"foo/bar",
+		"foo/baz.b64",
+		"foo/zab.yml",
+	}
+	assert.Equal(t, lst, wants)
+
+	// test name
+	assert.Equal(t, "gopass", root.String())
+
+	// test format
+	color.NoColor = true
+	out := root.Format(2)
+	want := `gopass
+└── foo (template)
+    ├── bar
+    ├── baz.b64 (binary)
+    └── zab.yml (yaml)
+`
+	assert.Equal(t, out, want)
+
+	// test list 1
+	root = New("gopass")
+	assert.NoError(t, root.AddFile("zab/foozen", "text/plain"))
+	assert.NoError(t, root.AddFile("zab/foo/bar", "text/plain"))
+	assert.NoError(t, root.AddFile("zab/foo/baz", "text/plain"))
+
+	lst = root.List(1)
+	sort.Strings(lst)
+	wants = []string{
+		"zab/foozen",
+	}
+	assert.Equal(t, wants, lst)
+
+}

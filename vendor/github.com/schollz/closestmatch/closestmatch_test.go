@@ -78,6 +78,18 @@ func BenchmarkFileSave(b *testing.B) {
 	}
 }
 
+func ExampleMatchingSmall() {
+	cm := New([]string{"love", "loving", "cat", "kit", "cats"}, []int{4})
+	fmt.Println(cm.splitWord("love"))
+	fmt.Println(cm.splitWord("kit"))
+	fmt.Println(cm.Closest("kit"))
+	// Output:
+	// map[love:{}]
+	// map[kit:{}]
+	// kit
+
+}
+
 func ExampleMatchingSimple() {
 	cm := New(test.WordsToTest, []int{3})
 	for _, searchWord := range test.SearchWords {
@@ -109,6 +121,34 @@ func ExampleMatchingBigList() {
 	// island of a thousand mirrors by nayomi munaweera
 }
 
+func ExampleMatchingCatcher() {
+	bText, _ := ioutil.ReadFile("test/catcher.txt")
+	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
+	cm := New(wordsToTest, []int{5})
+	searchWord := "catcher in the rye by jd salinger"
+	for i, match := range cm.ClosestN(searchWord, 3) {
+		if i == 2 {
+			fmt.Println(match)
+		}
+	}
+	// Output:
+	// the catcher in the rye by j.d. salinger
+}
+
+func ExampleMatchingPotter() {
+	bText, _ := ioutil.ReadFile("test/potter.txt")
+	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
+	cm := New(wordsToTest, []int{5})
+	searchWord := "harry potter and the half blood prince by j.k. rowling"
+	for i, match := range cm.ClosestN(searchWord, 3) {
+		if i == 1 {
+			fmt.Println(match)
+		}
+	}
+	// Output:
+	//  harry potter and the order of the phoenix (harry potter, #5, part 1) by j.k. rowling
+}
+
 func TestAccuracyBookWords(t *testing.T) {
 	bText, _ := ioutil.ReadFile("test/books.list")
 	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
@@ -117,7 +157,7 @@ func TestAccuracyBookWords(t *testing.T) {
 	fmt.Printf("Accuracy with mutating words in book list:\t%2.1f%%\n", accuracy)
 }
 
-func TestAccuracyBookletters(t *testing.T) {
+func TestAccuracyBookLetters(t *testing.T) {
 	bText, _ := ioutil.ReadFile("test/books.list")
 	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
 	cm := New(wordsToTest, []int{5})
@@ -125,7 +165,7 @@ func TestAccuracyBookletters(t *testing.T) {
 	fmt.Printf("Accuracy with mutating letters in book list:\t%2.1f%%\n", accuracy)
 }
 
-func TestAccuracyDictionaryletters(t *testing.T) {
+func TestAccuracyDictionaryLetters(t *testing.T) {
 	bText, _ := ioutil.ReadFile("test/popular.txt")
 	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
 	cm := New(wordsToTest, []int{2, 3, 4})
@@ -134,16 +174,26 @@ func TestAccuracyDictionaryletters(t *testing.T) {
 }
 
 func TestSaveLoad(t *testing.T) {
-	cm := New(test.WordsToTest, []int{2, 3, 4})
-	err := cm.Save("test.txt")
+	bText, _ := ioutil.ReadFile("test/books.list")
+	wordsToTest := strings.Split(strings.ToLower(string(bText)), "\n")
+	type TestStruct struct {
+		cm *ClosestMatch
+	}
+	tst := new(TestStruct)
+	tst.cm = New(wordsToTest, []int{5})
+	err := tst.cm.Save("test.gob")
 	if err != nil {
 		t.Error(err)
 	}
-	cm2, err := Load("test.txt")
+
+	tst2 := new(TestStruct)
+	tst2.cm, err = Load("test.gob")
 	if err != nil {
 		t.Error(err)
 	}
-	if cm2.Closest("war by hg wells") != cm.Closest("war by hg wells") {
-		t.Errorf("Differing answers")
+	answer2 := tst2.cm.Closest("war of the worlds by hg wells")
+	answer1 := tst.cm.Closest("war of the worlds by hg wells")
+	if answer1 != answer2 {
+		t.Errorf("Differing answers: '%s' '%s'", answer1, answer2)
 	}
 }

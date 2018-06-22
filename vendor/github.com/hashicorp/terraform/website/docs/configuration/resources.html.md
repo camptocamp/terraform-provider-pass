@@ -71,11 +71,6 @@ There are **meta-parameters** available to all resources:
     example, this can be used to create an new DNS record before removing an old
     record.
 
-        ~> Resources that utilize the `create_before_destroy` key can only
-        depend on other resources that also include `create_before_destroy`.
-        Referencing a resource that does not include `create_before_destroy`
-        will result in a dependency graph cycle.
-
   - `prevent_destroy` (bool) - This flag provides extra protection against the
     destruction of a given resource. When this is set to `true`, any plan that
     includes a destroy of this resource will return an error message.
@@ -91,6 +86,8 @@ There are **meta-parameters** available to all resources:
         Additionally you can also use a single entry with a wildcard (e.g. `"*"`)
         which will match all attribute names. Using a partial string together
         with a wildcard (e.g. `"rout*"`) is **not** supported.
+
+  -> Interpolations are not currently supported in the `lifecycle` configuration block (see [issue #3116](https://github.com/hashicorp/terraform/issues/3116))
 
 ### Timeouts
 
@@ -226,6 +223,38 @@ resource "aws_instance" "app" {
   count = "3"
   private_ip = "${lookup(var.instance_ips, count.index)}"
   # ...
+}
+```
+
+To reference a particular instance of a resource you can use `resource.foo.*.id[#]` where `#` is the index number of the instance.
+
+For example, to create a list of all [AWS subnet](/docs/providers/aws/r/subnet.html) ids vs referencing a specific subnet in the list you can use this syntax:
+
+```hcl
+resource "aws_vpc" "foo" {
+  cidr_block = "198.18.0.0/16"
+}
+
+resource "aws_subnet" "bar" {
+  count      = 2
+  vpc_id     = "${aws_vpc.foo.id}"
+  cidr_block = "${cidrsubnet(aws_vpc.foo.cidr_block, 8, count.index)}"
+}
+
+output "vpc_id" {
+  value = "${aws_vpc.foo.id}"
+}
+
+output "all_subnet_ids" {
+  value = "${aws_subnet.bar.*.id}"
+}
+
+output "subnet_id_0" {
+  value = "${aws_subnet.bar.*.id[0]}"
+}
+
+output "subnet_id_1" {
+  value = "${aws_subnet.bar.*.id[1]}"
 }
 ```
 

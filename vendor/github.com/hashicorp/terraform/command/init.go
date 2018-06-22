@@ -180,7 +180,6 @@ func (c *InitCommand) Run(args []string) int {
 					"Error downloading modules: %s", err))
 				return 1
 			}
-
 		}
 
 		// If we're requesting backend configuration or looking for required
@@ -274,20 +273,21 @@ func (c *InitCommand) Run(args []string) int {
 // Load the complete module tree, and fetch any missing providers.
 // This method outputs its own Ui.
 func (c *InitCommand) getProviders(path string, state *terraform.State, upgrade bool) error {
-	mod, err := c.Module(path)
-	if err != nil {
-		c.Ui.Error(fmt.Sprintf("Error getting plugins: %s", err))
-		return err
+	mod, diags := c.Module(path)
+	if diags.HasErrors() {
+		c.showDiagnostics(diags)
+		return diags.Err()
 	}
 
-	if diags := mod.Validate(); diags.HasErrors() {
-		err := diags.Err()
-		c.Ui.Error(fmt.Sprintf("Error getting plugins: %s", err))
+	if err := terraform.CheckStateVersion(state); err != nil {
+		diags = diags.Append(err)
+		c.showDiagnostics(diags)
 		return err
 	}
 
 	if err := terraform.CheckRequiredVersion(mod); err != nil {
-		c.Ui.Error(err.Error())
+		diags = diags.Append(err)
+		c.showDiagnostics(diags)
 		return err
 	}
 
@@ -311,7 +311,6 @@ func (c *InitCommand) getProviders(path string, state *terraform.State, upgrade 
 	))
 
 	missing := c.missingPlugins(available, requirements)
-	internal := c.internalProviders()
 
 	var errs error
 	if c.getPlugins {
@@ -321,12 +320,6 @@ func (c *InitCommand) getProviders(path string, state *terraform.State, upgrade 
 		}
 
 		for provider, reqd := range missing {
-			if _, isInternal := internal[provider]; isInternal {
-				// Ignore internal providers; they are not eligible for
-				// installation.
-				continue
-			}
-
 			_, err := c.providerInstaller.Get(provider, reqd.Versions)
 
 			if err != nil {
@@ -384,7 +377,10 @@ func (c *InitCommand) getProviders(path string, state *terraform.State, upgrade 
 	// again. If anything changes, other commands that use providers will
 	// fail with an error instructing the user to re-run this command.
 	available = c.providerPluginSet() // re-discover to see newly-installed plugins
-	chosen := choosePlugins(available, internal, requirements)
+
+	// internal providers were already filtered out, since we don't need to get them.
+	chosen := choosePlugins(available, nil, requirements)
+
 	digests := map[string][]byte{}
 	for name, meta := range chosen {
 		digest, err := meta.SHA256()
@@ -397,7 +393,7 @@ func (c *InitCommand) getProviders(path string, state *terraform.State, upgrade 
 			digests[name] = nil
 		}
 	}
-	err = c.providerPluginsLock().Write(digests)
+	err := c.providerPluginsLock().Write(digests)
 	if err != nil {
 		c.Ui.Error(fmt.Sprintf("failed to save provider manifest: %s", err))
 		return err
