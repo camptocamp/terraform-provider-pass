@@ -1,3 +1,13 @@
+## 1.1.0 (Jun 25, 2018)
+
+IMPROVEMENTS:
+
+* Support newer versions of gopass
+
+FEATURES:
+
+* Expose entire secret contents in `.full` data source attribute
+
 ## 1.0.1 (Mar 5, 2018)
 
 BUG FIXES:
