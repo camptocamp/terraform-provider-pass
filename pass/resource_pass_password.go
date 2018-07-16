@@ -56,8 +56,14 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 		return errors.Wrapf(err, "failed to marshal data as YAML for %s", path)
 	}
 
-	sec := secret.New(passwd, fmt.Sprintf("---\n%s", dataYaml))
-	err = st.Set(context.Background(), path, sec)
+	if len(data) == 0 {
+		sec := secret.New(passwd, fmt.Sprintf(""))
+		err = st.Set(context.Background(), path, sec)
+	} else {
+		sec := secret.New(passwd, fmt.Sprintf("---\n%s", dataYaml))
+		err = st.Set(context.Background(), path, sec)
+	}
+
 	if err != nil {
 		return errors.Wrapf(err, "failed to write secret at %s", path)
 	}
