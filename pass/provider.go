@@ -53,7 +53,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 
 	if !act.Store.Initialized(ctx) {
-		return nil, errors.Wrap(err, "password-store not initialized")
+		return nil, errors.New("password-store not initialized")
 	}
 	st := act.Store
 
