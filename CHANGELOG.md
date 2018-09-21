@@ -1,3 +1,13 @@
+## 1.1.1 (Sep 21, 2018)
+
+IMPROVEMENTS:
+
+* Support for single-line password secret
+
+BUG FIXES:
+
+* provider: return an error if the store is not initialized
+
 ## 1.1.0 (Jun 25, 2018)
 
 IMPROVEMENTS:
