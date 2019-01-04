@@ -17,7 +17,7 @@ cache:
   - vendor
 
 before_script:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gpg2 pass; mkdir $GOPATH/bin; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gpg2 pass; mkdir -p $GOPATH/bin; fi
 - gpg --batch --gen-key test-gpg-key
 - pass init "joe@foo.bar"
 - curl -L https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
@@ -29,7 +29,7 @@ script:
 - make vet
 
 before_install:
-- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then   mkdir $GOPATH/bin; fi
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then mkdir -p $GOPATH/bin; fi
 - curl -L https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 - dep ensure
 
