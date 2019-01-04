@@ -1,0 +1,51 @@
+language: go
+go:
+- '1.10'
+
+os:
+- linux
+- osx
+
+addons:
+  apt:
+    packages:
+    - gnupg2
+    - pass
+
+cache:
+  directories:
+  - vendor
+
+before_script:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then HOMEBREW_NO_AUTO_UPDATE=1 brew install gpg2 pass; mkdir $GOPATH/bin; fi
+- gpg --batch --gen-key test-gpg-key
+- pass init "joe@foo.bar"
+- curl -L https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+- dep ensure
+
+script:
+- make test
+- make testacc
+- make vet
+
+before_install:
+- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then   mkdir $GOPATH/bin; fi
+- curl -L https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+- dep ensure
+
+install:
+- make build
+
+# TODO: set this up with https://docs.travis-ci.com/user/deployment/releases#using-travis-ci-client-to-populate-initial-deployment-configuration
+# deploy:
+#   provider: releases
+#   file: 
+#   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-darwin_amd64.zip
+#   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-linux_amd64.zip
+#   skip_cleanup: true
+#   api_key:
+#     secure: api-key-encrypted-by-travis-cli
+#   on:
+#     repo: camptocamp/terraform-provider-pass
+#     tags: true
+

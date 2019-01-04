@@ -5,6 +5,7 @@ default: build
 
 build: fmtcheck
 	go install
+	@zip -j builds/terraform-provider-pass-$$(go env GOOS)_$$(go env GOARCH).zip $$(go env GOPATH)/bin/terraform-provider-pass
 
 test: fmtcheck
 	go test -i $(TEST) || exit 1
