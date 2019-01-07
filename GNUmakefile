@@ -6,6 +6,9 @@ default: build
 build: fmtcheck
 	go install
 
+static-build: fmtcheck
+	CGO_ENABLED=0 go install
+
 test: fmtcheck
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \
@@ -43,5 +46,5 @@ test-compile:
 	fi
 	go test -c $(TEST) $(TESTARGS)
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile
+.PHONY: build static-build test testacc vet fmt fmtcheck errcheck vendor-status test-compile
 
