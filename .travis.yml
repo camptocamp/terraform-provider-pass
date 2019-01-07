@@ -35,6 +35,7 @@ before_install:
 
 install:
 - make build
+- make static-build
 
 # TODO: set this up with https://docs.travis-ci.com/user/deployment/releases#using-travis-ci-client-to-populate-initial-deployment-configuration
 # deploy:
@@ -42,6 +43,8 @@ install:
 #   file: 
 #   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-darwin_amd64.zip
 #   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-linux_amd64.zip
+#   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-static-darwin_amd64.zip
+#   - $TRAVIS_BUILD_DIR/builds/terraform-provider-pass-static-linux_amd64.zip
 #   skip_cleanup: true
 #   api_key:
 #     secure: api-key-encrypted-by-travis-cli
