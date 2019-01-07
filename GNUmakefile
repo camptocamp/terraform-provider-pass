@@ -7,6 +7,9 @@ build: fmtcheck
 	go install
 	@zip -j builds/terraform-provider-pass-$$(go env GOOS)_$$(go env GOARCH).zip $$(go env GOPATH)/bin/terraform-provider-pass
 
+static-build: fmtcheck
+	CGO_ENABLED=0 go install
+
 test: fmtcheck
 	go test -i $(TEST) || exit 1
 	echo $(TEST) | \
@@ -44,5 +47,5 @@ test-compile:
 	fi
 	go test -c $(TEST) $(TESTARGS)
 
-.PHONY: build test testacc vet fmt fmtcheck errcheck vendor-status test-compile
+.PHONY: build static-build test testacc vet fmt fmtcheck errcheck vendor-status test-compile
 
