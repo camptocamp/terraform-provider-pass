@@ -1,6 +1,7 @@
 ---
 layout: "docs"
 page_title: "Consul - Storage Backends - Configuration"
+sidebar_title: "Consul"
 sidebar_current: "docs-configuration-storage-consul"
 description: |-
   The Consul storage backend is used to persist Vault's data in Consul's
@@ -50,6 +51,9 @@ vault.service.consul
 Sealed Vault instances will mark themselves as unhealthy to avoid being returned
 at Consul's service discovery layer.
 
+Note that if you have configured multiple listeners for Vault, you must specify
+which one Consul should advertise to the cluster using [`api_addr`][api-addr]
+and [`cluster_addr`][cluster-addr] ([example][listener-example]).
 
 ## `consul` Parameters
 
@@ -171,6 +175,40 @@ the following will work for most use-cases, assuming that your service name is
 }
 ```
 
+For Consul 1.4+, the following example takes into account the changed ACL
+language:
+
+```json
+{
+  "key_prefix": {
+    "vault/": {
+      "policy": "write"
+    }
+  },
+  "node_prefix": {
+    "": {
+      "policy": "write"
+    }
+  },
+  "service": {
+    "vault": {
+      "policy": "write"
+    }
+  },
+  "agent_prefix": {
+    "": {
+      "policy": "write"
+    }
+
+  },
+  "session_prefix": {
+    "": {
+      "policy": "write"
+    }
+  }
+}
+```
+
 ## `consul` Examples
 
 ### Local Agent
@@ -236,3 +274,6 @@ storage "consul" {
 [consul-encryption]: https://www.consul.io/docs/agent/encryption.html "Consul Encryption"
 [consul-translate-wan-addrs]: https://www.consul.io/docs/agent/options.html#translate_wan_addrs "Consul Configuration"
 [consul-session-ttl]: https://www.consul.io/docs/agent/options.html#session_ttl_min "Consul Configuration"
+[api-addr]: /docs/configuration/index.html#api_addr
+[cluster-addr]: /docs/configuration/index.html#cluster_addr
+[listener-example]: /docs/configuration/listener/tcp.html#listening-on-multiple-interfaces

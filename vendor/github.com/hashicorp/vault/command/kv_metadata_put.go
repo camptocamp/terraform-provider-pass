@@ -26,7 +26,7 @@ func (c *KVMetadataPutCommand) Synopsis() string {
 
 func (c *KVMetadataPutCommand) Help() string {
 	helpText := `
-Usage: vault metadata kv put [options] KEY [DATA]
+Usage: vault metadata kv put [options] KEY
 
   This command can be used to create a blank key in the key-value store or to
   update key configuration for a specified key.
@@ -41,7 +41,7 @@ Usage: vault metadata kv put [options] KEY [DATA]
 
   Require Check-and-Set for this key: 
 
-      $ vault kv metadata put -require-cas secret/foo
+      $ vault kv metadata put -cas-required secret/foo
 
   Additional flags and more advanced use cases are detailed below.
 

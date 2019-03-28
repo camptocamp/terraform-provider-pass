@@ -1,6 +1,7 @@
 package getter
 
 import (
+	"bytes"
 	"encoding/base64"
 	"io/ioutil"
 	"net/url"
@@ -10,6 +11,8 @@ import (
 	"runtime"
 	"strings"
 	"testing"
+
+	urlhelper "github.com/hashicorp/go-getter/helper/url"
 )
 
 var testHasGit bool
@@ -26,8 +29,7 @@ func TestGitGetter_impl(t *testing.T) {
 
 func TestGitGetter(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
@@ -50,8 +52,7 @@ func TestGitGetter(t *testing.T) {
 
 func TestGitGetter_branch(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
@@ -87,10 +88,45 @@ func TestGitGetter_branch(t *testing.T) {
 	}
 }
 
-func TestGitGetter_branchUpdate(t *testing.T) {
+func TestGitGetter_shallowClone(t *testing.T) {
 	if !testHasGit {
 		t.Log("git not found, skipping")
 		t.Skip()
+	}
+
+	g := new(GitGetter)
+	dst := tempDir(t)
+
+	repo := testGitRepo(t, "upstream")
+	repo.commitFile("upstream.txt", "0")
+	repo.commitFile("upstream.txt", "1")
+
+	// Specifiy a clone depth of 1
+	q := repo.url.Query()
+	q.Add("depth", "1")
+	repo.url.RawQuery = q.Encode()
+
+	if err := g.Get(dst, repo.url); err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	// Assert rev-list count is '1'
+	cmd := exec.Command("git", "rev-list", "HEAD", "--count")
+	cmd.Dir = dst
+	b, err := cmd.Output()
+	if err != nil {
+		t.Fatalf("err: %s", err)
+	}
+
+	out := strings.TrimSpace(string(b))
+	if out != "1" {
+		t.Fatalf("expected rev-list count to be '1' but got %v", out)
+	}
+}
+
+func TestGitGetter_branchUpdate(t *testing.T) {
+	if !testHasGit {
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
@@ -132,8 +168,7 @@ func TestGitGetter_branchUpdate(t *testing.T) {
 
 func TestGitGetter_tag(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
@@ -171,12 +206,12 @@ func TestGitGetter_tag(t *testing.T) {
 
 func TestGitGetter_GetFile(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
-	dst := tempFile(t)
+	dst := tempTestFile(t)
+	defer os.RemoveAll(filepath.Dir(dst))
 
 	repo := testGitRepo(t, "file")
 	repo.commitFile("file.txt", "hello")
@@ -195,6 +230,12 @@ func TestGitGetter_GetFile(t *testing.T) {
 }
 
 func TestGitGetter_gitVersion(t *testing.T) {
+	if !testHasGit {
+		t.Skip("git not found, skipping")
+	}
+	if runtime.GOOS == "windows" {
+		t.Skip("skipping on windows since the test requires sh")
+	}
 	dir, err := ioutil.TempDir("", "go-getter")
 	if err != nil {
 		t.Fatal(err)
@@ -204,7 +245,7 @@ func TestGitGetter_gitVersion(t *testing.T) {
 	script := filepath.Join(dir, "git")
 	err = ioutil.WriteFile(
 		script,
-		[]byte("#!/bin/sh\necho git version 2.0\n"),
+		[]byte("#!/bin/sh\necho \"git version 2.0 (Some Metadata Here)\n\""),
 		0700)
 	if err != nil {
 		t.Fatal(err)
@@ -229,8 +270,7 @@ func TestGitGetter_gitVersion(t *testing.T) {
 
 func TestGitGetter_sshKey(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
@@ -238,7 +278,11 @@ func TestGitGetter_sshKey(t *testing.T) {
 
 	encodedKey := base64.StdEncoding.EncodeToString([]byte(testGitToken))
 
-	u, err := url.Parse("ssh://git@github.com/hashicorp/test-private-repo" +
+	// avoid getting locked by a github authenticity validation prompt
+	os.Setenv("GIT_SSH_COMMAND", "ssh -o StrictHostKeyChecking=no")
+	defer os.Setenv("GIT_SSH_COMMAND", "")
+
+	u, err := urlhelper.Parse("ssh://git@github.com/hashicorp/test-private-repo" +
 		"?sshkey=" + encodedKey)
 	if err != nil {
 		t.Fatal(err)
@@ -256,12 +300,21 @@ func TestGitGetter_sshKey(t *testing.T) {
 
 func TestGitGetter_submodule(t *testing.T) {
 	if !testHasGit {
-		t.Log("git not found, skipping")
-		t.Skip()
+		t.Skip("git not found, skipping")
 	}
 
 	g := new(GitGetter)
 	dst := tempDir(t)
+
+	relpath := func(basepath, targpath string) string {
+		relpath, err := filepath.Rel(basepath, targpath)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return strings.Replace(relpath, `\`, `/`, -1)
+		// on windows git still prefers relatives paths
+		// containing `/` for submodules
+	}
 
 	// Set up the grandchild
 	gc := testGitRepo(t, "grandchild")
@@ -270,13 +323,13 @@ func TestGitGetter_submodule(t *testing.T) {
 	// Set up the child
 	c := testGitRepo(t, "child")
 	c.commitFile("child.txt", "child")
-	c.git("submodule", "add", gc.dir)
+	c.git("submodule", "add", "-f", relpath(c.dir, gc.dir))
 	c.git("commit", "-m", "Add grandchild submodule")
 
 	// Set up the parent
 	p := testGitRepo(t, "parent")
 	p.commitFile("parent.txt", "parent")
-	p.git("submodule", "add", c.dir)
+	p.git("submodule", "add", "-f", relpath(p.dir, c.dir))
 	p.git("commit", "-m", "Add child submodule")
 
 	// Clone the root repository
@@ -298,8 +351,7 @@ func TestGitGetter_submodule(t *testing.T) {
 
 func TestGitGetter_setupGitEnv_sshKey(t *testing.T) {
 	if runtime.GOOS == "windows" {
-		t.Skipf("skipping on windows since the test requires sh")
-		return
+		t.Skip("skipping on windows since the test requires sh")
 	}
 
 	cmd := exec.Command("/bin/sh", "-c", "echo $GIT_SSH_COMMAND")
@@ -361,12 +413,13 @@ func testGitRepo(t *testing.T, name string) *gitRepo {
 		dir: dir,
 	}
 
-	url, err := url.Parse("file://" + r.dir)
+	url, err := urlhelper.Parse("file://" + r.dir)
 	if err != nil {
 		t.Fatal(err)
 	}
 	r.url = url
 
+	t.Logf("initializing git repo in %s", dir)
 	r.git("init")
 	r.git("config", "user.name", "go-getter")
 	r.git("config", "user.email", "go-getter@hashicorp.com")
@@ -378,8 +431,10 @@ func testGitRepo(t *testing.T, name string) *gitRepo {
 func (r *gitRepo) git(args ...string) {
 	cmd := exec.Command("git", args...)
 	cmd.Dir = r.dir
+	bfr := bytes.NewBuffer(nil)
+	cmd.Stderr = bfr
 	if err := cmd.Run(); err != nil {
-		r.t.Fatal(err)
+		r.t.Fatal(err, bfr.String())
 	}
 }
 
@@ -394,30 +449,32 @@ func (r *gitRepo) commitFile(file, content string) {
 }
 
 // This is a read-only deploy key for an empty test repository.
+// Note: This is split over multiple lines to avoid being disabled by key
+// scanners automatically.
 var testGitToken = `-----BEGIN RSA PRIVATE KEY-----
-MIIEpgIBAAKCAQEArGJ7eweUMiT58m424ZHLu6UordeoTcOTPEMeOjIL2GuVhPU+
-Y6sdW3gMKEYFKo5ywXxVgNo8VCI8Ny8+PPfR+BNJaAI+VYNDU5rvD3ecfIjH3We4
-VyRbT/PcxNK1XJcE260P6nVXrnNLJQBbsP6tjqSswwVy/9gCiI0aa4GxvK4R1ZPJ
-H6ONYXzwgYR0QAH6jhyENe5skbH+40fT2u/I3z99HggqKOCJpgq9JkAWdXdqJPO7
-kcGP6I6lTE1Cjpi7GEuVx6iWeflmX3uveOLTJohVkhAzGxIk5rIgbqkDoiNJ1RFl
-MxFCc/LkmqdYiW6DgrWZJhlY9wB+YFWi3O/2BwIDAQABAoIBAQCE9LROcMsBXfmV
-3SHhGqUrRjg41NOPnt+JpC7FLeJq+pdo5ApJrynGabHewhqr9xBVYUNFTY0oSvts
-iLiVJ4K/tohwewJ+y+36ps3pfRSqDIkyoBPSykzPPsQw3l9ZWXU6xaE38Wc+Othj
-YoJV4igUk7hX9nT7FSznCwWsk2x1m/w40PVDeWp0VOqGz407oPpirL8wS6yxwrcL
-IR/XtEXOiOoJmHMdxlNwVOTdMz5mtCGJcl2IqjLZLP0az0SxAkTLrDeR+R9tTY/T
-cbdZS3aBVi/9pXQ9yG+QcVrV1PKGdSzOoS1QB0746n9qW4pM93PoRkeENBAM44Gx
-zJvanaqRAoGBANU7HbhkUzBiotEhFlf4uQ3cKFzlSMoJAX27OKR8MDD2vLEL0lBv
-biYBntMBU/L3A7nr/oVHJRS3dGVEoJdmvoXB+eCpNhyYiZKDXrPfaY3ifRKvcIoq
-XuWYkIGB0X1Djf7Sj6ruSxcm8y6M4l2kQq7bo7HXHvJuPRuG930OzAopAoGBAM72
-A0+3xTQrzbHcffPJPw8GUvk8tVmypHojQyXdX283GDW7LYvHd+x6rCNDIdXiZ25L
-M3YKEcZMPpjnjEH5CRUHyubocelyRiz7P2Hwj3MOSO5g11nLbSlkLYvoG4uuH8ck
-2trIRJ81OnVwwIj61CNMCG3CyYk6GN5ShDCJNWSvAoGBAKScyKrrOJWn8A4GvxsW
-9rXOepKMp47hOPd5q5bAEOwb7zu25pwWCjDpG1XGNqrhK01C9PCrJeNCZWcwfdGk
-Df1w7JkVyKJ21+314Qx3syNH8EqWigkAANa62wQ/1hwgJOTOZP8Oi4XKGf6b4L1t
-69TV1x+Z9Vgu5pnzregrnjVRAoGBAIm1KhjmB4KiTti1BN2sn5fItnb+jRClDEn0
-op5UQUcIGsTNyg2C6Onh6h4AckgVwIqj4Rb+tjsCyngFQc83/HIQ4FJqgjk5/zW4
-68CoR1rgO2jZ6RDnibgL3z6Db6iucJiajkEbFoX07fPs1T+P3o2p7sXR4TW9AYUU
-1L5S3cMjAoGBAKd+zv8xjwN9bw9wGz3l/5lWni6muXpmJ7a43Hj562jspb+moMqM
-thGypwYJHZX05VkSk8iXvZehE+Czj6xu9P5FtxKCWgMT6hc8qvCq4n41Ndx59zkN
-yuFmGAiAN8bAZgSQYyIUnWENsqFJNkj/HHR4MA/O2gY1zPq/PFCvQ9Q4
+MIIEpAIBAAKCAQEA9cHsxCl3Jjgu9DHpwvmfFOl1XEdY+ShHDR/cMnzJ5ddk5/oV
+Wy6EWatvyHZfRSZMwzv4PtKeUPm6iXjqWp4xdWU9khlPzozyj+U9Fq70TRVUW9E5
+T1XdQVwJE421yffr4VMMwu60wBqjI1epapH2i2inYvw9Zl9X2MXq0+jTvFvDerbT
+mDtfStDPljenELAIZtWVETSvbI46gALwbxbM2292ZUIL4D6jRz0aZMmyy/twYv8r
+9WGJLwmYzU518Ie7zqKW/mCTdTrV0WRiDj0MeRaPgrGY9amuHE4r9iG/cJkwpKAO
+Ccz0Hs6i89u9vZnTqZU9V7weJqRAQcMjXXR6yQIDAQABAoIBAQDBzICKnGxiTlHw
+rd+6qqChnAy5jWYDbZjCJ8q8YZ3RS08+g/8NXZxvHftTqM0uOaq1FviHig3gq15H
+hHvCpBc6jXDFYoKFzq6FfO/0kFkE5HoWweIgxwRow0xBCDJAJ+ryUEyy+Ay/pQHb
+IAjwilRS0V+WdnVw4mTjBAhPvb4jPOo97Yfy3PYUyx2F3newkqXOZy+zx3G/ANoa
+ncypfMGyy76sfCWKqw4J1gVkVQLwbB6gQkXUFGYwY9sRrxbG93kQw76Flc/E/s52
+62j4v1IM0fq0t/St+Y/+s6Lkw` + `aqt3ft1nsqWcRaVDdqvMfkzgJGXlw0bGzJG5MEQ
+AIBq3dHRAoGBAP8OeG/DKG2Z1VmSfzuz1pas1fbZ+F7venOBrjez3sKlb3Pyl2aH
+mt2wjaTUi5v10VrHgYtOEdqyhQeUSYydWXIBKNMag0NLLrfFUKZK+57wrHWFdFjn
+VgpsdkLSNTOZpC8gA5OaJ+36IcOPfGqyyP9wuuRoaYnVT1KEzqLa9FEFAoGBAPaq
+pglwhil2rxjJE4zq0afQLNpAfi7Xqcrepij+xvJIcIj7nawxXuPxqRFxONE/h3yX
+zkybO8wLdbHX9Iw/wc1j50Uf1Z5gHdLf7/hQJoWKpz1RnkWRy6CYON8v1tpVp0tb
+OAajR/kZnzebq2mfa7pyy5zDCX++2kp/dcFwHf31AoGAE8oupBVTZLWj7TBFuP8q
+LkS40U92Sv9v09iDCQVmylmFvUxcXPM2m+7f/qMTNgWrucxzC7kB/6MMWVszHbrz
+vrnCTibnemgx9sZTjKOSxHFOIEw7i85fSa3Cu0qOIDPSnmlwfZpfcMKQrhjLAYhf
+uhooFiLX1X78iZ2OXup4PHUCgYEAsmBrm83sp1V1gAYBBlnVbXakyNv0pCk/Vz61
+iFXeRt1NzDGxLxGw3kQnED8BaIh5kQcyn8Fud7sdzJMv/LAqlT4Ww60mzNYTGyjo
+H3jOsqm3ESfRvduWFreeAQBWbiOczGjV1i8D4EbAFfWT+tjXjchwKBf+6Yt5zn/o
+Bw/uEHUCgYAFs+JPOR25oRyBs7ujrMo/OY1z/eXTVVgZxY+tYGe1FJqDeFyR7ytK
++JBB1MuDwQKGm2wSIXdCzTNoIx2B9zTseiPTwT8G7vqNFhXoIaTBp4P2xIQb45mJ
+7GkTsMBHwpSMOXgX9Weq3v5xOJ2WxVtjENmd6qzxcYCO5lP15O17hA==
 -----END RSA PRIVATE KEY-----`

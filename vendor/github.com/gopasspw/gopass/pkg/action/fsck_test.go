@@ -14,6 +14,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli"
 )
 
@@ -24,14 +25,17 @@ func TestFsck(t *testing.T) {
 	ctx := context.Background()
 	ctx = ctxutil.WithTerminal(ctx, false)
 	act, err := newMock(ctx, u)
-	assert.NoError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, act)
 
 	buf := &bytes.Buffer{}
 	out.Stdout = buf
+	out.Stderr = buf
 	stdout = buf
 	defer func() {
 		stdout = os.Stdout
 		out.Stdout = os.Stdout
+		out.Stderr = os.Stderr
 	}()
 	color.NoColor = true
 
@@ -40,7 +44,7 @@ func TestFsck(t *testing.T) {
 	// fsck
 	c := cli.NewContext(app, flag.NewFlagSet("default", flag.ContinueOnError), nil)
 	assert.NoError(t, act.Fsck(ctx, c))
-	assert.Equal(t, "Extra recipients on foo: [0xFEEDBEEF]\nPushed changes to git remote", strings.TrimSpace(buf.String()))
+	assert.Equal(t, "Checking store integrity ...\n\n[] Extra recipients on foo: [0xFEEDBEEF]\n\n[] Pushed changes to git remote", strings.TrimSpace(buf.String()))
 	buf.Reset()
 
 	// fsck fo
@@ -49,6 +53,6 @@ func TestFsck(t *testing.T) {
 	c = cli.NewContext(app, fs, nil)
 
 	assert.NoError(t, act.Fsck(ctx, c))
-	assert.Equal(t, "Extra recipients on foo: [0xFEEDBEEF]\nPushed changes to git remote", strings.TrimSpace(buf.String()))
+	assert.Equal(t, "Checking store integrity ...\n\n[] Extra recipients on foo: [0xFEEDBEEF]\n\n[] Pushed changes to git remote", strings.TrimSpace(buf.String()))
 	buf.Reset()
 }

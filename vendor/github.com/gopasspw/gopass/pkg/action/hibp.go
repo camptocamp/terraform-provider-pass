@@ -2,11 +2,11 @@ package action
 
 import (
 	"context"
+	"crypto/sha1"
 	"fmt"
 	"io/ioutil"
 	"sort"
 
-	"github.com/gopasspw/gopass/pkg/hashsum"
 	hibpapi "github.com/gopasspw/gopass/pkg/hibp/api"
 	hibpdump "github.com/gopasspw/gopass/pkg/hibp/dump"
 	"github.com/gopasspw/gopass/pkg/notify"
@@ -50,7 +50,7 @@ func (s *Action) hibpAPI(ctx context.Context, force bool) error {
 	for _, shaSum := range sortedShaSums {
 		freq, err := hibpapi.Lookup(ctx, shaSum)
 		if err != nil {
-			out.Red(ctx, "Failed to check HIBP API: %s", err)
+			out.Error(ctx, "Failed to check HIBP API: %s", err)
 			continue
 		}
 		if freq < 1 {
@@ -144,7 +144,7 @@ func (s *Action) hibpPrecomputeHashes(ctx context.Context) (map[string]string, [
 		if len(sec.Password()) < 1 {
 			continue
 		}
-		sum := hashsum.SHA1(sec.Password())
+		sum := sha1hex(sec.Password())
 		shaSums[sum] = secret
 		sortedShaSums = append(sortedShaSums, sum)
 	}
@@ -165,10 +165,16 @@ func (s *Action) printHIBPMatches(ctx context.Context, matchList []string) error
 
 	sort.Strings(matchList)
 	_ = notify.Notify(ctx, "gopass - audit HIBP", fmt.Sprintf("Oh no - found %d matches", len(matchList)))
-	out.Red(ctx, "Oh no - Found some matches:")
+	out.Error(ctx, "Oh no - Found some matches:")
 	for _, m := range matchList {
-		out.Red(ctx, "\t- %s", m)
+		out.Error(ctx, "\t- %s", m)
 	}
 	out.Cyan(ctx, "The passwords in the listed secrets were included in public leaks in the past. This means they are likely included in many word-list attacks and provide only very little security. Strongly consider changing those passwords!")
 	return ExitError(ctx, ExitAudit, nil, "weak passwords found")
+}
+
+func sha1hex(data string) string {
+	h := sha1.New()
+	_, _ = h.Write([]byte(data))
+	return fmt.Sprintf("%X", h.Sum(nil))
 }

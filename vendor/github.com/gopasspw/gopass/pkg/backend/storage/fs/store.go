@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"sort"
 	"strings"
+	"syscall"
 
 	"github.com/gopasspw/gopass/pkg/fsutil"
 	"github.com/gopasspw/gopass/pkg/out"
@@ -22,8 +23,11 @@ type Store struct {
 
 // New creates a new store
 func New(dir string) *Store {
+	if d, err := filepath.EvalSymlinks(dir); err == nil {
+		dir = d
+	}
 	return &Store{
-		path: filepath.Clean(dir),
+		path: dir,
 	}
 }
 
@@ -51,7 +55,34 @@ func (s *Store) Set(ctx context.Context, name string, value []byte) error {
 func (s *Store) Delete(ctx context.Context, name string) error {
 	path := filepath.Join(s.path, filepath.Clean(name))
 	out.Debug(ctx, "fs.Delete(%s) - %s", name, path)
-	return os.Remove(path)
+
+	if err := os.Remove(path); err != nil {
+		return err
+	}
+
+	return s.removeEmptyParentDirectories(path)
+}
+
+// Deletes all empty parent directories up to the store root
+func (s *Store) removeEmptyParentDirectories(path string) error {
+	parent := filepath.Dir(path)
+
+	if relpath, err := filepath.Rel(s.path, parent); err != nil {
+		return err
+	} else if strings.HasPrefix(relpath, ".") {
+		return nil
+	}
+
+	err := os.Remove(parent)
+	switch {
+	case err == nil:
+		return s.removeEmptyParentDirectories(parent)
+	case err.(*os.PathError).Err == syscall.ENOTEMPTY:
+		// ignore when directory is non-empty
+		return nil
+	default:
+		return err
+	}
 }
 
 // Exists checks if the named entity exists

@@ -22,19 +22,10 @@ func setupApp(ctx context.Context, sv semver.Version) *cli.App {
 	// set config values
 	ctx = initContext(ctx, cfg)
 
-	// only update version field in config, if it's older than this build
-	csv, err := semver.Parse(cfg.Version)
-	if err != nil || csv.LT(sv) {
-		cfg.Version = sv.String()
-		if err := cfg.Save(); err != nil {
-			out.Red(ctx, "Failed to save config: %s", err)
-		}
-	}
-
 	// initialize action handlers
 	action, err := ap.New(ctx, cfg, sv)
 	if err != nil {
-		out.Red(ctx, "No gpg binary found: %s", err)
+		out.Error(ctx, "No gpg binary found: %s", err)
 		os.Exit(ap.ExitGPG)
 	}
 
@@ -59,12 +50,12 @@ func setupApp(ctx context.Context, sv semver.Version) *cli.App {
 	}
 
 	app.Action = func(c *cli.Context) error {
-		if strings.HasSuffix(os.Args[0], "native_host") || strings.HasSuffix(os.Args[0], "native_host.exe") {
-			return action.JSONAPI(withGlobalFlags(ctx, c), c)
-		}
-
 		if err := action.Initialized(withGlobalFlags(ctx, c), c); err != nil {
 			return err
+		}
+
+		if strings.HasSuffix(os.Args[0], "native_host") || strings.HasSuffix(os.Args[0], "native_host.exe") {
+			return action.JSONAPI(withGlobalFlags(ctx, c), c)
 		}
 
 		if c.Args().Present() {

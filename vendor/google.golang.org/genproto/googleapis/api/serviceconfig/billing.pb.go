@@ -56,7 +56,7 @@ func (m *Billing) Reset()         { *m = Billing{} }
 func (m *Billing) String() string { return proto.CompactTextString(m) }
 func (*Billing) ProtoMessage()    {}
 func (*Billing) Descriptor() ([]byte, []int) {
-	return fileDescriptor_billing_19b9055d537fbaf3, []int{0}
+	return fileDescriptor_billing_6cb9ad7d84588d76, []int{0}
 }
 func (m *Billing) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Billing.Unmarshal(m, b)
@@ -87,10 +87,12 @@ func (m *Billing) GetConsumerDestinations() []*Billing_BillingDestination {
 // bill against consumer project).
 type Billing_BillingDestination struct {
 	// The monitored resource type. The type must be defined in
-	// [Service.monitored_resources][google.api.Service.monitored_resources] section.
+	// [Service.monitored_resources][google.api.Service.monitored_resources]
+	// section.
 	MonitoredResource string `protobuf:"bytes,1,opt,name=monitored_resource,json=monitoredResource,proto3" json:"monitored_resource,omitempty"`
 	// Names of the metrics to report to this billing destination.
-	// Each name must be defined in [Service.metrics][google.api.Service.metrics] section.
+	// Each name must be defined in
+	// [Service.metrics][google.api.Service.metrics] section.
 	Metrics              []string `protobuf:"bytes,2,rep,name=metrics,proto3" json:"metrics,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -101,7 +103,7 @@ func (m *Billing_BillingDestination) Reset()         { *m = Billing_BillingDesti
 func (m *Billing_BillingDestination) String() string { return proto.CompactTextString(m) }
 func (*Billing_BillingDestination) ProtoMessage()    {}
 func (*Billing_BillingDestination) Descriptor() ([]byte, []int) {
-	return fileDescriptor_billing_19b9055d537fbaf3, []int{0, 0}
+	return fileDescriptor_billing_6cb9ad7d84588d76, []int{0, 0}
 }
 func (m *Billing_BillingDestination) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Billing_BillingDestination.Unmarshal(m, b)
@@ -140,9 +142,9 @@ func init() {
 	proto.RegisterType((*Billing_BillingDestination)(nil), "google.api.Billing.BillingDestination")
 }
 
-func init() { proto.RegisterFile("google/api/billing.proto", fileDescriptor_billing_19b9055d537fbaf3) }
+func init() { proto.RegisterFile("google/api/billing.proto", fileDescriptor_billing_6cb9ad7d84588d76) }
 
-var fileDescriptor_billing_19b9055d537fbaf3 = []byte{
+var fileDescriptor_billing_6cb9ad7d84588d76 = []byte{
 	// 265 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x64, 0x90, 0xc1, 0x4a, 0xc4, 0x30,
 	0x10, 0x86, 0xe9, 0xae, 0xb8, 0x6e, 0x14, 0xc1, 0xa0, 0x58, 0x8a, 0x87, 0xe2, 0x41, 0x7a, 0xb1,

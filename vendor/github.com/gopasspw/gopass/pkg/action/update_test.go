@@ -18,8 +18,13 @@ import (
 	"github.com/gopasspw/gopass/pkg/updater"
 	"github.com/gopasspw/gopass/tests/gptest"
 
+	_ "github.com/gopasspw/gopass/pkg/backend/crypto"
+	_ "github.com/gopasspw/gopass/pkg/backend/rcs"
+	_ "github.com/gopasspw/gopass/pkg/backend/storage"
+
 	"github.com/dominikschulz/github-releases/ghrel"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli"
 )
 
@@ -51,7 +56,7 @@ func TestUpdate(t *testing.T) {
 	ctx = ctxutil.WithAlwaysYes(ctx, true)
 	ctx = out.WithHidden(ctx, true)
 	act, err := newMock(ctx, u)
-	assert.NoError(t, err)
+	require.NoError(t, err)
 
 	app := cli.NewApp()
 	fs := flag.NewFlagSet("default", flag.ContinueOnError)
@@ -69,9 +74,10 @@ func TestUpdate(t *testing.T) {
 		}()
 		body := "foobar"
 		hdr := &tar.Header{
-			Name: "gopass",
-			Mode: 0600,
-			Size: int64(len(body)),
+			Typeflag: tar.TypeReg,
+			Name:     "gopass",
+			Mode:     0600,
+			Size:     int64(len(body)),
 		}
 		if err := tw.WriteHeader(hdr); err != nil {
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)

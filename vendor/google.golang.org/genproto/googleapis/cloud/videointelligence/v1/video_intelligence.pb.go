@@ -42,6 +42,12 @@ const (
 	Feature_EXPLICIT_CONTENT_DETECTION Feature = 3
 	// Human face detection and tracking.
 	Feature_FACE_DETECTION Feature = 4
+	// Speech transcription.
+	Feature_SPEECH_TRANSCRIPTION Feature = 6
+	// OCR text detection and tracking.
+	Feature_TEXT_DETECTION Feature = 7
+	// Object detection and tracking.
+	Feature_OBJECT_TRACKING Feature = 9
 )
 
 var Feature_name = map[int32]string{
@@ -50,6 +56,9 @@ var Feature_name = map[int32]string{
 	2: "SHOT_CHANGE_DETECTION",
 	3: "EXPLICIT_CONTENT_DETECTION",
 	4: "FACE_DETECTION",
+	6: "SPEECH_TRANSCRIPTION",
+	7: "TEXT_DETECTION",
+	9: "OBJECT_TRACKING",
 }
 var Feature_value = map[string]int32{
 	"FEATURE_UNSPECIFIED":        0,
@@ -57,13 +66,16 @@ var Feature_value = map[string]int32{
 	"SHOT_CHANGE_DETECTION":      2,
 	"EXPLICIT_CONTENT_DETECTION": 3,
 	"FACE_DETECTION":             4,
+	"SPEECH_TRANSCRIPTION":       6,
+	"TEXT_DETECTION":             7,
+	"OBJECT_TRACKING":            9,
 }
 
 func (x Feature) String() string {
 	return proto.EnumName(Feature_name, int32(x))
 }
 func (Feature) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{0}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{0}
 }
 
 // Label detection mode.
@@ -97,7 +109,7 @@ func (x LabelDetectionMode) String() string {
 	return proto.EnumName(LabelDetectionMode_name, int32(x))
 }
 func (LabelDetectionMode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{1}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{1}
 }
 
 // Bucketized representation of likelihood.
@@ -139,7 +151,7 @@ func (x Likelihood) String() string {
 	return proto.EnumName(Likelihood_name, int32(x))
 }
 func (Likelihood) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{2}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{2}
 }
 
 // Video annotation request.
@@ -148,10 +160,10 @@ type AnnotateVideoRequest struct {
 	// [Google Cloud Storage](https://cloud.google.com/storage/) URIs are
 	// supported, which must be specified in the following format:
 	// `gs://bucket-id/object-id` (other URI formats return
-	// [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see
-	// [Request URIs](/storage/docs/reference-uris).
-	// A video URI may include wildcards in `object-id`, and thus identify
-	// multiple videos. Supported wildcards: '*' to match 0 or more characters;
+	// [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For
+	// more information, see [Request URIs](/storage/docs/reference-uris). A video
+	// URI may include wildcards in `object-id`, and thus identify multiple
+	// videos. Supported wildcards: '*' to match 0 or more characters;
 	// '?' to match 1 character. If unset, the input video should be embedded
 	// in the request as `input_content`. If set, `input_content` should be unset.
 	InputUri string `protobuf:"bytes,1,opt,name=input_uri,json=inputUri,proto3" json:"input_uri,omitempty"`
@@ -167,8 +179,8 @@ type AnnotateVideoRequest struct {
 	// Currently, only [Google Cloud Storage](https://cloud.google.com/storage/)
 	// URIs are supported, which must be specified in the following format:
 	// `gs://bucket-id/object-id` (other URI formats return
-	// [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For more information, see
-	// [Request URIs](/storage/docs/reference-uris).
+	// [google.rpc.Code.INVALID_ARGUMENT][google.rpc.Code.INVALID_ARGUMENT]). For
+	// more information, see [Request URIs](/storage/docs/reference-uris).
 	OutputUri string `protobuf:"bytes,4,opt,name=output_uri,json=outputUri,proto3" json:"output_uri,omitempty"`
 	// Optional cloud region where annotation should take place. Supported cloud
 	// regions: `us-east1`, `us-west1`, `europe-west1`, `asia-east1`. If no region
@@ -183,7 +195,7 @@ func (m *AnnotateVideoRequest) Reset()         { *m = AnnotateVideoRequest{} }
 func (m *AnnotateVideoRequest) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoRequest) ProtoMessage()    {}
 func (*AnnotateVideoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{0}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{0}
 }
 func (m *AnnotateVideoRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoRequest.Unmarshal(m, b)
@@ -248,8 +260,8 @@ func (m *AnnotateVideoRequest) GetLocationId() string {
 // Video context and/or feature-specific parameters.
 type VideoContext struct {
 	// Video segments to annotate. The segments may overlap and are not required
-	// to be contiguous or span the whole video. If unspecified, each video
-	// is treated as a single segment.
+	// to be contiguous or span the whole video. If unspecified, each video is
+	// treated as a single segment.
 	Segments []*VideoSegment `protobuf:"bytes,1,rep,name=segments,proto3" json:"segments,omitempty"`
 	// Config for LABEL_DETECTION.
 	LabelDetectionConfig *LabelDetectionConfig `protobuf:"bytes,2,opt,name=label_detection_config,json=labelDetectionConfig,proto3" json:"label_detection_config,omitempty"`
@@ -258,7 +270,11 @@ type VideoContext struct {
 	// Config for EXPLICIT_CONTENT_DETECTION.
 	ExplicitContentDetectionConfig *ExplicitContentDetectionConfig `protobuf:"bytes,4,opt,name=explicit_content_detection_config,json=explicitContentDetectionConfig,proto3" json:"explicit_content_detection_config,omitempty"`
 	// Config for FACE_DETECTION.
-	FaceDetectionConfig  *FaceDetectionConfig `protobuf:"bytes,5,opt,name=face_detection_config,json=faceDetectionConfig,proto3" json:"face_detection_config,omitempty"`
+	FaceDetectionConfig *FaceDetectionConfig `protobuf:"bytes,5,opt,name=face_detection_config,json=faceDetectionConfig,proto3" json:"face_detection_config,omitempty"`
+	// Config for SPEECH_TRANSCRIPTION.
+	SpeechTranscriptionConfig *SpeechTranscriptionConfig `protobuf:"bytes,6,opt,name=speech_transcription_config,json=speechTranscriptionConfig,proto3" json:"speech_transcription_config,omitempty"`
+	// Config for TEXT_DETECTION.
+	TextDetectionConfig  *TextDetectionConfig `protobuf:"bytes,8,opt,name=text_detection_config,json=textDetectionConfig,proto3" json:"text_detection_config,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
 	XXX_sizecache        int32                `json:"-"`
@@ -268,7 +284,7 @@ func (m *VideoContext) Reset()         { *m = VideoContext{} }
 func (m *VideoContext) String() string { return proto.CompactTextString(m) }
 func (*VideoContext) ProtoMessage()    {}
 func (*VideoContext) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{1}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{1}
 }
 func (m *VideoContext) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoContext.Unmarshal(m, b)
@@ -323,6 +339,20 @@ func (m *VideoContext) GetFaceDetectionConfig() *FaceDetectionConfig {
 	return nil
 }
 
+func (m *VideoContext) GetSpeechTranscriptionConfig() *SpeechTranscriptionConfig {
+	if m != nil {
+		return m.SpeechTranscriptionConfig
+	}
+	return nil
+}
+
+func (m *VideoContext) GetTextDetectionConfig() *TextDetectionConfig {
+	if m != nil {
+		return m.TextDetectionConfig
+	}
+	return nil
+}
+
 // Config for LABEL_DETECTION.
 type LabelDetectionConfig struct {
 	// What labels should be detected with LABEL_DETECTION, in addition to
@@ -346,7 +376,7 @@ func (m *LabelDetectionConfig) Reset()         { *m = LabelDetectionConfig{} }
 func (m *LabelDetectionConfig) String() string { return proto.CompactTextString(m) }
 func (*LabelDetectionConfig) ProtoMessage()    {}
 func (*LabelDetectionConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{2}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{2}
 }
 func (m *LabelDetectionConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelDetectionConfig.Unmarshal(m, b)
@@ -402,7 +432,7 @@ func (m *ShotChangeDetectionConfig) Reset()         { *m = ShotChangeDetectionCo
 func (m *ShotChangeDetectionConfig) String() string { return proto.CompactTextString(m) }
 func (*ShotChangeDetectionConfig) ProtoMessage()    {}
 func (*ShotChangeDetectionConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{3}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{3}
 }
 func (m *ShotChangeDetectionConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ShotChangeDetectionConfig.Unmarshal(m, b)
@@ -444,7 +474,7 @@ func (m *ExplicitContentDetectionConfig) Reset()         { *m = ExplicitContentD
 func (m *ExplicitContentDetectionConfig) String() string { return proto.CompactTextString(m) }
 func (*ExplicitContentDetectionConfig) ProtoMessage()    {}
 func (*ExplicitContentDetectionConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{4}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{4}
 }
 func (m *ExplicitContentDetectionConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ExplicitContentDetectionConfig.Unmarshal(m, b)
@@ -488,7 +518,7 @@ func (m *FaceDetectionConfig) Reset()         { *m = FaceDetectionConfig{} }
 func (m *FaceDetectionConfig) String() string { return proto.CompactTextString(m) }
 func (*FaceDetectionConfig) ProtoMessage()    {}
 func (*FaceDetectionConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{5}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{5}
 }
 func (m *FaceDetectionConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceDetectionConfig.Unmarshal(m, b)
@@ -522,6 +552,50 @@ func (m *FaceDetectionConfig) GetIncludeBoundingBoxes() bool {
 	return false
 }
 
+// Config for TEXT_DETECTION.
+type TextDetectionConfig struct {
+	// Language hint can be specified if the language to be detected is known a
+	// priori. It can increase the accuracy of the detection. Language hint must
+	// be language code in BCP-47 format.
+	//
+	// Automatic language detection is performed if no hint is provided.
+	LanguageHints        []string `protobuf:"bytes,1,rep,name=language_hints,json=languageHints,proto3" json:"language_hints,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *TextDetectionConfig) Reset()         { *m = TextDetectionConfig{} }
+func (m *TextDetectionConfig) String() string { return proto.CompactTextString(m) }
+func (*TextDetectionConfig) ProtoMessage()    {}
+func (*TextDetectionConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{6}
+}
+func (m *TextDetectionConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TextDetectionConfig.Unmarshal(m, b)
+}
+func (m *TextDetectionConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TextDetectionConfig.Marshal(b, m, deterministic)
+}
+func (dst *TextDetectionConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextDetectionConfig.Merge(dst, src)
+}
+func (m *TextDetectionConfig) XXX_Size() int {
+	return xxx_messageInfo_TextDetectionConfig.Size(m)
+}
+func (m *TextDetectionConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_TextDetectionConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TextDetectionConfig proto.InternalMessageInfo
+
+func (m *TextDetectionConfig) GetLanguageHints() []string {
+	if m != nil {
+		return m.LanguageHints
+	}
+	return nil
+}
+
 // Video segment.
 type VideoSegment struct {
 	// Time-offset, relative to the beginning of the video,
@@ -539,7 +613,7 @@ func (m *VideoSegment) Reset()         { *m = VideoSegment{} }
 func (m *VideoSegment) String() string { return proto.CompactTextString(m) }
 func (*VideoSegment) ProtoMessage()    {}
 func (*VideoSegment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{6}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{7}
 }
 func (m *VideoSegment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoSegment.Unmarshal(m, b)
@@ -588,7 +662,7 @@ func (m *LabelSegment) Reset()         { *m = LabelSegment{} }
 func (m *LabelSegment) String() string { return proto.CompactTextString(m) }
 func (*LabelSegment) ProtoMessage()    {}
 func (*LabelSegment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{7}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{8}
 }
 func (m *LabelSegment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelSegment.Unmarshal(m, b)
@@ -638,7 +712,7 @@ func (m *LabelFrame) Reset()         { *m = LabelFrame{} }
 func (m *LabelFrame) String() string { return proto.CompactTextString(m) }
 func (*LabelFrame) ProtoMessage()    {}
 func (*LabelFrame) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{8}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{9}
 }
 func (m *LabelFrame) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelFrame.Unmarshal(m, b)
@@ -691,7 +765,7 @@ func (m *Entity) Reset()         { *m = Entity{} }
 func (m *Entity) String() string { return proto.CompactTextString(m) }
 func (*Entity) ProtoMessage()    {}
 func (*Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{9}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{10}
 }
 func (m *Entity) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Entity.Unmarshal(m, b)
@@ -754,7 +828,7 @@ func (m *LabelAnnotation) Reset()         { *m = LabelAnnotation{} }
 func (m *LabelAnnotation) String() string { return proto.CompactTextString(m) }
 func (*LabelAnnotation) ProtoMessage()    {}
 func (*LabelAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{10}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{11}
 }
 func (m *LabelAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_LabelAnnotation.Unmarshal(m, b)
@@ -818,7 +892,7 @@ func (m *ExplicitContentFrame) Reset()         { *m = ExplicitContentFrame{} }
 func (m *ExplicitContentFrame) String() string { return proto.CompactTextString(m) }
 func (*ExplicitContentFrame) ProtoMessage()    {}
 func (*ExplicitContentFrame) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{11}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{12}
 }
 func (m *ExplicitContentFrame) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ExplicitContentFrame.Unmarshal(m, b)
@@ -867,7 +941,7 @@ func (m *ExplicitContentAnnotation) Reset()         { *m = ExplicitContentAnnota
 func (m *ExplicitContentAnnotation) String() string { return proto.CompactTextString(m) }
 func (*ExplicitContentAnnotation) ProtoMessage()    {}
 func (*ExplicitContentAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{12}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{13}
 }
 func (m *ExplicitContentAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ExplicitContentAnnotation.Unmarshal(m, b)
@@ -915,7 +989,7 @@ func (m *NormalizedBoundingBox) Reset()         { *m = NormalizedBoundingBox{} }
 func (m *NormalizedBoundingBox) String() string { return proto.CompactTextString(m) }
 func (*NormalizedBoundingBox) ProtoMessage()    {}
 func (*NormalizedBoundingBox) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{13}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{14}
 }
 func (m *NormalizedBoundingBox) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_NormalizedBoundingBox.Unmarshal(m, b)
@@ -976,7 +1050,7 @@ func (m *FaceSegment) Reset()         { *m = FaceSegment{} }
 func (m *FaceSegment) String() string { return proto.CompactTextString(m) }
 func (*FaceSegment) ProtoMessage()    {}
 func (*FaceSegment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{14}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{15}
 }
 func (m *FaceSegment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceSegment.Unmarshal(m, b)
@@ -1021,7 +1095,7 @@ func (m *FaceFrame) Reset()         { *m = FaceFrame{} }
 func (m *FaceFrame) String() string { return proto.CompactTextString(m) }
 func (*FaceFrame) ProtoMessage()    {}
 func (*FaceFrame) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{15}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{16}
 }
 func (m *FaceFrame) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceFrame.Unmarshal(m, b)
@@ -1072,7 +1146,7 @@ func (m *FaceAnnotation) Reset()         { *m = FaceAnnotation{} }
 func (m *FaceAnnotation) String() string { return proto.CompactTextString(m) }
 func (*FaceAnnotation) ProtoMessage()    {}
 func (*FaceAnnotation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{16}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{17}
 }
 func (m *FaceAnnotation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FaceAnnotation.Unmarshal(m, b)
@@ -1133,6 +1207,14 @@ type VideoAnnotationResults struct {
 	ShotAnnotations []*VideoSegment `protobuf:"bytes,6,rep,name=shot_annotations,json=shotAnnotations,proto3" json:"shot_annotations,omitempty"`
 	// Explicit content annotation.
 	ExplicitAnnotation *ExplicitContentAnnotation `protobuf:"bytes,7,opt,name=explicit_annotation,json=explicitAnnotation,proto3" json:"explicit_annotation,omitempty"`
+	// Speech transcription.
+	SpeechTranscriptions []*SpeechTranscription `protobuf:"bytes,11,rep,name=speech_transcriptions,json=speechTranscriptions,proto3" json:"speech_transcriptions,omitempty"`
+	// OCR text detection and tracking.
+	// Annotations for list of detected text snippets. Each will have list of
+	// frame information associated with it.
+	TextAnnotations []*TextAnnotation `protobuf:"bytes,12,rep,name=text_annotations,json=textAnnotations,proto3" json:"text_annotations,omitempty"`
+	// Annotations for list of objects detected and tracked in video.
+	ObjectAnnotations []*ObjectTrackingAnnotation `protobuf:"bytes,14,rep,name=object_annotations,json=objectAnnotations,proto3" json:"object_annotations,omitempty"`
 	// If set, indicates an error. Note that for a single `AnnotateVideoRequest`
 	// some videos may succeed and some may fail.
 	Error                *status.Status `protobuf:"bytes,9,opt,name=error,proto3" json:"error,omitempty"`
@@ -1145,7 +1227,7 @@ func (m *VideoAnnotationResults) Reset()         { *m = VideoAnnotationResults{}
 func (m *VideoAnnotationResults) String() string { return proto.CompactTextString(m) }
 func (*VideoAnnotationResults) ProtoMessage()    {}
 func (*VideoAnnotationResults) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{17}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{18}
 }
 func (m *VideoAnnotationResults) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoAnnotationResults.Unmarshal(m, b)
@@ -1214,6 +1296,27 @@ func (m *VideoAnnotationResults) GetExplicitAnnotation() *ExplicitContentAnnotat
 	return nil
 }
 
+func (m *VideoAnnotationResults) GetSpeechTranscriptions() []*SpeechTranscription {
+	if m != nil {
+		return m.SpeechTranscriptions
+	}
+	return nil
+}
+
+func (m *VideoAnnotationResults) GetTextAnnotations() []*TextAnnotation {
+	if m != nil {
+		return m.TextAnnotations
+	}
+	return nil
+}
+
+func (m *VideoAnnotationResults) GetObjectAnnotations() []*ObjectTrackingAnnotation {
+	if m != nil {
+		return m.ObjectAnnotations
+	}
+	return nil
+}
+
 func (m *VideoAnnotationResults) GetError() *status.Status {
 	if m != nil {
 		return m.Error
@@ -1236,7 +1339,7 @@ func (m *AnnotateVideoResponse) Reset()         { *m = AnnotateVideoResponse{} }
 func (m *AnnotateVideoResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoResponse) ProtoMessage()    {}
 func (*AnnotateVideoResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{18}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{19}
 }
 func (m *AnnotateVideoResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoResponse.Unmarshal(m, b)
@@ -1268,8 +1371,8 @@ type VideoAnnotationProgress struct {
 	// Video file location in
 	// [Google Cloud Storage](https://cloud.google.com/storage/).
 	InputUri string `protobuf:"bytes,1,opt,name=input_uri,json=inputUri,proto3" json:"input_uri,omitempty"`
-	// Approximate percentage processed thus far.
-	// Guaranteed to be 100 when fully processed.
+	// Approximate percentage processed thus far. Guaranteed to be
+	// 100 when fully processed.
 	ProgressPercent int32 `protobuf:"varint,2,opt,name=progress_percent,json=progressPercent,proto3" json:"progress_percent,omitempty"`
 	// Time when the request was received.
 	StartTime *timestamp.Timestamp `protobuf:"bytes,3,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
@@ -1284,7 +1387,7 @@ func (m *VideoAnnotationProgress) Reset()         { *m = VideoAnnotationProgress
 func (m *VideoAnnotationProgress) String() string { return proto.CompactTextString(m) }
 func (*VideoAnnotationProgress) ProtoMessage()    {}
 func (*VideoAnnotationProgress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{19}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{20}
 }
 func (m *VideoAnnotationProgress) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_VideoAnnotationProgress.Unmarshal(m, b)
@@ -1347,7 +1450,7 @@ func (m *AnnotateVideoProgress) Reset()         { *m = AnnotateVideoProgress{} }
 func (m *AnnotateVideoProgress) String() string { return proto.CompactTextString(m) }
 func (*AnnotateVideoProgress) ProtoMessage()    {}
 func (*AnnotateVideoProgress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_video_intelligence_09ca97bf0b395287, []int{20}
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{21}
 }
 func (m *AnnotateVideoProgress) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateVideoProgress.Unmarshal(m, b)
@@ -1374,6 +1477,894 @@ func (m *AnnotateVideoProgress) GetAnnotationProgress() []*VideoAnnotationProgre
 	return nil
 }
 
+// Config for SPEECH_TRANSCRIPTION.
+type SpeechTranscriptionConfig struct {
+	// *Required* The language of the supplied audio as a
+	// [BCP-47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) language tag.
+	// Example: "en-US".
+	// See [Language Support](https://cloud.google.com/speech/docs/languages)
+	// for a list of the currently supported language codes.
+	LanguageCode string `protobuf:"bytes,1,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	// *Optional* Maximum number of recognition hypotheses to be returned.
+	// Specifically, the maximum number of `SpeechRecognitionAlternative` messages
+	// within each `SpeechTranscription`. The server may return fewer than
+	// `max_alternatives`. Valid values are `0`-`30`. A value of `0` or `1` will
+	// return a maximum of one. If omitted, will return a maximum of one.
+	MaxAlternatives int32 `protobuf:"varint,2,opt,name=max_alternatives,json=maxAlternatives,proto3" json:"max_alternatives,omitempty"`
+	// *Optional* If set to `true`, the server will attempt to filter out
+	// profanities, replacing all but the initial character in each filtered word
+	// with asterisks, e.g. "f***". If set to `false` or omitted, profanities
+	// won't be filtered out.
+	FilterProfanity bool `protobuf:"varint,3,opt,name=filter_profanity,json=filterProfanity,proto3" json:"filter_profanity,omitempty"`
+	// *Optional* A means to provide context to assist the speech recognition.
+	SpeechContexts []*SpeechContext `protobuf:"bytes,4,rep,name=speech_contexts,json=speechContexts,proto3" json:"speech_contexts,omitempty"`
+	// *Optional* If 'true', adds punctuation to recognition result hypotheses.
+	// This feature is only available in select languages. Setting this for
+	// requests in other languages has no effect at all. The default 'false' value
+	// does not add punctuation to result hypotheses. NOTE: "This is currently
+	// offered as an experimental service, complimentary to all users. In the
+	// future this may be exclusively available as a premium feature."
+	EnableAutomaticPunctuation bool `protobuf:"varint,5,opt,name=enable_automatic_punctuation,json=enableAutomaticPunctuation,proto3" json:"enable_automatic_punctuation,omitempty"`
+	// *Optional* For file formats, such as MXF or MKV, supporting multiple audio
+	// tracks, specify up to two tracks. Default: track 0.
+	AudioTracks []int32 `protobuf:"varint,6,rep,packed,name=audio_tracks,json=audioTracks,proto3" json:"audio_tracks,omitempty"`
+	// *Optional* If 'true', enables speaker detection for each recognized word in
+	// the top alternative of the recognition result using a speaker_tag provided
+	// in the WordInfo.
+	// Note: When this is true, we send all the words from the beginning of the
+	// audio for the top alternative in every consecutive responses.
+	// This is done in order to improve our speaker tags as our models learn to
+	// identify the speakers in the conversation over time.
+	EnableSpeakerDiarization bool `protobuf:"varint,7,opt,name=enable_speaker_diarization,json=enableSpeakerDiarization,proto3" json:"enable_speaker_diarization,omitempty"`
+	// *Optional*
+	// If set, specifies the estimated number of speakers in the conversation.
+	// If not set, defaults to '2'.
+	// Ignored unless enable_speaker_diarization is set to true.
+	DiarizationSpeakerCount int32 `protobuf:"varint,8,opt,name=diarization_speaker_count,json=diarizationSpeakerCount,proto3" json:"diarization_speaker_count,omitempty"`
+	// *Optional* If `true`, the top result includes a list of words and the
+	// confidence for those words. If `false`, no word-level confidence
+	// information is returned. The default is `false`.
+	EnableWordConfidence bool     `protobuf:"varint,9,opt,name=enable_word_confidence,json=enableWordConfidence,proto3" json:"enable_word_confidence,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SpeechTranscriptionConfig) Reset()         { *m = SpeechTranscriptionConfig{} }
+func (m *SpeechTranscriptionConfig) String() string { return proto.CompactTextString(m) }
+func (*SpeechTranscriptionConfig) ProtoMessage()    {}
+func (*SpeechTranscriptionConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{22}
+}
+func (m *SpeechTranscriptionConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SpeechTranscriptionConfig.Unmarshal(m, b)
+}
+func (m *SpeechTranscriptionConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SpeechTranscriptionConfig.Marshal(b, m, deterministic)
+}
+func (dst *SpeechTranscriptionConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeechTranscriptionConfig.Merge(dst, src)
+}
+func (m *SpeechTranscriptionConfig) XXX_Size() int {
+	return xxx_messageInfo_SpeechTranscriptionConfig.Size(m)
+}
+func (m *SpeechTranscriptionConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeechTranscriptionConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeechTranscriptionConfig proto.InternalMessageInfo
+
+func (m *SpeechTranscriptionConfig) GetLanguageCode() string {
+	if m != nil {
+		return m.LanguageCode
+	}
+	return ""
+}
+
+func (m *SpeechTranscriptionConfig) GetMaxAlternatives() int32 {
+	if m != nil {
+		return m.MaxAlternatives
+	}
+	return 0
+}
+
+func (m *SpeechTranscriptionConfig) GetFilterProfanity() bool {
+	if m != nil {
+		return m.FilterProfanity
+	}
+	return false
+}
+
+func (m *SpeechTranscriptionConfig) GetSpeechContexts() []*SpeechContext {
+	if m != nil {
+		return m.SpeechContexts
+	}
+	return nil
+}
+
+func (m *SpeechTranscriptionConfig) GetEnableAutomaticPunctuation() bool {
+	if m != nil {
+		return m.EnableAutomaticPunctuation
+	}
+	return false
+}
+
+func (m *SpeechTranscriptionConfig) GetAudioTracks() []int32 {
+	if m != nil {
+		return m.AudioTracks
+	}
+	return nil
+}
+
+func (m *SpeechTranscriptionConfig) GetEnableSpeakerDiarization() bool {
+	if m != nil {
+		return m.EnableSpeakerDiarization
+	}
+	return false
+}
+
+func (m *SpeechTranscriptionConfig) GetDiarizationSpeakerCount() int32 {
+	if m != nil {
+		return m.DiarizationSpeakerCount
+	}
+	return 0
+}
+
+func (m *SpeechTranscriptionConfig) GetEnableWordConfidence() bool {
+	if m != nil {
+		return m.EnableWordConfidence
+	}
+	return false
+}
+
+// Provides "hints" to the speech recognizer to favor specific words and phrases
+// in the results.
+type SpeechContext struct {
+	// *Optional* A list of strings containing words and phrases "hints" so that
+	// the speech recognition is more likely to recognize them. This can be used
+	// to improve the accuracy for specific words and phrases, for example, if
+	// specific commands are typically spoken by the user. This can also be used
+	// to add additional words to the vocabulary of the recognizer. See
+	// [usage limits](https://cloud.google.com/speech/limits#content).
+	Phrases              []string `protobuf:"bytes,1,rep,name=phrases,proto3" json:"phrases,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SpeechContext) Reset()         { *m = SpeechContext{} }
+func (m *SpeechContext) String() string { return proto.CompactTextString(m) }
+func (*SpeechContext) ProtoMessage()    {}
+func (*SpeechContext) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{23}
+}
+func (m *SpeechContext) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SpeechContext.Unmarshal(m, b)
+}
+func (m *SpeechContext) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SpeechContext.Marshal(b, m, deterministic)
+}
+func (dst *SpeechContext) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeechContext.Merge(dst, src)
+}
+func (m *SpeechContext) XXX_Size() int {
+	return xxx_messageInfo_SpeechContext.Size(m)
+}
+func (m *SpeechContext) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeechContext.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeechContext proto.InternalMessageInfo
+
+func (m *SpeechContext) GetPhrases() []string {
+	if m != nil {
+		return m.Phrases
+	}
+	return nil
+}
+
+// A speech recognition result corresponding to a portion of the audio.
+type SpeechTranscription struct {
+	// May contain one or more recognition hypotheses (up to the maximum specified
+	// in `max_alternatives`).  These alternatives are ordered in terms of
+	// accuracy, with the top (first) alternative being the most probable, as
+	// ranked by the recognizer.
+	Alternatives []*SpeechRecognitionAlternative `protobuf:"bytes,1,rep,name=alternatives,proto3" json:"alternatives,omitempty"`
+	// Output only. The
+	// [BCP-47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) language tag of the
+	// language in this result. This language code was detected to have the most
+	// likelihood of being spoken in the audio.
+	LanguageCode         string   `protobuf:"bytes,2,opt,name=language_code,json=languageCode,proto3" json:"language_code,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *SpeechTranscription) Reset()         { *m = SpeechTranscription{} }
+func (m *SpeechTranscription) String() string { return proto.CompactTextString(m) }
+func (*SpeechTranscription) ProtoMessage()    {}
+func (*SpeechTranscription) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{24}
+}
+func (m *SpeechTranscription) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SpeechTranscription.Unmarshal(m, b)
+}
+func (m *SpeechTranscription) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SpeechTranscription.Marshal(b, m, deterministic)
+}
+func (dst *SpeechTranscription) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeechTranscription.Merge(dst, src)
+}
+func (m *SpeechTranscription) XXX_Size() int {
+	return xxx_messageInfo_SpeechTranscription.Size(m)
+}
+func (m *SpeechTranscription) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeechTranscription.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeechTranscription proto.InternalMessageInfo
+
+func (m *SpeechTranscription) GetAlternatives() []*SpeechRecognitionAlternative {
+	if m != nil {
+		return m.Alternatives
+	}
+	return nil
+}
+
+func (m *SpeechTranscription) GetLanguageCode() string {
+	if m != nil {
+		return m.LanguageCode
+	}
+	return ""
+}
+
+// Alternative hypotheses (a.k.a. n-best list).
+type SpeechRecognitionAlternative struct {
+	// Transcript text representing the words that the user spoke.
+	Transcript string `protobuf:"bytes,1,opt,name=transcript,proto3" json:"transcript,omitempty"`
+	// The confidence estimate between 0.0 and 1.0. A higher number
+	// indicates an estimated greater likelihood that the recognized words are
+	// correct. This field is typically provided only for the top hypothesis, and
+	// only for `is_final=true` results. Clients should not rely on the
+	// `confidence` field as it is not guaranteed to be accurate or consistent.
+	// The default of 0.0 is a sentinel value indicating `confidence` was not set.
+	Confidence float32 `protobuf:"fixed32,2,opt,name=confidence,proto3" json:"confidence,omitempty"`
+	// A list of word-specific information for each recognized word.
+	Words                []*WordInfo `protobuf:"bytes,3,rep,name=words,proto3" json:"words,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *SpeechRecognitionAlternative) Reset()         { *m = SpeechRecognitionAlternative{} }
+func (m *SpeechRecognitionAlternative) String() string { return proto.CompactTextString(m) }
+func (*SpeechRecognitionAlternative) ProtoMessage()    {}
+func (*SpeechRecognitionAlternative) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{25}
+}
+func (m *SpeechRecognitionAlternative) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SpeechRecognitionAlternative.Unmarshal(m, b)
+}
+func (m *SpeechRecognitionAlternative) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SpeechRecognitionAlternative.Marshal(b, m, deterministic)
+}
+func (dst *SpeechRecognitionAlternative) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SpeechRecognitionAlternative.Merge(dst, src)
+}
+func (m *SpeechRecognitionAlternative) XXX_Size() int {
+	return xxx_messageInfo_SpeechRecognitionAlternative.Size(m)
+}
+func (m *SpeechRecognitionAlternative) XXX_DiscardUnknown() {
+	xxx_messageInfo_SpeechRecognitionAlternative.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SpeechRecognitionAlternative proto.InternalMessageInfo
+
+func (m *SpeechRecognitionAlternative) GetTranscript() string {
+	if m != nil {
+		return m.Transcript
+	}
+	return ""
+}
+
+func (m *SpeechRecognitionAlternative) GetConfidence() float32 {
+	if m != nil {
+		return m.Confidence
+	}
+	return 0
+}
+
+func (m *SpeechRecognitionAlternative) GetWords() []*WordInfo {
+	if m != nil {
+		return m.Words
+	}
+	return nil
+}
+
+// Word-specific information for recognized words. Word information is only
+// included in the response when certain request parameters are set, such
+// as `enable_word_time_offsets`.
+type WordInfo struct {
+	// Time offset relative to the beginning of the audio, and
+	// corresponding to the start of the spoken word. This field is only set if
+	// `enable_word_time_offsets=true` and only in the top hypothesis. This is an
+	// experimental feature and the accuracy of the time offset can vary.
+	StartTime *duration.Duration `protobuf:"bytes,1,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// Time offset relative to the beginning of the audio, and
+	// corresponding to the end of the spoken word. This field is only set if
+	// `enable_word_time_offsets=true` and only in the top hypothesis. This is an
+	// experimental feature and the accuracy of the time offset can vary.
+	EndTime *duration.Duration `protobuf:"bytes,2,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	// The word corresponding to this set of information.
+	Word string `protobuf:"bytes,3,opt,name=word,proto3" json:"word,omitempty"`
+	// Output only. The confidence estimate between 0.0 and 1.0. A higher number
+	// indicates an estimated greater likelihood that the recognized words are
+	// correct. This field is set only for the top alternative.
+	// This field is not guaranteed to be accurate and users should not rely on it
+	// to be always provided.
+	// The default of 0.0 is a sentinel value indicating `confidence` was not set.
+	Confidence float32 `protobuf:"fixed32,4,opt,name=confidence,proto3" json:"confidence,omitempty"`
+	// Output only. A distinct integer value is assigned for every speaker within
+	// the audio. This field specifies which one of those speakers was detected to
+	// have spoken this word. Value ranges from 1 up to diarization_speaker_count,
+	// and is only set if speaker diarization is enabled.
+	SpeakerTag           int32    `protobuf:"varint,5,opt,name=speaker_tag,json=speakerTag,proto3" json:"speaker_tag,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *WordInfo) Reset()         { *m = WordInfo{} }
+func (m *WordInfo) String() string { return proto.CompactTextString(m) }
+func (*WordInfo) ProtoMessage()    {}
+func (*WordInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{26}
+}
+func (m *WordInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WordInfo.Unmarshal(m, b)
+}
+func (m *WordInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WordInfo.Marshal(b, m, deterministic)
+}
+func (dst *WordInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WordInfo.Merge(dst, src)
+}
+func (m *WordInfo) XXX_Size() int {
+	return xxx_messageInfo_WordInfo.Size(m)
+}
+func (m *WordInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_WordInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WordInfo proto.InternalMessageInfo
+
+func (m *WordInfo) GetStartTime() *duration.Duration {
+	if m != nil {
+		return m.StartTime
+	}
+	return nil
+}
+
+func (m *WordInfo) GetEndTime() *duration.Duration {
+	if m != nil {
+		return m.EndTime
+	}
+	return nil
+}
+
+func (m *WordInfo) GetWord() string {
+	if m != nil {
+		return m.Word
+	}
+	return ""
+}
+
+func (m *WordInfo) GetConfidence() float32 {
+	if m != nil {
+		return m.Confidence
+	}
+	return 0
+}
+
+func (m *WordInfo) GetSpeakerTag() int32 {
+	if m != nil {
+		return m.SpeakerTag
+	}
+	return 0
+}
+
+// A vertex represents a 2D point in the image.
+// NOTE: the normalized vertex coordinates are relative to the original image
+// and range from 0 to 1.
+type NormalizedVertex struct {
+	// X coordinate.
+	X float32 `protobuf:"fixed32,1,opt,name=x,proto3" json:"x,omitempty"`
+	// Y coordinate.
+	Y                    float32  `protobuf:"fixed32,2,opt,name=y,proto3" json:"y,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *NormalizedVertex) Reset()         { *m = NormalizedVertex{} }
+func (m *NormalizedVertex) String() string { return proto.CompactTextString(m) }
+func (*NormalizedVertex) ProtoMessage()    {}
+func (*NormalizedVertex) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{27}
+}
+func (m *NormalizedVertex) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NormalizedVertex.Unmarshal(m, b)
+}
+func (m *NormalizedVertex) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NormalizedVertex.Marshal(b, m, deterministic)
+}
+func (dst *NormalizedVertex) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NormalizedVertex.Merge(dst, src)
+}
+func (m *NormalizedVertex) XXX_Size() int {
+	return xxx_messageInfo_NormalizedVertex.Size(m)
+}
+func (m *NormalizedVertex) XXX_DiscardUnknown() {
+	xxx_messageInfo_NormalizedVertex.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NormalizedVertex proto.InternalMessageInfo
+
+func (m *NormalizedVertex) GetX() float32 {
+	if m != nil {
+		return m.X
+	}
+	return 0
+}
+
+func (m *NormalizedVertex) GetY() float32 {
+	if m != nil {
+		return m.Y
+	}
+	return 0
+}
+
+// Normalized bounding polygon for text (that might not be aligned with axis).
+// Contains list of the corner points in clockwise order starting from
+// top-left corner. For example, for a rectangular bounding box:
+// When the text is horizontal it might look like:
+//         0----1
+//         |    |
+//         3----2
+//
+// When it's clockwise rotated 180 degrees around the top-left corner it
+// becomes:
+//         2----3
+//         |    |
+//         1----0
+//
+// and the vertex order will still be (0, 1, 2, 3). Note that values can be less
+// than 0, or greater than 1 due to trignometric calculations for location of
+// the box.
+type NormalizedBoundingPoly struct {
+	// Normalized vertices of the bounding polygon.
+	Vertices             []*NormalizedVertex `protobuf:"bytes,1,rep,name=vertices,proto3" json:"vertices,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *NormalizedBoundingPoly) Reset()         { *m = NormalizedBoundingPoly{} }
+func (m *NormalizedBoundingPoly) String() string { return proto.CompactTextString(m) }
+func (*NormalizedBoundingPoly) ProtoMessage()    {}
+func (*NormalizedBoundingPoly) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{28}
+}
+func (m *NormalizedBoundingPoly) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_NormalizedBoundingPoly.Unmarshal(m, b)
+}
+func (m *NormalizedBoundingPoly) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_NormalizedBoundingPoly.Marshal(b, m, deterministic)
+}
+func (dst *NormalizedBoundingPoly) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NormalizedBoundingPoly.Merge(dst, src)
+}
+func (m *NormalizedBoundingPoly) XXX_Size() int {
+	return xxx_messageInfo_NormalizedBoundingPoly.Size(m)
+}
+func (m *NormalizedBoundingPoly) XXX_DiscardUnknown() {
+	xxx_messageInfo_NormalizedBoundingPoly.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NormalizedBoundingPoly proto.InternalMessageInfo
+
+func (m *NormalizedBoundingPoly) GetVertices() []*NormalizedVertex {
+	if m != nil {
+		return m.Vertices
+	}
+	return nil
+}
+
+// Video segment level annotation results for text detection.
+type TextSegment struct {
+	// Video segment where a text snippet was detected.
+	Segment *VideoSegment `protobuf:"bytes,1,opt,name=segment,proto3" json:"segment,omitempty"`
+	// Confidence for the track of detected text. It is calculated as the highest
+	// over all frames where OCR detected text appears.
+	Confidence float32 `protobuf:"fixed32,2,opt,name=confidence,proto3" json:"confidence,omitempty"`
+	// Information related to the frames where OCR detected text appears.
+	Frames               []*TextFrame `protobuf:"bytes,3,rep,name=frames,proto3" json:"frames,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *TextSegment) Reset()         { *m = TextSegment{} }
+func (m *TextSegment) String() string { return proto.CompactTextString(m) }
+func (*TextSegment) ProtoMessage()    {}
+func (*TextSegment) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{29}
+}
+func (m *TextSegment) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TextSegment.Unmarshal(m, b)
+}
+func (m *TextSegment) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TextSegment.Marshal(b, m, deterministic)
+}
+func (dst *TextSegment) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextSegment.Merge(dst, src)
+}
+func (m *TextSegment) XXX_Size() int {
+	return xxx_messageInfo_TextSegment.Size(m)
+}
+func (m *TextSegment) XXX_DiscardUnknown() {
+	xxx_messageInfo_TextSegment.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TextSegment proto.InternalMessageInfo
+
+func (m *TextSegment) GetSegment() *VideoSegment {
+	if m != nil {
+		return m.Segment
+	}
+	return nil
+}
+
+func (m *TextSegment) GetConfidence() float32 {
+	if m != nil {
+		return m.Confidence
+	}
+	return 0
+}
+
+func (m *TextSegment) GetFrames() []*TextFrame {
+	if m != nil {
+		return m.Frames
+	}
+	return nil
+}
+
+// Video frame level annotation results for text annotation (OCR).
+// Contains information regarding timestamp and bounding box locations for the
+// frames containing detected OCR text snippets.
+type TextFrame struct {
+	// Bounding polygon of the detected text for this frame.
+	RotatedBoundingBox *NormalizedBoundingPoly `protobuf:"bytes,1,opt,name=rotated_bounding_box,json=rotatedBoundingBox,proto3" json:"rotated_bounding_box,omitempty"`
+	// Timestamp of this frame.
+	TimeOffset           *duration.Duration `protobuf:"bytes,2,opt,name=time_offset,json=timeOffset,proto3" json:"time_offset,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *TextFrame) Reset()         { *m = TextFrame{} }
+func (m *TextFrame) String() string { return proto.CompactTextString(m) }
+func (*TextFrame) ProtoMessage()    {}
+func (*TextFrame) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{30}
+}
+func (m *TextFrame) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TextFrame.Unmarshal(m, b)
+}
+func (m *TextFrame) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TextFrame.Marshal(b, m, deterministic)
+}
+func (dst *TextFrame) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextFrame.Merge(dst, src)
+}
+func (m *TextFrame) XXX_Size() int {
+	return xxx_messageInfo_TextFrame.Size(m)
+}
+func (m *TextFrame) XXX_DiscardUnknown() {
+	xxx_messageInfo_TextFrame.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TextFrame proto.InternalMessageInfo
+
+func (m *TextFrame) GetRotatedBoundingBox() *NormalizedBoundingPoly {
+	if m != nil {
+		return m.RotatedBoundingBox
+	}
+	return nil
+}
+
+func (m *TextFrame) GetTimeOffset() *duration.Duration {
+	if m != nil {
+		return m.TimeOffset
+	}
+	return nil
+}
+
+// Annotations related to one detected OCR text snippet. This will contain the
+// corresponding text, confidence value, and frame level information for each
+// detection.
+type TextAnnotation struct {
+	// The detected text.
+	Text string `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	// All video segments where OCR detected text appears.
+	Segments             []*TextSegment `protobuf:"bytes,2,rep,name=segments,proto3" json:"segments,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *TextAnnotation) Reset()         { *m = TextAnnotation{} }
+func (m *TextAnnotation) String() string { return proto.CompactTextString(m) }
+func (*TextAnnotation) ProtoMessage()    {}
+func (*TextAnnotation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{31}
+}
+func (m *TextAnnotation) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_TextAnnotation.Unmarshal(m, b)
+}
+func (m *TextAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_TextAnnotation.Marshal(b, m, deterministic)
+}
+func (dst *TextAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TextAnnotation.Merge(dst, src)
+}
+func (m *TextAnnotation) XXX_Size() int {
+	return xxx_messageInfo_TextAnnotation.Size(m)
+}
+func (m *TextAnnotation) XXX_DiscardUnknown() {
+	xxx_messageInfo_TextAnnotation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TextAnnotation proto.InternalMessageInfo
+
+func (m *TextAnnotation) GetText() string {
+	if m != nil {
+		return m.Text
+	}
+	return ""
+}
+
+func (m *TextAnnotation) GetSegments() []*TextSegment {
+	if m != nil {
+		return m.Segments
+	}
+	return nil
+}
+
+// Video frame level annotations for object detection and tracking. This field
+// stores per frame location, time offset, and confidence.
+type ObjectTrackingFrame struct {
+	// The normalized bounding box location of this object track for the frame.
+	NormalizedBoundingBox *NormalizedBoundingBox `protobuf:"bytes,1,opt,name=normalized_bounding_box,json=normalizedBoundingBox,proto3" json:"normalized_bounding_box,omitempty"`
+	// The timestamp of the frame in microseconds.
+	TimeOffset           *duration.Duration `protobuf:"bytes,2,opt,name=time_offset,json=timeOffset,proto3" json:"time_offset,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}           `json:"-"`
+	XXX_unrecognized     []byte             `json:"-"`
+	XXX_sizecache        int32              `json:"-"`
+}
+
+func (m *ObjectTrackingFrame) Reset()         { *m = ObjectTrackingFrame{} }
+func (m *ObjectTrackingFrame) String() string { return proto.CompactTextString(m) }
+func (*ObjectTrackingFrame) ProtoMessage()    {}
+func (*ObjectTrackingFrame) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{32}
+}
+func (m *ObjectTrackingFrame) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ObjectTrackingFrame.Unmarshal(m, b)
+}
+func (m *ObjectTrackingFrame) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ObjectTrackingFrame.Marshal(b, m, deterministic)
+}
+func (dst *ObjectTrackingFrame) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectTrackingFrame.Merge(dst, src)
+}
+func (m *ObjectTrackingFrame) XXX_Size() int {
+	return xxx_messageInfo_ObjectTrackingFrame.Size(m)
+}
+func (m *ObjectTrackingFrame) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectTrackingFrame.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectTrackingFrame proto.InternalMessageInfo
+
+func (m *ObjectTrackingFrame) GetNormalizedBoundingBox() *NormalizedBoundingBox {
+	if m != nil {
+		return m.NormalizedBoundingBox
+	}
+	return nil
+}
+
+func (m *ObjectTrackingFrame) GetTimeOffset() *duration.Duration {
+	if m != nil {
+		return m.TimeOffset
+	}
+	return nil
+}
+
+// Annotations corresponding to one tracked object.
+type ObjectTrackingAnnotation struct {
+	// Different representation of tracking info in non-streaming batch
+	// and streaming modes.
+	//
+	// Types that are valid to be assigned to TrackInfo:
+	//	*ObjectTrackingAnnotation_Segment
+	//	*ObjectTrackingAnnotation_TrackId
+	TrackInfo isObjectTrackingAnnotation_TrackInfo `protobuf_oneof:"track_info"`
+	// Entity to specify the object category that this track is labeled as.
+	Entity *Entity `protobuf:"bytes,1,opt,name=entity,proto3" json:"entity,omitempty"`
+	// Object category's labeling confidence of this track.
+	Confidence float32 `protobuf:"fixed32,4,opt,name=confidence,proto3" json:"confidence,omitempty"`
+	// Information corresponding to all frames where this object track appears.
+	// Non-streaming batch mode: it may be one or multiple ObjectTrackingFrame
+	// messages in frames.
+	// Streaming mode: it can only be one ObjectTrackingFrame message in frames.
+	Frames               []*ObjectTrackingFrame `protobuf:"bytes,2,rep,name=frames,proto3" json:"frames,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}               `json:"-"`
+	XXX_unrecognized     []byte                 `json:"-"`
+	XXX_sizecache        int32                  `json:"-"`
+}
+
+func (m *ObjectTrackingAnnotation) Reset()         { *m = ObjectTrackingAnnotation{} }
+func (m *ObjectTrackingAnnotation) String() string { return proto.CompactTextString(m) }
+func (*ObjectTrackingAnnotation) ProtoMessage()    {}
+func (*ObjectTrackingAnnotation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_video_intelligence_d20a6d7e04a3f86b, []int{33}
+}
+func (m *ObjectTrackingAnnotation) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ObjectTrackingAnnotation.Unmarshal(m, b)
+}
+func (m *ObjectTrackingAnnotation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ObjectTrackingAnnotation.Marshal(b, m, deterministic)
+}
+func (dst *ObjectTrackingAnnotation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ObjectTrackingAnnotation.Merge(dst, src)
+}
+func (m *ObjectTrackingAnnotation) XXX_Size() int {
+	return xxx_messageInfo_ObjectTrackingAnnotation.Size(m)
+}
+func (m *ObjectTrackingAnnotation) XXX_DiscardUnknown() {
+	xxx_messageInfo_ObjectTrackingAnnotation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ObjectTrackingAnnotation proto.InternalMessageInfo
+
+type isObjectTrackingAnnotation_TrackInfo interface {
+	isObjectTrackingAnnotation_TrackInfo()
+}
+
+type ObjectTrackingAnnotation_Segment struct {
+	Segment *VideoSegment `protobuf:"bytes,3,opt,name=segment,proto3,oneof"`
+}
+
+type ObjectTrackingAnnotation_TrackId struct {
+	TrackId int64 `protobuf:"varint,5,opt,name=track_id,json=trackId,proto3,oneof"`
+}
+
+func (*ObjectTrackingAnnotation_Segment) isObjectTrackingAnnotation_TrackInfo() {}
+
+func (*ObjectTrackingAnnotation_TrackId) isObjectTrackingAnnotation_TrackInfo() {}
+
+func (m *ObjectTrackingAnnotation) GetTrackInfo() isObjectTrackingAnnotation_TrackInfo {
+	if m != nil {
+		return m.TrackInfo
+	}
+	return nil
+}
+
+func (m *ObjectTrackingAnnotation) GetSegment() *VideoSegment {
+	if x, ok := m.GetTrackInfo().(*ObjectTrackingAnnotation_Segment); ok {
+		return x.Segment
+	}
+	return nil
+}
+
+func (m *ObjectTrackingAnnotation) GetTrackId() int64 {
+	if x, ok := m.GetTrackInfo().(*ObjectTrackingAnnotation_TrackId); ok {
+		return x.TrackId
+	}
+	return 0
+}
+
+func (m *ObjectTrackingAnnotation) GetEntity() *Entity {
+	if m != nil {
+		return m.Entity
+	}
+	return nil
+}
+
+func (m *ObjectTrackingAnnotation) GetConfidence() float32 {
+	if m != nil {
+		return m.Confidence
+	}
+	return 0
+}
+
+func (m *ObjectTrackingAnnotation) GetFrames() []*ObjectTrackingFrame {
+	if m != nil {
+		return m.Frames
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*ObjectTrackingAnnotation) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _ObjectTrackingAnnotation_OneofMarshaler, _ObjectTrackingAnnotation_OneofUnmarshaler, _ObjectTrackingAnnotation_OneofSizer, []interface{}{
+		(*ObjectTrackingAnnotation_Segment)(nil),
+		(*ObjectTrackingAnnotation_TrackId)(nil),
+	}
+}
+
+func _ObjectTrackingAnnotation_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*ObjectTrackingAnnotation)
+	// track_info
+	switch x := m.TrackInfo.(type) {
+	case *ObjectTrackingAnnotation_Segment:
+		b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Segment); err != nil {
+			return err
+		}
+	case *ObjectTrackingAnnotation_TrackId:
+		b.EncodeVarint(5<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.TrackId))
+	case nil:
+	default:
+		return fmt.Errorf("ObjectTrackingAnnotation.TrackInfo has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _ObjectTrackingAnnotation_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*ObjectTrackingAnnotation)
+	switch tag {
+	case 3: // track_info.segment
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(VideoSegment)
+		err := b.DecodeMessage(msg)
+		m.TrackInfo = &ObjectTrackingAnnotation_Segment{msg}
+		return true, err
+	case 5: // track_info.track_id
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.TrackInfo = &ObjectTrackingAnnotation_TrackId{int64(x)}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _ObjectTrackingAnnotation_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*ObjectTrackingAnnotation)
+	// track_info
+	switch x := m.TrackInfo.(type) {
+	case *ObjectTrackingAnnotation_Segment:
+		s := proto.Size(x.Segment)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ObjectTrackingAnnotation_TrackId:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(x.TrackId))
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
 func init() {
 	proto.RegisterType((*AnnotateVideoRequest)(nil), "google.cloud.videointelligence.v1.AnnotateVideoRequest")
 	proto.RegisterType((*VideoContext)(nil), "google.cloud.videointelligence.v1.VideoContext")
@@ -1381,6 +2372,7 @@ func init() {
 	proto.RegisterType((*ShotChangeDetectionConfig)(nil), "google.cloud.videointelligence.v1.ShotChangeDetectionConfig")
 	proto.RegisterType((*ExplicitContentDetectionConfig)(nil), "google.cloud.videointelligence.v1.ExplicitContentDetectionConfig")
 	proto.RegisterType((*FaceDetectionConfig)(nil), "google.cloud.videointelligence.v1.FaceDetectionConfig")
+	proto.RegisterType((*TextDetectionConfig)(nil), "google.cloud.videointelligence.v1.TextDetectionConfig")
 	proto.RegisterType((*VideoSegment)(nil), "google.cloud.videointelligence.v1.VideoSegment")
 	proto.RegisterType((*LabelSegment)(nil), "google.cloud.videointelligence.v1.LabelSegment")
 	proto.RegisterType((*LabelFrame)(nil), "google.cloud.videointelligence.v1.LabelFrame")
@@ -1396,6 +2388,18 @@ func init() {
 	proto.RegisterType((*AnnotateVideoResponse)(nil), "google.cloud.videointelligence.v1.AnnotateVideoResponse")
 	proto.RegisterType((*VideoAnnotationProgress)(nil), "google.cloud.videointelligence.v1.VideoAnnotationProgress")
 	proto.RegisterType((*AnnotateVideoProgress)(nil), "google.cloud.videointelligence.v1.AnnotateVideoProgress")
+	proto.RegisterType((*SpeechTranscriptionConfig)(nil), "google.cloud.videointelligence.v1.SpeechTranscriptionConfig")
+	proto.RegisterType((*SpeechContext)(nil), "google.cloud.videointelligence.v1.SpeechContext")
+	proto.RegisterType((*SpeechTranscription)(nil), "google.cloud.videointelligence.v1.SpeechTranscription")
+	proto.RegisterType((*SpeechRecognitionAlternative)(nil), "google.cloud.videointelligence.v1.SpeechRecognitionAlternative")
+	proto.RegisterType((*WordInfo)(nil), "google.cloud.videointelligence.v1.WordInfo")
+	proto.RegisterType((*NormalizedVertex)(nil), "google.cloud.videointelligence.v1.NormalizedVertex")
+	proto.RegisterType((*NormalizedBoundingPoly)(nil), "google.cloud.videointelligence.v1.NormalizedBoundingPoly")
+	proto.RegisterType((*TextSegment)(nil), "google.cloud.videointelligence.v1.TextSegment")
+	proto.RegisterType((*TextFrame)(nil), "google.cloud.videointelligence.v1.TextFrame")
+	proto.RegisterType((*TextAnnotation)(nil), "google.cloud.videointelligence.v1.TextAnnotation")
+	proto.RegisterType((*ObjectTrackingFrame)(nil), "google.cloud.videointelligence.v1.ObjectTrackingFrame")
+	proto.RegisterType((*ObjectTrackingAnnotation)(nil), "google.cloud.videointelligence.v1.ObjectTrackingAnnotation")
 	proto.RegisterEnum("google.cloud.videointelligence.v1.Feature", Feature_name, Feature_value)
 	proto.RegisterEnum("google.cloud.videointelligence.v1.LabelDetectionMode", LabelDetectionMode_name, LabelDetectionMode_value)
 	proto.RegisterEnum("google.cloud.videointelligence.v1.Likelihood", Likelihood_name, Likelihood_value)
@@ -1482,116 +2486,163 @@ var _VideoIntelligenceService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/videointelligence/v1/video_intelligence.proto", fileDescriptor_video_intelligence_09ca97bf0b395287)
+	proto.RegisterFile("google/cloud/videointelligence/v1/video_intelligence.proto", fileDescriptor_video_intelligence_d20a6d7e04a3f86b)
 }
 
-var fileDescriptor_video_intelligence_09ca97bf0b395287 = []byte{
-	// 1705 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x58, 0xcd, 0x73, 0xe3, 0x48,
-	0x15, 0x47, 0xb6, 0x93, 0x89, 0x5f, 0xbe, 0x3c, 0x9d, 0x2f, 0x27, 0xcc, 0x64, 0x33, 0x5a, 0xa8,
-	0xca, 0x06, 0xb0, 0x2b, 0x01, 0x76, 0xd9, 0x2c, 0x17, 0xc7, 0x51, 0x76, 0xcc, 0x66, 0xe2, 0x54,
-	0xdb, 0x93, 0xda, 0xdd, 0x9a, 0x2a, 0x95, 0x22, 0xb5, 0x65, 0xed, 0xc8, 0x6a, 0x21, 0xb5, 0x52,
-	0x13, 0xaa, 0x38, 0x40, 0x51, 0x70, 0xe1, 0xc6, 0x85, 0x3f, 0x80, 0x13, 0x7f, 0x00, 0xc5, 0x85,
-	0xaa, 0x2d, 0x8a, 0x13, 0x07, 0x2e, 0x9c, 0xb8, 0xef, 0x1f, 0x42, 0xa9, 0xbb, 0x65, 0x2b, 0x92,
-	0x33, 0x91, 0x07, 0x6e, 0xea, 0xf7, 0xf1, 0x7b, 0xaf, 0xdf, 0x57, 0x77, 0x0b, 0x8e, 0x6d, 0x4a,
-	0x6d, 0x97, 0x34, 0x4d, 0x97, 0x46, 0x56, 0xf3, 0xc6, 0xb1, 0x08, 0x75, 0x3c, 0x46, 0x5c, 0xd7,
-	0xb1, 0x89, 0x67, 0x92, 0xe6, 0xcd, 0xa1, 0x20, 0xea, 0x69, 0x6a, 0xc3, 0x0f, 0x28, 0xa3, 0xe8,
-	0x99, 0xd0, 0x6d, 0x70, 0xdd, 0x46, 0x4e, 0xb7, 0x71, 0x73, 0xb8, 0xf3, 0x44, 0xc2, 0x1b, 0xbe,
-	0xd3, 0x34, 0x3c, 0x8f, 0x32, 0x83, 0x39, 0xd4, 0x0b, 0x05, 0xc0, 0xce, 0xfb, 0x92, 0xeb, 0x52,
-	0xcf, 0x0e, 0x22, 0xcf, 0x73, 0x3c, 0xbb, 0x49, 0x7d, 0x12, 0xdc, 0x11, 0xda, 0x95, 0x42, 0x7c,
-	0x75, 0x1d, 0x0d, 0x9a, 0x56, 0x24, 0x04, 0x24, 0xff, 0xbd, 0x2c, 0x9f, 0x39, 0x23, 0x12, 0x32,
-	0x63, 0xe4, 0x4b, 0x81, 0x2d, 0x29, 0x10, 0xf8, 0x66, 0x33, 0x64, 0x06, 0x8b, 0x24, 0xb2, 0xfa,
-	0x97, 0x12, 0xac, 0xb7, 0x84, 0x53, 0xe4, 0x2a, 0xf6, 0x1e, 0x93, 0x9f, 0x47, 0x24, 0x64, 0xe8,
-	0xdb, 0x50, 0x75, 0x3c, 0x3f, 0x62, 0x7a, 0x14, 0x38, 0x75, 0x65, 0x4f, 0xd9, 0xaf, 0xe2, 0x05,
-	0x4e, 0x78, 0x19, 0x38, 0xe8, 0x7d, 0x58, 0x16, 0x4c, 0x93, 0x7a, 0x8c, 0x78, 0xac, 0x3e, 0xbf,
-	0xa7, 0xec, 0x2f, 0xe1, 0x25, 0x4e, 0x6c, 0x0b, 0x1a, 0x3a, 0x83, 0x85, 0x01, 0x31, 0x58, 0x14,
-	0x90, 0xb0, 0x5e, 0xda, 0x2b, 0xef, 0xaf, 0x1c, 0x1d, 0x34, 0x1e, 0x8c, 0x56, 0xe3, 0x4c, 0xa8,
-	0xe0, 0xb1, 0x2e, 0xea, 0xc3, 0xb2, 0x08, 0x3f, 0x37, 0xf6, 0x86, 0xd5, 0xcb, 0x7b, 0xca, 0xfe,
-	0xe2, 0x51, 0xb3, 0x00, 0x18, 0xdf, 0x51, 0x5b, 0xa8, 0xe1, 0xa5, 0x9b, 0xd4, 0x0a, 0x3d, 0x05,
-	0xa0, 0x11, 0x4b, 0x36, 0x58, 0xe1, 0x1b, 0xac, 0x0a, 0x4a, 0xbc, 0xc3, 0xf7, 0x60, 0xd1, 0xa5,
-	0x26, 0x8f, 0xb1, 0xee, 0x58, 0xf5, 0x39, 0xce, 0x87, 0x84, 0xd4, 0xb1, 0xd4, 0x7f, 0x54, 0x60,
-	0x29, 0x0d, 0x8f, 0x3e, 0x83, 0x85, 0x90, 0xd8, 0x23, 0xe2, 0xb1, 0xb0, 0xae, 0xec, 0x95, 0x67,
-	0xf1, 0xb0, 0x27, 0xf4, 0xf0, 0x18, 0x00, 0x8d, 0x60, 0xd3, 0x35, 0xae, 0x89, 0xab, 0x5b, 0x84,
-	0x11, 0x93, 0x7b, 0x61, 0x52, 0x6f, 0xe0, 0xd8, 0xf5, 0x12, 0xdf, 0xfc, 0x47, 0x05, 0xa0, 0xcf,
-	0x63, 0x80, 0xd3, 0x44, 0xbf, 0xcd, 0xd5, 0xf1, 0xba, 0x3b, 0x85, 0x8a, 0x7e, 0x09, 0x4f, 0xc2,
-	0x21, 0x65, 0xba, 0x39, 0x34, 0x3c, 0x9b, 0xe4, 0x8d, 0x8a, 0x88, 0xff, 0xb4, 0x80, 0xd1, 0xde,
-	0x90, 0xb2, 0x36, 0x47, 0xc9, 0x5a, 0xde, 0x0e, 0xef, 0x63, 0xa1, 0xdf, 0x2b, 0xf0, 0x8c, 0xbc,
-	0xf1, 0x5d, 0xc7, 0x74, 0xc6, 0x25, 0x95, 0x77, 0xa2, 0xc2, 0x9d, 0x68, 0x15, 0x70, 0x42, 0x93,
-	0x58, 0xb2, 0x12, 0xb3, 0x9e, 0xec, 0x92, 0xb7, 0xf2, 0xd1, 0x57, 0xb0, 0x31, 0x30, 0xcc, 0x29,
-	0x61, 0x98, 0xe3, 0x1e, 0x7c, 0x58, 0xa4, 0x8a, 0x0d, 0x33, 0x17, 0x80, 0xb5, 0x41, 0x9e, 0xa8,
-	0xfe, 0x5d, 0x81, 0xf5, 0x69, 0x89, 0x42, 0x36, 0xac, 0x67, 0x2b, 0x60, 0x44, 0x2d, 0xc2, 0x5b,
-	0x71, 0xe5, 0xe8, 0xc7, 0x33, 0xe7, 0xff, 0x05, 0xb5, 0x08, 0x46, 0x6e, 0x8e, 0x86, 0xbe, 0x07,
-	0x8f, 0x43, 0x31, 0x92, 0x8c, 0xe0, 0x56, 0x37, 0x8d, 0x11, 0x09, 0x0c, 0x5e, 0x65, 0x0b, 0xb8,
-	0x36, 0x61, 0xb4, 0x39, 0x1d, 0xad, 0xc3, 0x5c, 0xec, 0x85, 0xcb, 0x2b, 0xa2, 0x8a, 0xc5, 0x42,
-	0x3d, 0x84, 0xed, 0x7b, 0xf3, 0x3e, 0x51, 0x51, 0xd2, 0x2a, 0x1f, 0xc2, 0xee, 0xdb, 0xb3, 0x74,
-	0x8f, 0x9e, 0x01, 0x6b, 0x53, 0x62, 0x3b, 0x5d, 0x18, 0xfd, 0x08, 0x36, 0x1d, 0xcf, 0x74, 0x23,
-	0x8b, 0xe8, 0xd7, 0x34, 0xf2, 0x2c, 0xc7, 0xb3, 0xf5, 0x6b, 0xfa, 0x86, 0xcf, 0xa3, 0x78, 0x7f,
-	0xeb, 0x92, 0x7b, 0x22, 0x99, 0x27, 0x31, 0x4f, 0xfd, 0xa3, 0x22, 0x3b, 0x5b, 0xb6, 0x25, 0xd2,
-	0x78, 0x84, 0x02, 0xa6, 0xc7, 0x53, 0x55, 0xa7, 0x83, 0x41, 0x48, 0x18, 0x37, 0xb4, 0x78, 0xb4,
-	0x9d, 0xe4, 0x21, 0x99, 0xbc, 0x8d, 0x53, 0x39, 0x99, 0xf1, 0x2a, 0xd7, 0xe9, 0x3b, 0x23, 0xd2,
-	0xe5, 0x1a, 0xa8, 0x05, 0xab, 0xc4, 0xb3, 0xee, 0x80, 0x94, 0x1e, 0x02, 0x59, 0x26, 0x9e, 0x35,
-	0x81, 0x50, 0x6f, 0x61, 0x89, 0x67, 0x35, 0xf1, 0xac, 0x03, 0x8f, 0xe4, 0xc8, 0x90, 0xfe, 0xcc,
-	0x3c, 0x72, 0x12, 0x7d, 0xb4, 0x0b, 0xc0, 0xab, 0xdc, 0x8a, 0xc5, 0xb8, 0x63, 0x25, 0x9c, 0xa2,
-	0xa8, 0x43, 0x00, 0x6e, 0xfa, 0x2c, 0x30, 0x46, 0x04, 0x1d, 0xc3, 0xe2, 0x4c, 0xc1, 0x00, 0x36,
-	0x89, 0xc3, 0x43, 0x96, 0x5c, 0x98, 0xd7, 0x3c, 0xe6, 0xb0, 0xdb, 0xf8, 0x0c, 0x22, 0xfc, 0x2b,
-	0x1e, 0xc1, 0xf2, 0x0c, 0x12, 0x84, 0x8e, 0x85, 0xf6, 0x60, 0xd1, 0x22, 0xa1, 0x19, 0x38, 0x7e,
-	0x6c, 0x81, 0xe3, 0x54, 0x71, 0x9a, 0x14, 0x9f, 0x52, 0xae, 0xe1, 0xd9, 0x91, 0x61, 0x13, 0xdd,
-	0x8c, 0x7b, 0x47, 0x14, 0xed, 0x52, 0x42, 0x6c, 0x53, 0x8b, 0xa8, 0x5f, 0x97, 0x60, 0x95, 0x6f,
-	0xac, 0x35, 0x3e, 0x9a, 0x51, 0x0b, 0xe6, 0x85, 0x19, 0xb9, 0xb1, 0x0f, 0x8a, 0xcc, 0x1c, 0xae,
-	0x80, 0xa5, 0x22, 0xba, 0x82, 0xc7, 0xa6, 0xc1, 0x88, 0x4d, 0x83, 0x5b, 0x9d, 0x93, 0x1c, 0x79,
-	0x0a, 0xce, 0x84, 0x56, 0x4b, 0x30, 0x34, 0x09, 0x71, 0xe7, 0x94, 0x29, 0x17, 0x3e, 0x65, 0xd2,
-	0x45, 0x93, 0x3a, 0x65, 0x34, 0x98, 0x1f, 0xc4, 0xe9, 0x0c, 0xeb, 0x15, 0x0e, 0xf5, 0x83, 0xa2,
-	0x50, 0xbc, 0x08, 0xb0, 0x54, 0x56, 0xff, 0xaa, 0xc0, 0x7a, 0xa6, 0x99, 0xff, 0xf7, 0x2a, 0xb1,
-	0x60, 0xd3, 0xa7, 0x81, 0x47, 0xed, 0xc0, 0xf0, 0x87, 0xb7, 0xba, 0xeb, 0xbc, 0x26, 0xae, 0x33,
-	0xa4, 0xd4, 0xe2, 0x99, 0x5e, 0x29, 0xe6, 0xeb, 0x58, 0x09, 0x6f, 0xa4, 0xc0, 0x26, 0x64, 0xd5,
-	0x85, 0xed, 0x8c, 0xe7, 0xa9, 0x32, 0xe8, 0x8e, 0xc3, 0x23, 0xce, 0xf3, 0x8f, 0x66, 0x3f, 0x7a,
-	0xee, 0x06, 0xea, 0x35, 0x6c, 0x5c, 0xd0, 0x60, 0x64, 0xb8, 0xce, 0x2f, 0x88, 0x95, 0x1a, 0x3a,
-	0x08, 0x41, 0xc5, 0x25, 0x03, 0x11, 0xa1, 0x12, 0xe6, 0xdf, 0xa8, 0x06, 0x65, 0x46, 0x7d, 0xd9,
-	0x1f, 0xf1, 0x67, 0x3c, 0xe4, 0x02, 0xc7, 0x1e, 0x8a, 0x0b, 0x50, 0x09, 0x8b, 0x05, 0xda, 0x84,
-	0xf9, 0x6b, 0xca, 0x18, 0x1d, 0xf1, 0x03, 0xb2, 0x84, 0xe5, 0x4a, 0xfd, 0x1c, 0x16, 0xe3, 0x49,
-	0xf9, 0xff, 0x1f, 0x15, 0xea, 0xdf, 0x14, 0xa8, 0xc6, 0xd0, 0x22, 0xc9, 0x0c, 0xb6, 0xbd, 0xf1,
-	0xa6, 0xb2, 0x73, 0x56, 0x04, 0xee, 0x27, 0x05, 0x4c, 0x4d, 0x0d, 0x0c, 0xde, 0xf2, 0xa6, 0x91,
-	0x49, 0x98, 0x2d, 0xad, 0xd2, 0x0c, 0xa5, 0xa5, 0x7e, 0xad, 0xc0, 0x4a, 0xec, 0x7f, 0x2a, 0xd5,
-	0x4f, 0xa0, 0xca, 0x86, 0xd1, 0xe8, 0xda, 0x33, 0x1c, 0x71, 0x86, 0x2c, 0xe1, 0x09, 0x01, 0xfd,
-	0x2c, 0xd5, 0x74, 0xa2, 0x87, 0x1b, 0x05, 0xef, 0x00, 0xf9, 0x9e, 0x3b, 0x1d, 0x17, 0x95, 0x68,
-	0xdf, 0xef, 0x17, 0x44, 0xba, 0x5b, 0x49, 0xff, 0x9a, 0x83, 0x4d, 0x9e, 0x9c, 0xc9, 0x1e, 0x30,
-	0x09, 0x23, 0x97, 0x85, 0x6f, 0xbf, 0xb8, 0x7b, 0xb0, 0x2d, 0x3d, 0xd1, 0xc5, 0xed, 0x22, 0xf5,
-	0x20, 0x91, 0x5b, 0x3b, 0x2a, 0x3a, 0x04, 0x52, 0xa6, 0xb7, 0x24, 0x68, 0x86, 0x1e, 0xa2, 0x21,
-	0x6c, 0xf2, 0x8b, 0x65, 0xde, 0x58, 0xf9, 0x9d, 0x8d, 0xad, 0xc7, 0x88, 0x39, 0x4b, 0x5f, 0xc1,
-	0x16, 0x8f, 0xcd, 0x14, 0x53, 0x95, 0x77, 0x36, 0xb5, 0xc1, 0x21, 0x73, 0xb6, 0x5e, 0x41, 0x8d,
-	0x5f, 0x10, 0xd3, 0x46, 0xe6, 0xb8, 0x91, 0xc3, 0x82, 0xd9, 0x4c, 0xd9, 0x58, 0x1d, 0xdc, 0x59,
-	0x87, 0xe8, 0x4b, 0xa8, 0xf1, 0x98, 0xa5, 0xd1, 0xe7, 0xdf, 0xed, 0x41, 0xb1, 0x1a, 0x03, 0xa5,
-	0xb1, 0x47, 0xb0, 0x36, 0xbe, 0x68, 0x4f, 0xf0, 0xeb, 0x8f, 0x0a, 0xdf, 0xef, 0xef, 0x9d, 0x96,
-	0x18, 0x25, 0xc0, 0xa9, 0xb6, 0xda, 0x87, 0x39, 0x12, 0x04, 0x34, 0xa8, 0x57, 0xb9, 0x01, 0x94,
-	0x18, 0x08, 0x7c, 0xb3, 0xd1, 0xe3, 0xcf, 0x50, 0x2c, 0x04, 0xd4, 0x5f, 0x29, 0xb0, 0x91, 0x79,
-	0x87, 0x86, 0x3e, 0xf5, 0x42, 0x82, 0x86, 0x80, 0x26, 0x9e, 0xea, 0x81, 0xa8, 0x72, 0x39, 0x58,
-	0x3e, 0x2e, 0x1a, 0x90, 0x5c, 0x9b, 0xe0, 0xc7, 0x46, 0x96, 0xa4, 0xfe, 0x47, 0x81, 0xad, 0x8c,
-	0xf4, 0x65, 0x40, 0xed, 0x80, 0x84, 0x0f, 0x74, 0xd5, 0x07, 0x50, 0xf3, 0xa5, 0xa0, 0xee, 0x93,
-	0xc0, 0x8c, 0x87, 0x6c, 0x3c, 0x91, 0xe6, 0xf0, 0x6a, 0x42, 0xbf, 0x14, 0x64, 0xf4, 0x31, 0xc0,
-	0xe4, 0x2e, 0x29, 0xdf, 0x55, 0x3b, 0xb9, 0xb1, 0xd5, 0x4f, 0x9e, 0xef, 0xb8, 0x3a, 0xbe, 0x45,
-	0xa2, 0x4f, 0x60, 0x31, 0xf2, 0x2d, 0x83, 0x11, 0xa1, 0x5b, 0x79, 0x50, 0x17, 0x84, 0x78, 0x4c,
-	0x50, 0x7f, 0x93, 0x8d, 0xef, 0x78, 0x67, 0xaf, 0x61, 0x2d, 0x15, 0xdf, 0xc4, 0x5f, 0x19, 0xe0,
-	0xe3, 0xd9, 0x03, 0x9c, 0x00, 0xe3, 0x54, 0xda, 0x12, 0xda, 0xc1, 0x6f, 0x15, 0x78, 0x24, 0x5f,
-	0xf8, 0x68, 0x0b, 0xd6, 0xce, 0xb4, 0x56, 0xff, 0x25, 0xd6, 0xf4, 0x97, 0x17, 0xbd, 0x4b, 0xad,
-	0xdd, 0x39, 0xeb, 0x68, 0xa7, 0xb5, 0x6f, 0xa1, 0x35, 0x58, 0x3d, 0x6f, 0x9d, 0x68, 0xe7, 0xfa,
-	0xa9, 0xd6, 0xd7, 0xda, 0xfd, 0x4e, 0xf7, 0xa2, 0xa6, 0xa0, 0x6d, 0xd8, 0xe8, 0x3d, 0xef, 0xf6,
-	0xf5, 0xf6, 0xf3, 0xd6, 0xc5, 0xa7, 0x5a, 0x8a, 0x55, 0x42, 0xbb, 0xb0, 0xa3, 0x7d, 0x7e, 0x79,
-	0xde, 0x69, 0x77, 0xfa, 0x7a, 0xbb, 0x7b, 0xd1, 0xd7, 0x2e, 0xfa, 0x29, 0x7e, 0x19, 0x21, 0x58,
-	0x39, 0x6b, 0xb5, 0xd3, 0x3a, 0x95, 0x83, 0x00, 0x50, 0xfe, 0x7d, 0x84, 0xbe, 0x03, 0x7b, 0x19,
-	0xcb, 0xfa, 0x8b, 0xee, 0x69, 0xd6, 0xbf, 0x65, 0xa8, 0x72, 0x57, 0x62, 0x56, 0x4d, 0x41, 0x2b,
-	0x00, 0x67, 0xb8, 0xf5, 0x42, 0x13, 0xeb, 0x52, 0xbc, 0x2f, 0xce, 0x6e, 0x5d, 0x9c, 0xea, 0x29,
-	0x46, 0xf9, 0x80, 0x01, 0x4c, 0xae, 0x1e, 0x68, 0x07, 0x36, 0xcf, 0x3b, 0x9f, 0x69, 0xe7, 0x9d,
-	0xe7, 0xdd, 0xee, 0x69, 0xc6, 0xc2, 0x63, 0x58, 0xbe, 0xd2, 0xf0, 0x17, 0xfa, 0xcb, 0x0b, 0x2e,
-	0xf2, 0x45, 0x4d, 0x41, 0x4b, 0xb0, 0x30, 0x5e, 0x95, 0xe2, 0xd5, 0x65, 0xb7, 0xd7, 0xeb, 0x9c,
-	0x9c, 0x6b, 0xb5, 0x32, 0x02, 0x98, 0x97, 0x9c, 0x0a, 0x5a, 0x85, 0x45, 0xae, 0x2a, 0x09, 0x73,
-	0x47, 0x7f, 0x52, 0xa0, 0xce, 0x53, 0xd4, 0x49, 0xe5, 0xad, 0x47, 0x82, 0x1b, 0xc7, 0x24, 0xe8,
-	0x77, 0x0a, 0x2c, 0xdf, 0x29, 0x0b, 0x54, 0xe4, 0x92, 0x33, 0xed, 0x87, 0xd1, 0xce, 0xd3, 0x44,
-	0x31, 0xf5, 0x27, 0xab, 0xd1, 0x4d, 0xfe, 0x64, 0xa9, 0xbb, 0xbf, 0xfe, 0xf7, 0x37, 0x7f, 0x28,
-	0xd5, 0xd5, 0xb5, 0xf1, 0xef, 0xb4, 0xf0, 0x58, 0x16, 0x08, 0x39, 0x56, 0x0e, 0x4e, 0xbe, 0x51,
-	0xe0, 0xbb, 0x26, 0x1d, 0x3d, 0x6c, 0xfd, 0xe4, 0xe9, 0x7d, 0xbb, 0xb9, 0x8c, 0x5b, 0xe0, 0x52,
-	0xf9, 0x12, 0x4b, 0x0c, 0x9b, 0xc6, 0x37, 0xfd, 0x06, 0x0d, 0xec, 0xa6, 0x4d, 0x3c, 0xde, 0x20,
-	0x4d, 0xc1, 0x32, 0x7c, 0x27, 0x7c, 0xcb, 0xef, 0xbe, 0x4f, 0x72, 0xc4, 0x3f, 0x97, 0x9e, 0x7d,
-	0x2a, 0x40, 0xdb, 0xdc, 0xb1, 0x9c, 0x0b, 0x8d, 0xab, 0xc3, 0x7f, 0x26, 0x32, 0xaf, 0xb8, 0xcc,
-	0xab, 0x9c, 0xcc, 0xab, 0xab, 0xc3, 0xeb, 0x79, 0xee, 0xc6, 0x0f, 0xff, 0x1b, 0x00, 0x00, 0xff,
-	0xff, 0xa3, 0x97, 0x20, 0x48, 0x74, 0x14, 0x00, 0x00,
+var fileDescriptor_video_intelligence_d20a6d7e04a3f86b = []byte{
+	// 2462 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x59, 0xcb, 0x6f, 0x1b, 0xc9,
+	0xd1, 0xdf, 0x21, 0x45, 0x89, 0x2c, 0x52, 0x12, 0xdd, 0x7a, 0x51, 0xb2, 0x2d, 0xcb, 0xb3, 0xdf,
+	0x02, 0xb6, 0xf7, 0x0b, 0x15, 0x69, 0x37, 0xde, 0xb5, 0x6c, 0x20, 0xa1, 0x28, 0xca, 0xe2, 0x5a,
+	0x16, 0x89, 0x16, 0xad, 0xd8, 0x0b, 0x03, 0x83, 0xd1, 0x4c, 0x93, 0x1c, 0x6b, 0x38, 0xcd, 0xcc,
+	0x0c, 0x15, 0x69, 0x91, 0x1c, 0x12, 0xe4, 0x71, 0xc9, 0x2d, 0x97, 0xdc, 0x82, 0x00, 0x39, 0xe5,
+	0x90, 0x53, 0x10, 0xe4, 0x92, 0x60, 0x91, 0x20, 0x87, 0xe4, 0x92, 0x43, 0x4e, 0xb9, 0xef, 0x1f,
+	0x12, 0xf4, 0x63, 0xc8, 0x21, 0x87, 0xb2, 0x46, 0xf2, 0x22, 0x37, 0x76, 0x75, 0xd5, 0xaf, 0x1e,
+	0x5d, 0x5d, 0x5d, 0x35, 0x84, 0xad, 0x16, 0xa5, 0x2d, 0x9b, 0xac, 0x1b, 0x36, 0xed, 0x99, 0xeb,
+	0xa7, 0x96, 0x49, 0xa8, 0xe5, 0xf8, 0xc4, 0xb6, 0xad, 0x16, 0x71, 0x0c, 0xb2, 0x7e, 0xba, 0x21,
+	0x88, 0x5a, 0x98, 0x5a, 0xec, 0xba, 0xd4, 0xa7, 0xe8, 0xae, 0x90, 0x2d, 0x72, 0xd9, 0x62, 0x44,
+	0xb6, 0x78, 0xba, 0xb1, 0x72, 0x4b, 0xc2, 0xeb, 0x5d, 0x6b, 0x5d, 0x77, 0x1c, 0xea, 0xeb, 0xbe,
+	0x45, 0x1d, 0x4f, 0x00, 0xac, 0xbc, 0x2f, 0x77, 0x6d, 0xea, 0xb4, 0xdc, 0x9e, 0xe3, 0x58, 0x4e,
+	0x6b, 0x9d, 0x76, 0x89, 0x3b, 0xc4, 0xb4, 0x2a, 0x99, 0xf8, 0xea, 0xb8, 0xd7, 0x5c, 0x37, 0x7b,
+	0x82, 0x41, 0xee, 0xdf, 0x19, 0xdd, 0xf7, 0xad, 0x0e, 0xf1, 0x7c, 0xbd, 0xd3, 0x95, 0x0c, 0x4b,
+	0x92, 0xc1, 0xed, 0x1a, 0xeb, 0x9e, 0xaf, 0xfb, 0x3d, 0x89, 0xac, 0xfe, 0x31, 0x01, 0xf3, 0x25,
+	0x61, 0x14, 0x39, 0x62, 0xd6, 0x63, 0xf2, 0xbd, 0x1e, 0xf1, 0x7c, 0x74, 0x13, 0x32, 0x96, 0xd3,
+	0xed, 0xf9, 0x5a, 0xcf, 0xb5, 0x0a, 0xca, 0x9a, 0x72, 0x2f, 0x83, 0xd3, 0x9c, 0xf0, 0xc2, 0xb5,
+	0xd0, 0xfb, 0x30, 0x2d, 0x36, 0x0d, 0xea, 0xf8, 0xc4, 0xf1, 0x0b, 0x93, 0x6b, 0xca, 0xbd, 0x1c,
+	0xce, 0x71, 0x62, 0x59, 0xd0, 0xd0, 0x2e, 0xa4, 0x9b, 0x44, 0xf7, 0x7b, 0x2e, 0xf1, 0x0a, 0x89,
+	0xb5, 0xe4, 0xbd, 0x99, 0xcd, 0x07, 0xc5, 0x4b, 0xa3, 0x55, 0xdc, 0x15, 0x22, 0xb8, 0x2f, 0x8b,
+	0x1a, 0x30, 0x2d, 0xc2, 0xcf, 0x95, 0x9d, 0xf9, 0x85, 0xe4, 0x9a, 0x72, 0x2f, 0xbb, 0xb9, 0x1e,
+	0x03, 0x8c, 0x7b, 0x54, 0x16, 0x62, 0x38, 0x77, 0x1a, 0x5a, 0xa1, 0xdb, 0x00, 0xb4, 0xe7, 0x07,
+	0x0e, 0x4e, 0x70, 0x07, 0x33, 0x82, 0xc2, 0x3c, 0xbc, 0x03, 0x59, 0x9b, 0x1a, 0x3c, 0xc6, 0x9a,
+	0x65, 0x16, 0x52, 0x7c, 0x1f, 0x02, 0x52, 0xd5, 0x54, 0x7f, 0x3f, 0x09, 0xb9, 0x30, 0x3c, 0x7a,
+	0x06, 0x69, 0x8f, 0xb4, 0x3a, 0xc4, 0xf1, 0xbd, 0x82, 0xb2, 0x96, 0xbc, 0x8a, 0x85, 0x87, 0x42,
+	0x0e, 0xf7, 0x01, 0x50, 0x07, 0x16, 0x6d, 0xfd, 0x98, 0xd8, 0x9a, 0x49, 0x7c, 0x62, 0x70, 0x2b,
+	0x0c, 0xea, 0x34, 0xad, 0x56, 0x21, 0xc1, 0x9d, 0xff, 0x24, 0x06, 0xf4, 0x3e, 0x03, 0xd8, 0x09,
+	0xe4, 0xcb, 0x5c, 0x1c, 0xcf, 0xdb, 0x63, 0xa8, 0xe8, 0x87, 0x70, 0xcb, 0x6b, 0x53, 0x5f, 0x33,
+	0xda, 0xba, 0xd3, 0x22, 0x51, 0xa5, 0x22, 0xe2, 0x4f, 0x62, 0x28, 0x3d, 0x6c, 0x53, 0xbf, 0xcc,
+	0x51, 0x46, 0x35, 0x2f, 0x7b, 0x17, 0x6d, 0xa1, 0x5f, 0x28, 0x70, 0x97, 0x9c, 0x75, 0x6d, 0xcb,
+	0xb0, 0xfa, 0x29, 0x15, 0x35, 0x62, 0x82, 0x1b, 0x51, 0x8a, 0x61, 0x44, 0x45, 0x62, 0xc9, 0x4c,
+	0x1c, 0xb5, 0x64, 0x95, 0xbc, 0x75, 0x1f, 0xbd, 0x81, 0x85, 0xa6, 0x6e, 0x8c, 0x09, 0x43, 0x8a,
+	0x5b, 0xf0, 0x30, 0x4e, 0x16, 0xeb, 0x46, 0x24, 0x00, 0x73, 0xcd, 0x28, 0x11, 0xfd, 0x00, 0x6e,
+	0x7a, 0x5d, 0x42, 0x8c, 0xb6, 0xe6, 0xbb, 0xba, 0xe3, 0x19, 0xae, 0xd5, 0x0d, 0x6b, 0x9c, 0x8c,
+	0x1f, 0x78, 0x8e, 0xd2, 0x08, 0x83, 0xf4, 0x03, 0x7f, 0xd1, 0x16, 0xf3, 0x94, 0xe5, 0x6e, 0xd4,
+	0xd3, 0x74, 0x6c, 0x4f, 0x1b, 0xe4, 0x2c, 0x12, 0xe0, 0x39, 0x3f, 0x4a, 0x54, 0xff, 0xaa, 0xc0,
+	0xfc, 0xb8, 0x94, 0x44, 0x2d, 0x98, 0x1f, 0xcd, 0xf5, 0x0e, 0x35, 0x09, 0x2f, 0x3a, 0x33, 0x9b,
+	0xdf, 0xba, 0x72, 0xa6, 0x3f, 0xa7, 0x26, 0xc1, 0xc8, 0x8e, 0xd0, 0xd0, 0x87, 0x70, 0xc3, 0x13,
+	0xc5, 0x57, 0x77, 0xcf, 0x35, 0x43, 0xef, 0x10, 0x57, 0xe7, 0xf7, 0x29, 0x8d, 0xf3, 0x83, 0x8d,
+	0x32, 0xa7, 0xa3, 0x79, 0x48, 0x31, 0x2b, 0x6c, 0x9e, 0xfb, 0x19, 0x2c, 0x16, 0xea, 0x06, 0x2c,
+	0x5f, 0x98, 0xe1, 0x03, 0x11, 0x25, 0x2c, 0xf2, 0x10, 0x56, 0xdf, 0x9e, 0x8f, 0x17, 0xc8, 0xe9,
+	0x30, 0x37, 0x26, 0x8b, 0xc6, 0x33, 0xa3, 0x8f, 0x61, 0xd1, 0x72, 0x0c, 0xbb, 0x67, 0x12, 0xed,
+	0x98, 0xf6, 0x1c, 0xd3, 0x72, 0x5a, 0xda, 0x31, 0x3d, 0xe3, 0x95, 0x97, 0xf9, 0x37, 0x2f, 0x77,
+	0xb7, 0xe5, 0xe6, 0x36, 0xdb, 0x53, 0x9f, 0xc0, 0xdc, 0x98, 0xe3, 0x43, 0x1f, 0xc0, 0x8c, 0xad,
+	0x3b, 0xad, 0x9e, 0xde, 0x22, 0x5a, 0xdb, 0x0a, 0xea, 0x59, 0x06, 0x4f, 0x07, 0xd4, 0x3d, 0x46,
+	0x54, 0x7f, 0xa5, 0xc8, 0x0a, 0x28, 0xcb, 0x17, 0xaa, 0xf0, 0xf8, 0xba, 0xbe, 0xc6, 0x5e, 0x1f,
+	0x8d, 0x36, 0x9b, 0x1e, 0xf1, 0xb9, 0x99, 0xd9, 0xcd, 0xe5, 0xe0, 0x14, 0x83, 0x17, 0xaa, 0xb8,
+	0x23, 0x5f, 0x30, 0x3c, 0xcb, 0x65, 0x1a, 0x56, 0x87, 0xd4, 0xb8, 0x04, 0x2a, 0xc1, 0x2c, 0x71,
+	0xcc, 0x21, 0x90, 0xc4, 0x65, 0x20, 0xd3, 0xc4, 0x31, 0x07, 0x10, 0xea, 0x39, 0xe4, 0x78, 0x4e,
+	0x04, 0x96, 0x55, 0x61, 0x4a, 0x96, 0x56, 0x69, 0xcf, 0x95, 0x4b, 0x73, 0x20, 0x8f, 0x56, 0x01,
+	0xf8, 0x1d, 0x31, 0x19, 0x1b, 0x37, 0x2c, 0x81, 0x43, 0x14, 0xb5, 0x0d, 0xc0, 0x55, 0xef, 0xba,
+	0x7a, 0x87, 0xa0, 0x2d, 0xc8, 0x5e, 0x29, 0x18, 0xe0, 0x0f, 0xe2, 0x70, 0x99, 0x26, 0x1b, 0x26,
+	0x2b, 0x8e, 0x6f, 0xf9, 0xe7, 0xec, 0xad, 0x26, 0xfc, 0x17, 0x7b, 0xaa, 0xe4, 0x5b, 0x2d, 0x08,
+	0x55, 0x13, 0xad, 0x41, 0xd6, 0x24, 0xfd, 0x8b, 0xcf, 0x71, 0x32, 0x38, 0x4c, 0x62, 0xaf, 0x79,
+	0xff, 0xbc, 0x0d, 0x76, 0xf3, 0x44, 0xca, 0xe7, 0x02, 0x62, 0x99, 0x9a, 0x44, 0xfd, 0x32, 0x01,
+	0xb3, 0xdc, 0xb1, 0x52, 0xbf, 0x85, 0x41, 0x25, 0x98, 0x14, 0x6a, 0xa4, 0x63, 0xf7, 0xe3, 0xd4,
+	0x66, 0x2e, 0x80, 0xa5, 0x20, 0x3a, 0x82, 0x1b, 0x86, 0xee, 0x93, 0x16, 0x75, 0xcf, 0x35, 0x4e,
+	0xb2, 0x64, 0xb7, 0x70, 0x25, 0xb4, 0x7c, 0x80, 0x51, 0x91, 0x10, 0x43, 0xaf, 0x71, 0x32, 0xf6,
+	0x6b, 0x1c, 0x4e, 0x9a, 0xd0, 0x6b, 0x5c, 0x81, 0xc9, 0x26, 0x3b, 0x4e, 0xaf, 0x30, 0xc1, 0xa1,
+	0xbe, 0x11, 0x17, 0x8a, 0x27, 0x01, 0x96, 0xc2, 0xea, 0x9f, 0x14, 0x98, 0x1f, 0x29, 0x05, 0xef,
+	0x9e, 0x25, 0x26, 0x2c, 0x76, 0xa9, 0xeb, 0xd0, 0x96, 0xab, 0x77, 0xdb, 0xe7, 0x9a, 0x6d, 0x9d,
+	0x10, 0xdb, 0x6a, 0x53, 0x6a, 0xf2, 0x93, 0x9e, 0x89, 0x67, 0x6b, 0x5f, 0x08, 0x2f, 0x84, 0xc0,
+	0x06, 0x64, 0xd5, 0x86, 0xe5, 0x11, 0xcb, 0x43, 0x69, 0x50, 0xeb, 0x87, 0x47, 0xf4, 0x3d, 0x9f,
+	0x5c, 0xfd, 0x89, 0x1e, 0x0e, 0xd4, 0x09, 0x2c, 0x1c, 0x50, 0xb7, 0xa3, 0xdb, 0xd6, 0x17, 0xc4,
+	0x0c, 0x95, 0x2c, 0x84, 0x60, 0xc2, 0x26, 0x4d, 0x11, 0xa1, 0x04, 0xe6, 0xbf, 0x51, 0x1e, 0x92,
+	0x3e, 0xed, 0xca, 0xfb, 0xc1, 0x7e, 0xb2, 0x12, 0xe9, 0x5a, 0xad, 0xb6, 0x68, 0x14, 0x13, 0x58,
+	0x2c, 0xd0, 0x22, 0x4c, 0x1e, 0x53, 0xdf, 0xa7, 0x1d, 0xde, 0x48, 0x24, 0xb0, 0x5c, 0xa9, 0x2f,
+	0x21, 0xcb, 0xea, 0xec, 0xd7, 0x5f, 0x2a, 0xd4, 0x3f, 0x2b, 0x90, 0x61, 0xd0, 0xe2, 0x90, 0x7d,
+	0x58, 0x76, 0xfa, 0x4e, 0x8d, 0x56, 0x69, 0x11, 0xb8, 0x4f, 0x63, 0xa8, 0x1a, 0x1b, 0x18, 0xbc,
+	0xe4, 0x8c, 0x23, 0x13, 0x6f, 0x34, 0xb5, 0x12, 0x57, 0x48, 0x2d, 0xf5, 0x4b, 0x05, 0x66, 0x98,
+	0xfd, 0xa1, 0xa3, 0xbe, 0x05, 0x19, 0xbf, 0xdd, 0xeb, 0x1c, 0x3b, 0xba, 0x25, 0x5e, 0xa0, 0x1c,
+	0x1e, 0x10, 0xd0, 0x67, 0xa1, 0x4b, 0x27, 0xee, 0x70, 0x31, 0x66, 0xaf, 0x14, 0xbd, 0x73, 0x3b,
+	0xfd, 0xa4, 0x12, 0xd7, 0xf7, 0xff, 0x63, 0x22, 0x0d, 0x67, 0xd2, 0x4f, 0xd3, 0xb0, 0xc8, 0x0f,
+	0x67, 0xe0, 0x03, 0x26, 0x5e, 0xcf, 0xf6, 0xbd, 0xb7, 0x0f, 0x38, 0x0e, 0x2c, 0x4b, 0x4b, 0x34,
+	0xd1, 0x9b, 0x84, 0x06, 0x37, 0xe9, 0xda, 0x66, 0xdc, 0x22, 0x10, 0x52, 0xbd, 0x24, 0x41, 0x47,
+	0xe8, 0x1e, 0x6a, 0xc3, 0x22, 0x6f, 0xc0, 0xa3, 0xca, 0x92, 0xd7, 0x56, 0x36, 0xcf, 0x10, 0x23,
+	0x9a, 0xde, 0xc0, 0x12, 0x8f, 0xcd, 0x18, 0x55, 0x13, 0xd7, 0x56, 0xb5, 0xc0, 0x21, 0x23, 0xba,
+	0x5e, 0x43, 0x9e, 0x37, 0xd2, 0x61, 0x25, 0x29, 0xae, 0x64, 0x23, 0xe6, 0x69, 0x86, 0x74, 0xcc,
+	0x36, 0x87, 0xd6, 0x1e, 0xfa, 0x1c, 0xf2, 0x3c, 0x66, 0x61, 0xf4, 0xc9, 0xeb, 0x0d, 0x5e, 0xb3,
+	0x0c, 0x28, 0x8c, 0xdd, 0x81, 0xb9, 0xfe, 0x40, 0x32, 0xc0, 0x2f, 0x4c, 0xc5, 0x6e, 0xc7, 0x2f,
+	0xac, 0x96, 0x18, 0x05, 0xc0, 0xa1, 0x6b, 0x75, 0x02, 0x0b, 0xe3, 0xa6, 0x00, 0xaf, 0x90, 0xe5,
+	0xfe, 0x3c, 0xbc, 0x5e, 0xff, 0x8f, 0xe7, 0xc7, 0x74, 0xfe, 0xfc, 0x54, 0x78, 0xd3, 0x1f, 0x8e,
+	0x5b, 0x2e, 0xf6, 0xa9, 0xb0, 0x86, 0x31, 0x7c, 0x2a, 0xfe, 0xd0, 0x9a, 0xe5, 0x17, 0xa2, 0xc7,
+	0x6f, 0x88, 0x31, 0x8c, 0x3f, 0xc3, 0xf1, 0x1f, 0xc7, 0xc0, 0xaf, 0x71, 0xe1, 0x86, 0xab, 0x1b,
+	0x27, 0x96, 0xd3, 0x0a, 0x69, 0xba, 0x21, 0x60, 0xc3, 0xba, 0xee, 0x41, 0x8a, 0xb8, 0x2e, 0x75,
+	0x0b, 0x19, 0x7e, 0x2e, 0x28, 0x80, 0x77, 0xbb, 0x46, 0xf1, 0x90, 0x7f, 0xe5, 0xc0, 0x82, 0x41,
+	0xfd, 0x91, 0x02, 0x0b, 0x23, 0x9f, 0x39, 0xbc, 0x2e, 0x75, 0x3c, 0x82, 0xda, 0x80, 0x06, 0x86,
+	0x6a, 0xae, 0x28, 0x0e, 0xb2, 0x1e, 0x3f, 0x8a, 0x9b, 0x47, 0x91, 0xea, 0x82, 0x6f, 0xe8, 0xa3,
+	0x24, 0xf5, 0x3f, 0x0a, 0x2c, 0x8d, 0x70, 0xd7, 0x5d, 0xda, 0x72, 0x89, 0x77, 0x49, 0x31, 0xba,
+	0x0f, 0xf9, 0xae, 0x64, 0xd4, 0xba, 0xc4, 0x35, 0xd8, 0xdb, 0xc4, 0x0a, 0x79, 0x0a, 0xcf, 0x06,
+	0xf4, 0xba, 0x20, 0xa3, 0x47, 0x00, 0x83, 0x16, 0x5c, 0x8e, 0xed, 0x2b, 0x91, 0x6a, 0xdf, 0x08,
+	0xbe, 0x0e, 0xe1, 0x4c, 0xbf, 0xf9, 0x46, 0x8f, 0x21, 0xdb, 0xeb, 0x9a, 0xba, 0x4f, 0x84, 0xec,
+	0xc4, 0xa5, 0xb2, 0x20, 0xd8, 0x19, 0x41, 0xfd, 0xc9, 0x68, 0x7c, 0xfb, 0x9e, 0x9d, 0xc0, 0x5c,
+	0x28, 0xbe, 0x81, 0xbd, 0x32, 0xc0, 0x5b, 0x57, 0x0f, 0x70, 0x00, 0x8c, 0x43, 0xc7, 0x16, 0xd0,
+	0xd4, 0x9f, 0x4d, 0xc0, 0xf2, 0x85, 0x83, 0x70, 0xb4, 0xcf, 0x55, 0xa2, 0x7d, 0x2e, 0x0b, 0x76,
+	0x47, 0x3f, 0xd3, 0x74, 0xdb, 0x27, 0xae, 0xa3, 0xfb, 0xd6, 0xa9, 0x9c, 0xa1, 0x52, 0x78, 0xb6,
+	0xa3, 0x9f, 0x95, 0x42, 0x64, 0xc6, 0xda, 0xb4, 0x18, 0x81, 0xb9, 0xd5, 0xd4, 0x1d, 0xd6, 0x08,
+	0x27, 0xf9, 0xb8, 0x35, 0x2b, 0xe8, 0xf5, 0x80, 0x8c, 0x5e, 0xc1, 0xac, 0xbc, 0xe0, 0xf2, 0x23,
+	0x56, 0x50, 0x6d, 0xbf, 0x19, 0xfb, 0x6a, 0x07, 0x9f, 0xb1, 0x66, 0xbc, 0xf0, 0xd2, 0x43, 0xdf,
+	0x81, 0x5b, 0xc4, 0xd1, 0x8f, 0x6d, 0xa2, 0xe9, 0x3d, 0x9f, 0x76, 0x74, 0xdf, 0x32, 0xb4, 0x6e,
+	0xcf, 0x31, 0xfc, 0x9e, 0xa8, 0x59, 0x29, 0x6e, 0xd1, 0x8a, 0xe0, 0x29, 0x05, 0x2c, 0xf5, 0x01,
+	0x07, 0xba, 0x0b, 0x39, 0xbd, 0x67, 0x5a, 0x94, 0x15, 0x1f, 0xe3, 0x44, 0x14, 0xd1, 0x14, 0xce,
+	0x72, 0x1a, 0xbf, 0x88, 0x1e, 0x7a, 0x02, 0x12, 0x40, 0xf3, 0xba, 0x44, 0x3f, 0x21, 0xae, 0x66,
+	0x5a, 0xba, 0x6b, 0x7d, 0x31, 0x28, 0x8b, 0x69, 0x5c, 0x10, 0x1c, 0x87, 0x82, 0x61, 0x67, 0xb0,
+	0x8f, 0xb6, 0x60, 0x39, 0xc4, 0xde, 0x87, 0x30, 0x68, 0xcf, 0xf1, 0xf9, 0xa7, 0x86, 0x14, 0x5e,
+	0x0a, 0x31, 0x48, 0x84, 0x32, 0xdb, 0x66, 0x93, 0xad, 0xd4, 0xfc, 0x7d, 0xea, 0x9a, 0x5a, 0x68,
+	0x22, 0xca, 0x88, 0xc9, 0x56, 0xec, 0x7e, 0x97, 0xba, 0x66, 0x79, 0x30, 0x1b, 0xdd, 0x87, 0xe9,
+	0xa1, 0xa8, 0xa1, 0x02, 0x4c, 0x75, 0xdb, 0xae, 0xee, 0x91, 0x60, 0x98, 0x0d, 0x96, 0xea, 0xaf,
+	0x15, 0x98, 0x1b, 0x93, 0x33, 0xc8, 0x80, 0xdc, 0x50, 0x12, 0x88, 0x8c, 0xfd, 0x76, 0xec, 0xf3,
+	0xc2, 0xc4, 0xa0, 0x2d, 0xc7, 0x62, 0x58, 0xa1, 0xac, 0xc1, 0x43, 0xa0, 0xd1, 0x94, 0x4c, 0x8c,
+	0x19, 0xbd, 0x7e, 0xa3, 0xc0, 0xad, 0xb7, 0x61, 0xb2, 0x49, 0x71, 0xf0, 0x6e, 0xc8, 0xac, 0x0e,
+	0x51, 0x2e, 0x9b, 0x24, 0x51, 0x09, 0x52, 0x2c, 0xb8, 0x41, 0xb3, 0xf1, 0x61, 0x0c, 0x1f, 0x59,
+	0xbc, 0xab, 0x4e, 0x93, 0x62, 0x21, 0xa9, 0xfe, 0x4b, 0x81, 0x74, 0x40, 0x43, 0x9f, 0x0e, 0x55,
+	0xa1, 0x4b, 0xc7, 0x99, 0x50, 0x11, 0xfa, 0x18, 0xd2, 0xc1, 0xec, 0x7f, 0x79, 0xaf, 0x3a, 0x25,
+	0x87, 0x7e, 0x36, 0x16, 0x30, 0x2b, 0xe4, 0xdc, 0xca, 0x7f, 0x8f, 0xf8, 0x3c, 0x11, 0xf1, 0xf9,
+	0x0e, 0x64, 0x83, 0x3c, 0xf4, 0x75, 0xf1, 0x69, 0x2f, 0x85, 0x41, 0x92, 0x1a, 0x7a, 0x4b, 0x2d,
+	0x42, 0x7e, 0xd0, 0x6b, 0x1f, 0x11, 0xd7, 0x27, 0x67, 0x28, 0x07, 0xca, 0x99, 0x1c, 0x3e, 0x14,
+	0xbe, 0x3a, 0x97, 0xd1, 0x54, 0xce, 0x55, 0x0b, 0x16, 0xa3, 0xbd, 0x79, 0x9d, 0xda, 0xe7, 0xa8,
+	0x06, 0xe9, 0x53, 0xe2, 0xfa, 0x96, 0xd1, 0xcf, 0xa2, 0x8f, 0xae, 0xd4, 0xe8, 0x0b, 0xe5, 0xb8,
+	0x0f, 0xa2, 0xfe, 0x45, 0x81, 0x2c, 0x7b, 0x87, 0xff, 0xf7, 0x9f, 0x37, 0xae, 0xd5, 0x96, 0x33,
+	0x53, 0x87, 0xdb, 0xf2, 0x3f, 0x28, 0x90, 0xe9, 0x53, 0xd1, 0x09, 0xcc, 0xbb, 0xfc, 0xe5, 0x18,
+	0x1e, 0x8b, 0xa4, 0x2f, 0x8f, 0xae, 0x35, 0x14, 0xb1, 0xc0, 0x63, 0x24, 0x61, 0xc3, 0x23, 0xe4,
+	0xbb, 0x0c, 0x44, 0x5d, 0x98, 0x19, 0x6e, 0x7f, 0x58, 0xe6, 0xf1, 0xbf, 0x24, 0xc4, 0x9d, 0xe3,
+	0xbf, 0xaf, 0x39, 0x05, 0x85, 0xce, 0x73, 0x30, 0x05, 0xa9, 0x7f, 0x53, 0x60, 0x6e, 0xb8, 0x23,
+	0x12, 0x21, 0xeb, 0xc2, 0xd2, 0x05, 0xc3, 0xa4, 0x8c, 0xda, 0xf5, 0x47, 0xc9, 0x85, 0xb1, 0xa3,
+	0xe4, 0x3b, 0xc5, 0xed, 0xef, 0x09, 0x28, 0x5c, 0xd4, 0xd7, 0xa1, 0x67, 0x83, 0xe4, 0x4d, 0x5e,
+	0x2b, 0x79, 0xf7, 0xde, 0x1b, 0xa4, 0xef, 0x4d, 0x48, 0xf3, 0x47, 0x2c, 0xf8, 0xcf, 0x26, 0xc9,
+	0x36, 0x39, 0xa5, 0x6a, 0x7e, 0x1d, 0x9f, 0xab, 0x2e, 0xab, 0x2a, 0x07, 0xfd, 0xeb, 0x91, 0x88,
+	0xdd, 0xb9, 0x8f, 0x39, 0xdf, 0xe0, 0xa2, 0x6c, 0xe7, 0x78, 0x65, 0x67, 0xfe, 0x38, 0x4d, 0xfa,
+	0xe0, 0x1f, 0x0a, 0x4c, 0xc9, 0xff, 0xc7, 0xd0, 0x12, 0xcc, 0xed, 0x56, 0x4a, 0x8d, 0x17, 0xb8,
+	0xa2, 0xbd, 0x38, 0x38, 0xac, 0x57, 0xca, 0xd5, 0xdd, 0x6a, 0x65, 0x27, 0xff, 0x1e, 0x9a, 0x83,
+	0xd9, 0xfd, 0xd2, 0x76, 0x65, 0x5f, 0xdb, 0xa9, 0x34, 0x2a, 0xe5, 0x46, 0xb5, 0x76, 0x90, 0x57,
+	0xd0, 0x32, 0x2c, 0x1c, 0xee, 0xd5, 0x1a, 0x5a, 0x79, 0xaf, 0x74, 0xf0, 0xb4, 0x12, 0xda, 0x4a,
+	0xa0, 0x55, 0x58, 0xa9, 0xbc, 0xac, 0xef, 0x57, 0xcb, 0xd5, 0x86, 0x56, 0xae, 0x1d, 0x34, 0x2a,
+	0x07, 0x8d, 0xd0, 0x7e, 0x12, 0x21, 0x98, 0xd9, 0x2d, 0x95, 0xc3, 0x32, 0x13, 0xa8, 0x00, 0xf3,
+	0x87, 0xf5, 0x4a, 0xa5, 0xbc, 0xa7, 0x35, 0x70, 0xe9, 0xe0, 0xb0, 0x8c, 0xab, 0x75, 0xbe, 0x33,
+	0xc9, 0xb8, 0x1b, 0x95, 0x97, 0x61, 0x84, 0x29, 0x66, 0x51, 0x6d, 0xfb, 0xb3, 0x4a, 0xb9, 0xc1,
+	0xb8, 0xcb, 0xcf, 0xaa, 0x07, 0x4f, 0xf3, 0x99, 0x07, 0x2e, 0xa0, 0xe8, 0x67, 0x7b, 0xf4, 0x7f,
+	0xb0, 0x36, 0x62, 0xbc, 0xf6, 0xbc, 0xb6, 0x33, 0xea, 0xe2, 0x34, 0x64, 0xb8, 0x37, 0x6c, 0x2b,
+	0xaf, 0xa0, 0x19, 0x80, 0x5d, 0x5c, 0x7a, 0x5e, 0x11, 0xeb, 0x04, 0x0b, 0x0d, 0xdf, 0x2e, 0x1d,
+	0xec, 0x68, 0xa1, 0x8d, 0xe4, 0x03, 0x1f, 0x60, 0xf0, 0x4d, 0x0b, 0xad, 0xc0, 0xe2, 0x7e, 0xf5,
+	0x59, 0x65, 0xbf, 0xba, 0x57, 0xab, 0xed, 0x8c, 0x68, 0xb8, 0x01, 0xd3, 0x47, 0x15, 0xfc, 0x4a,
+	0x7b, 0x71, 0xc0, 0x59, 0x5e, 0xe5, 0x15, 0x94, 0x83, 0x74, 0x7f, 0x95, 0x60, 0xab, 0x7a, 0xed,
+	0xf0, 0xb0, 0xba, 0xbd, 0x5f, 0xc9, 0x27, 0x11, 0xc0, 0xa4, 0xdc, 0x99, 0x40, 0xb3, 0x90, 0xe5,
+	0xa2, 0x92, 0x90, 0xda, 0xfc, 0xad, 0x02, 0x05, 0x9e, 0xaf, 0xd5, 0xd0, 0xc1, 0x1f, 0x12, 0xf7,
+	0xd4, 0x32, 0x08, 0xfa, 0xb9, 0x02, 0xd3, 0x43, 0x8d, 0x33, 0x8a, 0xf3, 0xf5, 0x6c, 0xdc, 0x3f,
+	0xb6, 0x2b, 0xb7, 0x03, 0xc1, 0xd0, 0x5f, 0xc9, 0xc5, 0x5a, 0xf0, 0x57, 0xb2, 0xba, 0xfa, 0xe3,
+	0x7f, 0x7f, 0xf5, 0xcb, 0x44, 0x41, 0x9d, 0xeb, 0xff, 0x9f, 0xed, 0x6d, 0xc9, 0x16, 0x9a, 0x6c,
+	0x29, 0x0f, 0xb6, 0xbf, 0x52, 0xe0, 0x03, 0x83, 0x76, 0x2e, 0xd7, 0xbe, 0x7d, 0xfb, 0x22, 0x6f,
+	0xea, 0xac, 0x0a, 0xd4, 0x95, 0xcf, 0xb1, 0xc4, 0x68, 0x51, 0xd6, 0xc7, 0x14, 0xa9, 0xdb, 0x5a,
+	0x6f, 0x11, 0x87, 0xd7, 0x88, 0x75, 0xb1, 0xa5, 0x77, 0x2d, 0xef, 0x2d, 0xff, 0xb7, 0x3f, 0x8e,
+	0x10, 0x7f, 0x97, 0xb8, 0xfb, 0x54, 0x80, 0x96, 0xb9, 0x61, 0x11, 0x13, 0x8a, 0x47, 0x1b, 0xff,
+	0x0c, 0x78, 0x5e, 0x73, 0x9e, 0xd7, 0x11, 0x9e, 0xd7, 0x47, 0x1b, 0xc7, 0x93, 0xdc, 0x8c, 0x8f,
+	0xfe, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x74, 0x61, 0x19, 0xe7, 0xf5, 0x1f, 0x00, 0x00,
 }

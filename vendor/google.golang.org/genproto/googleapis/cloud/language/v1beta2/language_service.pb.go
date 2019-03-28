@@ -69,7 +69,7 @@ func (x EncodingType) String() string {
 	return proto.EnumName(EncodingType_name, int32(x))
 }
 func (EncodingType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{0}
 }
 
 // The document types enum.
@@ -99,7 +99,7 @@ func (x Document_Type) String() string {
 	return proto.EnumName(Document_Type_name, int32(x))
 }
 func (Document_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{0, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{0, 0}
 }
 
 // The type of the entity.
@@ -149,7 +149,7 @@ func (x Entity_Type) String() string {
 	return proto.EnumName(Entity_Type_name, int32(x))
 }
 func (Entity_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{2, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{2, 0}
 }
 
 // The part of speech tags enum.
@@ -223,7 +223,7 @@ func (x PartOfSpeech_Tag) String() string {
 	return proto.EnumName(PartOfSpeech_Tag_name, int32(x))
 }
 func (PartOfSpeech_Tag) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 0}
 }
 
 // The characteristic of a verb that expresses time flow during an event.
@@ -257,7 +257,7 @@ func (x PartOfSpeech_Aspect) String() string {
 	return proto.EnumName(PartOfSpeech_Aspect_name, int32(x))
 }
 func (PartOfSpeech_Aspect) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 1}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 1}
 }
 
 // The grammatical function performed by a noun or pronoun in a phrase,
@@ -337,7 +337,7 @@ func (x PartOfSpeech_Case) String() string {
 	return proto.EnumName(PartOfSpeech_Case_name, int32(x))
 }
 func (PartOfSpeech_Case) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 2}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 2}
 }
 
 // Depending on the language, Form can be categorizing different forms of
@@ -406,7 +406,7 @@ func (x PartOfSpeech_Form) String() string {
 	return proto.EnumName(PartOfSpeech_Form_name, int32(x))
 }
 func (PartOfSpeech_Form) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 3}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 3}
 }
 
 // Gender classes of nouns reflected in the behaviour of associated words.
@@ -440,7 +440,7 @@ func (x PartOfSpeech_Gender) String() string {
 	return proto.EnumName(PartOfSpeech_Gender_name, int32(x))
 }
 func (PartOfSpeech_Gender) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 4}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 4}
 }
 
 // The grammatical feature of verbs, used for showing modality and attitude.
@@ -486,7 +486,7 @@ func (x PartOfSpeech_Mood) String() string {
 	return proto.EnumName(PartOfSpeech_Mood_name, int32(x))
 }
 func (PartOfSpeech_Mood) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 5}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 5}
 }
 
 // Count distinctions.
@@ -520,7 +520,7 @@ func (x PartOfSpeech_Number) String() string {
 	return proto.EnumName(PartOfSpeech_Number_name, int32(x))
 }
 func (PartOfSpeech_Number) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 6}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 6}
 }
 
 // The distinction between the speaker, second person, third person, etc.
@@ -558,7 +558,7 @@ func (x PartOfSpeech_Person) String() string {
 	return proto.EnumName(PartOfSpeech_Person_name, int32(x))
 }
 func (PartOfSpeech_Person) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 7}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 7}
 }
 
 // This category shows if the token is part of a proper name.
@@ -588,7 +588,7 @@ func (x PartOfSpeech_Proper) String() string {
 	return proto.EnumName(PartOfSpeech_Proper_name, int32(x))
 }
 func (PartOfSpeech_Proper) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 8}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 8}
 }
 
 // Reciprocal features of a pronoun.
@@ -619,7 +619,7 @@ func (x PartOfSpeech_Reciprocity) String() string {
 	return proto.EnumName(PartOfSpeech_Reciprocity_name, int32(x))
 }
 func (PartOfSpeech_Reciprocity) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 9}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 9}
 }
 
 // Time reference.
@@ -665,7 +665,7 @@ func (x PartOfSpeech_Tense) String() string {
 	return proto.EnumName(PartOfSpeech_Tense_name, int32(x))
 }
 func (PartOfSpeech_Tense) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 10}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 10}
 }
 
 // The relationship between the action that a verb expresses and the
@@ -700,7 +700,7 @@ func (x PartOfSpeech_Voice) String() string {
 	return proto.EnumName(PartOfSpeech_Voice_name, int32(x))
 }
 func (PartOfSpeech_Voice) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5, 11}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5, 11}
 }
 
 // The parse label enum for the token.
@@ -1050,7 +1050,7 @@ func (x DependencyEdge_Label) String() string {
 	return proto.EnumName(DependencyEdge_Label_name, int32(x))
 }
 func (DependencyEdge_Label) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{6, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{6, 0}
 }
 
 // The supported types of mentions.
@@ -1080,7 +1080,7 @@ func (x EntityMention_Type) String() string {
 	return proto.EnumName(EntityMention_Type_name, int32(x))
 }
 func (EntityMention_Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{7, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{7, 0}
 }
 
 // ################################################################ #
@@ -1115,7 +1115,7 @@ func (m *Document) Reset()         { *m = Document{} }
 func (m *Document) String() string { return proto.CompactTextString(m) }
 func (*Document) ProtoMessage()    {}
 func (*Document) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{0}
 }
 func (m *Document) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Document.Unmarshal(m, b)
@@ -1135,6 +1135,13 @@ func (m *Document) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Document proto.InternalMessageInfo
 
+func (m *Document) GetType() Document_Type {
+	if m != nil {
+		return m.Type
+	}
+	return Document_TYPE_UNSPECIFIED
+}
+
 type isDocument_Source interface {
 	isDocument_Source()
 }
@@ -1142,11 +1149,13 @@ type isDocument_Source interface {
 type Document_Content struct {
 	Content string `protobuf:"bytes,2,opt,name=content,proto3,oneof"`
 }
+
 type Document_GcsContentUri struct {
 	GcsContentUri string `protobuf:"bytes,3,opt,name=gcs_content_uri,json=gcsContentUri,proto3,oneof"`
 }
 
-func (*Document_Content) isDocument_Source()       {}
+func (*Document_Content) isDocument_Source() {}
+
 func (*Document_GcsContentUri) isDocument_Source() {}
 
 func (m *Document) GetSource() isDocument_Source {
@@ -1154,13 +1163,6 @@ func (m *Document) GetSource() isDocument_Source {
 		return m.Source
 	}
 	return nil
-}
-
-func (m *Document) GetType() Document_Type {
-	if m != nil {
-		return m.Type
-	}
-	return Document_TYPE_UNSPECIFIED
 }
 
 func (m *Document) GetContent() string {
@@ -1255,8 +1257,8 @@ type Sentence struct {
 	// The sentence text.
 	Text *TextSpan `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
 	// For calls to [AnalyzeSentiment][] or if
-	// [AnnotateTextRequest.Features.extract_document_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_document_sentiment] is set to
-	// true, this field will contain the sentiment for the sentence.
+	// [AnnotateTextRequest.Features.extract_document_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_document_sentiment]
+	// is set to true, this field will contain the sentiment for the sentence.
 	Sentiment            *Sentiment `protobuf:"bytes,2,opt,name=sentiment,proto3" json:"sentiment,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -1267,7 +1269,7 @@ func (m *Sentence) Reset()         { *m = Sentence{} }
 func (m *Sentence) String() string { return proto.CompactTextString(m) }
 func (*Sentence) ProtoMessage()    {}
 func (*Sentence) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{1}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{1}
 }
 func (m *Sentence) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Sentence.Unmarshal(m, b)
@@ -1325,9 +1327,9 @@ type Entity struct {
 	// supports proper noun mentions.
 	Mentions []*EntityMention `protobuf:"bytes,5,rep,name=mentions,proto3" json:"mentions,omitempty"`
 	// For calls to [AnalyzeEntitySentiment][] or if
-	// [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_entity_sentiment] is set to
-	// true, this field will contain the aggregate sentiment expressed for this
-	// entity in the provided document.
+	// [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_entity_sentiment]
+	// is set to true, this field will contain the aggregate sentiment expressed
+	// for this entity in the provided document.
 	Sentiment            *Sentiment `protobuf:"bytes,6,opt,name=sentiment,proto3" json:"sentiment,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -1338,7 +1340,7 @@ func (m *Entity) Reset()         { *m = Entity{} }
 func (m *Entity) String() string { return proto.CompactTextString(m) }
 func (*Entity) ProtoMessage()    {}
 func (*Entity) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{2}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{2}
 }
 func (m *Entity) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Entity.Unmarshal(m, b)
@@ -1419,7 +1421,7 @@ func (m *Token) Reset()         { *m = Token{} }
 func (m *Token) String() string { return proto.CompactTextString(m) }
 func (*Token) ProtoMessage()    {}
 func (*Token) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{3}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{3}
 }
 func (m *Token) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Token.Unmarshal(m, b)
@@ -1486,7 +1488,7 @@ func (m *Sentiment) Reset()         { *m = Sentiment{} }
 func (m *Sentiment) String() string { return proto.CompactTextString(m) }
 func (*Sentiment) ProtoMessage()    {}
 func (*Sentiment) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{4}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{4}
 }
 func (m *Sentiment) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Sentiment.Unmarshal(m, b)
@@ -1555,7 +1557,7 @@ func (m *PartOfSpeech) Reset()         { *m = PartOfSpeech{} }
 func (m *PartOfSpeech) String() string { return proto.CompactTextString(m) }
 func (*PartOfSpeech) ProtoMessage()    {}
 func (*PartOfSpeech) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{5}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{5}
 }
 func (m *PartOfSpeech) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PartOfSpeech.Unmarshal(m, b)
@@ -1678,7 +1680,7 @@ func (m *DependencyEdge) Reset()         { *m = DependencyEdge{} }
 func (m *DependencyEdge) String() string { return proto.CompactTextString(m) }
 func (*DependencyEdge) ProtoMessage()    {}
 func (*DependencyEdge) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{6}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{6}
 }
 func (m *DependencyEdge) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DependencyEdge.Unmarshal(m, b)
@@ -1720,9 +1722,9 @@ type EntityMention struct {
 	// The type of the entity mention.
 	Type EntityMention_Type `protobuf:"varint,2,opt,name=type,proto3,enum=google.cloud.language.v1beta2.EntityMention_Type" json:"type,omitempty"`
 	// For calls to [AnalyzeEntitySentiment][] or if
-	// [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_entity_sentiment] is set to
-	// true, this field will contain the sentiment expressed for this mention of
-	// the entity in the provided document.
+	// [AnnotateTextRequest.Features.extract_entity_sentiment][google.cloud.language.v1beta2.AnnotateTextRequest.Features.extract_entity_sentiment]
+	// is set to true, this field will contain the sentiment expressed for this
+	// mention of the entity in the provided document.
 	Sentiment            *Sentiment `protobuf:"bytes,3,opt,name=sentiment,proto3" json:"sentiment,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_unrecognized     []byte     `json:"-"`
@@ -1733,7 +1735,7 @@ func (m *EntityMention) Reset()         { *m = EntityMention{} }
 func (m *EntityMention) String() string { return proto.CompactTextString(m) }
 func (*EntityMention) ProtoMessage()    {}
 func (*EntityMention) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{7}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{7}
 }
 func (m *EntityMention) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityMention.Unmarshal(m, b)
@@ -1779,7 +1781,9 @@ type TextSpan struct {
 	// The content of the output text.
 	Content string `protobuf:"bytes,1,opt,name=content,proto3" json:"content,omitempty"`
 	// The API calculates the beginning offset of the content in the original
-	// document according to the [EncodingType][google.cloud.language.v1beta2.EncodingType] specified in the API request.
+	// document according to the
+	// [EncodingType][google.cloud.language.v1beta2.EncodingType] specified in the
+	// API request.
 	BeginOffset          int32    `protobuf:"varint,2,opt,name=begin_offset,json=beginOffset,proto3" json:"begin_offset,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -1790,7 +1794,7 @@ func (m *TextSpan) Reset()         { *m = TextSpan{} }
 func (m *TextSpan) String() string { return proto.CompactTextString(m) }
 func (*TextSpan) ProtoMessage()    {}
 func (*TextSpan) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{8}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{8}
 }
 func (m *TextSpan) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TextSpan.Unmarshal(m, b)
@@ -1840,7 +1844,7 @@ func (m *ClassificationCategory) Reset()         { *m = ClassificationCategory{}
 func (m *ClassificationCategory) String() string { return proto.CompactTextString(m) }
 func (*ClassificationCategory) ProtoMessage()    {}
 func (*ClassificationCategory) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{9}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{9}
 }
 func (m *ClassificationCategory) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClassificationCategory.Unmarshal(m, b)
@@ -1890,7 +1894,7 @@ func (m *AnalyzeSentimentRequest) Reset()         { *m = AnalyzeSentimentRequest
 func (m *AnalyzeSentimentRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSentimentRequest) ProtoMessage()    {}
 func (*AnalyzeSentimentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{10}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{10}
 }
 func (m *AnalyzeSentimentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSentimentRequest.Unmarshal(m, b)
@@ -1930,7 +1934,8 @@ type AnalyzeSentimentResponse struct {
 	DocumentSentiment *Sentiment `protobuf:"bytes,1,opt,name=document_sentiment,json=documentSentiment,proto3" json:"document_sentiment,omitempty"`
 	// The language of the text, which will be the same as the language specified
 	// in the request or, if not specified, the automatically-detected language.
-	// See [Document.language][google.cloud.language.v1beta2.Document.language] field for more details.
+	// See [Document.language][google.cloud.language.v1beta2.Document.language]
+	// field for more details.
 	Language string `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`
 	// The sentiment for all the sentences in the document.
 	Sentences            []*Sentence `protobuf:"bytes,3,rep,name=sentences,proto3" json:"sentences,omitempty"`
@@ -1943,7 +1948,7 @@ func (m *AnalyzeSentimentResponse) Reset()         { *m = AnalyzeSentimentRespon
 func (m *AnalyzeSentimentResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSentimentResponse) ProtoMessage()    {}
 func (*AnalyzeSentimentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{11}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{11}
 }
 func (m *AnalyzeSentimentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSentimentResponse.Unmarshal(m, b)
@@ -1999,7 +2004,7 @@ func (m *AnalyzeEntitySentimentRequest) Reset()         { *m = AnalyzeEntitySent
 func (m *AnalyzeEntitySentimentRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitySentimentRequest) ProtoMessage()    {}
 func (*AnalyzeEntitySentimentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{12}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{12}
 }
 func (m *AnalyzeEntitySentimentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitySentimentRequest.Unmarshal(m, b)
@@ -2039,7 +2044,8 @@ type AnalyzeEntitySentimentResponse struct {
 	Entities []*Entity `protobuf:"bytes,1,rep,name=entities,proto3" json:"entities,omitempty"`
 	// The language of the text, which will be the same as the language specified
 	// in the request or, if not specified, the automatically-detected language.
-	// See [Document.language][google.cloud.language.v1beta2.Document.language] field for more details.
+	// See [Document.language][google.cloud.language.v1beta2.Document.language]
+	// field for more details.
 	Language             string   `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -2050,7 +2056,7 @@ func (m *AnalyzeEntitySentimentResponse) Reset()         { *m = AnalyzeEntitySen
 func (m *AnalyzeEntitySentimentResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitySentimentResponse) ProtoMessage()    {}
 func (*AnalyzeEntitySentimentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{13}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{13}
 }
 func (m *AnalyzeEntitySentimentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitySentimentResponse.Unmarshal(m, b)
@@ -2099,7 +2105,7 @@ func (m *AnalyzeEntitiesRequest) Reset()         { *m = AnalyzeEntitiesRequest{}
 func (m *AnalyzeEntitiesRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitiesRequest) ProtoMessage()    {}
 func (*AnalyzeEntitiesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{14}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{14}
 }
 func (m *AnalyzeEntitiesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitiesRequest.Unmarshal(m, b)
@@ -2139,7 +2145,8 @@ type AnalyzeEntitiesResponse struct {
 	Entities []*Entity `protobuf:"bytes,1,rep,name=entities,proto3" json:"entities,omitempty"`
 	// The language of the text, which will be the same as the language specified
 	// in the request or, if not specified, the automatically-detected language.
-	// See [Document.language][google.cloud.language.v1beta2.Document.language] field for more details.
+	// See [Document.language][google.cloud.language.v1beta2.Document.language]
+	// field for more details.
 	Language             string   `protobuf:"bytes,2,opt,name=language,proto3" json:"language,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -2150,7 +2157,7 @@ func (m *AnalyzeEntitiesResponse) Reset()         { *m = AnalyzeEntitiesResponse
 func (m *AnalyzeEntitiesResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeEntitiesResponse) ProtoMessage()    {}
 func (*AnalyzeEntitiesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{15}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{15}
 }
 func (m *AnalyzeEntitiesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeEntitiesResponse.Unmarshal(m, b)
@@ -2199,7 +2206,7 @@ func (m *AnalyzeSyntaxRequest) Reset()         { *m = AnalyzeSyntaxRequest{} }
 func (m *AnalyzeSyntaxRequest) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSyntaxRequest) ProtoMessage()    {}
 func (*AnalyzeSyntaxRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{16}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{16}
 }
 func (m *AnalyzeSyntaxRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSyntaxRequest.Unmarshal(m, b)
@@ -2241,7 +2248,8 @@ type AnalyzeSyntaxResponse struct {
 	Tokens []*Token `protobuf:"bytes,2,rep,name=tokens,proto3" json:"tokens,omitempty"`
 	// The language of the text, which will be the same as the language specified
 	// in the request or, if not specified, the automatically-detected language.
-	// See [Document.language][google.cloud.language.v1beta2.Document.language] field for more details.
+	// See [Document.language][google.cloud.language.v1beta2.Document.language]
+	// field for more details.
 	Language             string   `protobuf:"bytes,3,opt,name=language,proto3" json:"language,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -2252,7 +2260,7 @@ func (m *AnalyzeSyntaxResponse) Reset()         { *m = AnalyzeSyntaxResponse{} }
 func (m *AnalyzeSyntaxResponse) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeSyntaxResponse) ProtoMessage()    {}
 func (*AnalyzeSyntaxResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{17}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{17}
 }
 func (m *AnalyzeSyntaxResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeSyntaxResponse.Unmarshal(m, b)
@@ -2306,7 +2314,7 @@ func (m *ClassifyTextRequest) Reset()         { *m = ClassifyTextRequest{} }
 func (m *ClassifyTextRequest) String() string { return proto.CompactTextString(m) }
 func (*ClassifyTextRequest) ProtoMessage()    {}
 func (*ClassifyTextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{18}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{18}
 }
 func (m *ClassifyTextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClassifyTextRequest.Unmarshal(m, b)
@@ -2346,7 +2354,7 @@ func (m *ClassifyTextResponse) Reset()         { *m = ClassifyTextResponse{} }
 func (m *ClassifyTextResponse) String() string { return proto.CompactTextString(m) }
 func (*ClassifyTextResponse) ProtoMessage()    {}
 func (*ClassifyTextResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{19}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{19}
 }
 func (m *ClassifyTextResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ClassifyTextResponse.Unmarshal(m, b)
@@ -2391,7 +2399,7 @@ func (m *AnnotateTextRequest) Reset()         { *m = AnnotateTextRequest{} }
 func (m *AnnotateTextRequest) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextRequest) ProtoMessage()    {}
 func (*AnnotateTextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{20}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{20}
 }
 func (m *AnnotateTextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextRequest.Unmarshal(m, b)
@@ -2454,7 +2462,7 @@ func (m *AnnotateTextRequest_Features) Reset()         { *m = AnnotateTextReques
 func (m *AnnotateTextRequest_Features) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextRequest_Features) ProtoMessage()    {}
 func (*AnnotateTextRequest_Features) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{20, 0}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{20, 0}
 }
 func (m *AnnotateTextRequest_Features) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextRequest_Features.Unmarshal(m, b)
@@ -2527,7 +2535,8 @@ type AnnotateTextResponse struct {
 	DocumentSentiment *Sentiment `protobuf:"bytes,4,opt,name=document_sentiment,json=documentSentiment,proto3" json:"document_sentiment,omitempty"`
 	// The language of the text, which will be the same as the language specified
 	// in the request or, if not specified, the automatically-detected language.
-	// See [Document.language][google.cloud.language.v1beta2.Document.language] field for more details.
+	// See [Document.language][google.cloud.language.v1beta2.Document.language]
+	// field for more details.
 	Language string `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty"`
 	// Categories identified in the input document.
 	Categories           []*ClassificationCategory `protobuf:"bytes,6,rep,name=categories,proto3" json:"categories,omitempty"`
@@ -2540,7 +2549,7 @@ func (m *AnnotateTextResponse) Reset()         { *m = AnnotateTextResponse{} }
 func (m *AnnotateTextResponse) String() string { return proto.CompactTextString(m) }
 func (*AnnotateTextResponse) ProtoMessage()    {}
 func (*AnnotateTextResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_language_service_e31a2a45b17cb49a, []int{21}
+	return fileDescriptor_language_service_8631c63c036efdcc, []int{21}
 }
 func (m *AnnotateTextResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnnotateTextResponse.Unmarshal(m, b)
@@ -2664,8 +2673,10 @@ type LanguageServiceClient interface {
 	// along with entity types, salience, mentions for each entity, and
 	// other properties.
 	AnalyzeEntities(ctx context.Context, in *AnalyzeEntitiesRequest, opts ...grpc.CallOption) (*AnalyzeEntitiesResponse, error)
-	// Finds entities, similar to [AnalyzeEntities][google.cloud.language.v1beta2.LanguageService.AnalyzeEntities] in the text and analyzes
-	// sentiment associated with each entity and its mentions.
+	// Finds entities, similar to
+	// [AnalyzeEntities][google.cloud.language.v1beta2.LanguageService.AnalyzeEntities]
+	// in the text and analyzes sentiment associated with each entity and its
+	// mentions.
 	AnalyzeEntitySentiment(ctx context.Context, in *AnalyzeEntitySentimentRequest, opts ...grpc.CallOption) (*AnalyzeEntitySentimentResponse, error)
 	// Analyzes the syntax of the text and provides sentence boundaries and
 	// tokenization along with part of speech tags, dependency trees, and other
@@ -2748,8 +2759,10 @@ type LanguageServiceServer interface {
 	// along with entity types, salience, mentions for each entity, and
 	// other properties.
 	AnalyzeEntities(context.Context, *AnalyzeEntitiesRequest) (*AnalyzeEntitiesResponse, error)
-	// Finds entities, similar to [AnalyzeEntities][google.cloud.language.v1beta2.LanguageService.AnalyzeEntities] in the text and analyzes
-	// sentiment associated with each entity and its mentions.
+	// Finds entities, similar to
+	// [AnalyzeEntities][google.cloud.language.v1beta2.LanguageService.AnalyzeEntities]
+	// in the text and analyzes sentiment associated with each entity and its
+	// mentions.
 	AnalyzeEntitySentiment(context.Context, *AnalyzeEntitySentimentRequest) (*AnalyzeEntitySentimentResponse, error)
 	// Analyzes the syntax of the text and provides sentence boundaries and
 	// tokenization along with part of speech tags, dependency trees, and other
@@ -2908,10 +2921,10 @@ var _LanguageService_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/language/v1beta2/language_service.proto", fileDescriptor_language_service_e31a2a45b17cb49a)
+	proto.RegisterFile("google/cloud/language/v1beta2/language_service.proto", fileDescriptor_language_service_8631c63c036efdcc)
 }
 
-var fileDescriptor_language_service_e31a2a45b17cb49a = []byte{
+var fileDescriptor_language_service_8631c63c036efdcc = []byte{
 	// 3019 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x3a, 0x4b, 0x73, 0xdb, 0xc6,
 	0xfd, 0x06, 0x5f, 0xa2, 0x96, 0x92, 0xbc, 0x86, 0x1d, 0x9b, 0x7f, 0xfd, 0xf3, 0x70, 0xe0, 0xb8,

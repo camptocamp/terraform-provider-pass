@@ -1,4 +1,4 @@
-// Copyright 2015 Garrett D'Amore
+// Copyright 2018 Garrett D'Amore
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -16,33 +16,29 @@ package encoding
 
 import (
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestISO8859_9(t *testing.T) {
-	Convey("8859-9 identity transforms", t, func() {
-		for i := 0; i < 256; i++ {
-			r := rune(i)
-			switch i {
-			case 0xd0:
-				r = 'Ğ'
-			case 0xdd:
-				r = 'İ'
-			case 0xde:
-				r = 'Ş'
-			case 0xf0:
-				r = 'ğ'
-			case 0xfd:
-				r = 'ı'
-			case 0xfe:
-				r = 'ş'
-			}
-			verifyMap(ISO8859_9, byte(i), r)
+	t.Logf("8859-9 identity transforms")
+	for i := 0; i < 256; i++ {
+		r := rune(i)
+		switch i {
+		case 0xd0:
+			r = 'Ğ'
+		case 0xdd:
+			r = 'İ'
+		case 0xde:
+			r = 'Ş'
+		case 0xf0:
+			r = 'ğ'
+		case 0xfd:
+			r = 'ı'
+		case 0xfe:
+			r = 'ş'
 		}
-	})
+		verifyMap(t, ISO8859_9, byte(i), r)
+	}
 
-	Convey("Large UTF maps to ASCIISub", t, func() {
-		verifyFromUTF(ISO8859_9, ASCIISub, '㿿')
-	})
+	t.Logf("Large UTF maps to ASCIISub")
+	verifyFromUTF(t, ISO8859_9, ASCIISub, '㿿')
 }

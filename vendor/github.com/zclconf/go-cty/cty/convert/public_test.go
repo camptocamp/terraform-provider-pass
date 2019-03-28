@@ -122,6 +122,28 @@ func TestConvert(t *testing.T) {
 			}),
 		},
 		{
+			Value: cty.TupleVal([]cty.Value{
+				cty.ObjectVal(map[string]cty.Value{
+					"type":        cty.StringVal("ingress"),
+					"from_port":   cty.NumberIntVal(-1),
+					"to_port":     cty.NumberIntVal(-1),
+					"protocol":    cty.StringVal("icmp"),
+					"description": cty.StringVal("ICMP in"),
+					"cidr":        cty.TupleVal([]cty.Value{cty.StringVal("0.0.0.0/0")}),
+				}),
+				cty.ObjectVal(map[string]cty.Value{
+					"type":        cty.StringVal("ingress"),
+					"from_port":   cty.NumberIntVal(22),
+					"to_port":     cty.NumberIntVal(22),
+					"protocol":    cty.StringVal("tcp"),
+					"description": cty.StringVal("SSH from Bastion"),
+					"source_sg":   cty.StringVal("sg-abc123"),
+				}),
+			}),
+			Type:      cty.List(cty.DynamicPseudoType),
+			WantError: true, // there is no type that both tuple elements can unify to for conversion to list
+		},
+		{
 			Value: cty.SetVal([]cty.Value{
 				cty.StringVal("5"),
 				cty.StringVal("10"),
@@ -212,6 +234,17 @@ func TestConvert(t *testing.T) {
 			}),
 			Type: cty.List(cty.DynamicPseudoType),
 			Want: cty.ListVal([]cty.Value{
+				cty.StringVal("5"),
+				cty.StringVal("hello"),
+			}),
+		},
+		{
+			Value: cty.TupleVal([]cty.Value{
+				cty.NumberIntVal(5),
+				cty.StringVal("hello"),
+			}),
+			Type: cty.Set(cty.DynamicPseudoType),
+			Want: cty.SetVal([]cty.Value{
 				cty.StringVal("5"),
 				cty.StringVal("hello"),
 			}),
@@ -413,6 +446,52 @@ func TestConvert(t *testing.T) {
 				"foo": cty.Number,
 			}),
 			WantError: true, // recursive conversion from bool to number is impossible
+		},
+		{
+			Value: cty.NullVal(cty.String),
+			Type:  cty.DynamicPseudoType,
+			Want:  cty.NullVal(cty.String),
+		},
+		{
+			Value: cty.UnknownVal(cty.String),
+			Type:  cty.DynamicPseudoType,
+			Want:  cty.UnknownVal(cty.String),
+		},
+		{
+			Value: cty.TupleVal([]cty.Value{
+				cty.StringVal("hello"),
+			}),
+			Type: cty.Tuple([]cty.Type{
+				cty.String,
+			}),
+			Want: cty.TupleVal([]cty.Value{
+				cty.StringVal("hello"),
+			}),
+		},
+		{
+			Value: cty.TupleVal([]cty.Value{
+				cty.True,
+			}),
+			Type: cty.Tuple([]cty.Type{
+				cty.String,
+			}),
+			Want: cty.TupleVal([]cty.Value{
+				cty.StringVal("true"),
+			}),
+		},
+		{
+			Value: cty.TupleVal([]cty.Value{
+				cty.True,
+			}),
+			Type:      cty.EmptyTuple,
+			WantError: true,
+		},
+		{
+			Value: cty.EmptyTupleVal,
+			Type: cty.Tuple([]cty.Type{
+				cty.String,
+			}),
+			WantError: true,
 		},
 	}
 

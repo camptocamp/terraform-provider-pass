@@ -4,10 +4,12 @@ import (
 	"context"
 	"fmt"
 	"regexp"
+	"runtime"
 	"strings"
 
 	fishcomp "github.com/gopasspw/gopass/pkg/completion/fish"
 	zshcomp "github.com/gopasspw/gopass/pkg/completion/zsh"
+	"github.com/gopasspw/gopass/pkg/out"
 
 	"github.com/urfave/cli"
 )
@@ -26,7 +28,11 @@ func bashEscape(s string) string {
 
 // Complete prints a list of all password names to os.Stdout
 func (s *Action) Complete(ctx context.Context, c *cli.Context) {
-	s.Store.Initialized(ctx) // important to make sure the structs are not nil
+	_, err := s.Store.Initialized(ctx) // important to make sure the structs are not nil
+	if err != nil {
+		out.Error(ctx, "Store not initialized: %s", err)
+		return
+	}
 	list, err := s.Store.List(ctx, 0)
 	if err != nil {
 		return
@@ -74,6 +80,9 @@ func (s *Action) CompletionBash(c *cli.Context) error {
 
 `
 	out += "complete -F _gopass_bash_autocomplete " + s.Name
+	if runtime.GOOS == "windows" {
+		out += "\ncomplete -F _gopass_bash_autocomplete " + s.Name + ".exe"
+	}
 	fmt.Fprintln(stdout, out)
 
 	return nil

@@ -1,7 +1,8 @@
-import Ember from 'ember';
-
-const { Component, inject, computed, get } = Ember;
-const { camelize } = Ember.String;
+import { inject as service } from '@ember/service';
+import { gt } from '@ember/object/computed';
+import { camelize } from '@ember/string';
+import Component from '@ember/component';
+import { get, computed } from '@ember/object';
 
 const DEFAULTS = {
   key: null,
@@ -9,6 +10,8 @@ const DEFAULTS = {
   errors: [],
   threshold: null,
   progress: null,
+  pgp_key: null,
+  haveSavedPGPKey: false,
   started: false,
   generateWithPGP: false,
   pgpKeyFile: { value: '' },
@@ -17,22 +20,27 @@ const DEFAULTS = {
 
 export default Component.extend(DEFAULTS, {
   tagName: '',
-  store: inject.service(),
+  store: service(),
   formText: null,
   fetchOnInit: false,
   buttonText: 'Submit',
   thresholdPath: 'required',
   generateAction: false,
-  encoded_token: null,
 
   init() {
+    this._super(...arguments);
     if (this.get('fetchOnInit')) {
       this.attemptProgress();
     }
-    return this._super(...arguments);
   },
 
-  onShamirSuccess: _ => _,
+  didInsertElement() {
+    this._super(...arguments);
+    this.onUpdate(this.getProperties(Object.keys(DEFAULTS)));
+  },
+
+  onUpdate() {},
+  onShamirSuccess() {},
   // can be overridden w/an attr
   isComplete(data) {
     return data.complete === true;
@@ -50,20 +58,26 @@ export default Component.extend(DEFAULTS, {
     this.setProperties(DEFAULTS);
   },
 
-  hasProgress: computed.gt('progress', 0),
+  hasProgress: gt('progress', 0),
 
   actionSuccess(resp) {
-    const { isComplete, onShamirSuccess, thresholdPath } = this.getProperties(
-      'isComplete',
-      'onShamirSuccess',
-      'thresholdPath'
-    );
+    let { onUpdate, isComplete, onShamirSuccess, thresholdPath } = this;
+    let threshold = get(resp, thresholdPath);
+    let props = {
+      ...resp,
+      threshold,
+    };
     this.stopLoading();
-    this.set('threshold', get(resp, thresholdPath));
-    this.setProperties(resp);
-    if (isComplete(resp)) {
+    // if we have an OTP, but update doesn't include one,
+    // we don't want to null it out
+    if (this.otp && !props.otp) {
+      delete props.otp;
+    }
+    this.setProperties(props);
+    onUpdate(props);
+    if (isComplete(props)) {
       this.reset();
-      onShamirSuccess(resp);
+      onShamirSuccess(props);
     }
   },
 
@@ -75,6 +89,20 @@ export default Component.extend(DEFAULTS, {
       throw e;
     }
   },
+
+  generateStep: computed('generateWithPGP', 'haveSavedPGPKey', 'pgp_key', function() {
+    let { generateWithPGP, pgp_key, haveSavedPGPKey } = this;
+    if (!generateWithPGP && !pgp_key) {
+      return 'chooseMethod';
+    }
+    if (generateWithPGP) {
+      if (pgp_key && haveSavedPGPKey) {
+        return 'beginGenerationWithPGP';
+      } else {
+        return 'providePGPKey';
+      }
+    }
+  }),
 
   extractData(data) {
     const isGenerate = this.get('generateAction');
@@ -96,7 +124,7 @@ export default Component.extend(DEFAULTS, {
     }
 
     return {
-      otp: data.otp,
+      attempt: data.attempt,
     };
   },
 
@@ -107,12 +135,19 @@ export default Component.extend(DEFAULTS, {
     this.set('loading', true);
     const adapter = this.get('store').adapterFor('cluster');
     const method = adapter[action];
+
     method
       .call(adapter, data, { checkStatus })
       .then(resp => this.actionSuccess(resp), (...args) => this.actionError(...args));
   },
 
   actions: {
+    reset() {
+      this.reset();
+      this.set('encoded_token', null);
+      this.set('otp', null);
+    },
+
     onSubmit(data) {
       if (!data.key) {
         return;
@@ -121,13 +156,10 @@ export default Component.extend(DEFAULTS, {
     },
 
     startGenerate(data) {
+      if (this.generateAction) {
+        data.attempt = true;
+      }
       this.attemptProgress(this.extractData(data));
-    },
-
-    generateOTP() {
-      const bytes = new window.Uint8Array(16);
-      window.crypto.getRandomValues(bytes);
-      this.set('otp', base64js.fromByteArray(bytes));
     },
 
     setKey(_, keyFile) {
@@ -135,8 +167,10 @@ export default Component.extend(DEFAULTS, {
       this.set('pgpKeyFile', keyFile);
     },
 
-    clearToken() {
-      this.set('encoded_token', null);
+    savePGPKey() {
+      if (this.get('pgp_key')) {
+        this.set('haveSavedPGPKey', true);
+      }
     },
   },
 });

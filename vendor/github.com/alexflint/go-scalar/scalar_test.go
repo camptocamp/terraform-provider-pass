@@ -10,6 +10,15 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+type textUnmarshaler struct {
+	val int
+}
+
+func (f *textUnmarshaler) UnmarshalText(b []byte) error {
+	f.val = len(b)
+	return nil
+}
+
 func assertParse(t *testing.T, expected interface{}, str string) {
 	v := reflect.New(reflect.TypeOf(expected)).Elem()
 	err := ParseValue(v, str)
@@ -67,6 +76,9 @@ func TestParseValue(t *testing.T) {
 
 	// MAC addresses
 	assertParse(t, net.HardwareAddr("\x01\x23\x45\x67\x89\xab"), "01:23:45:67:89:ab")
+
+	// custom text unmarshaler
+	assertParse(t, textUnmarshaler{3}, "abc")
 }
 
 func TestParse(t *testing.T) {

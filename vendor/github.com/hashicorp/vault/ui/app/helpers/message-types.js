@@ -1,4 +1,4 @@
-import Ember from 'ember';
+import { helper as buildHelper } from '@ember/component/helper';
 
 const MESSAGE_TYPES = {
   info: {
@@ -16,14 +16,14 @@ const MESSAGE_TYPES = {
   danger: {
     class: 'is-danger',
     glyphClass: 'has-text-danger',
-    glyph: 'close-circled',
+    glyph: 'cancel-square-fill',
     text: 'Error',
   },
   warning: {
     class: 'is-highlight',
     glyphClass: 'has-text-highlight',
     glyph: 'alert-circled',
-    text: 'Attention',
+    text: 'Warning',
   },
 };
 
@@ -31,4 +31,4 @@ export function messageTypes([type]) {
   return MESSAGE_TYPES[type];
 }
 
-export default Ember.Helper.helper(messageTypes);
+export default buildHelper(messageTypes);

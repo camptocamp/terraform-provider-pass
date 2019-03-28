@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/blang/semver"
+	"github.com/gopasspw/gopass/pkg/backend"
 	"github.com/gopasspw/gopass/pkg/out"
 	"github.com/gopasspw/gopass/pkg/protect"
 	"github.com/gopasspw/gopass/pkg/updater"
@@ -43,13 +44,17 @@ func (s *Action) Version(ctx context.Context, c *cli.Context) error {
 		}
 	}
 
+	fmt.Fprintf(stdout, "Available Crypto Backends: %s\n", strings.Join(backend.CryptoBackends(), ", "))
+	fmt.Fprintf(stdout, "Available RCS Backends: %s\n", strings.Join(backend.RCSBackends(), ", "))
+	fmt.Fprintf(stdout, "Available Storage Backends: %s\n", strings.Join(backend.StorageBackends(), ", "))
+
 	select {
 	case vi := <-version:
 		if vi != "" {
 			fmt.Fprintln(stdout, vi)
 		}
 	case <-time.After(2 * time.Second):
-		out.Red(ctx, "Version check timed out")
+		out.Error(ctx, "Version check timed out")
 	case <-ctx.Done():
 		return ExitError(ctx, ExitAborted, nil, "user aborted")
 	}

@@ -12,6 +12,7 @@ import (
 
 	"github.com/hashicorp/vault/api"
 	"github.com/hashicorp/vault/helper/pgpkeys"
+	"github.com/hashicorp/vault/vault"
 	"github.com/mitchellh/cli"
 )
 
@@ -35,6 +36,12 @@ func TestOperatorInitCommand_Run(t *testing.T) {
 		out  string
 		code int
 	}{
+		{
+			"too_many_args",
+			[]string{"foo"},
+			"Too many arguments",
+			1,
+		},
 		{
 			"pgp_keys_multi",
 			[]string{
@@ -326,7 +333,7 @@ func TestOperatorInitCommand_Run(t *testing.T) {
 		root := match[0][1]
 		decryptedRoot := testPGPDecrypt(t, pgpkeys.TestPrivKey1, root)
 
-		if l, exp := len(decryptedRoot), 36; l != exp {
+		if l, exp := len(decryptedRoot), vault.TokenLength+2; l != exp {
 			t.Errorf("expected %d to be %d", l, exp)
 		}
 	})
@@ -341,7 +348,8 @@ func TestOperatorInitCommand_Run(t *testing.T) {
 		cmd.client = client
 
 		code := cmd.Run([]string{
-			"secret/foo",
+			"-key-shares=1",
+			"-key-threshold=1",
 		})
 		if exp := 2; code != exp {
 			t.Errorf("expected %d to be %d", code, exp)

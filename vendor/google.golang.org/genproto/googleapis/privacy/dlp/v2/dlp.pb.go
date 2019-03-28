@@ -59,7 +59,55 @@ func (x ContentOption) String() string {
 	return proto.EnumName(ContentOption_name, int32(x))
 }
 func (ContentOption) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{0}
+}
+
+// Type of the match which can be applied to different ways of matching, like
+// Dictionary, regular expression and intersecting with findings of another
+// info type.
+type MatchingType int32
+
+const (
+	// Invalid.
+	MatchingType_MATCHING_TYPE_UNSPECIFIED MatchingType = 0
+	// Full match.
+	//
+	// - Dictionary: join of Dictionary results matched complete finding quote
+	// - Regex: all regex matches fill a finding quote start to end
+	// - Exclude info type: completely inside affecting info types findings
+	MatchingType_MATCHING_TYPE_FULL_MATCH MatchingType = 1
+	// Partial match.
+	//
+	// - Dictionary: at least one of the tokens in the finding matches
+	// - Regex: substring of the finding matches
+	// - Exclude info type: intersects with affecting info types findings
+	MatchingType_MATCHING_TYPE_PARTIAL_MATCH MatchingType = 2
+	// Inverse match.
+	//
+	// - Dictionary: no tokens in the finding match the dictionary
+	// - Regex: finding doesn't match the regex
+	// - Exclude info type: no intersection with affecting info types findings
+	MatchingType_MATCHING_TYPE_INVERSE_MATCH MatchingType = 3
+)
+
+var MatchingType_name = map[int32]string{
+	0: "MATCHING_TYPE_UNSPECIFIED",
+	1: "MATCHING_TYPE_FULL_MATCH",
+	2: "MATCHING_TYPE_PARTIAL_MATCH",
+	3: "MATCHING_TYPE_INVERSE_MATCH",
+}
+var MatchingType_value = map[string]int32{
+	"MATCHING_TYPE_UNSPECIFIED":   0,
+	"MATCHING_TYPE_FULL_MATCH":    1,
+	"MATCHING_TYPE_PARTIAL_MATCH": 2,
+	"MATCHING_TYPE_INVERSE_MATCH": 3,
+}
+
+func (x MatchingType) String() string {
+	return proto.EnumName(MatchingType_name, int32(x))
+}
+func (MatchingType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{1}
 }
 
 // Parts of the APIs which use certain infoTypes.
@@ -88,7 +136,7 @@ func (x InfoTypeSupportedBy) String() string {
 	return proto.EnumName(InfoTypeSupportedBy_name, int32(x))
 }
 func (InfoTypeSupportedBy) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{2}
 }
 
 // Operators available for comparing the value of fields.
@@ -96,9 +144,9 @@ type RelationalOperator int32
 
 const (
 	RelationalOperator_RELATIONAL_OPERATOR_UNSPECIFIED RelationalOperator = 0
-	// Equal.
+	// Equal. Attempts to match even with incompatible types.
 	RelationalOperator_EQUAL_TO RelationalOperator = 1
-	// Not equal to.
+	// Not equal to. Attempts to match even with incompatible types.
 	RelationalOperator_NOT_EQUAL_TO RelationalOperator = 2
 	// Greater than.
 	RelationalOperator_GREATER_THAN RelationalOperator = 3
@@ -137,7 +185,7 @@ func (x RelationalOperator) String() string {
 	return proto.EnumName(RelationalOperator_name, int32(x))
 }
 func (RelationalOperator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{3}
 }
 
 // An enum to represent the various type of DLP jobs.
@@ -166,7 +214,47 @@ func (x DlpJobType) String() string {
 	return proto.EnumName(DlpJobType_name, int32(x))
 }
 func (DlpJobType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{3}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{4}
+}
+
+// State of a StoredInfoType version.
+type StoredInfoTypeState int32
+
+const (
+	StoredInfoTypeState_STORED_INFO_TYPE_STATE_UNSPECIFIED StoredInfoTypeState = 0
+	// StoredInfoType version is being created.
+	StoredInfoTypeState_PENDING StoredInfoTypeState = 1
+	// StoredInfoType version is ready for use.
+	StoredInfoTypeState_READY StoredInfoTypeState = 2
+	// StoredInfoType creation failed. All relevant error messages are returned in
+	// the `StoredInfoTypeVersion` message.
+	StoredInfoTypeState_FAILED StoredInfoTypeState = 3
+	// StoredInfoType is no longer valid because artifacts stored in
+	// user-controlled storage were modified. To fix an invalid StoredInfoType,
+	// use the `UpdateStoredInfoType` method to create a new version.
+	StoredInfoTypeState_INVALID StoredInfoTypeState = 4
+)
+
+var StoredInfoTypeState_name = map[int32]string{
+	0: "STORED_INFO_TYPE_STATE_UNSPECIFIED",
+	1: "PENDING",
+	2: "READY",
+	3: "FAILED",
+	4: "INVALID",
+}
+var StoredInfoTypeState_value = map[string]int32{
+	"STORED_INFO_TYPE_STATE_UNSPECIFIED": 0,
+	"PENDING":                            1,
+	"READY":                              2,
+	"FAILED":                             3,
+	"INVALID":                            4,
+}
+
+func (x StoredInfoTypeState) String() string {
+	return proto.EnumName(StoredInfoTypeState_name, int32(x))
+}
+func (StoredInfoTypeState) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{5}
 }
 
 type ByteContentItem_BytesType int32
@@ -204,7 +292,7 @@ func (x ByteContentItem_BytesType) String() string {
 	return proto.EnumName(ByteContentItem_BytesType_name, int32(x))
 }
 func (ByteContentItem_BytesType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{1, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{5, 0}
 }
 
 // Predefined schemas for storing findings.
@@ -246,7 +334,7 @@ func (x OutputStorageConfig_OutputSchema) String() string {
 	return proto.EnumName(OutputStorageConfig_OutputSchema_name, int32(x))
 }
 func (OutputStorageConfig_OutputSchema) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{23, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{27, 0}
 }
 
 type TimePartConfig_TimePart int32
@@ -290,7 +378,7 @@ func (x TimePartConfig_TimePart) String() string {
 	return proto.EnumName(TimePartConfig_TimePart_name, int32(x))
 }
 func (TimePartConfig_TimePart) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{38, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{44, 0}
 }
 
 type CharsToIgnore_CommonCharsToIgnore int32
@@ -319,18 +407,18 @@ var CharsToIgnore_CommonCharsToIgnore_name = map[int32]string{
 }
 var CharsToIgnore_CommonCharsToIgnore_value = map[string]int32{
 	"COMMON_CHARS_TO_IGNORE_UNSPECIFIED": 0,
-	"NUMERIC":          1,
-	"ALPHA_UPPER_CASE": 2,
-	"ALPHA_LOWER_CASE": 3,
-	"PUNCTUATION":      4,
-	"WHITESPACE":       5,
+	"NUMERIC":                            1,
+	"ALPHA_UPPER_CASE":                   2,
+	"ALPHA_LOWER_CASE":                   3,
+	"PUNCTUATION":                        4,
+	"WHITESPACE":                         5,
 }
 
 func (x CharsToIgnore_CommonCharsToIgnore) String() string {
 	return proto.EnumName(CharsToIgnore_CommonCharsToIgnore_name, int32(x))
 }
 func (CharsToIgnore_CommonCharsToIgnore) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{43, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{49, 0}
 }
 
 // These are commonly used subsets of the alphabet that the FFX mode
@@ -359,17 +447,17 @@ var CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet_name = map[int32]string{
 }
 var CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet_value = map[string]int32{
 	"FFX_COMMON_NATIVE_ALPHABET_UNSPECIFIED": 0,
-	"NUMERIC":                  1,
-	"HEXADECIMAL":              2,
-	"UPPER_CASE_ALPHA_NUMERIC": 3,
-	"ALPHA_NUMERIC":            4,
+	"NUMERIC":                                1,
+	"HEXADECIMAL":                            2,
+	"UPPER_CASE_ALPHA_NUMERIC":               3,
+	"ALPHA_NUMERIC":                          4,
 }
 
 func (x CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet) String() string {
 	return proto.EnumName(CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet_name, int32(x))
 }
 func (CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{47, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{53, 0}
 }
 
 type RecordCondition_Expressions_LogicalOperator int32
@@ -385,14 +473,14 @@ var RecordCondition_Expressions_LogicalOperator_name = map[int32]string{
 }
 var RecordCondition_Expressions_LogicalOperator_value = map[string]int32{
 	"LOGICAL_OPERATOR_UNSPECIFIED": 0,
-	"AND": 1,
+	"AND":                          1,
 }
 
 func (x RecordCondition_Expressions_LogicalOperator) String() string {
 	return proto.EnumName(RecordCondition_Expressions_LogicalOperator_name, int32(x))
 }
 func (RecordCondition_Expressions_LogicalOperator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{57, 2, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{63, 2, 0}
 }
 
 // Possible outcomes of transformations.
@@ -411,15 +499,15 @@ var TransformationSummary_TransformationResultCode_name = map[int32]string{
 }
 var TransformationSummary_TransformationResultCode_value = map[string]int32{
 	"TRANSFORMATION_RESULT_CODE_UNSPECIFIED": 0,
-	"SUCCESS": 1,
-	"ERROR":   2,
+	"SUCCESS":                                1,
+	"ERROR":                                  2,
 }
 
 func (x TransformationSummary_TransformationResultCode) String() string {
 	return proto.EnumName(TransformationSummary_TransformationResultCode_name, int32(x))
 }
 func (TransformationSummary_TransformationResultCode) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{59, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{65, 0}
 }
 
 // Whether the trigger is currently active. If PAUSED or CANCELLED, no jobs
@@ -455,7 +543,7 @@ func (x JobTrigger_Status) String() string {
 	return proto.EnumName(JobTrigger_Status_name, int32(x))
 }
 func (JobTrigger_Status) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{64, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{70, 0}
 }
 
 type DlpJob_JobState int32
@@ -495,7 +583,440 @@ func (x DlpJob_JobState) String() string {
 	return proto.EnumName(DlpJob_JobState_name, int32(x))
 }
 func (DlpJob_JobState) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{80, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{87, 0}
+}
+
+// List of exclude infoTypes.
+type ExcludeInfoTypes struct {
+	// InfoType list in ExclusionRule rule drops a finding when it overlaps or
+	// contained within with a finding of an infoType from this list. For
+	// example, for `InspectionRuleSet.info_types` containing "PHONE_NUMBER"` and
+	// `exclusion_rule` containing `exclude_info_types.info_types` with
+	// "EMAIL_ADDRESS" the phone number findings are dropped if they overlap
+	// with EMAIL_ADDRESS finding.
+	// That leads to "555-222-2222@example.org" to generate only a single
+	// finding, namely email address.
+	InfoTypes            []*InfoType `protobuf:"bytes,1,rep,name=info_types,json=infoTypes,proto3" json:"info_types,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *ExcludeInfoTypes) Reset()         { *m = ExcludeInfoTypes{} }
+func (m *ExcludeInfoTypes) String() string { return proto.CompactTextString(m) }
+func (*ExcludeInfoTypes) ProtoMessage()    {}
+func (*ExcludeInfoTypes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{0}
+}
+func (m *ExcludeInfoTypes) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExcludeInfoTypes.Unmarshal(m, b)
+}
+func (m *ExcludeInfoTypes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExcludeInfoTypes.Marshal(b, m, deterministic)
+}
+func (dst *ExcludeInfoTypes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExcludeInfoTypes.Merge(dst, src)
+}
+func (m *ExcludeInfoTypes) XXX_Size() int {
+	return xxx_messageInfo_ExcludeInfoTypes.Size(m)
+}
+func (m *ExcludeInfoTypes) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExcludeInfoTypes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExcludeInfoTypes proto.InternalMessageInfo
+
+func (m *ExcludeInfoTypes) GetInfoTypes() []*InfoType {
+	if m != nil {
+		return m.InfoTypes
+	}
+	return nil
+}
+
+// The rule that specifies conditions when findings of infoTypes specified in
+// `InspectionRuleSet` are removed from results.
+type ExclusionRule struct {
+	// Types that are valid to be assigned to Type:
+	//	*ExclusionRule_Dictionary
+	//	*ExclusionRule_Regex
+	//	*ExclusionRule_ExcludeInfoTypes
+	Type isExclusionRule_Type `protobuf_oneof:"type"`
+	// How the rule is applied, see MatchingType documentation for details.
+	MatchingType         MatchingType `protobuf:"varint,4,opt,name=matching_type,json=matchingType,proto3,enum=google.privacy.dlp.v2.MatchingType" json:"matching_type,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_unrecognized     []byte       `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *ExclusionRule) Reset()         { *m = ExclusionRule{} }
+func (m *ExclusionRule) String() string { return proto.CompactTextString(m) }
+func (*ExclusionRule) ProtoMessage()    {}
+func (*ExclusionRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{1}
+}
+func (m *ExclusionRule) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ExclusionRule.Unmarshal(m, b)
+}
+func (m *ExclusionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ExclusionRule.Marshal(b, m, deterministic)
+}
+func (dst *ExclusionRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ExclusionRule.Merge(dst, src)
+}
+func (m *ExclusionRule) XXX_Size() int {
+	return xxx_messageInfo_ExclusionRule.Size(m)
+}
+func (m *ExclusionRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_ExclusionRule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ExclusionRule proto.InternalMessageInfo
+
+type isExclusionRule_Type interface {
+	isExclusionRule_Type()
+}
+
+type ExclusionRule_Dictionary struct {
+	Dictionary *CustomInfoType_Dictionary `protobuf:"bytes,1,opt,name=dictionary,proto3,oneof"`
+}
+
+type ExclusionRule_Regex struct {
+	Regex *CustomInfoType_Regex `protobuf:"bytes,2,opt,name=regex,proto3,oneof"`
+}
+
+type ExclusionRule_ExcludeInfoTypes struct {
+	ExcludeInfoTypes *ExcludeInfoTypes `protobuf:"bytes,3,opt,name=exclude_info_types,json=excludeInfoTypes,proto3,oneof"`
+}
+
+func (*ExclusionRule_Dictionary) isExclusionRule_Type() {}
+
+func (*ExclusionRule_Regex) isExclusionRule_Type() {}
+
+func (*ExclusionRule_ExcludeInfoTypes) isExclusionRule_Type() {}
+
+func (m *ExclusionRule) GetType() isExclusionRule_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (m *ExclusionRule) GetDictionary() *CustomInfoType_Dictionary {
+	if x, ok := m.GetType().(*ExclusionRule_Dictionary); ok {
+		return x.Dictionary
+	}
+	return nil
+}
+
+func (m *ExclusionRule) GetRegex() *CustomInfoType_Regex {
+	if x, ok := m.GetType().(*ExclusionRule_Regex); ok {
+		return x.Regex
+	}
+	return nil
+}
+
+func (m *ExclusionRule) GetExcludeInfoTypes() *ExcludeInfoTypes {
+	if x, ok := m.GetType().(*ExclusionRule_ExcludeInfoTypes); ok {
+		return x.ExcludeInfoTypes
+	}
+	return nil
+}
+
+func (m *ExclusionRule) GetMatchingType() MatchingType {
+	if m != nil {
+		return m.MatchingType
+	}
+	return MatchingType_MATCHING_TYPE_UNSPECIFIED
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*ExclusionRule) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _ExclusionRule_OneofMarshaler, _ExclusionRule_OneofUnmarshaler, _ExclusionRule_OneofSizer, []interface{}{
+		(*ExclusionRule_Dictionary)(nil),
+		(*ExclusionRule_Regex)(nil),
+		(*ExclusionRule_ExcludeInfoTypes)(nil),
+	}
+}
+
+func _ExclusionRule_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*ExclusionRule)
+	// type
+	switch x := m.Type.(type) {
+	case *ExclusionRule_Dictionary:
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Dictionary); err != nil {
+			return err
+		}
+	case *ExclusionRule_Regex:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Regex); err != nil {
+			return err
+		}
+	case *ExclusionRule_ExcludeInfoTypes:
+		b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ExcludeInfoTypes); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("ExclusionRule.Type has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _ExclusionRule_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*ExclusionRule)
+	switch tag {
+	case 1: // type.dictionary
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(CustomInfoType_Dictionary)
+		err := b.DecodeMessage(msg)
+		m.Type = &ExclusionRule_Dictionary{msg}
+		return true, err
+	case 2: // type.regex
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(CustomInfoType_Regex)
+		err := b.DecodeMessage(msg)
+		m.Type = &ExclusionRule_Regex{msg}
+		return true, err
+	case 3: // type.exclude_info_types
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ExcludeInfoTypes)
+		err := b.DecodeMessage(msg)
+		m.Type = &ExclusionRule_ExcludeInfoTypes{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _ExclusionRule_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*ExclusionRule)
+	// type
+	switch x := m.Type.(type) {
+	case *ExclusionRule_Dictionary:
+		s := proto.Size(x.Dictionary)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ExclusionRule_Regex:
+		s := proto.Size(x.Regex)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *ExclusionRule_ExcludeInfoTypes:
+		s := proto.Size(x.ExcludeInfoTypes)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// A single inspection rule to be applied to infoTypes, specified in
+// `InspectionRuleSet`.
+type InspectionRule struct {
+	// Types that are valid to be assigned to Type:
+	//	*InspectionRule_HotwordRule
+	//	*InspectionRule_ExclusionRule
+	Type                 isInspectionRule_Type `protobuf_oneof:"type"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *InspectionRule) Reset()         { *m = InspectionRule{} }
+func (m *InspectionRule) String() string { return proto.CompactTextString(m) }
+func (*InspectionRule) ProtoMessage()    {}
+func (*InspectionRule) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{2}
+}
+func (m *InspectionRule) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InspectionRule.Unmarshal(m, b)
+}
+func (m *InspectionRule) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InspectionRule.Marshal(b, m, deterministic)
+}
+func (dst *InspectionRule) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InspectionRule.Merge(dst, src)
+}
+func (m *InspectionRule) XXX_Size() int {
+	return xxx_messageInfo_InspectionRule.Size(m)
+}
+func (m *InspectionRule) XXX_DiscardUnknown() {
+	xxx_messageInfo_InspectionRule.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InspectionRule proto.InternalMessageInfo
+
+type isInspectionRule_Type interface {
+	isInspectionRule_Type()
+}
+
+type InspectionRule_HotwordRule struct {
+	HotwordRule *CustomInfoType_DetectionRule_HotwordRule `protobuf:"bytes,1,opt,name=hotword_rule,json=hotwordRule,proto3,oneof"`
+}
+
+type InspectionRule_ExclusionRule struct {
+	ExclusionRule *ExclusionRule `protobuf:"bytes,2,opt,name=exclusion_rule,json=exclusionRule,proto3,oneof"`
+}
+
+func (*InspectionRule_HotwordRule) isInspectionRule_Type() {}
+
+func (*InspectionRule_ExclusionRule) isInspectionRule_Type() {}
+
+func (m *InspectionRule) GetType() isInspectionRule_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (m *InspectionRule) GetHotwordRule() *CustomInfoType_DetectionRule_HotwordRule {
+	if x, ok := m.GetType().(*InspectionRule_HotwordRule); ok {
+		return x.HotwordRule
+	}
+	return nil
+}
+
+func (m *InspectionRule) GetExclusionRule() *ExclusionRule {
+	if x, ok := m.GetType().(*InspectionRule_ExclusionRule); ok {
+		return x.ExclusionRule
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*InspectionRule) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _InspectionRule_OneofMarshaler, _InspectionRule_OneofUnmarshaler, _InspectionRule_OneofSizer, []interface{}{
+		(*InspectionRule_HotwordRule)(nil),
+		(*InspectionRule_ExclusionRule)(nil),
+	}
+}
+
+func _InspectionRule_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*InspectionRule)
+	// type
+	switch x := m.Type.(type) {
+	case *InspectionRule_HotwordRule:
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.HotwordRule); err != nil {
+			return err
+		}
+	case *InspectionRule_ExclusionRule:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.ExclusionRule); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("InspectionRule.Type has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _InspectionRule_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*InspectionRule)
+	switch tag {
+	case 1: // type.hotword_rule
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(CustomInfoType_DetectionRule_HotwordRule)
+		err := b.DecodeMessage(msg)
+		m.Type = &InspectionRule_HotwordRule{msg}
+		return true, err
+	case 2: // type.exclusion_rule
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(ExclusionRule)
+		err := b.DecodeMessage(msg)
+		m.Type = &InspectionRule_ExclusionRule{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _InspectionRule_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*InspectionRule)
+	// type
+	switch x := m.Type.(type) {
+	case *InspectionRule_HotwordRule:
+		s := proto.Size(x.HotwordRule)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *InspectionRule_ExclusionRule:
+		s := proto.Size(x.ExclusionRule)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Rule set for modifying a set of infoTypes to alter behavior under certain
+// circumstances, depending on the specific details of the rules within the set.
+type InspectionRuleSet struct {
+	// List of infoTypes this rule set is applied to.
+	InfoTypes []*InfoType `protobuf:"bytes,1,rep,name=info_types,json=infoTypes,proto3" json:"info_types,omitempty"`
+	// Set of rules to be applied to infoTypes. The rules are applied in order.
+	Rules                []*InspectionRule `protobuf:"bytes,2,rep,name=rules,proto3" json:"rules,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *InspectionRuleSet) Reset()         { *m = InspectionRuleSet{} }
+func (m *InspectionRuleSet) String() string { return proto.CompactTextString(m) }
+func (*InspectionRuleSet) ProtoMessage()    {}
+func (*InspectionRuleSet) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{3}
+}
+func (m *InspectionRuleSet) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InspectionRuleSet.Unmarshal(m, b)
+}
+func (m *InspectionRuleSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InspectionRuleSet.Marshal(b, m, deterministic)
+}
+func (dst *InspectionRuleSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InspectionRuleSet.Merge(dst, src)
+}
+func (m *InspectionRuleSet) XXX_Size() int {
+	return xxx_messageInfo_InspectionRuleSet.Size(m)
+}
+func (m *InspectionRuleSet) XXX_DiscardUnknown() {
+	xxx_messageInfo_InspectionRuleSet.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InspectionRuleSet proto.InternalMessageInfo
+
+func (m *InspectionRuleSet) GetInfoTypes() []*InfoType {
+	if m != nil {
+		return m.InfoTypes
+	}
+	return nil
+}
+
+func (m *InspectionRuleSet) GetRules() []*InspectionRule {
+	if m != nil {
+		return m.Rules
+	}
+	return nil
 }
 
 // Configuration description of the scanning process.
@@ -503,10 +1024,21 @@ func (DlpJob_JobState) EnumDescriptor() ([]byte, []int) {
 // used.
 type InspectConfig struct {
 	// Restricts what info_types to look for. The values must correspond to
-	// InfoType values returned by ListInfoTypes or found in documentation.
+	// InfoType values returned by ListInfoTypes or listed at
+	// https://cloud.google.com/dlp/docs/infotypes-reference.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in a request, the
+	// system may automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
+	//
+	// The special InfoType name "ALL_BASIC" can be used to trigger all detectors,
+	// but may change over time as new InfoTypes are added. If you need precise
+	// control and predictability as to what detectors are run you should specify
+	// specific InfoTypes listed in the reference.
 	InfoTypes []*InfoType `protobuf:"bytes,1,rep,name=info_types,json=infoTypes,proto3" json:"info_types,omitempty"`
 	// Only returns findings equal or above this threshold. The default is
 	// POSSIBLE.
+	// See https://cloud.google.com/dlp/docs/likelihood to learn more.
 	MinLikelihood Likelihood                   `protobuf:"varint,2,opt,name=min_likelihood,json=minLikelihood,proto3,enum=google.privacy.dlp.v2.Likelihood" json:"min_likelihood,omitempty"`
 	Limits        *InspectConfig_FindingLimits `protobuf:"bytes,3,opt,name=limits,proto3" json:"limits,omitempty"`
 	// When true, a contextual quote from the data that triggered a finding is
@@ -514,21 +1046,26 @@ type InspectConfig struct {
 	IncludeQuote bool `protobuf:"varint,4,opt,name=include_quote,json=includeQuote,proto3" json:"include_quote,omitempty"`
 	// When true, excludes type information of the findings.
 	ExcludeInfoTypes bool `protobuf:"varint,5,opt,name=exclude_info_types,json=excludeInfoTypes,proto3" json:"exclude_info_types,omitempty"`
-	// Custom infoTypes provided by the user.
+	// CustomInfoTypes provided by the user. See
+	// https://cloud.google.com/dlp/docs/creating-custom-infotypes to learn more.
 	CustomInfoTypes []*CustomInfoType `protobuf:"bytes,6,rep,name=custom_info_types,json=customInfoTypes,proto3" json:"custom_info_types,omitempty"`
 	// List of options defining data content to scan.
 	// If empty, text, images, and other content will be included.
-	ContentOptions       []ContentOption `protobuf:"varint,8,rep,packed,name=content_options,json=contentOptions,proto3,enum=google.privacy.dlp.v2.ContentOption" json:"content_options,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
-	XXX_unrecognized     []byte          `json:"-"`
-	XXX_sizecache        int32           `json:"-"`
+	ContentOptions []ContentOption `protobuf:"varint,8,rep,packed,name=content_options,json=contentOptions,proto3,enum=google.privacy.dlp.v2.ContentOption" json:"content_options,omitempty"`
+	// Set of rules to apply to the findings for this InspectConfig.
+	// Exclusion rules, contained in the set are executed in the end, other
+	// rules are executed in the order they are specified for each info type.
+	RuleSet              []*InspectionRuleSet `protobuf:"bytes,10,rep,name=rule_set,json=ruleSet,proto3" json:"rule_set,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
 }
 
 func (m *InspectConfig) Reset()         { *m = InspectConfig{} }
 func (m *InspectConfig) String() string { return proto.CompactTextString(m) }
 func (*InspectConfig) ProtoMessage()    {}
 func (*InspectConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{4}
 }
 func (m *InspectConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectConfig.Unmarshal(m, b)
@@ -597,14 +1134,21 @@ func (m *InspectConfig) GetContentOptions() []ContentOption {
 	return nil
 }
 
+func (m *InspectConfig) GetRuleSet() []*InspectionRuleSet {
+	if m != nil {
+		return m.RuleSet
+	}
+	return nil
+}
+
 type InspectConfig_FindingLimits struct {
 	// Max number of findings that will be returned for each item scanned.
 	// When set within `InspectDataSourceRequest`,
-	// the maximum returned is 1000 regardless if this is set higher.
+	// the maximum returned is 2000 regardless if this is set higher.
 	// When set within `InspectContentRequest`, this field is ignored.
 	MaxFindingsPerItem int32 `protobuf:"varint,1,opt,name=max_findings_per_item,json=maxFindingsPerItem,proto3" json:"max_findings_per_item,omitempty"`
 	// Max number of findings that will be returned per request/job.
-	// When set within `InspectContentRequest`, the maximum returned is 1000
+	// When set within `InspectContentRequest`, the maximum returned is 2000
 	// regardless if this is set higher.
 	MaxFindingsPerRequest int32 `protobuf:"varint,2,opt,name=max_findings_per_request,json=maxFindingsPerRequest,proto3" json:"max_findings_per_request,omitempty"`
 	// Configuration of findings limit given for specified infoTypes.
@@ -618,7 +1162,7 @@ func (m *InspectConfig_FindingLimits) Reset()         { *m = InspectConfig_Findi
 func (m *InspectConfig_FindingLimits) String() string { return proto.CompactTextString(m) }
 func (*InspectConfig_FindingLimits) ProtoMessage()    {}
 func (*InspectConfig_FindingLimits) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{0, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{4, 0}
 }
 func (m *InspectConfig_FindingLimits) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectConfig_FindingLimits.Unmarshal(m, b)
@@ -680,7 +1224,7 @@ func (m *InspectConfig_FindingLimits_InfoTypeLimit) Reset() {
 func (m *InspectConfig_FindingLimits_InfoTypeLimit) String() string { return proto.CompactTextString(m) }
 func (*InspectConfig_FindingLimits_InfoTypeLimit) ProtoMessage()    {}
 func (*InspectConfig_FindingLimits_InfoTypeLimit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{0, 0, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{4, 0, 0}
 }
 func (m *InspectConfig_FindingLimits_InfoTypeLimit) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectConfig_FindingLimits_InfoTypeLimit.Unmarshal(m, b)
@@ -729,7 +1273,7 @@ func (m *ByteContentItem) Reset()         { *m = ByteContentItem{} }
 func (m *ByteContentItem) String() string { return proto.CompactTextString(m) }
 func (*ByteContentItem) ProtoMessage()    {}
 func (*ByteContentItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{5}
 }
 func (m *ByteContentItem) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ByteContentItem.Unmarshal(m, b)
@@ -781,7 +1325,7 @@ func (m *ContentItem) Reset()         { *m = ContentItem{} }
 func (m *ContentItem) String() string { return proto.CompactTextString(m) }
 func (*ContentItem) ProtoMessage()    {}
 func (*ContentItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{6}
 }
 func (m *ContentItem) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ContentItem.Unmarshal(m, b)
@@ -808,15 +1352,19 @@ type isContentItem_DataItem interface {
 type ContentItem_Value struct {
 	Value string `protobuf:"bytes,3,opt,name=value,proto3,oneof"`
 }
+
 type ContentItem_Table struct {
 	Table *Table `protobuf:"bytes,4,opt,name=table,proto3,oneof"`
 }
+
 type ContentItem_ByteItem struct {
 	ByteItem *ByteContentItem `protobuf:"bytes,5,opt,name=byte_item,json=byteItem,proto3,oneof"`
 }
 
-func (*ContentItem_Value) isContentItem_DataItem()    {}
-func (*ContentItem_Table) isContentItem_DataItem()    {}
+func (*ContentItem_Value) isContentItem_DataItem() {}
+
+func (*ContentItem_Table) isContentItem_DataItem() {}
+
 func (*ContentItem_ByteItem) isContentItem_DataItem() {}
 
 func (m *ContentItem) GetDataItem() isContentItem_DataItem {
@@ -937,6 +1485,8 @@ func _ContentItem_OneofSizer(msg proto.Message) (n int) {
 }
 
 // Structured content to inspect. Up to 50,000 `Value`s per request allowed.
+// See https://cloud.google.com/dlp/docs/inspecting-text#inspecting_a_table to
+// learn more.
 type Table struct {
 	Headers              []*FieldId   `protobuf:"bytes,1,rep,name=headers,proto3" json:"headers,omitempty"`
 	Rows                 []*Table_Row `protobuf:"bytes,2,rep,name=rows,proto3" json:"rows,omitempty"`
@@ -949,7 +1499,7 @@ func (m *Table) Reset()         { *m = Table{} }
 func (m *Table) String() string { return proto.CompactTextString(m) }
 func (*Table) ProtoMessage()    {}
 func (*Table) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{3}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{7}
 }
 func (m *Table) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table.Unmarshal(m, b)
@@ -994,7 +1544,7 @@ func (m *Table_Row) Reset()         { *m = Table_Row{} }
 func (m *Table_Row) String() string { return proto.CompactTextString(m) }
 func (*Table_Row) ProtoMessage()    {}
 func (*Table_Row) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{3, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{7, 0}
 }
 func (m *Table_Row) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Table_Row.Unmarshal(m, b)
@@ -1041,7 +1591,7 @@ func (m *InspectResult) Reset()         { *m = InspectResult{} }
 func (m *InspectResult) String() string { return proto.CompactTextString(m) }
 func (*InspectResult) ProtoMessage()    {}
 func (*InspectResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{4}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{8}
 }
 func (m *InspectResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectResult.Unmarshal(m, b)
@@ -1079,14 +1629,14 @@ func (m *InspectResult) GetFindingsTruncated() bool {
 type Finding struct {
 	// The content that was found. Even if the content is not textual, it
 	// may be converted to a textual representation here.
-	// Provided if requested by the `InspectConfig` and the finding is
+	// Provided if `include_quote` is true and the finding is
 	// less than or equal to 4096 bytes long. If the finding exceeds 4096 bytes
 	// in length, the quote may be omitted.
 	Quote string `protobuf:"bytes,1,opt,name=quote,proto3" json:"quote,omitempty"`
 	// The type of content that might have been found.
-	// Provided if requested by the `InspectConfig`.
+	// Provided if `excluded_types` is false.
 	InfoType *InfoType `protobuf:"bytes,2,opt,name=info_type,json=infoType,proto3" json:"info_type,omitempty"`
-	// Estimate of how likely it is that the `info_type` is correct.
+	// Confidence of how likely it is that the `info_type` is correct.
 	Likelihood Likelihood `protobuf:"varint,3,opt,name=likelihood,proto3,enum=google.privacy.dlp.v2.Likelihood" json:"likelihood,omitempty"`
 	// Where the content was found.
 	Location *Location `protobuf:"bytes,4,opt,name=location,proto3" json:"location,omitempty"`
@@ -1105,7 +1655,7 @@ func (m *Finding) Reset()         { *m = Finding{} }
 func (m *Finding) String() string { return proto.CompactTextString(m) }
 func (*Finding) ProtoMessage()    {}
 func (*Finding) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{5}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{9}
 }
 func (m *Finding) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Finding.Unmarshal(m, b)
@@ -1191,7 +1741,7 @@ func (m *Location) Reset()         { *m = Location{} }
 func (m *Location) String() string { return proto.CompactTextString(m) }
 func (*Location) ProtoMessage()    {}
 func (*Location) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{6}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{10}
 }
 func (m *Location) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Location.Unmarshal(m, b)
@@ -1235,9 +1785,15 @@ func (m *Location) GetContentLocations() []*ContentLocation {
 // Findings container location data.
 type ContentLocation struct {
 	// Name of the container where the finding is located.
-	// The top level name is the source file name or table name. Nested names
-	// could be absent if the embedded object has no string identifier
-	// (for an example an image contained within a document).
+	// The top level name is the source file name or table name. Names of some
+	// common storage containers are formatted as follows:
+	//
+	// * BigQuery tables:  `<project_id>:<dataset_id>.<table_id>`
+	// * Cloud Storage files: `gs://<bucket>/<path>`
+	// * Datastore namespace: <namespace>
+	//
+	// Nested names could be absent if the embedded object has no string
+	// identifier (for an example an image contained within a document).
 	ContainerName string `protobuf:"bytes,1,opt,name=container_name,json=containerName,proto3" json:"container_name,omitempty"`
 	// Type of the container within the file with location of the finding.
 	//
@@ -1263,7 +1819,7 @@ func (m *ContentLocation) Reset()         { *m = ContentLocation{} }
 func (m *ContentLocation) String() string { return proto.CompactTextString(m) }
 func (*ContentLocation) ProtoMessage()    {}
 func (*ContentLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{7}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{11}
 }
 func (m *ContentLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ContentLocation.Unmarshal(m, b)
@@ -1283,6 +1839,13 @@ func (m *ContentLocation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ContentLocation proto.InternalMessageInfo
 
+func (m *ContentLocation) GetContainerName() string {
+	if m != nil {
+		return m.ContainerName
+	}
+	return ""
+}
+
 type isContentLocation_Location interface {
 	isContentLocation_Location()
 }
@@ -1290,15 +1853,19 @@ type isContentLocation_Location interface {
 type ContentLocation_RecordLocation struct {
 	RecordLocation *RecordLocation `protobuf:"bytes,2,opt,name=record_location,json=recordLocation,proto3,oneof"`
 }
+
 type ContentLocation_ImageLocation struct {
 	ImageLocation *ImageLocation `protobuf:"bytes,3,opt,name=image_location,json=imageLocation,proto3,oneof"`
 }
+
 type ContentLocation_DocumentLocation struct {
 	DocumentLocation *DocumentLocation `protobuf:"bytes,5,opt,name=document_location,json=documentLocation,proto3,oneof"`
 }
 
-func (*ContentLocation_RecordLocation) isContentLocation_Location()   {}
-func (*ContentLocation_ImageLocation) isContentLocation_Location()    {}
+func (*ContentLocation_RecordLocation) isContentLocation_Location() {}
+
+func (*ContentLocation_ImageLocation) isContentLocation_Location() {}
+
 func (*ContentLocation_DocumentLocation) isContentLocation_Location() {}
 
 func (m *ContentLocation) GetLocation() isContentLocation_Location {
@@ -1306,13 +1873,6 @@ func (m *ContentLocation) GetLocation() isContentLocation_Location {
 		return m.Location
 	}
 	return nil
-}
-
-func (m *ContentLocation) GetContainerName() string {
-	if m != nil {
-		return m.ContainerName
-	}
-	return ""
 }
 
 func (m *ContentLocation) GetRecordLocation() *RecordLocation {
@@ -1457,7 +2017,7 @@ func (m *DocumentLocation) Reset()         { *m = DocumentLocation{} }
 func (m *DocumentLocation) String() string { return proto.CompactTextString(m) }
 func (*DocumentLocation) ProtoMessage()    {}
 func (*DocumentLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{8}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{12}
 }
 func (m *DocumentLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DocumentLocation.Unmarshal(m, b)
@@ -1501,7 +2061,7 @@ func (m *RecordLocation) Reset()         { *m = RecordLocation{} }
 func (m *RecordLocation) String() string { return proto.CompactTextString(m) }
 func (*RecordLocation) ProtoMessage()    {}
 func (*RecordLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{9}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{13}
 }
 func (m *RecordLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordLocation.Unmarshal(m, b)
@@ -1555,7 +2115,7 @@ func (m *TableLocation) Reset()         { *m = TableLocation{} }
 func (m *TableLocation) String() string { return proto.CompactTextString(m) }
 func (*TableLocation) ProtoMessage()    {}
 func (*TableLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{10}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{14}
 }
 func (m *TableLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TableLocation.Unmarshal(m, b)
@@ -1597,7 +2157,7 @@ func (m *Range) Reset()         { *m = Range{} }
 func (m *Range) String() string { return proto.CompactTextString(m) }
 func (*Range) ProtoMessage()    {}
 func (*Range) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{11}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{15}
 }
 func (m *Range) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Range.Unmarshal(m, b)
@@ -1644,7 +2204,7 @@ func (m *ImageLocation) Reset()         { *m = ImageLocation{} }
 func (m *ImageLocation) String() string { return proto.CompactTextString(m) }
 func (*ImageLocation) ProtoMessage()    {}
 func (*ImageLocation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{12}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{16}
 }
 func (m *ImageLocation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ImageLocation.Unmarshal(m, b)
@@ -1690,7 +2250,7 @@ func (m *BoundingBox) Reset()         { *m = BoundingBox{} }
 func (m *BoundingBox) String() string { return proto.CompactTextString(m) }
 func (*BoundingBox) ProtoMessage()    {}
 func (*BoundingBox) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{13}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{17}
 }
 func (m *BoundingBox) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BoundingBox.Unmarshal(m, b)
@@ -1738,8 +2298,8 @@ func (m *BoundingBox) GetHeight() int32 {
 	return 0
 }
 
-// Request to search for potentially sensitive info in a list of items
-// and replace it with a default or provided content.
+// Request to search for potentially sensitive info in an image and redact it
+// by covering it with a colored rectangle.
 type RedactImageRequest struct {
 	// The parent resource name, for example projects/my-project-id.
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
@@ -1747,6 +2307,9 @@ type RedactImageRequest struct {
 	InspectConfig *InspectConfig `protobuf:"bytes,2,opt,name=inspect_config,json=inspectConfig,proto3" json:"inspect_config,omitempty"`
 	// The configuration for specifying what content to redact from images.
 	ImageRedactionConfigs []*RedactImageRequest_ImageRedactionConfig `protobuf:"bytes,5,rep,name=image_redaction_configs,json=imageRedactionConfigs,proto3" json:"image_redaction_configs,omitempty"`
+	// Whether the response should include findings along with the redacted
+	// image.
+	IncludeFindings bool `protobuf:"varint,6,opt,name=include_findings,json=includeFindings,proto3" json:"include_findings,omitempty"`
 	// The content must be PNG, JPEG, SVG or BMP.
 	ByteItem             *ByteContentItem `protobuf:"bytes,7,opt,name=byte_item,json=byteItem,proto3" json:"byte_item,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
@@ -1758,7 +2321,7 @@ func (m *RedactImageRequest) Reset()         { *m = RedactImageRequest{} }
 func (m *RedactImageRequest) String() string { return proto.CompactTextString(m) }
 func (*RedactImageRequest) ProtoMessage()    {}
 func (*RedactImageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{14}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{18}
 }
 func (m *RedactImageRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RedactImageRequest.Unmarshal(m, b)
@@ -1799,6 +2362,13 @@ func (m *RedactImageRequest) GetImageRedactionConfigs() []*RedactImageRequest_Im
 	return nil
 }
 
+func (m *RedactImageRequest) GetIncludeFindings() bool {
+	if m != nil {
+		return m.IncludeFindings
+	}
+	return false
+}
+
 func (m *RedactImageRequest) GetByteItem() *ByteContentItem {
 	if m != nil {
 		return m.ByteItem
@@ -1828,7 +2398,7 @@ func (m *RedactImageRequest_ImageRedactionConfig) Reset() {
 func (m *RedactImageRequest_ImageRedactionConfig) String() string { return proto.CompactTextString(m) }
 func (*RedactImageRequest_ImageRedactionConfig) ProtoMessage()    {}
 func (*RedactImageRequest_ImageRedactionConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{14, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{18, 0}
 }
 func (m *RedactImageRequest_ImageRedactionConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RedactImageRequest_ImageRedactionConfig.Unmarshal(m, b)
@@ -1855,12 +2425,14 @@ type isRedactImageRequest_ImageRedactionConfig_Target interface {
 type RedactImageRequest_ImageRedactionConfig_InfoType struct {
 	InfoType *InfoType `protobuf:"bytes,1,opt,name=info_type,json=infoType,proto3,oneof"`
 }
+
 type RedactImageRequest_ImageRedactionConfig_RedactAllText struct {
 	RedactAllText bool `protobuf:"varint,2,opt,name=redact_all_text,json=redactAllText,proto3,oneof"`
 }
 
 func (*RedactImageRequest_ImageRedactionConfig_InfoType) isRedactImageRequest_ImageRedactionConfig_Target() {
 }
+
 func (*RedactImageRequest_ImageRedactionConfig_RedactAllText) isRedactImageRequest_ImageRedactionConfig_Target() {
 }
 
@@ -1982,7 +2554,7 @@ func (m *Color) Reset()         { *m = Color{} }
 func (m *Color) String() string { return proto.CompactTextString(m) }
 func (*Color) ProtoMessage()    {}
 func (*Color) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{15}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{19}
 }
 func (m *Color) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Color.Unmarshal(m, b)
@@ -2030,17 +2602,19 @@ type RedactImageResponse struct {
 	// If an image was being inspected and the InspectConfig's include_quote was
 	// set to true, then this field will include all text, if any, that was found
 	// in the image.
-	ExtractedText        string   `protobuf:"bytes,2,opt,name=extracted_text,json=extractedText,proto3" json:"extracted_text,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	ExtractedText string `protobuf:"bytes,2,opt,name=extracted_text,json=extractedText,proto3" json:"extracted_text,omitempty"`
+	// The findings. Populated when include_findings in the request is true.
+	InspectResult        *InspectResult `protobuf:"bytes,3,opt,name=inspect_result,json=inspectResult,proto3" json:"inspect_result,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_unrecognized     []byte         `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *RedactImageResponse) Reset()         { *m = RedactImageResponse{} }
 func (m *RedactImageResponse) String() string { return proto.CompactTextString(m) }
 func (*RedactImageResponse) ProtoMessage()    {}
 func (*RedactImageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{16}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{20}
 }
 func (m *RedactImageResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RedactImageResponse.Unmarshal(m, b)
@@ -2072,6 +2646,13 @@ func (m *RedactImageResponse) GetExtractedText() string {
 		return m.ExtractedText
 	}
 	return ""
+}
+
+func (m *RedactImageResponse) GetInspectResult() *InspectResult {
+	if m != nil {
+		return m.InspectResult
+	}
+	return nil
 }
 
 // Request to de-identify a list of items.
@@ -2109,7 +2690,7 @@ func (m *DeidentifyContentRequest) Reset()         { *m = DeidentifyContentReque
 func (m *DeidentifyContentRequest) String() string { return proto.CompactTextString(m) }
 func (*DeidentifyContentRequest) ProtoMessage()    {}
 func (*DeidentifyContentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{17}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{21}
 }
 func (m *DeidentifyContentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeidentifyContentRequest.Unmarshal(m, b)
@@ -2186,7 +2767,7 @@ func (m *DeidentifyContentResponse) Reset()         { *m = DeidentifyContentResp
 func (m *DeidentifyContentResponse) String() string { return proto.CompactTextString(m) }
 func (*DeidentifyContentResponse) ProtoMessage()    {}
 func (*DeidentifyContentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{18}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{22}
 }
 func (m *DeidentifyContentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeidentifyContentResponse.Unmarshal(m, b)
@@ -2260,7 +2841,7 @@ func (m *ReidentifyContentRequest) Reset()         { *m = ReidentifyContentReque
 func (m *ReidentifyContentRequest) String() string { return proto.CompactTextString(m) }
 func (*ReidentifyContentRequest) ProtoMessage()    {}
 func (*ReidentifyContentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{19}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{23}
 }
 func (m *ReidentifyContentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReidentifyContentRequest.Unmarshal(m, b)
@@ -2337,7 +2918,7 @@ func (m *ReidentifyContentResponse) Reset()         { *m = ReidentifyContentResp
 func (m *ReidentifyContentResponse) String() string { return proto.CompactTextString(m) }
 func (*ReidentifyContentResponse) ProtoMessage()    {}
 func (*ReidentifyContentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{20}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{24}
 }
 func (m *ReidentifyContentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReidentifyContentResponse.Unmarshal(m, b)
@@ -2395,7 +2976,7 @@ func (m *InspectContentRequest) Reset()         { *m = InspectContentRequest{} }
 func (m *InspectContentRequest) String() string { return proto.CompactTextString(m) }
 func (*InspectContentRequest) ProtoMessage()    {}
 func (*InspectContentRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{21}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{25}
 }
 func (m *InspectContentRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectContentRequest.Unmarshal(m, b)
@@ -2456,7 +3037,7 @@ func (m *InspectContentResponse) Reset()         { *m = InspectContentResponse{}
 func (m *InspectContentResponse) String() string { return proto.CompactTextString(m) }
 func (*InspectContentResponse) ProtoMessage()    {}
 func (*InspectContentResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{22}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{26}
 }
 func (m *InspectContentResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectContentResponse.Unmarshal(m, b)
@@ -2488,13 +3069,15 @@ type OutputStorageConfig struct {
 	// Types that are valid to be assigned to Type:
 	//	*OutputStorageConfig_Table
 	Type isOutputStorageConfig_Type `protobuf_oneof:"type"`
-	// Schema used for writing the findings. Columns are derived from the
-	// `Finding` object. If appending to an existing table, any columns from the
-	// predefined schema that are missing will be added. No columns in the
-	// existing table will be deleted.
+	// Schema used for writing the findings for Inspect jobs. This field is only
+	// used for Inspect and must be unspecified for Risk jobs. Columns are derived
+	// from the `Finding` object. If appending to an existing table, any columns
+	// from the predefined schema that are missing will be added. No columns in
+	// the existing table will be deleted.
 	//
-	// If unspecified, then all available columns will be used for a new table,
-	// and no changes will be made to an existing table.
+	// If unspecified, then all available columns will be used for a new table or
+	// an (existing) table with no schema, and no changes will be made to an
+	// existing table that has a schema.
 	OutputSchema         OutputStorageConfig_OutputSchema `protobuf:"varint,3,opt,name=output_schema,json=outputSchema,proto3,enum=google.privacy.dlp.v2.OutputStorageConfig_OutputSchema" json:"output_schema,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}                         `json:"-"`
 	XXX_unrecognized     []byte                           `json:"-"`
@@ -2505,7 +3088,7 @@ func (m *OutputStorageConfig) Reset()         { *m = OutputStorageConfig{} }
 func (m *OutputStorageConfig) String() string { return proto.CompactTextString(m) }
 func (*OutputStorageConfig) ProtoMessage()    {}
 func (*OutputStorageConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{23}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{27}
 }
 func (m *OutputStorageConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_OutputStorageConfig.Unmarshal(m, b)
@@ -2626,7 +3209,7 @@ func (m *InfoTypeStats) Reset()         { *m = InfoTypeStats{} }
 func (m *InfoTypeStats) String() string { return proto.CompactTextString(m) }
 func (*InfoTypeStats) ProtoMessage()    {}
 func (*InfoTypeStats) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{24}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{28}
 }
 func (m *InfoTypeStats) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InfoTypeStats.Unmarshal(m, b)
@@ -2675,7 +3258,7 @@ func (m *InspectDataSourceDetails) Reset()         { *m = InspectDataSourceDetai
 func (m *InspectDataSourceDetails) String() string { return proto.CompactTextString(m) }
 func (*InspectDataSourceDetails) ProtoMessage()    {}
 func (*InspectDataSourceDetails) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{25}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{29}
 }
 func (m *InspectDataSourceDetails) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectDataSourceDetails.Unmarshal(m, b)
@@ -2725,7 +3308,7 @@ func (m *InspectDataSourceDetails_RequestedOptions) Reset() {
 func (m *InspectDataSourceDetails_RequestedOptions) String() string { return proto.CompactTextString(m) }
 func (*InspectDataSourceDetails_RequestedOptions) ProtoMessage()    {}
 func (*InspectDataSourceDetails_RequestedOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{25, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{29, 0}
 }
 func (m *InspectDataSourceDetails_RequestedOptions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectDataSourceDetails_RequestedOptions.Unmarshal(m, b)
@@ -2776,7 +3359,7 @@ func (m *InspectDataSourceDetails_Result) Reset()         { *m = InspectDataSour
 func (m *InspectDataSourceDetails_Result) String() string { return proto.CompactTextString(m) }
 func (*InspectDataSourceDetails_Result) ProtoMessage()    {}
 func (*InspectDataSourceDetails_Result) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{25, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{29, 1}
 }
 func (m *InspectDataSourceDetails_Result) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectDataSourceDetails_Result.Unmarshal(m, b)
@@ -2824,17 +3407,20 @@ type InfoTypeDescription struct {
 	// Human readable form of the infoType name.
 	DisplayName string `protobuf:"bytes,2,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
 	// Which parts of the API supports this InfoType.
-	SupportedBy          []InfoTypeSupportedBy `protobuf:"varint,3,rep,packed,name=supported_by,json=supportedBy,proto3,enum=google.privacy.dlp.v2.InfoTypeSupportedBy" json:"supported_by,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_unrecognized     []byte                `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	SupportedBy []InfoTypeSupportedBy `protobuf:"varint,3,rep,packed,name=supported_by,json=supportedBy,proto3,enum=google.privacy.dlp.v2.InfoTypeSupportedBy" json:"supported_by,omitempty"`
+	// Description of the infotype. Translated when language is provided in the
+	// request.
+	Description          string   `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *InfoTypeDescription) Reset()         { *m = InfoTypeDescription{} }
 func (m *InfoTypeDescription) String() string { return proto.CompactTextString(m) }
 func (*InfoTypeDescription) ProtoMessage()    {}
 func (*InfoTypeDescription) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{26}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{30}
 }
 func (m *InfoTypeDescription) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InfoTypeDescription.Unmarshal(m, b)
@@ -2875,6 +3461,13 @@ func (m *InfoTypeDescription) GetSupportedBy() []InfoTypeSupportedBy {
 	return nil
 }
 
+func (m *InfoTypeDescription) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
 // Request for the list of infoTypes.
 type ListInfoTypesRequest struct {
 	// Optional BCP-47 language code for localized infoType friendly
@@ -2893,7 +3486,7 @@ func (m *ListInfoTypesRequest) Reset()         { *m = ListInfoTypesRequest{} }
 func (m *ListInfoTypesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListInfoTypesRequest) ProtoMessage()    {}
 func (*ListInfoTypesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{27}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{31}
 }
 func (m *ListInfoTypesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInfoTypesRequest.Unmarshal(m, b)
@@ -2940,7 +3533,7 @@ func (m *ListInfoTypesResponse) Reset()         { *m = ListInfoTypesResponse{} }
 func (m *ListInfoTypesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListInfoTypesResponse) ProtoMessage()    {}
 func (*ListInfoTypesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{28}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{32}
 }
 func (m *ListInfoTypesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInfoTypesResponse.Unmarshal(m, b)
@@ -2967,7 +3560,8 @@ func (m *ListInfoTypesResponse) GetInfoTypes() []*InfoTypeDescription {
 	return nil
 }
 
-// Configuration for a risk analysis job.
+// Configuration for a risk analysis job. See
+// https://cloud.google.com/dlp/docs/concepts-risk-analysis to learn more.
 type RiskAnalysisJobConfig struct {
 	// Privacy metric to compute.
 	PrivacyMetric *PrivacyMetric `protobuf:"bytes,1,opt,name=privacy_metric,json=privacyMetric,proto3" json:"privacy_metric,omitempty"`
@@ -2985,7 +3579,7 @@ func (m *RiskAnalysisJobConfig) Reset()         { *m = RiskAnalysisJobConfig{} }
 func (m *RiskAnalysisJobConfig) String() string { return proto.CompactTextString(m) }
 func (*RiskAnalysisJobConfig) ProtoMessage()    {}
 func (*RiskAnalysisJobConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{29}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{33}
 }
 func (m *RiskAnalysisJobConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RiskAnalysisJobConfig.Unmarshal(m, b)
@@ -3026,6 +3620,308 @@ func (m *RiskAnalysisJobConfig) GetActions() []*Action {
 	return nil
 }
 
+// A column with a semantic tag attached.
+type QuasiId struct {
+	// Identifies the column. [required]
+	Field *FieldId `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
+	// Semantic tag that identifies what a column contains, to determine which
+	// statistical model to use to estimate the reidentifiability of each
+	// value. [required]
+	//
+	// Types that are valid to be assigned to Tag:
+	//	*QuasiId_InfoType
+	//	*QuasiId_CustomTag
+	//	*QuasiId_Inferred
+	Tag                  isQuasiId_Tag `protobuf_oneof:"tag"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *QuasiId) Reset()         { *m = QuasiId{} }
+func (m *QuasiId) String() string { return proto.CompactTextString(m) }
+func (*QuasiId) ProtoMessage()    {}
+func (*QuasiId) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{34}
+}
+func (m *QuasiId) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_QuasiId.Unmarshal(m, b)
+}
+func (m *QuasiId) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_QuasiId.Marshal(b, m, deterministic)
+}
+func (dst *QuasiId) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QuasiId.Merge(dst, src)
+}
+func (m *QuasiId) XXX_Size() int {
+	return xxx_messageInfo_QuasiId.Size(m)
+}
+func (m *QuasiId) XXX_DiscardUnknown() {
+	xxx_messageInfo_QuasiId.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_QuasiId proto.InternalMessageInfo
+
+func (m *QuasiId) GetField() *FieldId {
+	if m != nil {
+		return m.Field
+	}
+	return nil
+}
+
+type isQuasiId_Tag interface {
+	isQuasiId_Tag()
+}
+
+type QuasiId_InfoType struct {
+	InfoType *InfoType `protobuf:"bytes,2,opt,name=info_type,json=infoType,proto3,oneof"`
+}
+
+type QuasiId_CustomTag struct {
+	CustomTag string `protobuf:"bytes,3,opt,name=custom_tag,json=customTag,proto3,oneof"`
+}
+
+type QuasiId_Inferred struct {
+	Inferred *empty.Empty `protobuf:"bytes,4,opt,name=inferred,proto3,oneof"`
+}
+
+func (*QuasiId_InfoType) isQuasiId_Tag() {}
+
+func (*QuasiId_CustomTag) isQuasiId_Tag() {}
+
+func (*QuasiId_Inferred) isQuasiId_Tag() {}
+
+func (m *QuasiId) GetTag() isQuasiId_Tag {
+	if m != nil {
+		return m.Tag
+	}
+	return nil
+}
+
+func (m *QuasiId) GetInfoType() *InfoType {
+	if x, ok := m.GetTag().(*QuasiId_InfoType); ok {
+		return x.InfoType
+	}
+	return nil
+}
+
+func (m *QuasiId) GetCustomTag() string {
+	if x, ok := m.GetTag().(*QuasiId_CustomTag); ok {
+		return x.CustomTag
+	}
+	return ""
+}
+
+func (m *QuasiId) GetInferred() *empty.Empty {
+	if x, ok := m.GetTag().(*QuasiId_Inferred); ok {
+		return x.Inferred
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*QuasiId) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _QuasiId_OneofMarshaler, _QuasiId_OneofUnmarshaler, _QuasiId_OneofSizer, []interface{}{
+		(*QuasiId_InfoType)(nil),
+		(*QuasiId_CustomTag)(nil),
+		(*QuasiId_Inferred)(nil),
+	}
+}
+
+func _QuasiId_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*QuasiId)
+	// tag
+	switch x := m.Tag.(type) {
+	case *QuasiId_InfoType:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.InfoType); err != nil {
+			return err
+		}
+	case *QuasiId_CustomTag:
+		b.EncodeVarint(3<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.CustomTag)
+	case *QuasiId_Inferred:
+		b.EncodeVarint(4<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.Inferred); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("QuasiId.Tag has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _QuasiId_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*QuasiId)
+	switch tag {
+	case 2: // tag.info_type
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(InfoType)
+		err := b.DecodeMessage(msg)
+		m.Tag = &QuasiId_InfoType{msg}
+		return true, err
+	case 3: // tag.custom_tag
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Tag = &QuasiId_CustomTag{x}
+		return true, err
+	case 4: // tag.inferred
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(empty.Empty)
+		err := b.DecodeMessage(msg)
+		m.Tag = &QuasiId_Inferred{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _QuasiId_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*QuasiId)
+	// tag
+	switch x := m.Tag.(type) {
+	case *QuasiId_InfoType:
+		s := proto.Size(x.InfoType)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *QuasiId_CustomTag:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.CustomTag)))
+		n += len(x.CustomTag)
+	case *QuasiId_Inferred:
+		s := proto.Size(x.Inferred)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// An auxiliary table containing statistical information on the relative
+// frequency of different quasi-identifiers values. It has one or several
+// quasi-identifiers columns, and one column that indicates the relative
+// frequency of each quasi-identifier tuple.
+// If a tuple is present in the data but not in the auxiliary table, the
+// corresponding relative frequency is assumed to be zero (and thus, the
+// tuple is highly reidentifiable).
+type StatisticalTable struct {
+	// Auxiliary table location. [required]
+	Table *BigQueryTable `protobuf:"bytes,3,opt,name=table,proto3" json:"table,omitempty"`
+	// Quasi-identifier columns. [required]
+	QuasiIds []*StatisticalTable_QuasiIdentifierField `protobuf:"bytes,1,rep,name=quasi_ids,json=quasiIds,proto3" json:"quasi_ids,omitempty"`
+	// The relative frequency column must contain a floating-point number
+	// between 0 and 1 (inclusive). Null values are assumed to be zero.
+	// [required]
+	RelativeFrequency    *FieldId `protobuf:"bytes,2,opt,name=relative_frequency,json=relativeFrequency,proto3" json:"relative_frequency,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StatisticalTable) Reset()         { *m = StatisticalTable{} }
+func (m *StatisticalTable) String() string { return proto.CompactTextString(m) }
+func (*StatisticalTable) ProtoMessage()    {}
+func (*StatisticalTable) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{35}
+}
+func (m *StatisticalTable) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StatisticalTable.Unmarshal(m, b)
+}
+func (m *StatisticalTable) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StatisticalTable.Marshal(b, m, deterministic)
+}
+func (dst *StatisticalTable) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatisticalTable.Merge(dst, src)
+}
+func (m *StatisticalTable) XXX_Size() int {
+	return xxx_messageInfo_StatisticalTable.Size(m)
+}
+func (m *StatisticalTable) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatisticalTable.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatisticalTable proto.InternalMessageInfo
+
+func (m *StatisticalTable) GetTable() *BigQueryTable {
+	if m != nil {
+		return m.Table
+	}
+	return nil
+}
+
+func (m *StatisticalTable) GetQuasiIds() []*StatisticalTable_QuasiIdentifierField {
+	if m != nil {
+		return m.QuasiIds
+	}
+	return nil
+}
+
+func (m *StatisticalTable) GetRelativeFrequency() *FieldId {
+	if m != nil {
+		return m.RelativeFrequency
+	}
+	return nil
+}
+
+// A quasi-identifier column has a custom_tag, used to know which column
+// in the data corresponds to which column in the statistical model.
+type StatisticalTable_QuasiIdentifierField struct {
+	Field                *FieldId `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
+	CustomTag            string   `protobuf:"bytes,2,opt,name=custom_tag,json=customTag,proto3" json:"custom_tag,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StatisticalTable_QuasiIdentifierField) Reset()         { *m = StatisticalTable_QuasiIdentifierField{} }
+func (m *StatisticalTable_QuasiIdentifierField) String() string { return proto.CompactTextString(m) }
+func (*StatisticalTable_QuasiIdentifierField) ProtoMessage()    {}
+func (*StatisticalTable_QuasiIdentifierField) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{35, 0}
+}
+func (m *StatisticalTable_QuasiIdentifierField) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StatisticalTable_QuasiIdentifierField.Unmarshal(m, b)
+}
+func (m *StatisticalTable_QuasiIdentifierField) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StatisticalTable_QuasiIdentifierField.Marshal(b, m, deterministic)
+}
+func (dst *StatisticalTable_QuasiIdentifierField) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StatisticalTable_QuasiIdentifierField.Merge(dst, src)
+}
+func (m *StatisticalTable_QuasiIdentifierField) XXX_Size() int {
+	return xxx_messageInfo_StatisticalTable_QuasiIdentifierField.Size(m)
+}
+func (m *StatisticalTable_QuasiIdentifierField) XXX_DiscardUnknown() {
+	xxx_messageInfo_StatisticalTable_QuasiIdentifierField.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StatisticalTable_QuasiIdentifierField proto.InternalMessageInfo
+
+func (m *StatisticalTable_QuasiIdentifierField) GetField() *FieldId {
+	if m != nil {
+		return m.Field
+	}
+	return nil
+}
+
+func (m *StatisticalTable_QuasiIdentifierField) GetCustomTag() string {
+	if m != nil {
+		return m.CustomTag
+	}
+	return ""
+}
+
 // Privacy metric to compute for reidentification risk analysis.
 type PrivacyMetric struct {
 	// Types that are valid to be assigned to Type:
@@ -3034,6 +3930,7 @@ type PrivacyMetric struct {
 	//	*PrivacyMetric_KAnonymityConfig_
 	//	*PrivacyMetric_LDiversityConfig_
 	//	*PrivacyMetric_KMapEstimationConfig_
+	//	*PrivacyMetric_DeltaPresenceEstimationConfig_
 	Type                 isPrivacyMetric_Type `protobuf_oneof:"type"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
 	XXX_unrecognized     []byte               `json:"-"`
@@ -3044,7 +3941,7 @@ func (m *PrivacyMetric) Reset()         { *m = PrivacyMetric{} }
 func (m *PrivacyMetric) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric) ProtoMessage()    {}
 func (*PrivacyMetric) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36}
 }
 func (m *PrivacyMetric) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric.Unmarshal(m, b)
@@ -3071,24 +3968,38 @@ type isPrivacyMetric_Type interface {
 type PrivacyMetric_NumericalStatsConfig_ struct {
 	NumericalStatsConfig *PrivacyMetric_NumericalStatsConfig `protobuf:"bytes,1,opt,name=numerical_stats_config,json=numericalStatsConfig,proto3,oneof"`
 }
+
 type PrivacyMetric_CategoricalStatsConfig_ struct {
 	CategoricalStatsConfig *PrivacyMetric_CategoricalStatsConfig `protobuf:"bytes,2,opt,name=categorical_stats_config,json=categoricalStatsConfig,proto3,oneof"`
 }
+
 type PrivacyMetric_KAnonymityConfig_ struct {
 	KAnonymityConfig *PrivacyMetric_KAnonymityConfig `protobuf:"bytes,3,opt,name=k_anonymity_config,json=kAnonymityConfig,proto3,oneof"`
 }
+
 type PrivacyMetric_LDiversityConfig_ struct {
 	LDiversityConfig *PrivacyMetric_LDiversityConfig `protobuf:"bytes,4,opt,name=l_diversity_config,json=lDiversityConfig,proto3,oneof"`
 }
+
 type PrivacyMetric_KMapEstimationConfig_ struct {
 	KMapEstimationConfig *PrivacyMetric_KMapEstimationConfig `protobuf:"bytes,5,opt,name=k_map_estimation_config,json=kMapEstimationConfig,proto3,oneof"`
 }
 
-func (*PrivacyMetric_NumericalStatsConfig_) isPrivacyMetric_Type()   {}
+type PrivacyMetric_DeltaPresenceEstimationConfig_ struct {
+	DeltaPresenceEstimationConfig *PrivacyMetric_DeltaPresenceEstimationConfig `protobuf:"bytes,6,opt,name=delta_presence_estimation_config,json=deltaPresenceEstimationConfig,proto3,oneof"`
+}
+
+func (*PrivacyMetric_NumericalStatsConfig_) isPrivacyMetric_Type() {}
+
 func (*PrivacyMetric_CategoricalStatsConfig_) isPrivacyMetric_Type() {}
-func (*PrivacyMetric_KAnonymityConfig_) isPrivacyMetric_Type()       {}
-func (*PrivacyMetric_LDiversityConfig_) isPrivacyMetric_Type()       {}
-func (*PrivacyMetric_KMapEstimationConfig_) isPrivacyMetric_Type()   {}
+
+func (*PrivacyMetric_KAnonymityConfig_) isPrivacyMetric_Type() {}
+
+func (*PrivacyMetric_LDiversityConfig_) isPrivacyMetric_Type() {}
+
+func (*PrivacyMetric_KMapEstimationConfig_) isPrivacyMetric_Type() {}
+
+func (*PrivacyMetric_DeltaPresenceEstimationConfig_) isPrivacyMetric_Type() {}
 
 func (m *PrivacyMetric) GetType() isPrivacyMetric_Type {
 	if m != nil {
@@ -3132,6 +4043,13 @@ func (m *PrivacyMetric) GetKMapEstimationConfig() *PrivacyMetric_KMapEstimationC
 	return nil
 }
 
+func (m *PrivacyMetric) GetDeltaPresenceEstimationConfig() *PrivacyMetric_DeltaPresenceEstimationConfig {
+	if x, ok := m.GetType().(*PrivacyMetric_DeltaPresenceEstimationConfig_); ok {
+		return x.DeltaPresenceEstimationConfig
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*PrivacyMetric) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _PrivacyMetric_OneofMarshaler, _PrivacyMetric_OneofUnmarshaler, _PrivacyMetric_OneofSizer, []interface{}{
@@ -3140,6 +4058,7 @@ func (*PrivacyMetric) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer)
 		(*PrivacyMetric_KAnonymityConfig_)(nil),
 		(*PrivacyMetric_LDiversityConfig_)(nil),
 		(*PrivacyMetric_KMapEstimationConfig_)(nil),
+		(*PrivacyMetric_DeltaPresenceEstimationConfig_)(nil),
 	}
 }
 
@@ -3170,6 +4089,11 @@ func _PrivacyMetric_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *PrivacyMetric_KMapEstimationConfig_:
 		b.EncodeVarint(5<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.KMapEstimationConfig); err != nil {
+			return err
+		}
+	case *PrivacyMetric_DeltaPresenceEstimationConfig_:
+		b.EncodeVarint(6<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DeltaPresenceEstimationConfig); err != nil {
 			return err
 		}
 	case nil:
@@ -3222,6 +4146,14 @@ func _PrivacyMetric_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.
 		err := b.DecodeMessage(msg)
 		m.Type = &PrivacyMetric_KMapEstimationConfig_{msg}
 		return true, err
+	case 6: // type.delta_presence_estimation_config
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(PrivacyMetric_DeltaPresenceEstimationConfig)
+		err := b.DecodeMessage(msg)
+		m.Type = &PrivacyMetric_DeltaPresenceEstimationConfig_{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -3256,6 +4188,11 @@ func _PrivacyMetric_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
+	case *PrivacyMetric_DeltaPresenceEstimationConfig_:
+		s := proto.Size(x.DeltaPresenceEstimationConfig)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -3278,7 +4215,7 @@ func (m *PrivacyMetric_NumericalStatsConfig) Reset()         { *m = PrivacyMetri
 func (m *PrivacyMetric_NumericalStatsConfig) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric_NumericalStatsConfig) ProtoMessage()    {}
 func (*PrivacyMetric_NumericalStatsConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 0}
 }
 func (m *PrivacyMetric_NumericalStatsConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_NumericalStatsConfig.Unmarshal(m, b)
@@ -3322,7 +4259,7 @@ func (m *PrivacyMetric_CategoricalStatsConfig) Reset()         { *m = PrivacyMet
 func (m *PrivacyMetric_CategoricalStatsConfig) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric_CategoricalStatsConfig) ProtoMessage()    {}
 func (*PrivacyMetric_CategoricalStatsConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 1}
 }
 func (m *PrivacyMetric_CategoricalStatsConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_CategoricalStatsConfig.Unmarshal(m, b)
@@ -3359,7 +4296,7 @@ type PrivacyMetric_KAnonymityConfig struct {
 	QuasiIds []*FieldId `protobuf:"bytes,1,rep,name=quasi_ids,json=quasiIds,proto3" json:"quasi_ids,omitempty"`
 	// Optional message indicating that multiple rows might be associated to a
 	// single individual. If the same entity_id is associated to multiple
-	// quasi-identifier tuples over distict rows, we consider the entire
+	// quasi-identifier tuples over distinct rows, we consider the entire
 	// collection of tuples as the composite quasi-identifier. This collection
 	// is a multiset: the order in which the different tuples appear in the
 	// dataset is ignored, but their frequency is taken into account.
@@ -3377,7 +4314,7 @@ func (m *PrivacyMetric_KAnonymityConfig) Reset()         { *m = PrivacyMetric_KA
 func (m *PrivacyMetric_KAnonymityConfig) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric_KAnonymityConfig) ProtoMessage()    {}
 func (*PrivacyMetric_KAnonymityConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 2}
 }
 func (m *PrivacyMetric_KAnonymityConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_KAnonymityConfig.Unmarshal(m, b)
@@ -3428,7 +4365,7 @@ func (m *PrivacyMetric_LDiversityConfig) Reset()         { *m = PrivacyMetric_LD
 func (m *PrivacyMetric_LDiversityConfig) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric_LDiversityConfig) ProtoMessage()    {}
 func (*PrivacyMetric_LDiversityConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 3}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 3}
 }
 func (m *PrivacyMetric_LDiversityConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_LDiversityConfig.Unmarshal(m, b)
@@ -3490,7 +4427,7 @@ func (m *PrivacyMetric_KMapEstimationConfig) Reset()         { *m = PrivacyMetri
 func (m *PrivacyMetric_KMapEstimationConfig) String() string { return proto.CompactTextString(m) }
 func (*PrivacyMetric_KMapEstimationConfig) ProtoMessage()    {}
 func (*PrivacyMetric_KMapEstimationConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 4}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 4}
 }
 func (m *PrivacyMetric_KMapEstimationConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_KMapEstimationConfig.Unmarshal(m, b)
@@ -3556,7 +4493,7 @@ func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) String() string {
 }
 func (*PrivacyMetric_KMapEstimationConfig_TaggedField) ProtoMessage() {}
 func (*PrivacyMetric_KMapEstimationConfig_TaggedField) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 4, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 4, 0}
 }
 func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_KMapEstimationConfig_TaggedField.Unmarshal(m, b)
@@ -3576,6 +4513,13 @@ func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_PrivacyMetric_KMapEstimationConfig_TaggedField proto.InternalMessageInfo
 
+func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) GetField() *FieldId {
+	if m != nil {
+		return m.Field
+	}
+	return nil
+}
+
 type isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag interface {
 	isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag()
 }
@@ -3583,30 +4527,27 @@ type isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag interface {
 type PrivacyMetric_KMapEstimationConfig_TaggedField_InfoType struct {
 	InfoType *InfoType `protobuf:"bytes,2,opt,name=info_type,json=infoType,proto3,oneof"`
 }
+
 type PrivacyMetric_KMapEstimationConfig_TaggedField_CustomTag struct {
 	CustomTag string `protobuf:"bytes,3,opt,name=custom_tag,json=customTag,proto3,oneof"`
 }
+
 type PrivacyMetric_KMapEstimationConfig_TaggedField_Inferred struct {
 	Inferred *empty.Empty `protobuf:"bytes,4,opt,name=inferred,proto3,oneof"`
 }
 
 func (*PrivacyMetric_KMapEstimationConfig_TaggedField_InfoType) isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag() {
 }
+
 func (*PrivacyMetric_KMapEstimationConfig_TaggedField_CustomTag) isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag() {
 }
+
 func (*PrivacyMetric_KMapEstimationConfig_TaggedField_Inferred) isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag() {
 }
 
 func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) GetTag() isPrivacyMetric_KMapEstimationConfig_TaggedField_Tag {
 	if m != nil {
 		return m.Tag
-	}
-	return nil
-}
-
-func (m *PrivacyMetric_KMapEstimationConfig_TaggedField) GetField() *FieldId {
-	if m != nil {
-		return m.Field
 	}
 	return nil
 }
@@ -3750,7 +4691,7 @@ func (m *PrivacyMetric_KMapEstimationConfig_AuxiliaryTable) String() string {
 }
 func (*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable) ProtoMessage() {}
 func (*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 4, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 4, 1}
 }
 func (m *PrivacyMetric_KMapEstimationConfig_AuxiliaryTable) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_KMapEstimationConfig_AuxiliaryTable.Unmarshal(m, b)
@@ -3809,7 +4750,7 @@ func (m *PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField) String(
 }
 func (*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField) ProtoMessage() {}
 func (*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{30, 4, 1, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 4, 1, 0}
 }
 func (m *PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField.Unmarshal(m, b)
@@ -3843,6 +4784,76 @@ func (m *PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField) GetCust
 	return ""
 }
 
+// δ-presence metric, used to estimate how likely it is for an attacker to
+// figure out that one given individual appears in a de-identified dataset.
+// Similarly to the k-map metric, we cannot compute δ-presence exactly without
+// knowing the attack dataset, so we use a statistical model instead.
+type PrivacyMetric_DeltaPresenceEstimationConfig struct {
+	// Fields considered to be quasi-identifiers. No two fields can have the
+	// same tag. [required]
+	QuasiIds []*QuasiId `protobuf:"bytes,1,rep,name=quasi_ids,json=quasiIds,proto3" json:"quasi_ids,omitempty"`
+	// ISO 3166-1 alpha-2 region code to use in the statistical modeling.
+	// Required if no column is tagged with a region-specific InfoType (like
+	// US_ZIP_5) or a region code.
+	RegionCode string `protobuf:"bytes,2,opt,name=region_code,json=regionCode,proto3" json:"region_code,omitempty"`
+	// Several auxiliary tables can be used in the analysis. Each custom_tag
+	// used to tag a quasi-identifiers field must appear in exactly one
+	// field of one auxiliary table.
+	AuxiliaryTables      []*StatisticalTable `protobuf:"bytes,3,rep,name=auxiliary_tables,json=auxiliaryTables,proto3" json:"auxiliary_tables,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
+}
+
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) Reset() {
+	*m = PrivacyMetric_DeltaPresenceEstimationConfig{}
+}
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) String() string {
+	return proto.CompactTextString(m)
+}
+func (*PrivacyMetric_DeltaPresenceEstimationConfig) ProtoMessage() {}
+func (*PrivacyMetric_DeltaPresenceEstimationConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{36, 5}
+}
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig.Unmarshal(m, b)
+}
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig.Marshal(b, m, deterministic)
+}
+func (dst *PrivacyMetric_DeltaPresenceEstimationConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig.Merge(dst, src)
+}
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) XXX_Size() int {
+	return xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig.Size(m)
+}
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_PrivacyMetric_DeltaPresenceEstimationConfig proto.InternalMessageInfo
+
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) GetQuasiIds() []*QuasiId {
+	if m != nil {
+		return m.QuasiIds
+	}
+	return nil
+}
+
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) GetRegionCode() string {
+	if m != nil {
+		return m.RegionCode
+	}
+	return ""
+}
+
+func (m *PrivacyMetric_DeltaPresenceEstimationConfig) GetAuxiliaryTables() []*StatisticalTable {
+	if m != nil {
+		return m.AuxiliaryTables
+	}
+	return nil
+}
+
 // Result of a risk analysis operation request.
 type AnalyzeDataSourceRiskDetails struct {
 	// Privacy metric to compute.
@@ -3857,6 +4868,7 @@ type AnalyzeDataSourceRiskDetails struct {
 	//	*AnalyzeDataSourceRiskDetails_KAnonymityResult_
 	//	*AnalyzeDataSourceRiskDetails_LDiversityResult_
 	//	*AnalyzeDataSourceRiskDetails_KMapEstimationResult_
+	//	*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_
 	Result               isAnalyzeDataSourceRiskDetails_Result `protobuf_oneof:"result"`
 	XXX_NoUnkeyedLiteral struct{}                              `json:"-"`
 	XXX_unrecognized     []byte                                `json:"-"`
@@ -3867,7 +4879,7 @@ func (m *AnalyzeDataSourceRiskDetails) Reset()         { *m = AnalyzeDataSourceR
 func (m *AnalyzeDataSourceRiskDetails) String() string { return proto.CompactTextString(m) }
 func (*AnalyzeDataSourceRiskDetails) ProtoMessage()    {}
 func (*AnalyzeDataSourceRiskDetails) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37}
 }
 func (m *AnalyzeDataSourceRiskDetails) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails.Unmarshal(m, b)
@@ -3887,39 +4899,6 @@ func (m *AnalyzeDataSourceRiskDetails) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AnalyzeDataSourceRiskDetails proto.InternalMessageInfo
 
-type isAnalyzeDataSourceRiskDetails_Result interface {
-	isAnalyzeDataSourceRiskDetails_Result()
-}
-
-type AnalyzeDataSourceRiskDetails_NumericalStatsResult_ struct {
-	NumericalStatsResult *AnalyzeDataSourceRiskDetails_NumericalStatsResult `protobuf:"bytes,3,opt,name=numerical_stats_result,json=numericalStatsResult,proto3,oneof"`
-}
-type AnalyzeDataSourceRiskDetails_CategoricalStatsResult_ struct {
-	CategoricalStatsResult *AnalyzeDataSourceRiskDetails_CategoricalStatsResult `protobuf:"bytes,4,opt,name=categorical_stats_result,json=categoricalStatsResult,proto3,oneof"`
-}
-type AnalyzeDataSourceRiskDetails_KAnonymityResult_ struct {
-	KAnonymityResult *AnalyzeDataSourceRiskDetails_KAnonymityResult `protobuf:"bytes,5,opt,name=k_anonymity_result,json=kAnonymityResult,proto3,oneof"`
-}
-type AnalyzeDataSourceRiskDetails_LDiversityResult_ struct {
-	LDiversityResult *AnalyzeDataSourceRiskDetails_LDiversityResult `protobuf:"bytes,6,opt,name=l_diversity_result,json=lDiversityResult,proto3,oneof"`
-}
-type AnalyzeDataSourceRiskDetails_KMapEstimationResult_ struct {
-	KMapEstimationResult *AnalyzeDataSourceRiskDetails_KMapEstimationResult `protobuf:"bytes,7,opt,name=k_map_estimation_result,json=kMapEstimationResult,proto3,oneof"`
-}
-
-func (*AnalyzeDataSourceRiskDetails_NumericalStatsResult_) isAnalyzeDataSourceRiskDetails_Result()   {}
-func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult_) isAnalyzeDataSourceRiskDetails_Result() {}
-func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_) isAnalyzeDataSourceRiskDetails_Result()       {}
-func (*AnalyzeDataSourceRiskDetails_LDiversityResult_) isAnalyzeDataSourceRiskDetails_Result()       {}
-func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_) isAnalyzeDataSourceRiskDetails_Result()   {}
-
-func (m *AnalyzeDataSourceRiskDetails) GetResult() isAnalyzeDataSourceRiskDetails_Result {
-	if m != nil {
-		return m.Result
-	}
-	return nil
-}
-
 func (m *AnalyzeDataSourceRiskDetails) GetRequestedPrivacyMetric() *PrivacyMetric {
 	if m != nil {
 		return m.RequestedPrivacyMetric
@@ -3930,6 +4909,54 @@ func (m *AnalyzeDataSourceRiskDetails) GetRequestedPrivacyMetric() *PrivacyMetri
 func (m *AnalyzeDataSourceRiskDetails) GetRequestedSourceTable() *BigQueryTable {
 	if m != nil {
 		return m.RequestedSourceTable
+	}
+	return nil
+}
+
+type isAnalyzeDataSourceRiskDetails_Result interface {
+	isAnalyzeDataSourceRiskDetails_Result()
+}
+
+type AnalyzeDataSourceRiskDetails_NumericalStatsResult_ struct {
+	NumericalStatsResult *AnalyzeDataSourceRiskDetails_NumericalStatsResult `protobuf:"bytes,3,opt,name=numerical_stats_result,json=numericalStatsResult,proto3,oneof"`
+}
+
+type AnalyzeDataSourceRiskDetails_CategoricalStatsResult_ struct {
+	CategoricalStatsResult *AnalyzeDataSourceRiskDetails_CategoricalStatsResult `protobuf:"bytes,4,opt,name=categorical_stats_result,json=categoricalStatsResult,proto3,oneof"`
+}
+
+type AnalyzeDataSourceRiskDetails_KAnonymityResult_ struct {
+	KAnonymityResult *AnalyzeDataSourceRiskDetails_KAnonymityResult `protobuf:"bytes,5,opt,name=k_anonymity_result,json=kAnonymityResult,proto3,oneof"`
+}
+
+type AnalyzeDataSourceRiskDetails_LDiversityResult_ struct {
+	LDiversityResult *AnalyzeDataSourceRiskDetails_LDiversityResult `protobuf:"bytes,6,opt,name=l_diversity_result,json=lDiversityResult,proto3,oneof"`
+}
+
+type AnalyzeDataSourceRiskDetails_KMapEstimationResult_ struct {
+	KMapEstimationResult *AnalyzeDataSourceRiskDetails_KMapEstimationResult `protobuf:"bytes,7,opt,name=k_map_estimation_result,json=kMapEstimationResult,proto3,oneof"`
+}
+
+type AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_ struct {
+	DeltaPresenceEstimationResult *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult `protobuf:"bytes,9,opt,name=delta_presence_estimation_result,json=deltaPresenceEstimationResult,proto3,oneof"`
+}
+
+func (*AnalyzeDataSourceRiskDetails_NumericalStatsResult_) isAnalyzeDataSourceRiskDetails_Result() {}
+
+func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult_) isAnalyzeDataSourceRiskDetails_Result() {}
+
+func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_) isAnalyzeDataSourceRiskDetails_Result() {}
+
+func (*AnalyzeDataSourceRiskDetails_LDiversityResult_) isAnalyzeDataSourceRiskDetails_Result() {}
+
+func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_) isAnalyzeDataSourceRiskDetails_Result() {}
+
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_) isAnalyzeDataSourceRiskDetails_Result() {
+}
+
+func (m *AnalyzeDataSourceRiskDetails) GetResult() isAnalyzeDataSourceRiskDetails_Result {
+	if m != nil {
+		return m.Result
 	}
 	return nil
 }
@@ -3969,6 +4996,13 @@ func (m *AnalyzeDataSourceRiskDetails) GetKMapEstimationResult() *AnalyzeDataSou
 	return nil
 }
 
+func (m *AnalyzeDataSourceRiskDetails) GetDeltaPresenceEstimationResult() *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult {
+	if x, ok := m.GetResult().(*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_); ok {
+		return x.DeltaPresenceEstimationResult
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*AnalyzeDataSourceRiskDetails) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _AnalyzeDataSourceRiskDetails_OneofMarshaler, _AnalyzeDataSourceRiskDetails_OneofUnmarshaler, _AnalyzeDataSourceRiskDetails_OneofSizer, []interface{}{
@@ -3977,6 +5011,7 @@ func (*AnalyzeDataSourceRiskDetails) XXX_OneofFuncs() (func(msg proto.Message, b
 		(*AnalyzeDataSourceRiskDetails_KAnonymityResult_)(nil),
 		(*AnalyzeDataSourceRiskDetails_LDiversityResult_)(nil),
 		(*AnalyzeDataSourceRiskDetails_KMapEstimationResult_)(nil),
+		(*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_)(nil),
 	}
 }
 
@@ -4007,6 +5042,11 @@ func _AnalyzeDataSourceRiskDetails_OneofMarshaler(msg proto.Message, b *proto.Bu
 	case *AnalyzeDataSourceRiskDetails_KMapEstimationResult_:
 		b.EncodeVarint(7<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.KMapEstimationResult); err != nil {
+			return err
+		}
+	case *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_:
+		b.EncodeVarint(9<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.DeltaPresenceEstimationResult); err != nil {
 			return err
 		}
 	case nil:
@@ -4059,6 +5099,14 @@ func _AnalyzeDataSourceRiskDetails_OneofUnmarshaler(msg proto.Message, tag, wire
 		err := b.DecodeMessage(msg)
 		m.Result = &AnalyzeDataSourceRiskDetails_KMapEstimationResult_{msg}
 		return true, err
+	case 9: // result.delta_presence_estimation_result
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult)
+		err := b.DecodeMessage(msg)
+		m.Result = &AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -4093,6 +5141,11 @@ func _AnalyzeDataSourceRiskDetails_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
+	case *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_:
+		s := proto.Size(x.DeltaPresenceEstimationResult)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -4122,7 +5175,7 @@ func (m *AnalyzeDataSourceRiskDetails_NumericalStatsResult) String() string {
 }
 func (*AnalyzeDataSourceRiskDetails_NumericalStatsResult) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_NumericalStatsResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 0}
 }
 func (m *AnalyzeDataSourceRiskDetails_NumericalStatsResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_NumericalStatsResult.Unmarshal(m, b)
@@ -4180,7 +5233,7 @@ func (m *AnalyzeDataSourceRiskDetails_CategoricalStatsResult) String() string {
 }
 func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 1}
 }
 func (m *AnalyzeDataSourceRiskDetails_CategoricalStatsResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_CategoricalStatsResult.Unmarshal(m, b)
@@ -4233,7 +5286,7 @@ func (m *AnalyzeDataSourceRiskDetails_CategoricalStatsResult_CategoricalStatsHis
 func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult_CategoricalStatsHistogramBucket) ProtoMessage() {
 }
 func (*AnalyzeDataSourceRiskDetails_CategoricalStatsResult_CategoricalStatsHistogramBucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 1, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 1, 0}
 }
 func (m *AnalyzeDataSourceRiskDetails_CategoricalStatsResult_CategoricalStatsHistogramBucket) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_CategoricalStatsResult_CategoricalStatsHistogramBucket.Unmarshal(m, b)
@@ -4305,7 +5358,7 @@ func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult) String() string {
 }
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 2}
 }
 func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KAnonymityResult.Unmarshal(m, b)
@@ -4354,7 +5407,7 @@ func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityEquivalenceClas
 }
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityEquivalenceClass) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityEquivalenceClass) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 2, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 2, 0}
 }
 func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityEquivalenceClass) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityEquivalenceClass.Unmarshal(m, b)
@@ -4413,7 +5466,7 @@ func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityHistogramBucket
 }
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityHistogramBucket) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityHistogramBucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 2, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 2, 1}
 }
 func (m *AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityHistogramBucket) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KAnonymityResult_KAnonymityHistogramBucket.Unmarshal(m, b)
@@ -4485,7 +5538,7 @@ func (m *AnalyzeDataSourceRiskDetails_LDiversityResult) String() string {
 }
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 3}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 3}
 }
 func (m *AnalyzeDataSourceRiskDetails_LDiversityResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_LDiversityResult.Unmarshal(m, b)
@@ -4536,7 +5589,7 @@ func (m *AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityEquivalenceClas
 }
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityEquivalenceClass) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityEquivalenceClass) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 3, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 3, 0}
 }
 func (m *AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityEquivalenceClass) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityEquivalenceClass.Unmarshal(m, b)
@@ -4611,7 +5664,7 @@ func (m *AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityHistogramBucket
 }
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityHistogramBucket) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityHistogramBucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 3, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 3, 1}
 }
 func (m *AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityHistogramBucket) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_LDiversityResult_LDiversityHistogramBucket.Unmarshal(m, b)
@@ -4691,7 +5744,7 @@ func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult) String() string {
 }
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 4}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 4}
 }
 func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KMapEstimationResult.Unmarshal(m, b)
@@ -4737,7 +5790,7 @@ func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiId
 }
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiIdValues) ProtoMessage() {}
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiIdValues) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 4, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 4, 0}
 }
 func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiIdValues) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiIdValues.Unmarshal(m, b)
@@ -4805,7 +5858,7 @@ func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogr
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogramBucket) ProtoMessage() {
 }
 func (*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogramBucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{31, 4, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 4, 1}
 }
 func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogramBucket) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogramBucket.Unmarshal(m, b)
@@ -4860,6 +5913,209 @@ func (m *AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogr
 	return 0
 }
 
+// Result of the δ-presence computation. Note that these results are an
+// estimation, not exact values.
+type AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult struct {
+	// The intervals [min_probability, max_probability) do not overlap. If a
+	// value doesn't correspond to any such interval, the associated frequency
+	// is zero. For example, the following records:
+	//   {min_probability: 0, max_probability: 0.1, frequency: 17}
+	//   {min_probability: 0.2, max_probability: 0.3, frequency: 42}
+	//   {min_probability: 0.3, max_probability: 0.4, frequency: 99}
+	// mean that there are no record with an estimated probability in [0.1, 0.2)
+	// nor larger or equal to 0.4.
+	DeltaPresenceEstimationHistogram []*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket `protobuf:"bytes,1,rep,name=delta_presence_estimation_histogram,json=deltaPresenceEstimationHistogram,proto3" json:"delta_presence_estimation_histogram,omitempty"`
+	XXX_NoUnkeyedLiteral             struct{}                                                                                             `json:"-"`
+	XXX_unrecognized                 []byte                                                                                               `json:"-"`
+	XXX_sizecache                    int32                                                                                                `json:"-"`
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) Reset() {
+	*m = AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult{}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) String() string {
+	return proto.CompactTextString(m)
+}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) ProtoMessage() {}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 5}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult.Unmarshal(m, b)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult.Marshal(b, m, deterministic)
+}
+func (dst *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult.Merge(dst, src)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) XXX_Size() int {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult.Size(m)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult proto.InternalMessageInfo
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult) GetDeltaPresenceEstimationHistogram() []*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket {
+	if m != nil {
+		return m.DeltaPresenceEstimationHistogram
+	}
+	return nil
+}
+
+// A tuple of values for the quasi-identifier columns.
+type AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues struct {
+	// The quasi-identifier values.
+	QuasiIdsValues []*Value `protobuf:"bytes,1,rep,name=quasi_ids_values,json=quasiIdsValues,proto3" json:"quasi_ids_values,omitempty"`
+	// The estimated probability that a given individual sharing these
+	// quasi-identifier values is in the dataset. This value, typically called
+	// δ, is the ratio between the number of records in the dataset with these
+	// quasi-identifier values, and the total number of individuals (inside
+	// *and* outside the dataset) with these quasi-identifier values.
+	// For example, if there are 15 individuals in the dataset who share the
+	// same quasi-identifier values, and an estimated 100 people in the entire
+	// population with these values, then δ is 0.15.
+	EstimatedProbability float64  `protobuf:"fixed64,2,opt,name=estimated_probability,json=estimatedProbability,proto3" json:"estimated_probability,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) Reset() {
+	*m = AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues{}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) String() string {
+	return proto.CompactTextString(m)
+}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) ProtoMessage() {
+}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 5, 0}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues.Unmarshal(m, b)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues.Marshal(b, m, deterministic)
+}
+func (dst *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues.Merge(dst, src)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) XXX_Size() int {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues.Size(m)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues proto.InternalMessageInfo
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) GetQuasiIdsValues() []*Value {
+	if m != nil {
+		return m.QuasiIdsValues
+	}
+	return nil
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues) GetEstimatedProbability() float64 {
+	if m != nil {
+		return m.EstimatedProbability
+	}
+	return 0
+}
+
+// A DeltaPresenceEstimationHistogramBucket message with the following
+// values:
+//   min_probability: 0.1
+//   max_probability: 0.2
+//   frequency: 42
+// means that there are 42 records for which δ is in [0.1, 0.2). An
+// important particular case is when min_probability = max_probability = 1:
+// then, every individual who shares this quasi-identifier combination is in
+// the dataset.
+type AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket struct {
+	// Between 0 and 1.
+	MinProbability float64 `protobuf:"fixed64,1,opt,name=min_probability,json=minProbability,proto3" json:"min_probability,omitempty"`
+	// Always greater than or equal to min_probability.
+	MaxProbability float64 `protobuf:"fixed64,2,opt,name=max_probability,json=maxProbability,proto3" json:"max_probability,omitempty"`
+	// Number of records within these probability bounds.
+	BucketSize int64 `protobuf:"varint,5,opt,name=bucket_size,json=bucketSize,proto3" json:"bucket_size,omitempty"`
+	// Sample of quasi-identifier tuple values in this bucket. The total
+	// number of classes returned per bucket is capped at 20.
+	BucketValues []*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues `protobuf:"bytes,6,rep,name=bucket_values,json=bucketValues,proto3" json:"bucket_values,omitempty"`
+	// Total number of distinct quasi-identifier tuple values in this bucket.
+	BucketValueCount     int64    `protobuf:"varint,7,opt,name=bucket_value_count,json=bucketValueCount,proto3" json:"bucket_value_count,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) Reset() {
+	*m = AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket{}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) String() string {
+	return proto.CompactTextString(m)
+}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) ProtoMessage() {
+}
+func (*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{37, 5, 1}
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket.Unmarshal(m, b)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket.Marshal(b, m, deterministic)
+}
+func (dst *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket.Merge(dst, src)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) XXX_Size() int {
+	return xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket.Size(m)
+}
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket proto.InternalMessageInfo
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) GetMinProbability() float64 {
+	if m != nil {
+		return m.MinProbability
+	}
+	return 0
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) GetMaxProbability() float64 {
+	if m != nil {
+		return m.MaxProbability
+	}
+	return 0
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) GetBucketSize() int64 {
+	if m != nil {
+		return m.BucketSize
+	}
+	return 0
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) GetBucketValues() []*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues {
+	if m != nil {
+		return m.BucketValues
+	}
+	return nil
+}
+
+func (m *AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket) GetBucketValueCount() int64 {
+	if m != nil {
+		return m.BucketValueCount
+	}
+	return 0
+}
+
 // A value of a field, including its frequency.
 type ValueFrequency struct {
 	// A value contained in the field in question.
@@ -4875,7 +6131,7 @@ func (m *ValueFrequency) Reset()         { *m = ValueFrequency{} }
 func (m *ValueFrequency) String() string { return proto.CompactTextString(m) }
 func (*ValueFrequency) ProtoMessage()    {}
 func (*ValueFrequency) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{32}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{38}
 }
 func (m *ValueFrequency) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ValueFrequency.Unmarshal(m, b)
@@ -4935,7 +6191,7 @@ func (m *Value) Reset()         { *m = Value{} }
 func (m *Value) String() string { return proto.CompactTextString(m) }
 func (*Value) ProtoMessage()    {}
 func (*Value) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{33}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{39}
 }
 func (m *Value) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Value.Unmarshal(m, b)
@@ -4962,35 +6218,49 @@ type isValue_Type interface {
 type Value_IntegerValue struct {
 	IntegerValue int64 `protobuf:"varint,1,opt,name=integer_value,json=integerValue,proto3,oneof"`
 }
+
 type Value_FloatValue struct {
 	FloatValue float64 `protobuf:"fixed64,2,opt,name=float_value,json=floatValue,proto3,oneof"`
 }
+
 type Value_StringValue struct {
 	StringValue string `protobuf:"bytes,3,opt,name=string_value,json=stringValue,proto3,oneof"`
 }
+
 type Value_BooleanValue struct {
 	BooleanValue bool `protobuf:"varint,4,opt,name=boolean_value,json=booleanValue,proto3,oneof"`
 }
+
 type Value_TimestampValue struct {
 	TimestampValue *timestamp.Timestamp `protobuf:"bytes,5,opt,name=timestamp_value,json=timestampValue,proto3,oneof"`
 }
+
 type Value_TimeValue struct {
 	TimeValue *timeofday.TimeOfDay `protobuf:"bytes,6,opt,name=time_value,json=timeValue,proto3,oneof"`
 }
+
 type Value_DateValue struct {
 	DateValue *date.Date `protobuf:"bytes,7,opt,name=date_value,json=dateValue,proto3,oneof"`
 }
+
 type Value_DayOfWeekValue struct {
 	DayOfWeekValue dayofweek.DayOfWeek `protobuf:"varint,8,opt,name=day_of_week_value,json=dayOfWeekValue,proto3,enum=google.type.DayOfWeek,oneof"`
 }
 
-func (*Value_IntegerValue) isValue_Type()   {}
-func (*Value_FloatValue) isValue_Type()     {}
-func (*Value_StringValue) isValue_Type()    {}
-func (*Value_BooleanValue) isValue_Type()   {}
+func (*Value_IntegerValue) isValue_Type() {}
+
+func (*Value_FloatValue) isValue_Type() {}
+
+func (*Value_StringValue) isValue_Type() {}
+
+func (*Value_BooleanValue) isValue_Type() {}
+
 func (*Value_TimestampValue) isValue_Type() {}
-func (*Value_TimeValue) isValue_Type()      {}
-func (*Value_DateValue) isValue_Type()      {}
+
+func (*Value_TimeValue) isValue_Type() {}
+
+func (*Value_DateValue) isValue_Type() {}
+
 func (*Value_DayOfWeekValue) isValue_Type() {}
 
 func (m *Value) GetType() isValue_Type {
@@ -5240,7 +6510,7 @@ func (m *QuoteInfo) Reset()         { *m = QuoteInfo{} }
 func (m *QuoteInfo) String() string { return proto.CompactTextString(m) }
 func (*QuoteInfo) ProtoMessage()    {}
 func (*QuoteInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{34}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{40}
 }
 func (m *QuoteInfo) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QuoteInfo.Unmarshal(m, b)
@@ -5340,6 +6610,7 @@ func _QuoteInfo_OneofSizer(msg proto.Message) (n int) {
 }
 
 // Message for a date time object.
+// e.g. 2018-01-01, 5th August.
 type DateTime struct {
 	// One or more of the following must be set. All fields are optional, but
 	// when set must be valid date or time values.
@@ -5356,7 +6627,7 @@ func (m *DateTime) Reset()         { *m = DateTime{} }
 func (m *DateTime) String() string { return proto.CompactTextString(m) }
 func (*DateTime) ProtoMessage()    {}
 func (*DateTime) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{35}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{41}
 }
 func (m *DateTime) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DateTime.Unmarshal(m, b)
@@ -5417,7 +6688,7 @@ func (m *DateTime_TimeZone) Reset()         { *m = DateTime_TimeZone{} }
 func (m *DateTime_TimeZone) String() string { return proto.CompactTextString(m) }
 func (*DateTime_TimeZone) ProtoMessage()    {}
 func (*DateTime_TimeZone) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{35, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{41, 0}
 }
 func (m *DateTime_TimeZone) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DateTime_TimeZone.Unmarshal(m, b)
@@ -5459,7 +6730,7 @@ func (m *DeidentifyConfig) Reset()         { *m = DeidentifyConfig{} }
 func (m *DeidentifyConfig) String() string { return proto.CompactTextString(m) }
 func (*DeidentifyConfig) ProtoMessage()    {}
 func (*DeidentifyConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{36}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{42}
 }
 func (m *DeidentifyConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeidentifyConfig.Unmarshal(m, b)
@@ -5486,12 +6757,14 @@ type isDeidentifyConfig_Transformation interface {
 type DeidentifyConfig_InfoTypeTransformations struct {
 	InfoTypeTransformations *InfoTypeTransformations `protobuf:"bytes,1,opt,name=info_type_transformations,json=infoTypeTransformations,proto3,oneof"`
 }
+
 type DeidentifyConfig_RecordTransformations struct {
 	RecordTransformations *RecordTransformations `protobuf:"bytes,2,opt,name=record_transformations,json=recordTransformations,proto3,oneof"`
 }
 
 func (*DeidentifyConfig_InfoTypeTransformations) isDeidentifyConfig_Transformation() {}
-func (*DeidentifyConfig_RecordTransformations) isDeidentifyConfig_Transformation()   {}
+
+func (*DeidentifyConfig_RecordTransformations) isDeidentifyConfig_Transformation() {}
 
 func (m *DeidentifyConfig) GetTransformation() isDeidentifyConfig_Transformation {
 	if m != nil {
@@ -5611,7 +6884,7 @@ func (m *PrimitiveTransformation) Reset()         { *m = PrimitiveTransformation
 func (m *PrimitiveTransformation) String() string { return proto.CompactTextString(m) }
 func (*PrimitiveTransformation) ProtoMessage()    {}
 func (*PrimitiveTransformation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{37}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{43}
 }
 func (m *PrimitiveTransformation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PrimitiveTransformation.Unmarshal(m, b)
@@ -5638,44 +6911,62 @@ type isPrimitiveTransformation_Transformation interface {
 type PrimitiveTransformation_ReplaceConfig struct {
 	ReplaceConfig *ReplaceValueConfig `protobuf:"bytes,1,opt,name=replace_config,json=replaceConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_RedactConfig struct {
 	RedactConfig *RedactConfig `protobuf:"bytes,2,opt,name=redact_config,json=redactConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_CharacterMaskConfig struct {
 	CharacterMaskConfig *CharacterMaskConfig `protobuf:"bytes,3,opt,name=character_mask_config,json=characterMaskConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_CryptoReplaceFfxFpeConfig struct {
 	CryptoReplaceFfxFpeConfig *CryptoReplaceFfxFpeConfig `protobuf:"bytes,4,opt,name=crypto_replace_ffx_fpe_config,json=cryptoReplaceFfxFpeConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_FixedSizeBucketingConfig struct {
 	FixedSizeBucketingConfig *FixedSizeBucketingConfig `protobuf:"bytes,5,opt,name=fixed_size_bucketing_config,json=fixedSizeBucketingConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_BucketingConfig struct {
 	BucketingConfig *BucketingConfig `protobuf:"bytes,6,opt,name=bucketing_config,json=bucketingConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_ReplaceWithInfoTypeConfig struct {
 	ReplaceWithInfoTypeConfig *ReplaceWithInfoTypeConfig `protobuf:"bytes,7,opt,name=replace_with_info_type_config,json=replaceWithInfoTypeConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_TimePartConfig struct {
 	TimePartConfig *TimePartConfig `protobuf:"bytes,8,opt,name=time_part_config,json=timePartConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_CryptoHashConfig struct {
 	CryptoHashConfig *CryptoHashConfig `protobuf:"bytes,9,opt,name=crypto_hash_config,json=cryptoHashConfig,proto3,oneof"`
 }
+
 type PrimitiveTransformation_DateShiftConfig struct {
 	DateShiftConfig *DateShiftConfig `protobuf:"bytes,11,opt,name=date_shift_config,json=dateShiftConfig,proto3,oneof"`
 }
 
-func (*PrimitiveTransformation_ReplaceConfig) isPrimitiveTransformation_Transformation()             {}
-func (*PrimitiveTransformation_RedactConfig) isPrimitiveTransformation_Transformation()              {}
-func (*PrimitiveTransformation_CharacterMaskConfig) isPrimitiveTransformation_Transformation()       {}
+func (*PrimitiveTransformation_ReplaceConfig) isPrimitiveTransformation_Transformation() {}
+
+func (*PrimitiveTransformation_RedactConfig) isPrimitiveTransformation_Transformation() {}
+
+func (*PrimitiveTransformation_CharacterMaskConfig) isPrimitiveTransformation_Transformation() {}
+
 func (*PrimitiveTransformation_CryptoReplaceFfxFpeConfig) isPrimitiveTransformation_Transformation() {}
-func (*PrimitiveTransformation_FixedSizeBucketingConfig) isPrimitiveTransformation_Transformation()  {}
-func (*PrimitiveTransformation_BucketingConfig) isPrimitiveTransformation_Transformation()           {}
+
+func (*PrimitiveTransformation_FixedSizeBucketingConfig) isPrimitiveTransformation_Transformation() {}
+
+func (*PrimitiveTransformation_BucketingConfig) isPrimitiveTransformation_Transformation() {}
+
 func (*PrimitiveTransformation_ReplaceWithInfoTypeConfig) isPrimitiveTransformation_Transformation() {}
-func (*PrimitiveTransformation_TimePartConfig) isPrimitiveTransformation_Transformation()            {}
-func (*PrimitiveTransformation_CryptoHashConfig) isPrimitiveTransformation_Transformation()          {}
-func (*PrimitiveTransformation_DateShiftConfig) isPrimitiveTransformation_Transformation()           {}
+
+func (*PrimitiveTransformation_TimePartConfig) isPrimitiveTransformation_Transformation() {}
+
+func (*PrimitiveTransformation_CryptoHashConfig) isPrimitiveTransformation_Transformation() {}
+
+func (*PrimitiveTransformation_DateShiftConfig) isPrimitiveTransformation_Transformation() {}
 
 func (m *PrimitiveTransformation) GetTransformation() isPrimitiveTransformation_Transformation {
 	if m != nil {
@@ -5993,7 +7284,7 @@ func (m *TimePartConfig) Reset()         { *m = TimePartConfig{} }
 func (m *TimePartConfig) String() string { return proto.CompactTextString(m) }
 func (*TimePartConfig) ProtoMessage()    {}
 func (*TimePartConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{38}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{44}
 }
 func (m *TimePartConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TimePartConfig.Unmarshal(m, b)
@@ -6023,9 +7314,10 @@ func (m *TimePartConfig) GetPartToExtract() TimePartConfig_TimePart {
 // Pseudonymization method that generates surrogates via cryptographic hashing.
 // Uses SHA-256.
 // The key size must be either 32 or 64 bytes.
-// Outputs a 32 byte digest as an uppercase hex string
-// (for example, 41D1567F7F99F1DC2A5FAB886DEE5BEE).
+// Outputs a base64 encoded representation of the hashed output
+// (for example, L7k0BHmF1ha5U3NfGykjro4xWi1MPVQPjhMAZbSV9mM=).
 // Currently, only string and integer values can be hashed.
+// See https://cloud.google.com/dlp/docs/pseudonymization to learn more.
 type CryptoHashConfig struct {
 	// The key used by the hash function.
 	CryptoKey            *CryptoKey `protobuf:"bytes,1,opt,name=crypto_key,json=cryptoKey,proto3" json:"crypto_key,omitempty"`
@@ -6038,7 +7330,7 @@ func (m *CryptoHashConfig) Reset()         { *m = CryptoHashConfig{} }
 func (m *CryptoHashConfig) String() string { return proto.CompactTextString(m) }
 func (*CryptoHashConfig) ProtoMessage()    {}
 func (*CryptoHashConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{39}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{45}
 }
 func (m *CryptoHashConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoHashConfig.Unmarshal(m, b)
@@ -6078,7 +7370,7 @@ func (m *ReplaceValueConfig) Reset()         { *m = ReplaceValueConfig{} }
 func (m *ReplaceValueConfig) String() string { return proto.CompactTextString(m) }
 func (*ReplaceValueConfig) ProtoMessage()    {}
 func (*ReplaceValueConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{40}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{46}
 }
 func (m *ReplaceValueConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReplaceValueConfig.Unmarshal(m, b)
@@ -6116,7 +7408,7 @@ func (m *ReplaceWithInfoTypeConfig) Reset()         { *m = ReplaceWithInfoTypeCo
 func (m *ReplaceWithInfoTypeConfig) String() string { return proto.CompactTextString(m) }
 func (*ReplaceWithInfoTypeConfig) ProtoMessage()    {}
 func (*ReplaceWithInfoTypeConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{41}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{47}
 }
 func (m *ReplaceWithInfoTypeConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ReplaceWithInfoTypeConfig.Unmarshal(m, b)
@@ -6149,7 +7441,7 @@ func (m *RedactConfig) Reset()         { *m = RedactConfig{} }
 func (m *RedactConfig) String() string { return proto.CompactTextString(m) }
 func (*RedactConfig) ProtoMessage()    {}
 func (*RedactConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{42}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{48}
 }
 func (m *RedactConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RedactConfig.Unmarshal(m, b)
@@ -6185,7 +7477,7 @@ func (m *CharsToIgnore) Reset()         { *m = CharsToIgnore{} }
 func (m *CharsToIgnore) String() string { return proto.CompactTextString(m) }
 func (*CharsToIgnore) ProtoMessage()    {}
 func (*CharsToIgnore) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{43}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{49}
 }
 func (m *CharsToIgnore) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CharsToIgnore.Unmarshal(m, b)
@@ -6212,11 +7504,13 @@ type isCharsToIgnore_Characters interface {
 type CharsToIgnore_CharactersToSkip struct {
 	CharactersToSkip string `protobuf:"bytes,1,opt,name=characters_to_skip,json=charactersToSkip,proto3,oneof"`
 }
+
 type CharsToIgnore_CommonCharactersToIgnore struct {
 	CommonCharactersToIgnore CharsToIgnore_CommonCharsToIgnore `protobuf:"varint,2,opt,name=common_characters_to_ignore,json=commonCharactersToIgnore,proto3,enum=google.privacy.dlp.v2.CharsToIgnore_CommonCharsToIgnore,oneof"`
 }
 
-func (*CharsToIgnore_CharactersToSkip) isCharsToIgnore_Characters()         {}
+func (*CharsToIgnore_CharactersToSkip) isCharsToIgnore_Characters() {}
+
 func (*CharsToIgnore_CommonCharactersToIgnore) isCharsToIgnore_Characters() {}
 
 func (m *CharsToIgnore) GetCharacters() isCharsToIgnore_Characters {
@@ -6339,7 +7633,7 @@ func (m *CharacterMaskConfig) Reset()         { *m = CharacterMaskConfig{} }
 func (m *CharacterMaskConfig) String() string { return proto.CompactTextString(m) }
 func (*CharacterMaskConfig) ProtoMessage()    {}
 func (*CharacterMaskConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{44}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{50}
 }
 func (m *CharacterMaskConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CharacterMaskConfig.Unmarshal(m, b)
@@ -6401,6 +7695,8 @@ func (m *CharacterMaskConfig) GetCharactersToIgnore() []*CharsToIgnore {
 // If the bound Value type differs from the type of data
 // being transformed, we will first attempt converting the type of the data to
 // be transformed to match the type of the bound before comparing.
+//
+// See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
 type FixedSizeBucketingConfig struct {
 	// Lower bound value of buckets. All values less than `lower_bound` are
 	// grouped together into a single bucket; for example if `lower_bound` = 10,
@@ -6425,7 +7721,7 @@ func (m *FixedSizeBucketingConfig) Reset()         { *m = FixedSizeBucketingConf
 func (m *FixedSizeBucketingConfig) String() string { return proto.CompactTextString(m) }
 func (*FixedSizeBucketingConfig) ProtoMessage()    {}
 func (*FixedSizeBucketingConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{45}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{51}
 }
 func (m *FixedSizeBucketingConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FixedSizeBucketingConfig.Unmarshal(m, b)
@@ -6474,6 +7770,7 @@ func (m *FixedSizeBucketingConfig) GetBucketSize() float64 {
 // If the bound `Value` type differs from the type of data being transformed, we
 // will first attempt converting the type of the data to be transformed to match
 // the type of the bound before comparing.
+// See https://cloud.google.com/dlp/docs/concepts-bucketing to learn more.
 type BucketingConfig struct {
 	// Set of buckets. Ranges must be non-overlapping.
 	Buckets              []*BucketingConfig_Bucket `protobuf:"bytes,1,rep,name=buckets,proto3" json:"buckets,omitempty"`
@@ -6486,7 +7783,7 @@ func (m *BucketingConfig) Reset()         { *m = BucketingConfig{} }
 func (m *BucketingConfig) String() string { return proto.CompactTextString(m) }
 func (*BucketingConfig) ProtoMessage()    {}
 func (*BucketingConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{46}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{52}
 }
 func (m *BucketingConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BucketingConfig.Unmarshal(m, b)
@@ -6532,7 +7829,7 @@ func (m *BucketingConfig_Bucket) Reset()         { *m = BucketingConfig_Bucket{}
 func (m *BucketingConfig_Bucket) String() string { return proto.CompactTextString(m) }
 func (*BucketingConfig_Bucket) ProtoMessage()    {}
 func (*BucketingConfig_Bucket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{46, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{52, 0}
 }
 func (m *BucketingConfig_Bucket) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_BucketingConfig_Bucket.Unmarshal(m, b)
@@ -6582,7 +7879,7 @@ func (m *BucketingConfig_Bucket) GetReplacementValue() *Value {
 // replaced with the same surrogate.
 // Identifiers must be at least two characters long.
 // In the case that the identifier is the empty string, it will be skipped.
-// See [Pseudonymization](/dlp/docs/pseudonymization) for example usage.
+// See https://cloud.google.com/dlp/docs/pseudonymization to learn more.
 type CryptoReplaceFfxFpeConfig struct {
 	// The key used by the encryption algorithm. [required]
 	CryptoKey *CryptoKey `protobuf:"bytes,1,opt,name=crypto_key,json=cryptoKey,proto3" json:"crypto_key,omitempty"`
@@ -6647,7 +7944,7 @@ func (m *CryptoReplaceFfxFpeConfig) Reset()         { *m = CryptoReplaceFfxFpeCo
 func (m *CryptoReplaceFfxFpeConfig) String() string { return proto.CompactTextString(m) }
 func (*CryptoReplaceFfxFpeConfig) ProtoMessage()    {}
 func (*CryptoReplaceFfxFpeConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{47}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{53}
 }
 func (m *CryptoReplaceFfxFpeConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoReplaceFfxFpeConfig.Unmarshal(m, b)
@@ -6667,31 +7964,6 @@ func (m *CryptoReplaceFfxFpeConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CryptoReplaceFfxFpeConfig proto.InternalMessageInfo
 
-type isCryptoReplaceFfxFpeConfig_Alphabet interface {
-	isCryptoReplaceFfxFpeConfig_Alphabet()
-}
-
-type CryptoReplaceFfxFpeConfig_CommonAlphabet struct {
-	CommonAlphabet CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet `protobuf:"varint,4,opt,name=common_alphabet,json=commonAlphabet,proto3,enum=google.privacy.dlp.v2.CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet,oneof"`
-}
-type CryptoReplaceFfxFpeConfig_CustomAlphabet struct {
-	CustomAlphabet string `protobuf:"bytes,5,opt,name=custom_alphabet,json=customAlphabet,proto3,oneof"`
-}
-type CryptoReplaceFfxFpeConfig_Radix struct {
-	Radix int32 `protobuf:"varint,6,opt,name=radix,proto3,oneof"`
-}
-
-func (*CryptoReplaceFfxFpeConfig_CommonAlphabet) isCryptoReplaceFfxFpeConfig_Alphabet() {}
-func (*CryptoReplaceFfxFpeConfig_CustomAlphabet) isCryptoReplaceFfxFpeConfig_Alphabet() {}
-func (*CryptoReplaceFfxFpeConfig_Radix) isCryptoReplaceFfxFpeConfig_Alphabet()          {}
-
-func (m *CryptoReplaceFfxFpeConfig) GetAlphabet() isCryptoReplaceFfxFpeConfig_Alphabet {
-	if m != nil {
-		return m.Alphabet
-	}
-	return nil
-}
-
 func (m *CryptoReplaceFfxFpeConfig) GetCryptoKey() *CryptoKey {
 	if m != nil {
 		return m.CryptoKey
@@ -6702,6 +7974,35 @@ func (m *CryptoReplaceFfxFpeConfig) GetCryptoKey() *CryptoKey {
 func (m *CryptoReplaceFfxFpeConfig) GetContext() *FieldId {
 	if m != nil {
 		return m.Context
+	}
+	return nil
+}
+
+type isCryptoReplaceFfxFpeConfig_Alphabet interface {
+	isCryptoReplaceFfxFpeConfig_Alphabet()
+}
+
+type CryptoReplaceFfxFpeConfig_CommonAlphabet struct {
+	CommonAlphabet CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet `protobuf:"varint,4,opt,name=common_alphabet,json=commonAlphabet,proto3,enum=google.privacy.dlp.v2.CryptoReplaceFfxFpeConfig_FfxCommonNativeAlphabet,oneof"`
+}
+
+type CryptoReplaceFfxFpeConfig_CustomAlphabet struct {
+	CustomAlphabet string `protobuf:"bytes,5,opt,name=custom_alphabet,json=customAlphabet,proto3,oneof"`
+}
+
+type CryptoReplaceFfxFpeConfig_Radix struct {
+	Radix int32 `protobuf:"varint,6,opt,name=radix,proto3,oneof"`
+}
+
+func (*CryptoReplaceFfxFpeConfig_CommonAlphabet) isCryptoReplaceFfxFpeConfig_Alphabet() {}
+
+func (*CryptoReplaceFfxFpeConfig_CustomAlphabet) isCryptoReplaceFfxFpeConfig_Alphabet() {}
+
+func (*CryptoReplaceFfxFpeConfig_Radix) isCryptoReplaceFfxFpeConfig_Alphabet() {}
+
+func (m *CryptoReplaceFfxFpeConfig) GetAlphabet() isCryptoReplaceFfxFpeConfig_Alphabet {
+	if m != nil {
+		return m.Alphabet
 	}
 	return nil
 }
@@ -6833,7 +8134,7 @@ func (m *CryptoKey) Reset()         { *m = CryptoKey{} }
 func (m *CryptoKey) String() string { return proto.CompactTextString(m) }
 func (*CryptoKey) ProtoMessage()    {}
 func (*CryptoKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{48}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{54}
 }
 func (m *CryptoKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CryptoKey.Unmarshal(m, b)
@@ -6860,15 +8161,19 @@ type isCryptoKey_Source interface {
 type CryptoKey_Transient struct {
 	Transient *TransientCryptoKey `protobuf:"bytes,1,opt,name=transient,proto3,oneof"`
 }
+
 type CryptoKey_Unwrapped struct {
 	Unwrapped *UnwrappedCryptoKey `protobuf:"bytes,2,opt,name=unwrapped,proto3,oneof"`
 }
+
 type CryptoKey_KmsWrapped struct {
 	KmsWrapped *KmsWrappedCryptoKey `protobuf:"bytes,3,opt,name=kms_wrapped,json=kmsWrapped,proto3,oneof"`
 }
 
-func (*CryptoKey_Transient) isCryptoKey_Source()  {}
-func (*CryptoKey_Unwrapped) isCryptoKey_Source()  {}
+func (*CryptoKey_Transient) isCryptoKey_Source() {}
+
+func (*CryptoKey_Unwrapped) isCryptoKey_Source() {}
+
 func (*CryptoKey_KmsWrapped) isCryptoKey_Source() {}
 
 func (m *CryptoKey) GetSource() isCryptoKey_Source {
@@ -7011,7 +8316,7 @@ func (m *TransientCryptoKey) Reset()         { *m = TransientCryptoKey{} }
 func (m *TransientCryptoKey) String() string { return proto.CompactTextString(m) }
 func (*TransientCryptoKey) ProtoMessage()    {}
 func (*TransientCryptoKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{49}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{55}
 }
 func (m *TransientCryptoKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransientCryptoKey.Unmarshal(m, b)
@@ -7052,7 +8357,7 @@ func (m *UnwrappedCryptoKey) Reset()         { *m = UnwrappedCryptoKey{} }
 func (m *UnwrappedCryptoKey) String() string { return proto.CompactTextString(m) }
 func (*UnwrappedCryptoKey) ProtoMessage()    {}
 func (*UnwrappedCryptoKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{50}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{56}
 }
 func (m *UnwrappedCryptoKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UnwrappedCryptoKey.Unmarshal(m, b)
@@ -7097,7 +8402,7 @@ func (m *KmsWrappedCryptoKey) Reset()         { *m = KmsWrappedCryptoKey{} }
 func (m *KmsWrappedCryptoKey) String() string { return proto.CompactTextString(m) }
 func (*KmsWrappedCryptoKey) ProtoMessage()    {}
 func (*KmsWrappedCryptoKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{51}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{57}
 }
 func (m *KmsWrappedCryptoKey) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KmsWrappedCryptoKey.Unmarshal(m, b)
@@ -7132,7 +8437,8 @@ func (m *KmsWrappedCryptoKey) GetCryptoKeyName() string {
 }
 
 // Shifts dates by random number of days, with option to be consistent for the
-// same context.
+// same context. See https://cloud.google.com/dlp/docs/concepts-date-shifting
+// to learn more.
 type DateShiftConfig struct {
 	// Range of shift in days. Actual shift will be selected at random within this
 	// range (inclusive ends). Negative means shift to earlier in time. Must not
@@ -7163,7 +8469,7 @@ func (m *DateShiftConfig) Reset()         { *m = DateShiftConfig{} }
 func (m *DateShiftConfig) String() string { return proto.CompactTextString(m) }
 func (*DateShiftConfig) ProtoMessage()    {}
 func (*DateShiftConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{52}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{58}
 }
 func (m *DateShiftConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DateShiftConfig.Unmarshal(m, b)
@@ -7183,23 +8489,6 @@ func (m *DateShiftConfig) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DateShiftConfig proto.InternalMessageInfo
 
-type isDateShiftConfig_Method interface {
-	isDateShiftConfig_Method()
-}
-
-type DateShiftConfig_CryptoKey struct {
-	CryptoKey *CryptoKey `protobuf:"bytes,4,opt,name=crypto_key,json=cryptoKey,proto3,oneof"`
-}
-
-func (*DateShiftConfig_CryptoKey) isDateShiftConfig_Method() {}
-
-func (m *DateShiftConfig) GetMethod() isDateShiftConfig_Method {
-	if m != nil {
-		return m.Method
-	}
-	return nil
-}
-
 func (m *DateShiftConfig) GetUpperBoundDays() int32 {
 	if m != nil {
 		return m.UpperBoundDays
@@ -7217,6 +8506,23 @@ func (m *DateShiftConfig) GetLowerBoundDays() int32 {
 func (m *DateShiftConfig) GetContext() *FieldId {
 	if m != nil {
 		return m.Context
+	}
+	return nil
+}
+
+type isDateShiftConfig_Method interface {
+	isDateShiftConfig_Method()
+}
+
+type DateShiftConfig_CryptoKey struct {
+	CryptoKey *CryptoKey `protobuf:"bytes,4,opt,name=crypto_key,json=cryptoKey,proto3,oneof"`
+}
+
+func (*DateShiftConfig_CryptoKey) isDateShiftConfig_Method() {}
+
+func (m *DateShiftConfig) GetMethod() isDateShiftConfig_Method {
+	if m != nil {
+		return m.Method
 	}
 	return nil
 }
@@ -7300,7 +8606,7 @@ func (m *InfoTypeTransformations) Reset()         { *m = InfoTypeTransformations
 func (m *InfoTypeTransformations) String() string { return proto.CompactTextString(m) }
 func (*InfoTypeTransformations) ProtoMessage()    {}
 func (*InfoTypeTransformations) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{53}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{59}
 }
 func (m *InfoTypeTransformations) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InfoTypeTransformations.Unmarshal(m, b)
@@ -7330,8 +8636,9 @@ func (m *InfoTypeTransformations) GetTransformations() []*InfoTypeTransformation
 // A transformation to apply to text that is identified as a specific
 // info_type.
 type InfoTypeTransformations_InfoTypeTransformation struct {
-	// InfoTypes to apply the transformation to. Empty list will match all
-	// available infoTypes for this transformation.
+	// InfoTypes to apply the transformation to. An empty list will cause
+	// this transformation to apply to all findings that correspond to
+	// infoTypes that were requested in `InspectConfig`.
 	InfoTypes []*InfoType `protobuf:"bytes,1,rep,name=info_types,json=infoTypes,proto3" json:"info_types,omitempty"`
 	// Primitive transformation to apply to the infoType. [required]
 	PrimitiveTransformation *PrimitiveTransformation `protobuf:"bytes,2,opt,name=primitive_transformation,json=primitiveTransformation,proto3" json:"primitive_transformation,omitempty"`
@@ -7348,7 +8655,7 @@ func (m *InfoTypeTransformations_InfoTypeTransformation) String() string {
 }
 func (*InfoTypeTransformations_InfoTypeTransformation) ProtoMessage() {}
 func (*InfoTypeTransformations_InfoTypeTransformation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{53, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{59, 0}
 }
 func (m *InfoTypeTransformations_InfoTypeTransformation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InfoTypeTransformations_InfoTypeTransformation.Unmarshal(m, b)
@@ -7411,7 +8718,7 @@ func (m *FieldTransformation) Reset()         { *m = FieldTransformation{} }
 func (m *FieldTransformation) String() string { return proto.CompactTextString(m) }
 func (*FieldTransformation) ProtoMessage()    {}
 func (*FieldTransformation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{54}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{60}
 }
 func (m *FieldTransformation) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_FieldTransformation.Unmarshal(m, b)
@@ -7431,27 +8738,6 @@ func (m *FieldTransformation) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_FieldTransformation proto.InternalMessageInfo
 
-type isFieldTransformation_Transformation interface {
-	isFieldTransformation_Transformation()
-}
-
-type FieldTransformation_PrimitiveTransformation struct {
-	PrimitiveTransformation *PrimitiveTransformation `protobuf:"bytes,4,opt,name=primitive_transformation,json=primitiveTransformation,proto3,oneof"`
-}
-type FieldTransformation_InfoTypeTransformations struct {
-	InfoTypeTransformations *InfoTypeTransformations `protobuf:"bytes,5,opt,name=info_type_transformations,json=infoTypeTransformations,proto3,oneof"`
-}
-
-func (*FieldTransformation_PrimitiveTransformation) isFieldTransformation_Transformation() {}
-func (*FieldTransformation_InfoTypeTransformations) isFieldTransformation_Transformation() {}
-
-func (m *FieldTransformation) GetTransformation() isFieldTransformation_Transformation {
-	if m != nil {
-		return m.Transformation
-	}
-	return nil
-}
-
 func (m *FieldTransformation) GetFields() []*FieldId {
 	if m != nil {
 		return m.Fields
@@ -7462,6 +8748,29 @@ func (m *FieldTransformation) GetFields() []*FieldId {
 func (m *FieldTransformation) GetCondition() *RecordCondition {
 	if m != nil {
 		return m.Condition
+	}
+	return nil
+}
+
+type isFieldTransformation_Transformation interface {
+	isFieldTransformation_Transformation()
+}
+
+type FieldTransformation_PrimitiveTransformation struct {
+	PrimitiveTransformation *PrimitiveTransformation `protobuf:"bytes,4,opt,name=primitive_transformation,json=primitiveTransformation,proto3,oneof"`
+}
+
+type FieldTransformation_InfoTypeTransformations struct {
+	InfoTypeTransformations *InfoTypeTransformations `protobuf:"bytes,5,opt,name=info_type_transformations,json=infoTypeTransformations,proto3,oneof"`
+}
+
+func (*FieldTransformation_PrimitiveTransformation) isFieldTransformation_Transformation() {}
+
+func (*FieldTransformation_InfoTypeTransformations) isFieldTransformation_Transformation() {}
+
+func (m *FieldTransformation) GetTransformation() isFieldTransformation_Transformation {
+	if m != nil {
+		return m.Transformation
 	}
 	return nil
 }
@@ -7571,7 +8880,7 @@ func (m *RecordTransformations) Reset()         { *m = RecordTransformations{} }
 func (m *RecordTransformations) String() string { return proto.CompactTextString(m) }
 func (*RecordTransformations) ProtoMessage()    {}
 func (*RecordTransformations) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{55}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{61}
 }
 func (m *RecordTransformations) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordTransformations.Unmarshal(m, b)
@@ -7620,7 +8929,7 @@ func (m *RecordSuppression) Reset()         { *m = RecordSuppression{} }
 func (m *RecordSuppression) String() string { return proto.CompactTextString(m) }
 func (*RecordSuppression) ProtoMessage()    {}
 func (*RecordSuppression) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{56}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{62}
 }
 func (m *RecordSuppression) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordSuppression.Unmarshal(m, b)
@@ -7661,7 +8970,7 @@ func (m *RecordCondition) Reset()         { *m = RecordCondition{} }
 func (m *RecordCondition) String() string { return proto.CompactTextString(m) }
 func (*RecordCondition) ProtoMessage()    {}
 func (*RecordCondition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{57}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{63}
 }
 func (m *RecordCondition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordCondition.Unmarshal(m, b)
@@ -7690,7 +8999,8 @@ func (m *RecordCondition) GetExpressions() *RecordCondition_Expressions {
 
 // The field type of `value` and `field` do not need to match to be
 // considered equal, but not all comparisons are possible.
-//
+// EQUAL_TO and NOT_EQUAL_TO attempt to compare even with incompatible types,
+// but all other comparisons are invalid with incompatible types.
 // A `value` of type:
 //
 // - `string` can be compared against all other types
@@ -7722,7 +9032,7 @@ func (m *RecordCondition_Condition) Reset()         { *m = RecordCondition_Condi
 func (m *RecordCondition_Condition) String() string { return proto.CompactTextString(m) }
 func (*RecordCondition_Condition) ProtoMessage()    {}
 func (*RecordCondition_Condition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{57, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{63, 0}
 }
 func (m *RecordCondition_Condition) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordCondition_Condition.Unmarshal(m, b)
@@ -7775,7 +9085,7 @@ func (m *RecordCondition_Conditions) Reset()         { *m = RecordCondition_Cond
 func (m *RecordCondition_Conditions) String() string { return proto.CompactTextString(m) }
 func (*RecordCondition_Conditions) ProtoMessage()    {}
 func (*RecordCondition_Conditions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{57, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{63, 1}
 }
 func (m *RecordCondition_Conditions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordCondition_Conditions.Unmarshal(m, b)
@@ -7819,7 +9129,7 @@ func (m *RecordCondition_Expressions) Reset()         { *m = RecordCondition_Exp
 func (m *RecordCondition_Expressions) String() string { return proto.CompactTextString(m) }
 func (*RecordCondition_Expressions) ProtoMessage()    {}
 func (*RecordCondition_Expressions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{57, 2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{63, 2}
 }
 func (m *RecordCondition_Expressions) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_RecordCondition_Expressions.Unmarshal(m, b)
@@ -7839,6 +9149,13 @@ func (m *RecordCondition_Expressions) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RecordCondition_Expressions proto.InternalMessageInfo
 
+func (m *RecordCondition_Expressions) GetLogicalOperator() RecordCondition_Expressions_LogicalOperator {
+	if m != nil {
+		return m.LogicalOperator
+	}
+	return RecordCondition_Expressions_LOGICAL_OPERATOR_UNSPECIFIED
+}
+
 type isRecordCondition_Expressions_Type interface {
 	isRecordCondition_Expressions_Type()
 }
@@ -7854,13 +9171,6 @@ func (m *RecordCondition_Expressions) GetType() isRecordCondition_Expressions_Ty
 		return m.Type
 	}
 	return nil
-}
-
-func (m *RecordCondition_Expressions) GetLogicalOperator() RecordCondition_Expressions_LogicalOperator {
-	if m != nil {
-		return m.LogicalOperator
-	}
-	return RecordCondition_Expressions_LOGICAL_OPERATOR_UNSPECIFIED
 }
 
 func (m *RecordCondition_Expressions) GetConditions() *RecordCondition_Conditions {
@@ -7940,7 +9250,7 @@ func (m *TransformationOverview) Reset()         { *m = TransformationOverview{}
 func (m *TransformationOverview) String() string { return proto.CompactTextString(m) }
 func (*TransformationOverview) ProtoMessage()    {}
 func (*TransformationOverview) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{58}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{64}
 }
 func (m *TransformationOverview) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransformationOverview.Unmarshal(m, b)
@@ -7978,7 +9288,7 @@ func (m *TransformationOverview) GetTransformationSummaries() []*TransformationS
 // Only one of 'transformation', 'field_transformation', or 'record_suppress'
 // will be set.
 type TransformationSummary struct {
-	// Set if the transformation was limited to a specific info_type.
+	// Set if the transformation was limited to a specific InfoType.
 	InfoType *InfoType `protobuf:"bytes,1,opt,name=info_type,json=infoType,proto3" json:"info_type,omitempty"`
 	// Set if the transformation was limited to a specific FieldId.
 	Field *FieldId `protobuf:"bytes,2,opt,name=field,proto3" json:"field,omitempty"`
@@ -8002,7 +9312,7 @@ func (m *TransformationSummary) Reset()         { *m = TransformationSummary{} }
 func (m *TransformationSummary) String() string { return proto.CompactTextString(m) }
 func (*TransformationSummary) ProtoMessage()    {}
 func (*TransformationSummary) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{59}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{65}
 }
 func (m *TransformationSummary) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransformationSummary.Unmarshal(m, b)
@@ -8088,7 +9398,7 @@ func (m *TransformationSummary_SummaryResult) Reset()         { *m = Transformat
 func (m *TransformationSummary_SummaryResult) String() string { return proto.CompactTextString(m) }
 func (*TransformationSummary_SummaryResult) ProtoMessage()    {}
 func (*TransformationSummary_SummaryResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{59, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{65, 0}
 }
 func (m *TransformationSummary_SummaryResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_TransformationSummary_SummaryResult.Unmarshal(m, b)
@@ -8143,7 +9453,7 @@ func (m *Schedule) Reset()         { *m = Schedule{} }
 func (m *Schedule) String() string { return proto.CompactTextString(m) }
 func (*Schedule) ProtoMessage()    {}
 func (*Schedule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{60}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{66}
 }
 func (m *Schedule) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Schedule.Unmarshal(m, b)
@@ -8244,7 +9554,8 @@ func _Schedule_OneofSizer(msg proto.Message) (n int) {
 
 // The inspectTemplate contains a configuration (set of types of sensitive data
 // to be detected) to be used anywhere you otherwise would normally specify
-// InspectConfig.
+// InspectConfig. See https://cloud.google.com/dlp/docs/concepts-templates
+// to learn more.
 type InspectTemplate struct {
 	// The template name. Output only.
 	//
@@ -8271,7 +9582,7 @@ func (m *InspectTemplate) Reset()         { *m = InspectTemplate{} }
 func (m *InspectTemplate) String() string { return proto.CompactTextString(m) }
 func (*InspectTemplate) ProtoMessage()    {}
 func (*InspectTemplate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{61}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{67}
 }
 func (m *InspectTemplate) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectTemplate.Unmarshal(m, b)
@@ -8334,6 +9645,7 @@ func (m *InspectTemplate) GetInspectConfig() *InspectConfig {
 }
 
 // The DeidentifyTemplates contains instructions on how to deidentify content.
+// See https://cloud.google.com/dlp/docs/concepts-templates to learn more.
 type DeidentifyTemplate struct {
 	// The template name. Output only.
 	//
@@ -8360,7 +9672,7 @@ func (m *DeidentifyTemplate) Reset()         { *m = DeidentifyTemplate{} }
 func (m *DeidentifyTemplate) String() string { return proto.CompactTextString(m) }
 func (*DeidentifyTemplate) ProtoMessage()    {}
 func (*DeidentifyTemplate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{62}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{68}
 }
 func (m *DeidentifyTemplate) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeidentifyTemplate.Unmarshal(m, b)
@@ -8438,7 +9750,7 @@ func (m *Error) Reset()         { *m = Error{} }
 func (m *Error) String() string { return proto.CompactTextString(m) }
 func (*Error) ProtoMessage()    {}
 func (*Error) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{63}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{69}
 }
 func (m *Error) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Error.Unmarshal(m, b)
@@ -8473,6 +9785,7 @@ func (m *Error) GetTimestamps() []*timestamp.Timestamp {
 }
 
 // Contains a configuration to make dlp api calls on a repeating basis.
+// See https://cloud.google.com/dlp/docs/concepts-job-triggers to learn more.
 type JobTrigger struct {
 	// Unique resource name for the triggeredJob, assigned by the service when the
 	// triggeredJob is created, for example
@@ -8492,7 +9805,7 @@ type JobTrigger struct {
 	// a single Schedule trigger and must have at least one object.
 	Triggers []*JobTrigger_Trigger `protobuf:"bytes,5,rep,name=triggers,proto3" json:"triggers,omitempty"`
 	// A stream of errors encountered when the trigger was activated. Repeated
-	// errors may result in the JobTrigger automaticaly being paused.
+	// errors may result in the JobTrigger automatically being paused.
 	// Will return the last 100 errors. Whenever the JobTrigger is modified
 	// this list will be cleared. Output only field.
 	Errors []*Error `protobuf:"bytes,6,rep,name=errors,proto3" json:"errors,omitempty"`
@@ -8513,7 +9826,7 @@ func (m *JobTrigger) Reset()         { *m = JobTrigger{} }
 func (m *JobTrigger) String() string { return proto.CompactTextString(m) }
 func (*JobTrigger) ProtoMessage()    {}
 func (*JobTrigger) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{64}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{70}
 }
 func (m *JobTrigger) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobTrigger.Unmarshal(m, b)
@@ -8532,23 +9845,6 @@ func (m *JobTrigger) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_JobTrigger proto.InternalMessageInfo
-
-type isJobTrigger_Job interface {
-	isJobTrigger_Job()
-}
-
-type JobTrigger_InspectJob struct {
-	InspectJob *InspectJobConfig `protobuf:"bytes,4,opt,name=inspect_job,json=inspectJob,proto3,oneof"`
-}
-
-func (*JobTrigger_InspectJob) isJobTrigger_Job() {}
-
-func (m *JobTrigger) GetJob() isJobTrigger_Job {
-	if m != nil {
-		return m.Job
-	}
-	return nil
-}
 
 func (m *JobTrigger) GetName() string {
 	if m != nil {
@@ -8569,6 +9865,23 @@ func (m *JobTrigger) GetDescription() string {
 		return m.Description
 	}
 	return ""
+}
+
+type isJobTrigger_Job interface {
+	isJobTrigger_Job()
+}
+
+type JobTrigger_InspectJob struct {
+	InspectJob *InspectJobConfig `protobuf:"bytes,4,opt,name=inspect_job,json=inspectJob,proto3,oneof"`
+}
+
+func (*JobTrigger_InspectJob) isJobTrigger_Job() {}
+
+func (m *JobTrigger) GetJob() isJobTrigger_Job {
+	if m != nil {
+		return m.Job
+	}
+	return nil
 }
 
 func (m *JobTrigger) GetInspectJob() *InspectJobConfig {
@@ -8689,7 +10002,7 @@ func (m *JobTrigger_Trigger) Reset()         { *m = JobTrigger_Trigger{} }
 func (m *JobTrigger_Trigger) String() string { return proto.CompactTextString(m) }
 func (*JobTrigger_Trigger) ProtoMessage()    {}
 func (*JobTrigger_Trigger) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{64, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{70, 0}
 }
 func (m *JobTrigger_Trigger) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_JobTrigger_Trigger.Unmarshal(m, b)
@@ -8789,11 +10102,13 @@ func _JobTrigger_Trigger_OneofSizer(msg proto.Message) (n int) {
 }
 
 // A task to execute on the completion of a job.
+// See https://cloud.google.com/dlp/docs/concepts-actions to learn more.
 type Action struct {
 	// Types that are valid to be assigned to Action:
 	//	*Action_SaveFindings_
 	//	*Action_PubSub
 	//	*Action_PublishSummaryToCscc_
+	//	*Action_JobNotificationEmails_
 	Action               isAction_Action `protobuf_oneof:"action"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -8804,7 +10119,7 @@ func (m *Action) Reset()         { *m = Action{} }
 func (m *Action) String() string { return proto.CompactTextString(m) }
 func (*Action) ProtoMessage()    {}
 func (*Action) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{65}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{71}
 }
 func (m *Action) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Action.Unmarshal(m, b)
@@ -8831,16 +10146,26 @@ type isAction_Action interface {
 type Action_SaveFindings_ struct {
 	SaveFindings *Action_SaveFindings `protobuf:"bytes,1,opt,name=save_findings,json=saveFindings,proto3,oneof"`
 }
+
 type Action_PubSub struct {
 	PubSub *Action_PublishToPubSub `protobuf:"bytes,2,opt,name=pub_sub,json=pubSub,proto3,oneof"`
 }
+
 type Action_PublishSummaryToCscc_ struct {
 	PublishSummaryToCscc *Action_PublishSummaryToCscc `protobuf:"bytes,3,opt,name=publish_summary_to_cscc,json=publishSummaryToCscc,proto3,oneof"`
 }
 
-func (*Action_SaveFindings_) isAction_Action()         {}
-func (*Action_PubSub) isAction_Action()                {}
+type Action_JobNotificationEmails_ struct {
+	JobNotificationEmails *Action_JobNotificationEmails `protobuf:"bytes,8,opt,name=job_notification_emails,json=jobNotificationEmails,proto3,oneof"`
+}
+
+func (*Action_SaveFindings_) isAction_Action() {}
+
+func (*Action_PubSub) isAction_Action() {}
+
 func (*Action_PublishSummaryToCscc_) isAction_Action() {}
+
+func (*Action_JobNotificationEmails_) isAction_Action() {}
 
 func (m *Action) GetAction() isAction_Action {
 	if m != nil {
@@ -8870,12 +10195,20 @@ func (m *Action) GetPublishSummaryToCscc() *Action_PublishSummaryToCscc {
 	return nil
 }
 
+func (m *Action) GetJobNotificationEmails() *Action_JobNotificationEmails {
+	if x, ok := m.GetAction().(*Action_JobNotificationEmails_); ok {
+		return x.JobNotificationEmails
+	}
+	return nil
+}
+
 // XXX_OneofFuncs is for the internal use of the proto package.
 func (*Action) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
 	return _Action_OneofMarshaler, _Action_OneofUnmarshaler, _Action_OneofSizer, []interface{}{
 		(*Action_SaveFindings_)(nil),
 		(*Action_PubSub)(nil),
 		(*Action_PublishSummaryToCscc_)(nil),
+		(*Action_JobNotificationEmails_)(nil),
 	}
 }
 
@@ -8896,6 +10229,11 @@ func _Action_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
 	case *Action_PublishSummaryToCscc_:
 		b.EncodeVarint(3<<3 | proto.WireBytes)
 		if err := b.EncodeMessage(x.PublishSummaryToCscc); err != nil {
+			return err
+		}
+	case *Action_JobNotificationEmails_:
+		b.EncodeVarint(8<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.JobNotificationEmails); err != nil {
 			return err
 		}
 	case nil:
@@ -8932,6 +10270,14 @@ func _Action_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer)
 		err := b.DecodeMessage(msg)
 		m.Action = &Action_PublishSummaryToCscc_{msg}
 		return true, err
+	case 8: // action.job_notification_emails
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(Action_JobNotificationEmails)
+		err := b.DecodeMessage(msg)
+		m.Action = &Action_JobNotificationEmails_{msg}
+		return true, err
 	default:
 		return false, nil
 	}
@@ -8956,6 +10302,11 @@ func _Action_OneofSizer(msg proto.Message) (n int) {
 		n += 1 // tag and wire
 		n += proto.SizeVarint(uint64(s))
 		n += s
+	case *Action_JobNotificationEmails_:
+		s := proto.Size(x.JobNotificationEmails)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
 	case nil:
 	default:
 		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
@@ -8966,7 +10317,7 @@ func _Action_OneofSizer(msg proto.Message) (n int) {
 // If set, the detailed findings will be persisted to the specified
 // OutputStorageConfig. Only a single instance of this action can be
 // specified.
-// Compatible with: Inspect
+// Compatible with: Inspect, Risk
 type Action_SaveFindings struct {
 	OutputConfig         *OutputStorageConfig `protobuf:"bytes,1,opt,name=output_config,json=outputConfig,proto3" json:"output_config,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
@@ -8978,7 +10329,7 @@ func (m *Action_SaveFindings) Reset()         { *m = Action_SaveFindings{} }
 func (m *Action_SaveFindings) String() string { return proto.CompactTextString(m) }
 func (*Action_SaveFindings) ProtoMessage()    {}
 func (*Action_SaveFindings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{65, 0}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{71, 0}
 }
 func (m *Action_SaveFindings) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Action_SaveFindings.Unmarshal(m, b)
@@ -9022,7 +10373,7 @@ func (m *Action_PublishToPubSub) Reset()         { *m = Action_PublishToPubSub{}
 func (m *Action_PublishToPubSub) String() string { return proto.CompactTextString(m) }
 func (*Action_PublishToPubSub) ProtoMessage()    {}
 func (*Action_PublishToPubSub) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{65, 1}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{71, 1}
 }
 func (m *Action_PublishToPubSub) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Action_PublishToPubSub.Unmarshal(m, b)
@@ -9069,7 +10420,7 @@ func (m *Action_PublishSummaryToCscc) Reset()         { *m = Action_PublishSumma
 func (m *Action_PublishSummaryToCscc) String() string { return proto.CompactTextString(m) }
 func (*Action_PublishSummaryToCscc) ProtoMessage()    {}
 func (*Action_PublishSummaryToCscc) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{65, 2}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{71, 2}
 }
 func (m *Action_PublishSummaryToCscc) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Action_PublishSummaryToCscc.Unmarshal(m, b)
@@ -9088,6 +10439,38 @@ func (m *Action_PublishSummaryToCscc) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_Action_PublishSummaryToCscc proto.InternalMessageInfo
+
+// Enable email notification to project owners and editors on jobs's
+// completion/failure.
+type Action_JobNotificationEmails struct {
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Action_JobNotificationEmails) Reset()         { *m = Action_JobNotificationEmails{} }
+func (m *Action_JobNotificationEmails) String() string { return proto.CompactTextString(m) }
+func (*Action_JobNotificationEmails) ProtoMessage()    {}
+func (*Action_JobNotificationEmails) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{71, 3}
+}
+func (m *Action_JobNotificationEmails) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Action_JobNotificationEmails.Unmarshal(m, b)
+}
+func (m *Action_JobNotificationEmails) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Action_JobNotificationEmails.Marshal(b, m, deterministic)
+}
+func (dst *Action_JobNotificationEmails) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Action_JobNotificationEmails.Merge(dst, src)
+}
+func (m *Action_JobNotificationEmails) XXX_Size() int {
+	return xxx_messageInfo_Action_JobNotificationEmails.Size(m)
+}
+func (m *Action_JobNotificationEmails) XXX_DiscardUnknown() {
+	xxx_messageInfo_Action_JobNotificationEmails.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Action_JobNotificationEmails proto.InternalMessageInfo
 
 // Request message for CreateInspectTemplate.
 type CreateInspectTemplateRequest struct {
@@ -9110,7 +10493,7 @@ func (m *CreateInspectTemplateRequest) Reset()         { *m = CreateInspectTempl
 func (m *CreateInspectTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateInspectTemplateRequest) ProtoMessage()    {}
 func (*CreateInspectTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{66}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{72}
 }
 func (m *CreateInspectTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateInspectTemplateRequest.Unmarshal(m, b)
@@ -9170,7 +10553,7 @@ func (m *UpdateInspectTemplateRequest) Reset()         { *m = UpdateInspectTempl
 func (m *UpdateInspectTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateInspectTemplateRequest) ProtoMessage()    {}
 func (*UpdateInspectTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{67}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{73}
 }
 func (m *UpdateInspectTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateInspectTemplateRequest.Unmarshal(m, b)
@@ -9226,7 +10609,7 @@ func (m *GetInspectTemplateRequest) Reset()         { *m = GetInspectTemplateReq
 func (m *GetInspectTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*GetInspectTemplateRequest) ProtoMessage()    {}
 func (*GetInspectTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{68}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{74}
 }
 func (m *GetInspectTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetInspectTemplateRequest.Unmarshal(m, b)
@@ -9263,7 +10646,21 @@ type ListInspectTemplatesRequest struct {
 	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	// Optional size of the page, can be limited by server. If zero server returns
 	// a page of max size 100.
-	PageSize             int32    `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageSize int32 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Optional comma separated list of fields to order by,
+	// followed by `asc` or `desc` postfix. This list is case-insensitive,
+	// default sorting order is ascending, redundant space characters are
+	// insignificant.
+	//
+	// Example: `name asc,update_time, create_time desc`
+	//
+	// Supported fields are:
+	//
+	// - `create_time`: corresponds to time the template was created.
+	// - `update_time`: corresponds to time the template was last updated.
+	// - `name`: corresponds to template's name.
+	// - `display_name`: corresponds to template's display name.
+	OrderBy              string   `protobuf:"bytes,4,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -9273,7 +10670,7 @@ func (m *ListInspectTemplatesRequest) Reset()         { *m = ListInspectTemplate
 func (m *ListInspectTemplatesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListInspectTemplatesRequest) ProtoMessage()    {}
 func (*ListInspectTemplatesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{69}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{75}
 }
 func (m *ListInspectTemplatesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInspectTemplatesRequest.Unmarshal(m, b)
@@ -9314,6 +10711,13 @@ func (m *ListInspectTemplatesRequest) GetPageSize() int32 {
 	return 0
 }
 
+func (m *ListInspectTemplatesRequest) GetOrderBy() string {
+	if m != nil {
+		return m.OrderBy
+	}
+	return ""
+}
+
 // Response message for ListInspectTemplates.
 type ListInspectTemplatesResponse struct {
 	// List of inspectTemplates, up to page_size in ListInspectTemplatesRequest.
@@ -9330,7 +10734,7 @@ func (m *ListInspectTemplatesResponse) Reset()         { *m = ListInspectTemplat
 func (m *ListInspectTemplatesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListInspectTemplatesResponse) ProtoMessage()    {}
 func (*ListInspectTemplatesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{70}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{76}
 }
 func (m *ListInspectTemplatesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListInspectTemplatesResponse.Unmarshal(m, b)
@@ -9379,7 +10783,7 @@ func (m *DeleteInspectTemplateRequest) Reset()         { *m = DeleteInspectTempl
 func (m *DeleteInspectTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteInspectTemplateRequest) ProtoMessage()    {}
 func (*DeleteInspectTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{71}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{77}
 }
 func (m *DeleteInspectTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteInspectTemplateRequest.Unmarshal(m, b)
@@ -9426,7 +10830,7 @@ func (m *CreateJobTriggerRequest) Reset()         { *m = CreateJobTriggerRequest
 func (m *CreateJobTriggerRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateJobTriggerRequest) ProtoMessage()    {}
 func (*CreateJobTriggerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{72}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{78}
 }
 func (m *CreateJobTriggerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateJobTriggerRequest.Unmarshal(m, b)
@@ -9467,6 +10871,47 @@ func (m *CreateJobTriggerRequest) GetTriggerId() string {
 	return ""
 }
 
+// Request message for ActivateJobTrigger.
+type ActivateJobTriggerRequest struct {
+	// Resource name of the trigger to activate, for example
+	// `projects/dlp-test-project/jobTriggers/53234423`.
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ActivateJobTriggerRequest) Reset()         { *m = ActivateJobTriggerRequest{} }
+func (m *ActivateJobTriggerRequest) String() string { return proto.CompactTextString(m) }
+func (*ActivateJobTriggerRequest) ProtoMessage()    {}
+func (*ActivateJobTriggerRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{79}
+}
+func (m *ActivateJobTriggerRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ActivateJobTriggerRequest.Unmarshal(m, b)
+}
+func (m *ActivateJobTriggerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ActivateJobTriggerRequest.Marshal(b, m, deterministic)
+}
+func (dst *ActivateJobTriggerRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ActivateJobTriggerRequest.Merge(dst, src)
+}
+func (m *ActivateJobTriggerRequest) XXX_Size() int {
+	return xxx_messageInfo_ActivateJobTriggerRequest.Size(m)
+}
+func (m *ActivateJobTriggerRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ActivateJobTriggerRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ActivateJobTriggerRequest proto.InternalMessageInfo
+
+func (m *ActivateJobTriggerRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 // Request message for UpdateJobTrigger.
 type UpdateJobTriggerRequest struct {
 	// Resource name of the project and the triggeredJob, for example
@@ -9485,7 +10930,7 @@ func (m *UpdateJobTriggerRequest) Reset()         { *m = UpdateJobTriggerRequest
 func (m *UpdateJobTriggerRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateJobTriggerRequest) ProtoMessage()    {}
 func (*UpdateJobTriggerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{73}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{80}
 }
 func (m *UpdateJobTriggerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateJobTriggerRequest.Unmarshal(m, b)
@@ -9540,7 +10985,7 @@ func (m *GetJobTriggerRequest) Reset()         { *m = GetJobTriggerRequest{} }
 func (m *GetJobTriggerRequest) String() string { return proto.CompactTextString(m) }
 func (*GetJobTriggerRequest) ProtoMessage()    {}
 func (*GetJobTriggerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{74}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{81}
 }
 func (m *GetJobTriggerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetJobTriggerRequest.Unmarshal(m, b)
@@ -9593,7 +11038,7 @@ func (m *CreateDlpJobRequest) Reset()         { *m = CreateDlpJobRequest{} }
 func (m *CreateDlpJobRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDlpJobRequest) ProtoMessage()    {}
 func (*CreateDlpJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{75}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{82}
 }
 func (m *CreateDlpJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDlpJobRequest.Unmarshal(m, b)
@@ -9613,6 +11058,13 @@ func (m *CreateDlpJobRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateDlpJobRequest proto.InternalMessageInfo
 
+func (m *CreateDlpJobRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
 type isCreateDlpJobRequest_Job interface {
 	isCreateDlpJobRequest_Job()
 }
@@ -9620,25 +11072,20 @@ type isCreateDlpJobRequest_Job interface {
 type CreateDlpJobRequest_InspectJob struct {
 	InspectJob *InspectJobConfig `protobuf:"bytes,2,opt,name=inspect_job,json=inspectJob,proto3,oneof"`
 }
+
 type CreateDlpJobRequest_RiskJob struct {
 	RiskJob *RiskAnalysisJobConfig `protobuf:"bytes,3,opt,name=risk_job,json=riskJob,proto3,oneof"`
 }
 
 func (*CreateDlpJobRequest_InspectJob) isCreateDlpJobRequest_Job() {}
-func (*CreateDlpJobRequest_RiskJob) isCreateDlpJobRequest_Job()    {}
+
+func (*CreateDlpJobRequest_RiskJob) isCreateDlpJobRequest_Job() {}
 
 func (m *CreateDlpJobRequest) GetJob() isCreateDlpJobRequest_Job {
 	if m != nil {
 		return m.Job
 	}
 	return nil
-}
-
-func (m *CreateDlpJobRequest) GetParent() string {
-	if m != nil {
-		return m.Parent
-	}
-	return ""
 }
 
 func (m *CreateDlpJobRequest) GetInspectJob() *InspectJobConfig {
@@ -9738,28 +11185,55 @@ func _CreateDlpJobRequest_OneofSizer(msg proto.Message) (n int) {
 
 // Request message for ListJobTriggers.
 type ListJobTriggersRequest struct {
-	// The parent resource name, for example projects/my-project-id.
+	// The parent resource name, for example `projects/my-project-id`.
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	// Optional page token to continue retrieval. Comes from previous call
-	// to ListJobTriggers. `order_by` and `filter` should not change for
-	// subsequent calls, but can be omitted if token is specified.
+	// to ListJobTriggers. `order_by` field must not
+	// change for subsequent calls.
 	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	// Optional size of the page, can be limited by a server.
 	PageSize int32 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
 	// Optional comma separated list of triggeredJob fields to order by,
-	// followed by 'asc/desc' postfix, i.e.
-	// `"create_time asc,name desc,schedule_mode asc"`. This list is
-	// case-insensitive.
+	// followed by `asc` or `desc` postfix. This list is case-insensitive,
+	// default sorting order is ascending, redundant space characters are
+	// insignificant.
 	//
-	// Example: `"name asc,schedule_mode desc, status desc"`
+	// Example: `name asc,update_time, create_time desc`
 	//
-	// Supported filters keys and values are:
+	// Supported fields are:
 	//
-	// - `create_time`: corresponds to time the triggeredJob was created.
-	// - `update_time`: corresponds to time the triggeredJob was last updated.
-	// - `name`: corresponds to JobTrigger's display name.
-	// - `status`: corresponds to the triggeredJob status.
-	OrderBy              string   `protobuf:"bytes,4,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	// - `create_time`: corresponds to time the JobTrigger was created.
+	// - `update_time`: corresponds to time the JobTrigger was last updated.
+	// - `last_run_time`: corresponds to the last time the JobTrigger ran.
+	// - `name`: corresponds to JobTrigger's name.
+	// - `display_name`: corresponds to JobTrigger's display name.
+	// - `status`: corresponds to JobTrigger's status.
+	OrderBy string `protobuf:"bytes,4,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	// Optional. Allows filtering.
+	//
+	// Supported syntax:
+	//
+	// * Filter expressions are made up of one or more restrictions.
+	// * Restrictions can be combined by `AND` or `OR` logical operators. A
+	// sequence of restrictions implicitly uses `AND`.
+	// * A restriction has the form of `<field> <operator> <value>`.
+	// * Supported fields/values for inspect jobs:
+	//     - `status` - HEALTHY|PAUSED|CANCELLED
+	//     - `inspected_storage` - DATASTORE|CLOUD_STORAGE|BIGQUERY
+	//     - 'last_run_time` - RFC 3339 formatted timestamp, surrounded by
+	//     quotation marks. Nanoseconds are ignored.
+	//     - 'error_count' - Number of errors that have occurred while running.
+	// * The operator must be `=` or `!=` for status and inspected_storage.
+	//
+	// Examples:
+	//
+	// * inspected_storage = cloud_storage AND status = HEALTHY
+	// * inspected_storage = cloud_storage OR inspected_storage = bigquery
+	// * inspected_storage = cloud_storage AND (state = PAUSED OR state = HEALTHY)
+	// * last_run_time > \"2017-12-12T00:00:00+00:00\"
+	//
+	// The length of this field should be no more than 500 characters.
+	Filter               string   `protobuf:"bytes,5,opt,name=filter,proto3" json:"filter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -9769,7 +11243,7 @@ func (m *ListJobTriggersRequest) Reset()         { *m = ListJobTriggersRequest{}
 func (m *ListJobTriggersRequest) String() string { return proto.CompactTextString(m) }
 func (*ListJobTriggersRequest) ProtoMessage()    {}
 func (*ListJobTriggersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{76}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{83}
 }
 func (m *ListJobTriggersRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListJobTriggersRequest.Unmarshal(m, b)
@@ -9817,6 +11291,13 @@ func (m *ListJobTriggersRequest) GetOrderBy() string {
 	return ""
 }
 
+func (m *ListJobTriggersRequest) GetFilter() string {
+	if m != nil {
+		return m.Filter
+	}
+	return ""
+}
+
 // Response message for ListJobTriggers.
 type ListJobTriggersResponse struct {
 	// List of triggeredJobs, up to page_size in ListJobTriggersRequest.
@@ -9833,7 +11314,7 @@ func (m *ListJobTriggersResponse) Reset()         { *m = ListJobTriggersResponse
 func (m *ListJobTriggersResponse) String() string { return proto.CompactTextString(m) }
 func (*ListJobTriggersResponse) ProtoMessage()    {}
 func (*ListJobTriggersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{77}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{84}
 }
 func (m *ListJobTriggersResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListJobTriggersResponse.Unmarshal(m, b)
@@ -9881,7 +11362,7 @@ func (m *DeleteJobTriggerRequest) Reset()         { *m = DeleteJobTriggerRequest
 func (m *DeleteJobTriggerRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteJobTriggerRequest) ProtoMessage()    {}
 func (*DeleteJobTriggerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{78}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{85}
 }
 func (m *DeleteJobTriggerRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteJobTriggerRequest.Unmarshal(m, b)
@@ -9929,7 +11410,7 @@ func (m *InspectJobConfig) Reset()         { *m = InspectJobConfig{} }
 func (m *InspectJobConfig) String() string { return proto.CompactTextString(m) }
 func (*InspectJobConfig) ProtoMessage()    {}
 func (*InspectJobConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{79}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{86}
 }
 func (m *InspectJobConfig) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_InspectJobConfig.Unmarshal(m, b)
@@ -10009,7 +11490,7 @@ func (m *DlpJob) Reset()         { *m = DlpJob{} }
 func (m *DlpJob) String() string { return proto.CompactTextString(m) }
 func (*DlpJob) ProtoMessage()    {}
 func (*DlpJob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{80}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{87}
 }
 func (m *DlpJob) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DlpJob.Unmarshal(m, b)
@@ -10028,27 +11509,6 @@ func (m *DlpJob) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_DlpJob proto.InternalMessageInfo
-
-type isDlpJob_Details interface {
-	isDlpJob_Details()
-}
-
-type DlpJob_RiskDetails struct {
-	RiskDetails *AnalyzeDataSourceRiskDetails `protobuf:"bytes,4,opt,name=risk_details,json=riskDetails,proto3,oneof"`
-}
-type DlpJob_InspectDetails struct {
-	InspectDetails *InspectDataSourceDetails `protobuf:"bytes,5,opt,name=inspect_details,json=inspectDetails,proto3,oneof"`
-}
-
-func (*DlpJob_RiskDetails) isDlpJob_Details()    {}
-func (*DlpJob_InspectDetails) isDlpJob_Details() {}
-
-func (m *DlpJob) GetDetails() isDlpJob_Details {
-	if m != nil {
-		return m.Details
-	}
-	return nil
-}
 
 func (m *DlpJob) GetName() string {
 	if m != nil {
@@ -10069,6 +11529,29 @@ func (m *DlpJob) GetState() DlpJob_JobState {
 		return m.State
 	}
 	return DlpJob_JOB_STATE_UNSPECIFIED
+}
+
+type isDlpJob_Details interface {
+	isDlpJob_Details()
+}
+
+type DlpJob_RiskDetails struct {
+	RiskDetails *AnalyzeDataSourceRiskDetails `protobuf:"bytes,4,opt,name=risk_details,json=riskDetails,proto3,oneof"`
+}
+
+type DlpJob_InspectDetails struct {
+	InspectDetails *InspectDataSourceDetails `protobuf:"bytes,5,opt,name=inspect_details,json=inspectDetails,proto3,oneof"`
+}
+
+func (*DlpJob_RiskDetails) isDlpJob_Details() {}
+
+func (*DlpJob_InspectDetails) isDlpJob_Details() {}
+
+func (m *DlpJob) GetDetails() isDlpJob_Details {
+	if m != nil {
+		return m.Details
+	}
+	return nil
 }
 
 func (m *DlpJob) GetRiskDetails() *AnalyzeDataSourceRiskDetails {
@@ -10207,7 +11690,7 @@ func (m *GetDlpJobRequest) Reset()         { *m = GetDlpJobRequest{} }
 func (m *GetDlpJobRequest) String() string { return proto.CompactTextString(m) }
 func (*GetDlpJobRequest) ProtoMessage()    {}
 func (*GetDlpJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{81}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{88}
 }
 func (m *GetDlpJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDlpJobRequest.Unmarshal(m, b)
@@ -10267,17 +11750,31 @@ type ListDlpJobsRequest struct {
 	// The standard list page token.
 	PageToken string `protobuf:"bytes,3,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	// The type of job. Defaults to `DlpJobType.INSPECT`
-	Type                 DlpJobType `protobuf:"varint,5,opt,name=type,proto3,enum=google.privacy.dlp.v2.DlpJobType" json:"type,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
-	XXX_unrecognized     []byte     `json:"-"`
-	XXX_sizecache        int32      `json:"-"`
+	Type DlpJobType `protobuf:"varint,5,opt,name=type,proto3,enum=google.privacy.dlp.v2.DlpJobType" json:"type,omitempty"`
+	// Optional comma separated list of fields to order by,
+	// followed by `asc` or `desc` postfix. This list is case-insensitive,
+	// default sorting order is ascending, redundant space characters are
+	// insignificant.
+	//
+	// Example: `name asc, end_time asc, create_time desc`
+	//
+	// Supported fields are:
+	//
+	// - `create_time`: corresponds to time the job was created.
+	// - `end_time`: corresponds to time the job ended.
+	// - `name`: corresponds to job's name.
+	// - `state`: corresponds to `state`
+	OrderBy              string   `protobuf:"bytes,6,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *ListDlpJobsRequest) Reset()         { *m = ListDlpJobsRequest{} }
 func (m *ListDlpJobsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListDlpJobsRequest) ProtoMessage()    {}
 func (*ListDlpJobsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{82}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{89}
 }
 func (m *ListDlpJobsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDlpJobsRequest.Unmarshal(m, b)
@@ -10332,6 +11829,13 @@ func (m *ListDlpJobsRequest) GetType() DlpJobType {
 	return DlpJobType_DLP_JOB_TYPE_UNSPECIFIED
 }
 
+func (m *ListDlpJobsRequest) GetOrderBy() string {
+	if m != nil {
+		return m.OrderBy
+	}
+	return ""
+}
+
 // The response message for listing DLP jobs.
 type ListDlpJobsResponse struct {
 	// A list of DlpJobs that matches the specified filter in the request.
@@ -10347,7 +11851,7 @@ func (m *ListDlpJobsResponse) Reset()         { *m = ListDlpJobsResponse{} }
 func (m *ListDlpJobsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListDlpJobsResponse) ProtoMessage()    {}
 func (*ListDlpJobsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{83}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{90}
 }
 func (m *ListDlpJobsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDlpJobsResponse.Unmarshal(m, b)
@@ -10394,7 +11898,7 @@ func (m *CancelDlpJobRequest) Reset()         { *m = CancelDlpJobRequest{} }
 func (m *CancelDlpJobRequest) String() string { return proto.CompactTextString(m) }
 func (*CancelDlpJobRequest) ProtoMessage()    {}
 func (*CancelDlpJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{84}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{91}
 }
 func (m *CancelDlpJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CancelDlpJobRequest.Unmarshal(m, b)
@@ -10434,7 +11938,7 @@ func (m *DeleteDlpJobRequest) Reset()         { *m = DeleteDlpJobRequest{} }
 func (m *DeleteDlpJobRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteDlpJobRequest) ProtoMessage()    {}
 func (*DeleteDlpJobRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{85}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{92}
 }
 func (m *DeleteDlpJobRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteDlpJobRequest.Unmarshal(m, b)
@@ -10482,7 +11986,7 @@ func (m *CreateDeidentifyTemplateRequest) Reset()         { *m = CreateDeidentif
 func (m *CreateDeidentifyTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateDeidentifyTemplateRequest) ProtoMessage()    {}
 func (*CreateDeidentifyTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{86}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{93}
 }
 func (m *CreateDeidentifyTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateDeidentifyTemplateRequest.Unmarshal(m, b)
@@ -10542,7 +12046,7 @@ func (m *UpdateDeidentifyTemplateRequest) Reset()         { *m = UpdateDeidentif
 func (m *UpdateDeidentifyTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateDeidentifyTemplateRequest) ProtoMessage()    {}
 func (*UpdateDeidentifyTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{87}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{94}
 }
 func (m *UpdateDeidentifyTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateDeidentifyTemplateRequest.Unmarshal(m, b)
@@ -10598,7 +12102,7 @@ func (m *GetDeidentifyTemplateRequest) Reset()         { *m = GetDeidentifyTempl
 func (m *GetDeidentifyTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*GetDeidentifyTemplateRequest) ProtoMessage()    {}
 func (*GetDeidentifyTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{88}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{95}
 }
 func (m *GetDeidentifyTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetDeidentifyTemplateRequest.Unmarshal(m, b)
@@ -10635,7 +12139,21 @@ type ListDeidentifyTemplatesRequest struct {
 	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
 	// Optional size of the page, can be limited by server. If zero server returns
 	// a page of max size 100.
-	PageSize             int32    `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageSize int32 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Optional comma separated list of fields to order by,
+	// followed by `asc` or `desc` postfix. This list is case-insensitive,
+	// default sorting order is ascending, redundant space characters are
+	// insignificant.
+	//
+	// Example: `name asc,update_time, create_time desc`
+	//
+	// Supported fields are:
+	//
+	// - `create_time`: corresponds to time the template was created.
+	// - `update_time`: corresponds to time the template was last updated.
+	// - `name`: corresponds to template's name.
+	// - `display_name`: corresponds to template's display name.
+	OrderBy              string   `protobuf:"bytes,4,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
@@ -10645,7 +12163,7 @@ func (m *ListDeidentifyTemplatesRequest) Reset()         { *m = ListDeidentifyTe
 func (m *ListDeidentifyTemplatesRequest) String() string { return proto.CompactTextString(m) }
 func (*ListDeidentifyTemplatesRequest) ProtoMessage()    {}
 func (*ListDeidentifyTemplatesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{89}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{96}
 }
 func (m *ListDeidentifyTemplatesRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDeidentifyTemplatesRequest.Unmarshal(m, b)
@@ -10686,6 +12204,13 @@ func (m *ListDeidentifyTemplatesRequest) GetPageSize() int32 {
 	return 0
 }
 
+func (m *ListDeidentifyTemplatesRequest) GetOrderBy() string {
+	if m != nil {
+		return m.OrderBy
+	}
+	return ""
+}
+
 // Response message for ListDeidentifyTemplates.
 type ListDeidentifyTemplatesResponse struct {
 	// List of deidentify templates, up to page_size in
@@ -10703,7 +12228,7 @@ func (m *ListDeidentifyTemplatesResponse) Reset()         { *m = ListDeidentifyT
 func (m *ListDeidentifyTemplatesResponse) String() string { return proto.CompactTextString(m) }
 func (*ListDeidentifyTemplatesResponse) ProtoMessage()    {}
 func (*ListDeidentifyTemplatesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{90}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{97}
 }
 func (m *ListDeidentifyTemplatesResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListDeidentifyTemplatesResponse.Unmarshal(m, b)
@@ -10752,7 +12277,7 @@ func (m *DeleteDeidentifyTemplateRequest) Reset()         { *m = DeleteDeidentif
 func (m *DeleteDeidentifyTemplateRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteDeidentifyTemplateRequest) ProtoMessage()    {}
 func (*DeleteDeidentifyTemplateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dlp_d5eb98801684ed28, []int{91}
+	return fileDescriptor_dlp_9184f835f60c3220, []int{98}
 }
 func (m *DeleteDeidentifyTemplateRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteDeidentifyTemplateRequest.Unmarshal(m, b)
@@ -10779,7 +12304,786 @@ func (m *DeleteDeidentifyTemplateRequest) GetName() string {
 	return ""
 }
 
+// Configuration for a custom dictionary created from a data source of any size
+// up to the maximum size defined in the
+// [limits](https://cloud.google.com/dlp/limits) page. The artifacts of
+// dictionary creation are stored in the specified Google Cloud Storage
+// location. Consider using `CustomInfoType.Dictionary` for smaller dictionaries
+// that satisfy the size requirements.
+type LargeCustomDictionaryConfig struct {
+	// Location to store dictionary artifacts in Google Cloud Storage. These files
+	// will only be accessible by project owners and the DLP API. If any of these
+	// artifacts are modified, the dictionary is considered invalid and can no
+	// longer be used.
+	OutputPath *CloudStoragePath `protobuf:"bytes,1,opt,name=output_path,json=outputPath,proto3" json:"output_path,omitempty"`
+	// Types that are valid to be assigned to Source:
+	//	*LargeCustomDictionaryConfig_CloudStorageFileSet
+	//	*LargeCustomDictionaryConfig_BigQueryField
+	Source               isLargeCustomDictionaryConfig_Source `protobuf_oneof:"source"`
+	XXX_NoUnkeyedLiteral struct{}                             `json:"-"`
+	XXX_unrecognized     []byte                               `json:"-"`
+	XXX_sizecache        int32                                `json:"-"`
+}
+
+func (m *LargeCustomDictionaryConfig) Reset()         { *m = LargeCustomDictionaryConfig{} }
+func (m *LargeCustomDictionaryConfig) String() string { return proto.CompactTextString(m) }
+func (*LargeCustomDictionaryConfig) ProtoMessage()    {}
+func (*LargeCustomDictionaryConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{99}
+}
+func (m *LargeCustomDictionaryConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_LargeCustomDictionaryConfig.Unmarshal(m, b)
+}
+func (m *LargeCustomDictionaryConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_LargeCustomDictionaryConfig.Marshal(b, m, deterministic)
+}
+func (dst *LargeCustomDictionaryConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LargeCustomDictionaryConfig.Merge(dst, src)
+}
+func (m *LargeCustomDictionaryConfig) XXX_Size() int {
+	return xxx_messageInfo_LargeCustomDictionaryConfig.Size(m)
+}
+func (m *LargeCustomDictionaryConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_LargeCustomDictionaryConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LargeCustomDictionaryConfig proto.InternalMessageInfo
+
+func (m *LargeCustomDictionaryConfig) GetOutputPath() *CloudStoragePath {
+	if m != nil {
+		return m.OutputPath
+	}
+	return nil
+}
+
+type isLargeCustomDictionaryConfig_Source interface {
+	isLargeCustomDictionaryConfig_Source()
+}
+
+type LargeCustomDictionaryConfig_CloudStorageFileSet struct {
+	CloudStorageFileSet *CloudStorageFileSet `protobuf:"bytes,2,opt,name=cloud_storage_file_set,json=cloudStorageFileSet,proto3,oneof"`
+}
+
+type LargeCustomDictionaryConfig_BigQueryField struct {
+	BigQueryField *BigQueryField `protobuf:"bytes,3,opt,name=big_query_field,json=bigQueryField,proto3,oneof"`
+}
+
+func (*LargeCustomDictionaryConfig_CloudStorageFileSet) isLargeCustomDictionaryConfig_Source() {}
+
+func (*LargeCustomDictionaryConfig_BigQueryField) isLargeCustomDictionaryConfig_Source() {}
+
+func (m *LargeCustomDictionaryConfig) GetSource() isLargeCustomDictionaryConfig_Source {
+	if m != nil {
+		return m.Source
+	}
+	return nil
+}
+
+func (m *LargeCustomDictionaryConfig) GetCloudStorageFileSet() *CloudStorageFileSet {
+	if x, ok := m.GetSource().(*LargeCustomDictionaryConfig_CloudStorageFileSet); ok {
+		return x.CloudStorageFileSet
+	}
+	return nil
+}
+
+func (m *LargeCustomDictionaryConfig) GetBigQueryField() *BigQueryField {
+	if x, ok := m.GetSource().(*LargeCustomDictionaryConfig_BigQueryField); ok {
+		return x.BigQueryField
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*LargeCustomDictionaryConfig) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _LargeCustomDictionaryConfig_OneofMarshaler, _LargeCustomDictionaryConfig_OneofUnmarshaler, _LargeCustomDictionaryConfig_OneofSizer, []interface{}{
+		(*LargeCustomDictionaryConfig_CloudStorageFileSet)(nil),
+		(*LargeCustomDictionaryConfig_BigQueryField)(nil),
+	}
+}
+
+func _LargeCustomDictionaryConfig_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*LargeCustomDictionaryConfig)
+	// source
+	switch x := m.Source.(type) {
+	case *LargeCustomDictionaryConfig_CloudStorageFileSet:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.CloudStorageFileSet); err != nil {
+			return err
+		}
+	case *LargeCustomDictionaryConfig_BigQueryField:
+		b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.BigQueryField); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("LargeCustomDictionaryConfig.Source has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _LargeCustomDictionaryConfig_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*LargeCustomDictionaryConfig)
+	switch tag {
+	case 2: // source.cloud_storage_file_set
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(CloudStorageFileSet)
+		err := b.DecodeMessage(msg)
+		m.Source = &LargeCustomDictionaryConfig_CloudStorageFileSet{msg}
+		return true, err
+	case 3: // source.big_query_field
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(BigQueryField)
+		err := b.DecodeMessage(msg)
+		m.Source = &LargeCustomDictionaryConfig_BigQueryField{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _LargeCustomDictionaryConfig_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*LargeCustomDictionaryConfig)
+	// source
+	switch x := m.Source.(type) {
+	case *LargeCustomDictionaryConfig_CloudStorageFileSet:
+		s := proto.Size(x.CloudStorageFileSet)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case *LargeCustomDictionaryConfig_BigQueryField:
+		s := proto.Size(x.BigQueryField)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Configuration for a StoredInfoType.
+type StoredInfoTypeConfig struct {
+	// Display name of the StoredInfoType (max 256 characters).
+	DisplayName string `protobuf:"bytes,1,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	// Description of the StoredInfoType (max 256 characters).
+	Description string `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	// Types that are valid to be assigned to Type:
+	//	*StoredInfoTypeConfig_LargeCustomDictionary
+	Type                 isStoredInfoTypeConfig_Type `protobuf_oneof:"type"`
+	XXX_NoUnkeyedLiteral struct{}                    `json:"-"`
+	XXX_unrecognized     []byte                      `json:"-"`
+	XXX_sizecache        int32                       `json:"-"`
+}
+
+func (m *StoredInfoTypeConfig) Reset()         { *m = StoredInfoTypeConfig{} }
+func (m *StoredInfoTypeConfig) String() string { return proto.CompactTextString(m) }
+func (*StoredInfoTypeConfig) ProtoMessage()    {}
+func (*StoredInfoTypeConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{100}
+}
+func (m *StoredInfoTypeConfig) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StoredInfoTypeConfig.Unmarshal(m, b)
+}
+func (m *StoredInfoTypeConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StoredInfoTypeConfig.Marshal(b, m, deterministic)
+}
+func (dst *StoredInfoTypeConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StoredInfoTypeConfig.Merge(dst, src)
+}
+func (m *StoredInfoTypeConfig) XXX_Size() int {
+	return xxx_messageInfo_StoredInfoTypeConfig.Size(m)
+}
+func (m *StoredInfoTypeConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_StoredInfoTypeConfig.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StoredInfoTypeConfig proto.InternalMessageInfo
+
+func (m *StoredInfoTypeConfig) GetDisplayName() string {
+	if m != nil {
+		return m.DisplayName
+	}
+	return ""
+}
+
+func (m *StoredInfoTypeConfig) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+type isStoredInfoTypeConfig_Type interface {
+	isStoredInfoTypeConfig_Type()
+}
+
+type StoredInfoTypeConfig_LargeCustomDictionary struct {
+	LargeCustomDictionary *LargeCustomDictionaryConfig `protobuf:"bytes,3,opt,name=large_custom_dictionary,json=largeCustomDictionary,proto3,oneof"`
+}
+
+func (*StoredInfoTypeConfig_LargeCustomDictionary) isStoredInfoTypeConfig_Type() {}
+
+func (m *StoredInfoTypeConfig) GetType() isStoredInfoTypeConfig_Type {
+	if m != nil {
+		return m.Type
+	}
+	return nil
+}
+
+func (m *StoredInfoTypeConfig) GetLargeCustomDictionary() *LargeCustomDictionaryConfig {
+	if x, ok := m.GetType().(*StoredInfoTypeConfig_LargeCustomDictionary); ok {
+		return x.LargeCustomDictionary
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*StoredInfoTypeConfig) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _StoredInfoTypeConfig_OneofMarshaler, _StoredInfoTypeConfig_OneofUnmarshaler, _StoredInfoTypeConfig_OneofSizer, []interface{}{
+		(*StoredInfoTypeConfig_LargeCustomDictionary)(nil),
+	}
+}
+
+func _StoredInfoTypeConfig_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*StoredInfoTypeConfig)
+	// type
+	switch x := m.Type.(type) {
+	case *StoredInfoTypeConfig_LargeCustomDictionary:
+		b.EncodeVarint(3<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.LargeCustomDictionary); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("StoredInfoTypeConfig.Type has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _StoredInfoTypeConfig_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*StoredInfoTypeConfig)
+	switch tag {
+	case 3: // type.large_custom_dictionary
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(LargeCustomDictionaryConfig)
+		err := b.DecodeMessage(msg)
+		m.Type = &StoredInfoTypeConfig_LargeCustomDictionary{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _StoredInfoTypeConfig_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*StoredInfoTypeConfig)
+	// type
+	switch x := m.Type.(type) {
+	case *StoredInfoTypeConfig_LargeCustomDictionary:
+		s := proto.Size(x.LargeCustomDictionary)
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// Version of a StoredInfoType, including the configuration used to build it,
+// create timestamp, and current state.
+type StoredInfoTypeVersion struct {
+	// StoredInfoType configuration.
+	Config *StoredInfoTypeConfig `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// Create timestamp of the version. Read-only, determined by the system
+	// when the version is created.
+	CreateTime *timestamp.Timestamp `protobuf:"bytes,2,opt,name=create_time,json=createTime,proto3" json:"create_time,omitempty"`
+	// Stored info type version state. Read-only, updated by the system
+	// during dictionary creation.
+	State StoredInfoTypeState `protobuf:"varint,3,opt,name=state,proto3,enum=google.privacy.dlp.v2.StoredInfoTypeState" json:"state,omitempty"`
+	// Errors that occurred when creating this storedInfoType version, or
+	// anomalies detected in the storedInfoType data that render it unusable. Only
+	// the five most recent errors will be displayed, with the most recent error
+	// appearing first.
+	// <p>For example, some of the data for stored custom dictionaries is put in
+	// the user's Google Cloud Storage bucket, and if this data is modified or
+	// deleted by the user or another system, the dictionary becomes invalid.
+	// <p>If any errors occur, fix the problem indicated by the error message and
+	// use the UpdateStoredInfoType API method to create another version of the
+	// storedInfoType to continue using it, reusing the same `config` if it was
+	// not the source of the error.
+	Errors               []*Error `protobuf:"bytes,4,rep,name=errors,proto3" json:"errors,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *StoredInfoTypeVersion) Reset()         { *m = StoredInfoTypeVersion{} }
+func (m *StoredInfoTypeVersion) String() string { return proto.CompactTextString(m) }
+func (*StoredInfoTypeVersion) ProtoMessage()    {}
+func (*StoredInfoTypeVersion) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{101}
+}
+func (m *StoredInfoTypeVersion) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StoredInfoTypeVersion.Unmarshal(m, b)
+}
+func (m *StoredInfoTypeVersion) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StoredInfoTypeVersion.Marshal(b, m, deterministic)
+}
+func (dst *StoredInfoTypeVersion) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StoredInfoTypeVersion.Merge(dst, src)
+}
+func (m *StoredInfoTypeVersion) XXX_Size() int {
+	return xxx_messageInfo_StoredInfoTypeVersion.Size(m)
+}
+func (m *StoredInfoTypeVersion) XXX_DiscardUnknown() {
+	xxx_messageInfo_StoredInfoTypeVersion.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StoredInfoTypeVersion proto.InternalMessageInfo
+
+func (m *StoredInfoTypeVersion) GetConfig() *StoredInfoTypeConfig {
+	if m != nil {
+		return m.Config
+	}
+	return nil
+}
+
+func (m *StoredInfoTypeVersion) GetCreateTime() *timestamp.Timestamp {
+	if m != nil {
+		return m.CreateTime
+	}
+	return nil
+}
+
+func (m *StoredInfoTypeVersion) GetState() StoredInfoTypeState {
+	if m != nil {
+		return m.State
+	}
+	return StoredInfoTypeState_STORED_INFO_TYPE_STATE_UNSPECIFIED
+}
+
+func (m *StoredInfoTypeVersion) GetErrors() []*Error {
+	if m != nil {
+		return m.Errors
+	}
+	return nil
+}
+
+// StoredInfoType resource message that contains information about the current
+// version and any pending updates.
+type StoredInfoType struct {
+	// Resource name.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Current version of the stored info type.
+	CurrentVersion *StoredInfoTypeVersion `protobuf:"bytes,2,opt,name=current_version,json=currentVersion,proto3" json:"current_version,omitempty"`
+	// Pending versions of the stored info type. Empty if no versions are
+	// pending.
+	PendingVersions      []*StoredInfoTypeVersion `protobuf:"bytes,3,rep,name=pending_versions,json=pendingVersions,proto3" json:"pending_versions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}                 `json:"-"`
+	XXX_unrecognized     []byte                   `json:"-"`
+	XXX_sizecache        int32                    `json:"-"`
+}
+
+func (m *StoredInfoType) Reset()         { *m = StoredInfoType{} }
+func (m *StoredInfoType) String() string { return proto.CompactTextString(m) }
+func (*StoredInfoType) ProtoMessage()    {}
+func (*StoredInfoType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{102}
+}
+func (m *StoredInfoType) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_StoredInfoType.Unmarshal(m, b)
+}
+func (m *StoredInfoType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_StoredInfoType.Marshal(b, m, deterministic)
+}
+func (dst *StoredInfoType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_StoredInfoType.Merge(dst, src)
+}
+func (m *StoredInfoType) XXX_Size() int {
+	return xxx_messageInfo_StoredInfoType.Size(m)
+}
+func (m *StoredInfoType) XXX_DiscardUnknown() {
+	xxx_messageInfo_StoredInfoType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_StoredInfoType proto.InternalMessageInfo
+
+func (m *StoredInfoType) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *StoredInfoType) GetCurrentVersion() *StoredInfoTypeVersion {
+	if m != nil {
+		return m.CurrentVersion
+	}
+	return nil
+}
+
+func (m *StoredInfoType) GetPendingVersions() []*StoredInfoTypeVersion {
+	if m != nil {
+		return m.PendingVersions
+	}
+	return nil
+}
+
+// Request message for CreateStoredInfoType.
+type CreateStoredInfoTypeRequest struct {
+	// The parent resource name, for example projects/my-project-id or
+	// organizations/my-org-id.
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// Configuration of the storedInfoType to create.
+	Config *StoredInfoTypeConfig `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	// The storedInfoType ID can contain uppercase and lowercase letters,
+	// numbers, and hyphens; that is, it must match the regular
+	// expression: `[a-zA-Z\\d-]+`. The maximum length is 100
+	// characters. Can be empty to allow the system to generate one.
+	StoredInfoTypeId     string   `protobuf:"bytes,3,opt,name=stored_info_type_id,json=storedInfoTypeId,proto3" json:"stored_info_type_id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateStoredInfoTypeRequest) Reset()         { *m = CreateStoredInfoTypeRequest{} }
+func (m *CreateStoredInfoTypeRequest) String() string { return proto.CompactTextString(m) }
+func (*CreateStoredInfoTypeRequest) ProtoMessage()    {}
+func (*CreateStoredInfoTypeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{103}
+}
+func (m *CreateStoredInfoTypeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateStoredInfoTypeRequest.Unmarshal(m, b)
+}
+func (m *CreateStoredInfoTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateStoredInfoTypeRequest.Marshal(b, m, deterministic)
+}
+func (dst *CreateStoredInfoTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateStoredInfoTypeRequest.Merge(dst, src)
+}
+func (m *CreateStoredInfoTypeRequest) XXX_Size() int {
+	return xxx_messageInfo_CreateStoredInfoTypeRequest.Size(m)
+}
+func (m *CreateStoredInfoTypeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateStoredInfoTypeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateStoredInfoTypeRequest proto.InternalMessageInfo
+
+func (m *CreateStoredInfoTypeRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *CreateStoredInfoTypeRequest) GetConfig() *StoredInfoTypeConfig {
+	if m != nil {
+		return m.Config
+	}
+	return nil
+}
+
+func (m *CreateStoredInfoTypeRequest) GetStoredInfoTypeId() string {
+	if m != nil {
+		return m.StoredInfoTypeId
+	}
+	return ""
+}
+
+// Request message for UpdateStoredInfoType.
+type UpdateStoredInfoTypeRequest struct {
+	// Resource name of organization and storedInfoType to be updated, for
+	// example `organizations/433245324/storedInfoTypes/432452342` or
+	// projects/project-id/storedInfoTypes/432452342.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Updated configuration for the storedInfoType. If not provided, a new
+	// version of the storedInfoType will be created with the existing
+	// configuration.
+	Config *StoredInfoTypeConfig `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	// Mask to control which fields get updated.
+	UpdateMask           *field_mask.FieldMask `protobuf:"bytes,3,opt,name=update_mask,json=updateMask,proto3" json:"update_mask,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *UpdateStoredInfoTypeRequest) Reset()         { *m = UpdateStoredInfoTypeRequest{} }
+func (m *UpdateStoredInfoTypeRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateStoredInfoTypeRequest) ProtoMessage()    {}
+func (*UpdateStoredInfoTypeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{104}
+}
+func (m *UpdateStoredInfoTypeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateStoredInfoTypeRequest.Unmarshal(m, b)
+}
+func (m *UpdateStoredInfoTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateStoredInfoTypeRequest.Marshal(b, m, deterministic)
+}
+func (dst *UpdateStoredInfoTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateStoredInfoTypeRequest.Merge(dst, src)
+}
+func (m *UpdateStoredInfoTypeRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateStoredInfoTypeRequest.Size(m)
+}
+func (m *UpdateStoredInfoTypeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateStoredInfoTypeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateStoredInfoTypeRequest proto.InternalMessageInfo
+
+func (m *UpdateStoredInfoTypeRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateStoredInfoTypeRequest) GetConfig() *StoredInfoTypeConfig {
+	if m != nil {
+		return m.Config
+	}
+	return nil
+}
+
+func (m *UpdateStoredInfoTypeRequest) GetUpdateMask() *field_mask.FieldMask {
+	if m != nil {
+		return m.UpdateMask
+	}
+	return nil
+}
+
+// Request message for GetStoredInfoType.
+type GetStoredInfoTypeRequest struct {
+	// Resource name of the organization and storedInfoType to be read, for
+	// example `organizations/433245324/storedInfoTypes/432452342` or
+	// projects/project-id/storedInfoTypes/432452342.
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GetStoredInfoTypeRequest) Reset()         { *m = GetStoredInfoTypeRequest{} }
+func (m *GetStoredInfoTypeRequest) String() string { return proto.CompactTextString(m) }
+func (*GetStoredInfoTypeRequest) ProtoMessage()    {}
+func (*GetStoredInfoTypeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{105}
+}
+func (m *GetStoredInfoTypeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetStoredInfoTypeRequest.Unmarshal(m, b)
+}
+func (m *GetStoredInfoTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetStoredInfoTypeRequest.Marshal(b, m, deterministic)
+}
+func (dst *GetStoredInfoTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetStoredInfoTypeRequest.Merge(dst, src)
+}
+func (m *GetStoredInfoTypeRequest) XXX_Size() int {
+	return xxx_messageInfo_GetStoredInfoTypeRequest.Size(m)
+}
+func (m *GetStoredInfoTypeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetStoredInfoTypeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetStoredInfoTypeRequest proto.InternalMessageInfo
+
+func (m *GetStoredInfoTypeRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+// Request message for ListStoredInfoTypes.
+type ListStoredInfoTypesRequest struct {
+	// The parent resource name, for example projects/my-project-id or
+	// organizations/my-org-id.
+	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
+	// Optional page token to continue retrieval. Comes from previous call
+	// to `ListStoredInfoTypes`.
+	PageToken string `protobuf:"bytes,2,opt,name=page_token,json=pageToken,proto3" json:"page_token,omitempty"`
+	// Optional size of the page, can be limited by server. If zero server returns
+	// a page of max size 100.
+	PageSize int32 `protobuf:"varint,3,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	// Optional comma separated list of fields to order by,
+	// followed by `asc` or `desc` postfix. This list is case-insensitive,
+	// default sorting order is ascending, redundant space characters are
+	// insignificant.
+	//
+	// Example: `name asc, display_name, create_time desc`
+	//
+	// Supported fields are:
+	//
+	// - `create_time`: corresponds to time the most recent version of the
+	// resource was created.
+	// - `state`: corresponds to the state of the resource.
+	// - `name`: corresponds to resource name.
+	// - `display_name`: corresponds to info type's display name.
+	OrderBy              string   `protobuf:"bytes,4,opt,name=order_by,json=orderBy,proto3" json:"order_by,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListStoredInfoTypesRequest) Reset()         { *m = ListStoredInfoTypesRequest{} }
+func (m *ListStoredInfoTypesRequest) String() string { return proto.CompactTextString(m) }
+func (*ListStoredInfoTypesRequest) ProtoMessage()    {}
+func (*ListStoredInfoTypesRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{106}
+}
+func (m *ListStoredInfoTypesRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListStoredInfoTypesRequest.Unmarshal(m, b)
+}
+func (m *ListStoredInfoTypesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListStoredInfoTypesRequest.Marshal(b, m, deterministic)
+}
+func (dst *ListStoredInfoTypesRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListStoredInfoTypesRequest.Merge(dst, src)
+}
+func (m *ListStoredInfoTypesRequest) XXX_Size() int {
+	return xxx_messageInfo_ListStoredInfoTypesRequest.Size(m)
+}
+func (m *ListStoredInfoTypesRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListStoredInfoTypesRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListStoredInfoTypesRequest proto.InternalMessageInfo
+
+func (m *ListStoredInfoTypesRequest) GetParent() string {
+	if m != nil {
+		return m.Parent
+	}
+	return ""
+}
+
+func (m *ListStoredInfoTypesRequest) GetPageToken() string {
+	if m != nil {
+		return m.PageToken
+	}
+	return ""
+}
+
+func (m *ListStoredInfoTypesRequest) GetPageSize() int32 {
+	if m != nil {
+		return m.PageSize
+	}
+	return 0
+}
+
+func (m *ListStoredInfoTypesRequest) GetOrderBy() string {
+	if m != nil {
+		return m.OrderBy
+	}
+	return ""
+}
+
+// Response message for ListStoredInfoTypes.
+type ListStoredInfoTypesResponse struct {
+	// List of storedInfoTypes, up to page_size in ListStoredInfoTypesRequest.
+	StoredInfoTypes []*StoredInfoType `protobuf:"bytes,1,rep,name=stored_info_types,json=storedInfoTypes,proto3" json:"stored_info_types,omitempty"`
+	// If the next page is available then the next page token to be used
+	// in following ListStoredInfoTypes request.
+	NextPageToken        string   `protobuf:"bytes,2,opt,name=next_page_token,json=nextPageToken,proto3" json:"next_page_token,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ListStoredInfoTypesResponse) Reset()         { *m = ListStoredInfoTypesResponse{} }
+func (m *ListStoredInfoTypesResponse) String() string { return proto.CompactTextString(m) }
+func (*ListStoredInfoTypesResponse) ProtoMessage()    {}
+func (*ListStoredInfoTypesResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{107}
+}
+func (m *ListStoredInfoTypesResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListStoredInfoTypesResponse.Unmarshal(m, b)
+}
+func (m *ListStoredInfoTypesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListStoredInfoTypesResponse.Marshal(b, m, deterministic)
+}
+func (dst *ListStoredInfoTypesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListStoredInfoTypesResponse.Merge(dst, src)
+}
+func (m *ListStoredInfoTypesResponse) XXX_Size() int {
+	return xxx_messageInfo_ListStoredInfoTypesResponse.Size(m)
+}
+func (m *ListStoredInfoTypesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListStoredInfoTypesResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListStoredInfoTypesResponse proto.InternalMessageInfo
+
+func (m *ListStoredInfoTypesResponse) GetStoredInfoTypes() []*StoredInfoType {
+	if m != nil {
+		return m.StoredInfoTypes
+	}
+	return nil
+}
+
+func (m *ListStoredInfoTypesResponse) GetNextPageToken() string {
+	if m != nil {
+		return m.NextPageToken
+	}
+	return ""
+}
+
+// Request message for DeleteStoredInfoType.
+type DeleteStoredInfoTypeRequest struct {
+	// Resource name of the organization and storedInfoType to be deleted, for
+	// example `organizations/433245324/storedInfoTypes/432452342` or
+	// projects/project-id/storedInfoTypes/432452342.
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteStoredInfoTypeRequest) Reset()         { *m = DeleteStoredInfoTypeRequest{} }
+func (m *DeleteStoredInfoTypeRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteStoredInfoTypeRequest) ProtoMessage()    {}
+func (*DeleteStoredInfoTypeRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dlp_9184f835f60c3220, []int{108}
+}
+func (m *DeleteStoredInfoTypeRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteStoredInfoTypeRequest.Unmarshal(m, b)
+}
+func (m *DeleteStoredInfoTypeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteStoredInfoTypeRequest.Marshal(b, m, deterministic)
+}
+func (dst *DeleteStoredInfoTypeRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteStoredInfoTypeRequest.Merge(dst, src)
+}
+func (m *DeleteStoredInfoTypeRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteStoredInfoTypeRequest.Size(m)
+}
+func (m *DeleteStoredInfoTypeRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteStoredInfoTypeRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteStoredInfoTypeRequest proto.InternalMessageInfo
+
+func (m *DeleteStoredInfoTypeRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 func init() {
+	proto.RegisterType((*ExcludeInfoTypes)(nil), "google.privacy.dlp.v2.ExcludeInfoTypes")
+	proto.RegisterType((*ExclusionRule)(nil), "google.privacy.dlp.v2.ExclusionRule")
+	proto.RegisterType((*InspectionRule)(nil), "google.privacy.dlp.v2.InspectionRule")
+	proto.RegisterType((*InspectionRuleSet)(nil), "google.privacy.dlp.v2.InspectionRuleSet")
 	proto.RegisterType((*InspectConfig)(nil), "google.privacy.dlp.v2.InspectConfig")
 	proto.RegisterType((*InspectConfig_FindingLimits)(nil), "google.privacy.dlp.v2.InspectConfig.FindingLimits")
 	proto.RegisterType((*InspectConfig_FindingLimits_InfoTypeLimit)(nil), "google.privacy.dlp.v2.InspectConfig.FindingLimits.InfoTypeLimit")
@@ -10816,6 +13120,9 @@ func init() {
 	proto.RegisterType((*ListInfoTypesRequest)(nil), "google.privacy.dlp.v2.ListInfoTypesRequest")
 	proto.RegisterType((*ListInfoTypesResponse)(nil), "google.privacy.dlp.v2.ListInfoTypesResponse")
 	proto.RegisterType((*RiskAnalysisJobConfig)(nil), "google.privacy.dlp.v2.RiskAnalysisJobConfig")
+	proto.RegisterType((*QuasiId)(nil), "google.privacy.dlp.v2.QuasiId")
+	proto.RegisterType((*StatisticalTable)(nil), "google.privacy.dlp.v2.StatisticalTable")
+	proto.RegisterType((*StatisticalTable_QuasiIdentifierField)(nil), "google.privacy.dlp.v2.StatisticalTable.QuasiIdentifierField")
 	proto.RegisterType((*PrivacyMetric)(nil), "google.privacy.dlp.v2.PrivacyMetric")
 	proto.RegisterType((*PrivacyMetric_NumericalStatsConfig)(nil), "google.privacy.dlp.v2.PrivacyMetric.NumericalStatsConfig")
 	proto.RegisterType((*PrivacyMetric_CategoricalStatsConfig)(nil), "google.privacy.dlp.v2.PrivacyMetric.CategoricalStatsConfig")
@@ -10825,6 +13132,7 @@ func init() {
 	proto.RegisterType((*PrivacyMetric_KMapEstimationConfig_TaggedField)(nil), "google.privacy.dlp.v2.PrivacyMetric.KMapEstimationConfig.TaggedField")
 	proto.RegisterType((*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable)(nil), "google.privacy.dlp.v2.PrivacyMetric.KMapEstimationConfig.AuxiliaryTable")
 	proto.RegisterType((*PrivacyMetric_KMapEstimationConfig_AuxiliaryTable_QuasiIdField)(nil), "google.privacy.dlp.v2.PrivacyMetric.KMapEstimationConfig.AuxiliaryTable.QuasiIdField")
+	proto.RegisterType((*PrivacyMetric_DeltaPresenceEstimationConfig)(nil), "google.privacy.dlp.v2.PrivacyMetric.DeltaPresenceEstimationConfig")
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails")
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails_NumericalStatsResult)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.NumericalStatsResult")
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails_CategoricalStatsResult)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.CategoricalStatsResult")
@@ -10838,6 +13146,9 @@ func init() {
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails_KMapEstimationResult)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.KMapEstimationResult")
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationQuasiIdValues)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.KMapEstimationResult.KMapEstimationQuasiIdValues")
 	proto.RegisterType((*AnalyzeDataSourceRiskDetails_KMapEstimationResult_KMapEstimationHistogramBucket)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.KMapEstimationResult.KMapEstimationHistogramBucket")
+	proto.RegisterType((*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.DeltaPresenceEstimationResult")
+	proto.RegisterType((*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationQuasiIdValues)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.DeltaPresenceEstimationResult.DeltaPresenceEstimationQuasiIdValues")
+	proto.RegisterType((*AnalyzeDataSourceRiskDetails_DeltaPresenceEstimationResult_DeltaPresenceEstimationHistogramBucket)(nil), "google.privacy.dlp.v2.AnalyzeDataSourceRiskDetails.DeltaPresenceEstimationResult.DeltaPresenceEstimationHistogramBucket")
 	proto.RegisterType((*ValueFrequency)(nil), "google.privacy.dlp.v2.ValueFrequency")
 	proto.RegisterType((*Value)(nil), "google.privacy.dlp.v2.Value")
 	proto.RegisterType((*QuoteInfo)(nil), "google.privacy.dlp.v2.QuoteInfo")
@@ -10883,6 +13194,7 @@ func init() {
 	proto.RegisterType((*Action_SaveFindings)(nil), "google.privacy.dlp.v2.Action.SaveFindings")
 	proto.RegisterType((*Action_PublishToPubSub)(nil), "google.privacy.dlp.v2.Action.PublishToPubSub")
 	proto.RegisterType((*Action_PublishSummaryToCscc)(nil), "google.privacy.dlp.v2.Action.PublishSummaryToCscc")
+	proto.RegisterType((*Action_JobNotificationEmails)(nil), "google.privacy.dlp.v2.Action.JobNotificationEmails")
 	proto.RegisterType((*CreateInspectTemplateRequest)(nil), "google.privacy.dlp.v2.CreateInspectTemplateRequest")
 	proto.RegisterType((*UpdateInspectTemplateRequest)(nil), "google.privacy.dlp.v2.UpdateInspectTemplateRequest")
 	proto.RegisterType((*GetInspectTemplateRequest)(nil), "google.privacy.dlp.v2.GetInspectTemplateRequest")
@@ -10890,6 +13202,7 @@ func init() {
 	proto.RegisterType((*ListInspectTemplatesResponse)(nil), "google.privacy.dlp.v2.ListInspectTemplatesResponse")
 	proto.RegisterType((*DeleteInspectTemplateRequest)(nil), "google.privacy.dlp.v2.DeleteInspectTemplateRequest")
 	proto.RegisterType((*CreateJobTriggerRequest)(nil), "google.privacy.dlp.v2.CreateJobTriggerRequest")
+	proto.RegisterType((*ActivateJobTriggerRequest)(nil), "google.privacy.dlp.v2.ActivateJobTriggerRequest")
 	proto.RegisterType((*UpdateJobTriggerRequest)(nil), "google.privacy.dlp.v2.UpdateJobTriggerRequest")
 	proto.RegisterType((*GetJobTriggerRequest)(nil), "google.privacy.dlp.v2.GetJobTriggerRequest")
 	proto.RegisterType((*CreateDlpJobRequest)(nil), "google.privacy.dlp.v2.CreateDlpJobRequest")
@@ -10909,10 +13222,22 @@ func init() {
 	proto.RegisterType((*ListDeidentifyTemplatesRequest)(nil), "google.privacy.dlp.v2.ListDeidentifyTemplatesRequest")
 	proto.RegisterType((*ListDeidentifyTemplatesResponse)(nil), "google.privacy.dlp.v2.ListDeidentifyTemplatesResponse")
 	proto.RegisterType((*DeleteDeidentifyTemplateRequest)(nil), "google.privacy.dlp.v2.DeleteDeidentifyTemplateRequest")
+	proto.RegisterType((*LargeCustomDictionaryConfig)(nil), "google.privacy.dlp.v2.LargeCustomDictionaryConfig")
+	proto.RegisterType((*StoredInfoTypeConfig)(nil), "google.privacy.dlp.v2.StoredInfoTypeConfig")
+	proto.RegisterType((*StoredInfoTypeVersion)(nil), "google.privacy.dlp.v2.StoredInfoTypeVersion")
+	proto.RegisterType((*StoredInfoType)(nil), "google.privacy.dlp.v2.StoredInfoType")
+	proto.RegisterType((*CreateStoredInfoTypeRequest)(nil), "google.privacy.dlp.v2.CreateStoredInfoTypeRequest")
+	proto.RegisterType((*UpdateStoredInfoTypeRequest)(nil), "google.privacy.dlp.v2.UpdateStoredInfoTypeRequest")
+	proto.RegisterType((*GetStoredInfoTypeRequest)(nil), "google.privacy.dlp.v2.GetStoredInfoTypeRequest")
+	proto.RegisterType((*ListStoredInfoTypesRequest)(nil), "google.privacy.dlp.v2.ListStoredInfoTypesRequest")
+	proto.RegisterType((*ListStoredInfoTypesResponse)(nil), "google.privacy.dlp.v2.ListStoredInfoTypesResponse")
+	proto.RegisterType((*DeleteStoredInfoTypeRequest)(nil), "google.privacy.dlp.v2.DeleteStoredInfoTypeRequest")
 	proto.RegisterEnum("google.privacy.dlp.v2.ContentOption", ContentOption_name, ContentOption_value)
+	proto.RegisterEnum("google.privacy.dlp.v2.MatchingType", MatchingType_name, MatchingType_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.InfoTypeSupportedBy", InfoTypeSupportedBy_name, InfoTypeSupportedBy_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.RelationalOperator", RelationalOperator_name, RelationalOperator_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.DlpJobType", DlpJobType_name, DlpJobType_value)
+	proto.RegisterEnum("google.privacy.dlp.v2.StoredInfoTypeState", StoredInfoTypeState_name, StoredInfoTypeState_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.ByteContentItem_BytesType", ByteContentItem_BytesType_name, ByteContentItem_BytesType_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.OutputStorageConfig_OutputSchema", OutputStorageConfig_OutputSchema_name, OutputStorageConfig_OutputSchema_value)
 	proto.RegisterEnum("google.privacy.dlp.v2.TimePartConfig_TimePart", TimePartConfig_TimePart_name, TimePartConfig_TimePart_value)
@@ -10938,71 +13263,146 @@ const _ = grpc.SupportPackageIsVersion4
 type DlpServiceClient interface {
 	// Finds potentially sensitive info in content.
 	// This method has limits on input size, processing time, and output size.
-	// [How-to guide for text](/dlp/docs/inspecting-text), [How-to guide for
-	// images](/dlp/docs/inspecting-images)
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
+	//
+	// For how to guides, see https://cloud.google.com/dlp/docs/inspecting-images
+	// and https://cloud.google.com/dlp/docs/inspecting-text,
 	InspectContent(ctx context.Context, in *InspectContentRequest, opts ...grpc.CallOption) (*InspectContentResponse, error)
 	// Redacts potentially sensitive info from an image.
 	// This method has limits on input size, processing time, and output size.
-	// [How-to guide](/dlp/docs/redacting-sensitive-data-images)
+	// See https://cloud.google.com/dlp/docs/redacting-sensitive-data-images to
+	// learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	RedactImage(ctx context.Context, in *RedactImageRequest, opts ...grpc.CallOption) (*RedactImageResponse, error)
 	// De-identifies potentially sensitive info from a ContentItem.
 	// This method has limits on input size and output size.
-	// [How-to guide](/dlp/docs/deidentify-sensitive-data)
+	// See https://cloud.google.com/dlp/docs/deidentify-sensitive-data to
+	// learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	DeidentifyContent(ctx context.Context, in *DeidentifyContentRequest, opts ...grpc.CallOption) (*DeidentifyContentResponse, error)
 	// Re-identifies content that has been de-identified.
+	// See
+	// https://cloud.google.com/dlp/docs/pseudonymization#re-identification_in_free_text_code_example
+	// to learn more.
 	ReidentifyContent(ctx context.Context, in *ReidentifyContentRequest, opts ...grpc.CallOption) (*ReidentifyContentResponse, error)
 	// Returns a list of the sensitive information types that the DLP API
-	// supports. For more information, see [Listing supported predefined
-	// infoTypes](/dlp/docs/listing-infotypes).
+	// supports. See https://cloud.google.com/dlp/docs/infotypes-reference to
+	// learn more.
 	ListInfoTypes(ctx context.Context, in *ListInfoTypesRequest, opts ...grpc.CallOption) (*ListInfoTypesResponse, error)
 	// Creates an InspectTemplate for re-using frequently used configuration
 	// for inspecting content, images, and storage.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	CreateInspectTemplate(ctx context.Context, in *CreateInspectTemplateRequest, opts ...grpc.CallOption) (*InspectTemplate, error)
 	// Updates the InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	UpdateInspectTemplate(ctx context.Context, in *UpdateInspectTemplateRequest, opts ...grpc.CallOption) (*InspectTemplate, error)
 	// Gets an InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	GetInspectTemplate(ctx context.Context, in *GetInspectTemplateRequest, opts ...grpc.CallOption) (*InspectTemplate, error)
 	// Lists InspectTemplates.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	ListInspectTemplates(ctx context.Context, in *ListInspectTemplatesRequest, opts ...grpc.CallOption) (*ListInspectTemplatesResponse, error)
 	// Deletes an InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	DeleteInspectTemplate(ctx context.Context, in *DeleteInspectTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// Creates a DeidentifyTemplate for re-using frequently used configuration
 	// for de-identifying content, images, and storage.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	CreateDeidentifyTemplate(ctx context.Context, in *CreateDeidentifyTemplateRequest, opts ...grpc.CallOption) (*DeidentifyTemplate, error)
 	// Updates the DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	UpdateDeidentifyTemplate(ctx context.Context, in *UpdateDeidentifyTemplateRequest, opts ...grpc.CallOption) (*DeidentifyTemplate, error)
 	// Gets a DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	GetDeidentifyTemplate(ctx context.Context, in *GetDeidentifyTemplateRequest, opts ...grpc.CallOption) (*DeidentifyTemplate, error)
 	// Lists DeidentifyTemplates.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	ListDeidentifyTemplates(ctx context.Context, in *ListDeidentifyTemplatesRequest, opts ...grpc.CallOption) (*ListDeidentifyTemplatesResponse, error)
 	// Deletes a DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	DeleteDeidentifyTemplate(ctx context.Context, in *DeleteDeidentifyTemplateRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// Creates a job trigger to run DLP actions such as scanning storage for
 	// sensitive information on a set schedule.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	CreateJobTrigger(ctx context.Context, in *CreateJobTriggerRequest, opts ...grpc.CallOption) (*JobTrigger, error)
 	// Updates a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	UpdateJobTrigger(ctx context.Context, in *UpdateJobTriggerRequest, opts ...grpc.CallOption) (*JobTrigger, error)
 	// Gets a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	GetJobTrigger(ctx context.Context, in *GetJobTriggerRequest, opts ...grpc.CallOption) (*JobTrigger, error)
 	// Lists job triggers.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	ListJobTriggers(ctx context.Context, in *ListJobTriggersRequest, opts ...grpc.CallOption) (*ListJobTriggersResponse, error)
 	// Deletes a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	DeleteJobTrigger(ctx context.Context, in *DeleteJobTriggerRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// Activate a job trigger. Causes the immediate execute of a trigger
+	// instead of waiting on the trigger event to occur.
+	ActivateJobTrigger(ctx context.Context, in *ActivateJobTriggerRequest, opts ...grpc.CallOption) (*DlpJob, error)
 	// Creates a new job to inspect storage or calculate risk metrics.
-	// [How-to guide](/dlp/docs/compute-risk-analysis).
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in inspect jobs, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	CreateDlpJob(ctx context.Context, in *CreateDlpJobRequest, opts ...grpc.CallOption) (*DlpJob, error)
 	// Lists DlpJobs that match the specified filter in the request.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	ListDlpJobs(ctx context.Context, in *ListDlpJobsRequest, opts ...grpc.CallOption) (*ListDlpJobsResponse, error)
 	// Gets the latest state of a long-running DlpJob.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	GetDlpJob(ctx context.Context, in *GetDlpJobRequest, opts ...grpc.CallOption) (*DlpJob, error)
 	// Deletes a long-running DlpJob. This method indicates that the client is
 	// no longer interested in the DlpJob result. The job will be cancelled if
 	// possible.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	DeleteDlpJob(ctx context.Context, in *DeleteDlpJobRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	// Starts asynchronous cancellation on a long-running DlpJob. The server
 	// makes a best effort to cancel the DlpJob, but success is not
 	// guaranteed.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	CancelDlpJob(ctx context.Context, in *CancelDlpJobRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	// Creates a pre-built stored infoType to be used for inspection.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	CreateStoredInfoType(ctx context.Context, in *CreateStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error)
+	// Updates the stored infoType by creating a new version. The existing version
+	// will continue to be used until the new version is ready.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	UpdateStoredInfoType(ctx context.Context, in *UpdateStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error)
+	// Gets a stored infoType.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	GetStoredInfoType(ctx context.Context, in *GetStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error)
+	// Lists stored infoTypes.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	ListStoredInfoTypes(ctx context.Context, in *ListStoredInfoTypesRequest, opts ...grpc.CallOption) (*ListStoredInfoTypesResponse, error)
+	// Deletes a stored infoType.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	DeleteStoredInfoType(ctx context.Context, in *DeleteStoredInfoTypeRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 }
 
 type dlpServiceClient struct {
@@ -11193,6 +13593,15 @@ func (c *dlpServiceClient) DeleteJobTrigger(ctx context.Context, in *DeleteJobTr
 	return out, nil
 }
 
+func (c *dlpServiceClient) ActivateJobTrigger(ctx context.Context, in *ActivateJobTriggerRequest, opts ...grpc.CallOption) (*DlpJob, error) {
+	out := new(DlpJob)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/ActivateJobTrigger", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *dlpServiceClient) CreateDlpJob(ctx context.Context, in *CreateDlpJobRequest, opts ...grpc.CallOption) (*DlpJob, error) {
 	out := new(DlpJob)
 	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/CreateDlpJob", in, out, opts...)
@@ -11238,75 +13647,195 @@ func (c *dlpServiceClient) CancelDlpJob(ctx context.Context, in *CancelDlpJobReq
 	return out, nil
 }
 
+func (c *dlpServiceClient) CreateStoredInfoType(ctx context.Context, in *CreateStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error) {
+	out := new(StoredInfoType)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/CreateStoredInfoType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dlpServiceClient) UpdateStoredInfoType(ctx context.Context, in *UpdateStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error) {
+	out := new(StoredInfoType)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/UpdateStoredInfoType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dlpServiceClient) GetStoredInfoType(ctx context.Context, in *GetStoredInfoTypeRequest, opts ...grpc.CallOption) (*StoredInfoType, error) {
+	out := new(StoredInfoType)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/GetStoredInfoType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dlpServiceClient) ListStoredInfoTypes(ctx context.Context, in *ListStoredInfoTypesRequest, opts ...grpc.CallOption) (*ListStoredInfoTypesResponse, error) {
+	out := new(ListStoredInfoTypesResponse)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/ListStoredInfoTypes", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *dlpServiceClient) DeleteStoredInfoType(ctx context.Context, in *DeleteStoredInfoTypeRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
+	out := new(empty.Empty)
+	err := c.cc.Invoke(ctx, "/google.privacy.dlp.v2.DlpService/DeleteStoredInfoType", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // DlpServiceServer is the server API for DlpService service.
 type DlpServiceServer interface {
 	// Finds potentially sensitive info in content.
 	// This method has limits on input size, processing time, and output size.
-	// [How-to guide for text](/dlp/docs/inspecting-text), [How-to guide for
-	// images](/dlp/docs/inspecting-images)
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
+	//
+	// For how to guides, see https://cloud.google.com/dlp/docs/inspecting-images
+	// and https://cloud.google.com/dlp/docs/inspecting-text,
 	InspectContent(context.Context, *InspectContentRequest) (*InspectContentResponse, error)
 	// Redacts potentially sensitive info from an image.
 	// This method has limits on input size, processing time, and output size.
-	// [How-to guide](/dlp/docs/redacting-sensitive-data-images)
+	// See https://cloud.google.com/dlp/docs/redacting-sensitive-data-images to
+	// learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	RedactImage(context.Context, *RedactImageRequest) (*RedactImageResponse, error)
 	// De-identifies potentially sensitive info from a ContentItem.
 	// This method has limits on input size and output size.
-	// [How-to guide](/dlp/docs/deidentify-sensitive-data)
+	// See https://cloud.google.com/dlp/docs/deidentify-sensitive-data to
+	// learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in this request, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	DeidentifyContent(context.Context, *DeidentifyContentRequest) (*DeidentifyContentResponse, error)
 	// Re-identifies content that has been de-identified.
+	// See
+	// https://cloud.google.com/dlp/docs/pseudonymization#re-identification_in_free_text_code_example
+	// to learn more.
 	ReidentifyContent(context.Context, *ReidentifyContentRequest) (*ReidentifyContentResponse, error)
 	// Returns a list of the sensitive information types that the DLP API
-	// supports. For more information, see [Listing supported predefined
-	// infoTypes](/dlp/docs/listing-infotypes).
+	// supports. See https://cloud.google.com/dlp/docs/infotypes-reference to
+	// learn more.
 	ListInfoTypes(context.Context, *ListInfoTypesRequest) (*ListInfoTypesResponse, error)
 	// Creates an InspectTemplate for re-using frequently used configuration
 	// for inspecting content, images, and storage.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	CreateInspectTemplate(context.Context, *CreateInspectTemplateRequest) (*InspectTemplate, error)
 	// Updates the InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	UpdateInspectTemplate(context.Context, *UpdateInspectTemplateRequest) (*InspectTemplate, error)
 	// Gets an InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	GetInspectTemplate(context.Context, *GetInspectTemplateRequest) (*InspectTemplate, error)
 	// Lists InspectTemplates.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	ListInspectTemplates(context.Context, *ListInspectTemplatesRequest) (*ListInspectTemplatesResponse, error)
 	// Deletes an InspectTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates to learn more.
 	DeleteInspectTemplate(context.Context, *DeleteInspectTemplateRequest) (*empty.Empty, error)
 	// Creates a DeidentifyTemplate for re-using frequently used configuration
 	// for de-identifying content, images, and storage.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	CreateDeidentifyTemplate(context.Context, *CreateDeidentifyTemplateRequest) (*DeidentifyTemplate, error)
 	// Updates the DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	UpdateDeidentifyTemplate(context.Context, *UpdateDeidentifyTemplateRequest) (*DeidentifyTemplate, error)
 	// Gets a DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	GetDeidentifyTemplate(context.Context, *GetDeidentifyTemplateRequest) (*DeidentifyTemplate, error)
 	// Lists DeidentifyTemplates.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	ListDeidentifyTemplates(context.Context, *ListDeidentifyTemplatesRequest) (*ListDeidentifyTemplatesResponse, error)
 	// Deletes a DeidentifyTemplate.
+	// See https://cloud.google.com/dlp/docs/creating-templates-deid to learn
+	// more.
 	DeleteDeidentifyTemplate(context.Context, *DeleteDeidentifyTemplateRequest) (*empty.Empty, error)
 	// Creates a job trigger to run DLP actions such as scanning storage for
 	// sensitive information on a set schedule.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	CreateJobTrigger(context.Context, *CreateJobTriggerRequest) (*JobTrigger, error)
 	// Updates a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	UpdateJobTrigger(context.Context, *UpdateJobTriggerRequest) (*JobTrigger, error)
 	// Gets a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	GetJobTrigger(context.Context, *GetJobTriggerRequest) (*JobTrigger, error)
 	// Lists job triggers.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	ListJobTriggers(context.Context, *ListJobTriggersRequest) (*ListJobTriggersResponse, error)
 	// Deletes a job trigger.
+	// See https://cloud.google.com/dlp/docs/creating-job-triggers to learn more.
 	DeleteJobTrigger(context.Context, *DeleteJobTriggerRequest) (*empty.Empty, error)
+	// Activate a job trigger. Causes the immediate execute of a trigger
+	// instead of waiting on the trigger event to occur.
+	ActivateJobTrigger(context.Context, *ActivateJobTriggerRequest) (*DlpJob, error)
 	// Creates a new job to inspect storage or calculate risk metrics.
-	// [How-to guide](/dlp/docs/compute-risk-analysis).
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
+	//
+	// When no InfoTypes or CustomInfoTypes are specified in inspect jobs, the
+	// system will automatically choose what detectors to run. By default this may
+	// be all types, but may change over time as detectors are updated.
 	CreateDlpJob(context.Context, *CreateDlpJobRequest) (*DlpJob, error)
 	// Lists DlpJobs that match the specified filter in the request.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	ListDlpJobs(context.Context, *ListDlpJobsRequest) (*ListDlpJobsResponse, error)
 	// Gets the latest state of a long-running DlpJob.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	GetDlpJob(context.Context, *GetDlpJobRequest) (*DlpJob, error)
 	// Deletes a long-running DlpJob. This method indicates that the client is
 	// no longer interested in the DlpJob result. The job will be cancelled if
 	// possible.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	DeleteDlpJob(context.Context, *DeleteDlpJobRequest) (*empty.Empty, error)
 	// Starts asynchronous cancellation on a long-running DlpJob. The server
 	// makes a best effort to cancel the DlpJob, but success is not
 	// guaranteed.
+	// See https://cloud.google.com/dlp/docs/inspecting-storage and
+	// https://cloud.google.com/dlp/docs/compute-risk-analysis to learn more.
 	CancelDlpJob(context.Context, *CancelDlpJobRequest) (*empty.Empty, error)
+	// Creates a pre-built stored infoType to be used for inspection.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	CreateStoredInfoType(context.Context, *CreateStoredInfoTypeRequest) (*StoredInfoType, error)
+	// Updates the stored infoType by creating a new version. The existing version
+	// will continue to be used until the new version is ready.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	UpdateStoredInfoType(context.Context, *UpdateStoredInfoTypeRequest) (*StoredInfoType, error)
+	// Gets a stored infoType.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	GetStoredInfoType(context.Context, *GetStoredInfoTypeRequest) (*StoredInfoType, error)
+	// Lists stored infoTypes.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	ListStoredInfoTypes(context.Context, *ListStoredInfoTypesRequest) (*ListStoredInfoTypesResponse, error)
+	// Deletes a stored infoType.
+	// See https://cloud.google.com/dlp/docs/creating-stored-infotypes to
+	// learn more.
+	DeleteStoredInfoType(context.Context, *DeleteStoredInfoTypeRequest) (*empty.Empty, error)
 }
 
 func RegisterDlpServiceServer(s *grpc.Server, srv DlpServiceServer) {
@@ -11673,6 +14202,24 @@ func _DlpService_DeleteJobTrigger_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DlpService_ActivateJobTrigger_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivateJobTriggerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).ActivateJobTrigger(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/ActivateJobTrigger",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).ActivateJobTrigger(ctx, req.(*ActivateJobTriggerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _DlpService_CreateDlpJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateDlpJobRequest)
 	if err := dec(in); err != nil {
@@ -11763,6 +14310,96 @@ func _DlpService_CancelDlpJob_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _DlpService_CreateStoredInfoType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateStoredInfoTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).CreateStoredInfoType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/CreateStoredInfoType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).CreateStoredInfoType(ctx, req.(*CreateStoredInfoTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DlpService_UpdateStoredInfoType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateStoredInfoTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).UpdateStoredInfoType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/UpdateStoredInfoType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).UpdateStoredInfoType(ctx, req.(*UpdateStoredInfoTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DlpService_GetStoredInfoType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetStoredInfoTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).GetStoredInfoType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/GetStoredInfoType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).GetStoredInfoType(ctx, req.(*GetStoredInfoTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DlpService_ListStoredInfoTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListStoredInfoTypesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).ListStoredInfoTypes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/ListStoredInfoTypes",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).ListStoredInfoTypes(ctx, req.(*ListStoredInfoTypesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _DlpService_DeleteStoredInfoType_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteStoredInfoTypeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(DlpServiceServer).DeleteStoredInfoType(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/google.privacy.dlp.v2.DlpService/DeleteStoredInfoType",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(DlpServiceServer).DeleteStoredInfoType(ctx, req.(*DeleteStoredInfoTypeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _DlpService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "google.privacy.dlp.v2.DlpService",
 	HandlerType: (*DlpServiceServer)(nil),
@@ -11848,6 +14485,10 @@ var _DlpService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _DlpService_DeleteJobTrigger_Handler,
 		},
 		{
+			MethodName: "ActivateJobTrigger",
+			Handler:    _DlpService_ActivateJobTrigger_Handler,
+		},
+		{
 			MethodName: "CreateDlpJob",
 			Handler:    _DlpService_CreateDlpJob_Handler,
 		},
@@ -11867,518 +14508,614 @@ var _DlpService_serviceDesc = grpc.ServiceDesc{
 			MethodName: "CancelDlpJob",
 			Handler:    _DlpService_CancelDlpJob_Handler,
 		},
+		{
+			MethodName: "CreateStoredInfoType",
+			Handler:    _DlpService_CreateStoredInfoType_Handler,
+		},
+		{
+			MethodName: "UpdateStoredInfoType",
+			Handler:    _DlpService_UpdateStoredInfoType_Handler,
+		},
+		{
+			MethodName: "GetStoredInfoType",
+			Handler:    _DlpService_GetStoredInfoType_Handler,
+		},
+		{
+			MethodName: "ListStoredInfoTypes",
+			Handler:    _DlpService_ListStoredInfoTypes_Handler,
+		},
+		{
+			MethodName: "DeleteStoredInfoType",
+			Handler:    _DlpService_DeleteStoredInfoType_Handler,
+		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "google/privacy/dlp/v2/dlp.proto",
 }
 
 func init() {
-	proto.RegisterFile("google/privacy/dlp/v2/dlp.proto", fileDescriptor_dlp_d5eb98801684ed28)
+	proto.RegisterFile("google/privacy/dlp/v2/dlp.proto", fileDescriptor_dlp_9184f835f60c3220)
 }
 
-var fileDescriptor_dlp_d5eb98801684ed28 = []byte{
-	// 8047 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x7d, 0x6b, 0x6c, 0x1b, 0x59,
-	0x77, 0x98, 0x86, 0x14, 0x25, 0xf2, 0xf0, 0x21, 0xea, 0xea, 0x61, 0x99, 0xb6, 0xd7, 0xde, 0xf1,
-	0xae, 0xd7, 0xab, 0xb5, 0xa5, 0x5d, 0xed, 0xe3, 0xdb, 0xf5, 0xee, 0xb7, 0x09, 0x45, 0xd2, 0x26,
-	0xbd, 0x92, 0x28, 0x0f, 0x29, 0xef, 0xda, 0x59, 0xec, 0x74, 0x44, 0x5e, 0x51, 0x63, 0x91, 0x33,
-	0xf4, 0xcc, 0xd0, 0x96, 0x36, 0x49, 0xf1, 0xa5, 0x48, 0x1b, 0xa4, 0xe8, 0x87, 0x06, 0x68, 0xbf,
-	0x7e, 0x68, 0xd2, 0x06, 0x69, 0xfb, 0xa3, 0x40, 0x80, 0xb4, 0x28, 0xda, 0x26, 0x68, 0x9b, 0xe6,
-	0x47, 0x5a, 0xb4, 0x45, 0x51, 0x14, 0x5f, 0xf0, 0xfd, 0x2a, 0x8a, 0x02, 0xed, 0xd7, 0x07, 0x0a,
-	0x6c, 0xfe, 0x14, 0xe8, 0x8f, 0x3e, 0x80, 0xa2, 0xb8, 0x8f, 0x79, 0x72, 0x86, 0x0f, 0xd9, 0x8b,
-	0x04, 0xf9, 0x25, 0xce, 0xb9, 0xe7, 0x9c, 0x7b, 0xee, 0x39, 0xe7, 0x9e, 0x7b, 0xef, 0xb9, 0x0f,
-	0xc1, 0xd5, 0x8e, 0xae, 0x77, 0xba, 0x78, 0xb3, 0x6f, 0xa8, 0xcf, 0x94, 0xd6, 0xd9, 0x66, 0xbb,
-	0xdb, 0xdf, 0x7c, 0xb6, 0x45, 0xfe, 0x6c, 0xf4, 0x0d, 0xdd, 0xd2, 0xd1, 0x0a, 0x43, 0xd8, 0xe0,
-	0x08, 0x1b, 0xa4, 0xe4, 0xd9, 0x56, 0xe1, 0x32, 0xa7, 0x53, 0xfa, 0xea, 0xa6, 0xa2, 0x69, 0xba,
-	0xa5, 0x58, 0xaa, 0xae, 0x99, 0x8c, 0xa8, 0x70, 0x3d, 0x9c, 0xab, 0x69, 0xe9, 0x86, 0xd2, 0xc1,
-	0x1c, 0xe9, 0x15, 0x07, 0x49, 0xb7, 0xf4, 0xc3, 0xc1, 0xd1, 0x66, 0x7b, 0x60, 0x50, 0x2e, 0xbc,
-	0xfc, 0x52, 0xb0, 0x1c, 0xf7, 0xfa, 0xd6, 0x19, 0x2f, 0xbc, 0x16, 0x2c, 0x3c, 0x52, 0x71, 0xb7,
-	0x2d, 0xf7, 0x14, 0xf3, 0x84, 0x63, 0x5c, 0x0d, 0x62, 0x58, 0x6a, 0x0f, 0x9b, 0x96, 0xd2, 0xe3,
-	0x2d, 0x2b, 0x5c, 0xe0, 0x08, 0x46, 0xbf, 0xb5, 0x69, 0x5a, 0x8a, 0x35, 0xb0, 0xa5, 0x5f, 0xe5,
-	0x05, 0xd6, 0x59, 0x1f, 0x6f, 0xb6, 0x15, 0x0b, 0x07, 0x04, 0xe2, 0xf0, 0x33, 0xfd, 0xe8, 0x39,
-	0xc6, 0x27, 0x61, 0x85, 0xa4, 0x2a, 0xfd, 0xa8, 0xad, 0x70, 0x69, 0xc5, 0x7f, 0x35, 0x07, 0xd9,
-	0x9a, 0x66, 0xf6, 0x71, 0xcb, 0x2a, 0xe9, 0xda, 0x91, 0xda, 0x41, 0x9f, 0x02, 0xa8, 0xda, 0x91,
-	0x2e, 0x13, 0x74, 0x73, 0x4d, 0xb8, 0x16, 0xbf, 0x99, 0xde, 0xba, 0xba, 0x11, 0xaa, 0xeb, 0x8d,
-	0x9a, 0x76, 0xa4, 0x37, 0xcf, 0xfa, 0x58, 0x4a, 0xa9, 0xfc, 0x97, 0x89, 0xaa, 0x90, 0xeb, 0xa9,
-	0x9a, 0xdc, 0x55, 0x4f, 0x70, 0x57, 0x3d, 0xd6, 0xf5, 0xf6, 0x5a, 0xec, 0x9a, 0x70, 0x33, 0xb7,
-	0xf5, 0x6a, 0x04, 0x8f, 0x1d, 0x07, 0x51, 0xca, 0xf6, 0x54, 0xcd, 0xfd, 0x44, 0xf7, 0x61, 0xae,
-	0xab, 0xf6, 0x54, 0xcb, 0x5c, 0x8b, 0x5f, 0x13, 0x6e, 0xa6, 0xb7, 0xb6, 0x22, 0xa5, 0xf0, 0xc8,
-	0xbf, 0x71, 0x57, 0xd5, 0xda, 0xaa, 0xd6, 0xd9, 0xa1, 0x94, 0x12, 0xe7, 0x80, 0xae, 0x43, 0x56,
-	0xd5, 0x5a, 0xdd, 0x41, 0x1b, 0xcb, 0x4f, 0x07, 0xba, 0x85, 0xd7, 0x66, 0xaf, 0x09, 0x37, 0x93,
-	0x52, 0x86, 0x03, 0x1f, 0x10, 0x18, 0xba, 0x05, 0x08, 0x9f, 0x32, 0x24, 0x8f, 0x0a, 0x12, 0x14,
-	0x33, 0xcf, 0x4b, 0x6a, 0x4e, 0x43, 0x1f, 0xc0, 0x62, 0x6b, 0x60, 0x5a, 0x7a, 0xcf, 0x8b, 0x3c,
-	0x47, 0xf5, 0xf5, 0x7a, 0x84, 0xa4, 0x25, 0x8a, 0xef, 0x68, 0x6d, 0xa1, 0xe5, 0xfb, 0x36, 0xd1,
-	0x2e, 0x2c, 0xb4, 0x74, 0xcd, 0xc2, 0x9a, 0x25, 0xeb, 0x7d, 0xea, 0xb6, 0x6b, 0xc9, 0x6b, 0xf1,
-	0x9b, 0xb9, 0xad, 0xd7, 0xa2, 0x18, 0x32, 0xec, 0x3a, 0x45, 0x96, 0x72, 0x2d, 0xef, 0xa7, 0x59,
-	0xf8, 0x26, 0x06, 0x59, 0x9f, 0x3a, 0xd0, 0x3b, 0xb0, 0xd2, 0x53, 0x4e, 0xe5, 0x23, 0x06, 0x34,
-	0xe5, 0x3e, 0x36, 0x64, 0xd5, 0xc2, 0xbd, 0x35, 0xe1, 0x9a, 0x70, 0x33, 0x21, 0xa1, 0x9e, 0x72,
-	0xca, 0x09, 0xcc, 0x7d, 0x6c, 0xd4, 0x2c, 0xdc, 0x43, 0xdf, 0x81, 0xb5, 0x21, 0x12, 0x03, 0x3f,
-	0x1d, 0x60, 0xd3, 0xa2, 0x96, 0x4d, 0x48, 0x2b, 0x7e, 0x2a, 0x89, 0x15, 0xa2, 0x9f, 0x83, 0xc2,
-	0x70, 0x5d, 0xb6, 0xa6, 0xd6, 0xe2, 0x54, 0x51, 0x3f, 0x3d, 0xbd, 0x49, 0x1d, 0xa7, 0xa3, 0x9f,
-	0xd2, 0x6a, 0x40, 0x64, 0x5e, 0x58, 0xe8, 0x13, 0xbf, 0xf6, 0x20, 0xa2, 0x4f, 0x20, 0xe5, 0xd6,
-	0x2e, 0x50, 0x87, 0x1a, 0xeb, 0xd6, 0x49, 0xdb, 0xad, 0xd1, 0xab, 0x90, 0xf1, 0x36, 0x86, 0xb7,
-	0x3c, 0xed, 0xa9, 0x5c, 0xfc, 0x46, 0x80, 0x85, 0xed, 0x33, 0x0b, 0x73, 0x9b, 0x50, 0xe5, 0x95,
-	0x61, 0xd6, 0xa9, 0x2f, 0xb7, 0xf5, 0x76, 0x44, 0x7d, 0x01, 0x2a, 0xfa, 0x6d, 0x52, 0x01, 0x28,
-	0x35, 0x42, 0x30, 0xdb, 0x56, 0x2c, 0x85, 0x56, 0x9a, 0x91, 0xe8, 0x6f, 0xf1, 0x4f, 0x43, 0xca,
-	0x41, 0x43, 0x05, 0x58, 0xdd, 0x7e, 0xd4, 0xac, 0x34, 0xe4, 0xe6, 0xa3, 0xfd, 0x8a, 0x7c, 0xb0,
-	0xd7, 0xd8, 0xaf, 0x94, 0x6a, 0x77, 0x6b, 0x95, 0x72, 0x7e, 0x06, 0xa5, 0x20, 0x51, 0xdb, 0x2d,
-	0xde, 0xab, 0xe4, 0xe7, 0x50, 0x0e, 0x80, 0xfe, 0x94, 0xef, 0xef, 0x57, 0xee, 0xe5, 0x05, 0x94,
-	0x85, 0x14, 0xfb, 0xde, 0xde, 0xdd, 0xcf, 0xc7, 0xdc, 0xcf, 0xfd, 0xbd, 0x7b, 0xf9, 0xb8, 0xfb,
-	0xd9, 0x78, 0x78, 0x2f, 0x3f, 0x4b, 0x3e, 0x9b, 0x95, 0x2f, 0x9a, 0xf2, 0x41, 0xf3, 0xee, 0x87,
-	0xf9, 0x84, 0xf8, 0x77, 0x05, 0x48, 0x7b, 0x5b, 0xba, 0x0a, 0x89, 0x67, 0x4a, 0x77, 0x80, 0x69,
-	0x5f, 0x4d, 0x55, 0x67, 0x24, 0xf6, 0x89, 0xde, 0x83, 0x84, 0xa5, 0x1c, 0x76, 0x59, 0x87, 0x4b,
-	0x6f, 0x5d, 0x8e, 0x50, 0x41, 0x93, 0xe0, 0x10, 0x2a, 0x8a, 0x8c, 0x2a, 0x90, 0x3a, 0x3c, 0xb3,
-	0x30, 0xf3, 0xcd, 0x04, 0xa5, 0xbc, 0x31, 0x99, 0xf2, 0xaa, 0x33, 0x52, 0x92, 0x90, 0x92, 0xdf,
-	0xdb, 0x69, 0x48, 0x11, 0x65, 0x51, 0x36, 0xe2, 0x3f, 0x10, 0x20, 0x41, 0xab, 0x41, 0x1f, 0xc2,
-	0xfc, 0x31, 0x56, 0xda, 0xd8, 0xb0, 0xe3, 0xdb, 0x2b, 0x11, 0xbc, 0xef, 0x92, 0xd0, 0x5d, 0x6b,
-	0x4b, 0x36, 0x3a, 0x7a, 0x0f, 0x66, 0x0d, 0xfd, 0x39, 0x31, 0x3f, 0x21, 0xbb, 0x36, 0xaa, 0x31,
-	0x1b, 0x92, 0xfe, 0x5c, 0xa2, 0xd8, 0x85, 0x8f, 0x21, 0x2e, 0xe9, 0xcf, 0xd1, 0x7b, 0x30, 0x47,
-	0x75, 0x62, 0xd7, 0x1a, 0xa5, 0x8b, 0x87, 0x04, 0x49, 0xe2, 0xb8, 0xe2, 0xd7, 0x4e, 0x80, 0x96,
-	0xb0, 0x39, 0xe8, 0x5a, 0xe8, 0x0e, 0x24, 0x1d, 0x37, 0x1c, 0x27, 0x3e, 0x45, 0x93, 0x1c, 0x7c,
-	0x74, 0x1b, 0x90, 0xd3, 0x1f, 0x2d, 0x63, 0xa0, 0xb5, 0x14, 0x0b, 0xb3, 0x00, 0x9d, 0x94, 0x16,
-	0xed, 0x92, 0xa6, 0x5d, 0x20, 0xfe, 0xfb, 0x18, 0xcc, 0x73, 0x26, 0x68, 0x19, 0x12, 0x2c, 0x72,
-	0x12, 0x5f, 0x4e, 0x49, 0xec, 0xc3, 0xdf, 0xab, 0x62, 0xd3, 0xf6, 0xaa, 0x22, 0x80, 0x67, 0x9c,
-	0x88, 0x4f, 0x3a, 0x4e, 0x78, 0x88, 0xd0, 0xc7, 0x90, 0xec, 0xea, 0x2d, 0x3a, 0x3a, 0x73, 0x17,
-	0x8b, 0xaa, 0x7f, 0x87, 0xa3, 0x49, 0x0e, 0x01, 0xfa, 0x18, 0xd2, 0x2d, 0x03, 0x2b, 0x16, 0x96,
-	0xc9, 0xb8, 0xb8, 0x36, 0x47, 0xe9, 0x0b, 0x2e, 0x3d, 0x1b, 0x9f, 0x37, 0x9a, 0xf6, 0xf8, 0x2c,
-	0x01, 0x43, 0x27, 0x00, 0xf4, 0x53, 0x00, 0x54, 0x07, 0x34, 0xa8, 0xad, 0xcd, 0x53, 0xda, 0x28,
-	0x8f, 0xa0, 0xe3, 0x0b, 0x51, 0x80, 0x94, 0x7a, 0x6a, 0xff, 0x14, 0xff, 0xb3, 0x00, 0xc9, 0x1d,
-	0x57, 0x14, 0xa0, 0x1e, 0x6f, 0x28, 0x5a, 0xc7, 0x8e, 0x4f, 0x51, 0x0e, 0x22, 0x11, 0x1c, 0x89,
-	0xf6, 0x10, 0xfa, 0x13, 0x55, 0xc8, 0xb8, 0xd1, 0xc6, 0x7d, 0x5d, 0xd5, 0x2c, 0xce, 0x21, 0x36,
-	0x01, 0x87, 0x9c, 0x43, 0xc4, 0xd8, 0x34, 0x60, 0xd1, 0x1e, 0x7e, 0x6c, 0x15, 0x99, 0x6b, 0xf3,
-	0xd4, 0xc5, 0x6e, 0x8c, 0x1e, 0x80, 0x1c, 0xdd, 0xe6, 0x5b, 0x7e, 0x80, 0x29, 0xfe, 0x4e, 0x1c,
-	0x16, 0x02, 0x58, 0xe8, 0x75, 0xa0, 0x43, 0x95, 0xa2, 0x6a, 0xd8, 0x90, 0x35, 0xa5, 0x67, 0x3b,
-	0x55, 0xd6, 0x81, 0xee, 0x29, 0x3d, 0x8c, 0xf6, 0x61, 0xc1, 0xc0, 0x2d, 0xdd, 0x68, 0x3b, 0xe2,
-	0xf0, 0x66, 0x45, 0x8d, 0xaf, 0x12, 0xc5, 0xb6, 0xab, 0xa9, 0xce, 0x48, 0x39, 0xc3, 0x07, 0x41,
-	0xbb, 0x90, 0x53, 0x7b, 0x4a, 0x07, 0xbb, 0x0c, 0xd9, 0xd4, 0x22, 0x6a, 0x7c, 0xad, 0x11, 0x64,
-	0x0f, 0xbf, 0xac, 0xea, 0x05, 0xa0, 0x87, 0xb0, 0xd8, 0xd6, 0x5b, 0x83, 0x9e, 0x57, 0x63, 0x3c,
-	0x5c, 0xbd, 0x11, 0xc1, 0xb1, 0xcc, 0xf1, 0x3d, 0x4c, 0xf3, 0xed, 0x00, 0x0c, 0x7d, 0x06, 0x4b,
-	0xae, 0x7e, 0x9c, 0xd9, 0xe1, 0x04, 0xfe, 0x89, 0x1c, 0x32, 0x07, 0x86, 0xde, 0x62, 0x56, 0x65,
-	0xcc, 0x9e, 0x61, 0xc3, 0x24, 0x42, 0xce, 0x53, 0x7d, 0xe7, 0x9d, 0x82, 0x87, 0x0c, 0xbe, 0x0d,
-	0x6e, 0x77, 0x12, 0xdf, 0x85, 0x7c, 0x50, 0x5a, 0x74, 0x15, 0xd2, 0x47, 0x6a, 0x17, 0xcb, 0xfa,
-	0xd1, 0x91, 0x89, 0x2d, 0x6a, 0xb6, 0xb8, 0x04, 0x04, 0x54, 0xa7, 0x10, 0xf1, 0xdf, 0x09, 0x90,
-	0xf3, 0x9b, 0x81, 0x74, 0x14, 0x6e, 0xc6, 0x13, 0x7c, 0xc6, 0x5d, 0xfb, 0xda, 0x48, 0x0b, 0x7e,
-	0x86, 0xcf, 0xa4, 0x94, 0x61, 0xff, 0x44, 0x1f, 0x91, 0x88, 0x47, 0x26, 0xd1, 0x6a, 0x9b, 0x3b,
-	0xc0, 0xd8, 0x80, 0x7d, 0xc4, 0x7e, 0xa0, 0xcf, 0x20, 0x47, 0x47, 0x94, 0x49, 0x0d, 0x4e, 0x43,
-	0xb7, 0xe3, 0xcd, 0x59, 0xcb, 0xfb, 0x29, 0xde, 0x82, 0xac, 0xaf, 0x1c, 0x5d, 0x82, 0x94, 0xa1,
-	0x3f, 0x97, 0x55, 0xad, 0x8d, 0x4f, 0xb9, 0x2e, 0x92, 0x86, 0xfe, 0xbc, 0x46, 0xbe, 0xc5, 0x4d,
-	0x48, 0xb0, 0x6e, 0xb5, 0x0c, 0x09, 0xd3, 0x52, 0x0c, 0x5b, 0x5b, 0xec, 0x03, 0xe5, 0x21, 0x8e,
-	0x35, 0xd6, 0x9e, 0xb8, 0x44, 0x7e, 0x8a, 0x8f, 0x21, 0xeb, 0xf3, 0x37, 0x54, 0x83, 0xdc, 0xa1,
-	0x3e, 0xa0, 0xe1, 0x57, 0x3e, 0xd4, 0x4f, 0x9d, 0x81, 0x43, 0x8c, 0x1a, 0x0a, 0x39, 0xf2, 0xb6,
-	0x7e, 0x2a, 0x65, 0x0f, 0xdd, 0x0f, 0x6c, 0x8a, 0x0a, 0xa4, 0x3d, 0xa5, 0xa4, 0x72, 0x4b, 0xef,
-	0xf3, 0x59, 0x1f, 0xf9, 0x49, 0xe6, 0x18, 0x5d, 0x7c, 0x64, 0x4f, 0xe9, 0xe8, 0x6f, 0x22, 0xf8,
-	0x73, 0xb5, 0x6d, 0x1d, 0x53, 0x9d, 0x25, 0x24, 0xf6, 0x81, 0x56, 0x61, 0xee, 0x18, 0xab, 0x9d,
-	0x63, 0x8b, 0xc6, 0xdb, 0x84, 0xc4, 0xbf, 0xc4, 0x3f, 0x3f, 0x0b, 0x48, 0xc2, 0x6d, 0xa5, 0x65,
-	0xd1, 0x56, 0xd8, 0xd3, 0xc0, 0x55, 0x98, 0xeb, 0x2b, 0x06, 0xd6, 0x2c, 0xde, 0xc7, 0xf9, 0x17,
-	0xb1, 0x8c, 0xca, 0xc6, 0x35, 0xb9, 0x45, 0xa7, 0x79, 0xdc, 0xb4, 0xaf, 0x4d, 0x32, 0x25, 0x94,
-	0xb2, 0xaa, 0x6f, 0xd1, 0xf2, 0x0c, 0x2e, 0xb0, 0x7e, 0x6d, 0x50, 0x01, 0x54, 0x5d, 0xe3, 0x4c,
-	0xc9, 0xf4, 0x9d, 0xa8, 0xec, 0xd3, 0x48, 0x7f, 0x0b, 0x0a, 0xbc, 0xc1, 0x3f, 0x38, 0x1f, 0x5e,
-	0xdf, 0x8a, 0x1a, 0x02, 0x35, 0x51, 0xc9, 0x3b, 0x4f, 0x99, 0x9f, 0x66, 0x9e, 0xe2, 0xce, 0x52,
-	0x0a, 0x7f, 0x20, 0xc0, 0x72, 0x58, 0xa5, 0xe8, 0xd3, 0xe9, 0xa7, 0xac, 0x64, 0xfa, 0xe3, 0x0c,
-	0xaf, 0x37, 0x49, 0xfc, 0x24, 0x2c, 0x65, 0xa5, 0xdb, 0x95, 0x2d, 0x7c, 0xca, 0xcc, 0x9b, 0x24,
-	0x81, 0x8c, 0x15, 0x14, 0xbb, 0xdd, 0x26, 0x3e, 0xb5, 0xc8, 0x00, 0xe2, 0xd5, 0x5c, 0x57, 0x37,
-	0x78, 0x3f, 0xb9, 0x1c, 0x19, 0xf7, 0xbb, 0xba, 0x41, 0xc2, 0xab, 0x23, 0x71, 0x57, 0x37, 0xb6,
-	0x93, 0x30, 0x67, 0x29, 0x46, 0x07, 0x5b, 0x62, 0x09, 0x12, 0x14, 0x44, 0x3c, 0xcd, 0xc0, 0x6d,
-	0x2a, 0x7d, 0x4c, 0x22, 0x3f, 0x89, 0x57, 0x75, 0x0c, 0x8c, 0x59, 0x2c, 0x8f, 0x49, 0xec, 0x83,
-	0xf8, 0xdf, 0xa1, 0x3d, 0x7d, 0x8c, 0x49, 0xf4, 0xb7, 0xd8, 0x82, 0x25, 0x9f, 0x7d, 0xcc, 0xbe,
-	0xae, 0x99, 0x98, 0x8c, 0x1e, 0xac, 0x5e, 0xdc, 0x96, 0xa9, 0x59, 0x28, 0xf7, 0x8c, 0xdd, 0x26,
-	0xdc, 0xa6, 0xe8, 0x04, 0x0d, 0x9f, 0x5a, 0x06, 0xc3, 0x73, 0x1a, 0x9f, 0x92, 0xb2, 0x0e, 0x94,
-	0x34, 0x5d, 0xfc, 0xbf, 0x31, 0x58, 0x2b, 0x63, 0xb5, 0x8d, 0x35, 0x4b, 0x3d, 0x3a, 0xe3, 0x16,
-	0x1a, 0xe7, 0xbc, 0x4d, 0x58, 0x6c, 0x3b, 0x34, 0x7e, 0xff, 0x8d, 0x0c, 0xfc, 0xde, 0x3a, 0x88,
-	0x4b, 0xe5, 0xdb, 0x01, 0x48, 0x48, 0x97, 0x88, 0x9f, 0xbf, 0x4b, 0x7c, 0x00, 0xb3, 0xd4, 0x2b,
-	0xd9, 0xa4, 0x48, 0x1c, 0x3d, 0x7e, 0x53, 0x8f, 0xa4, 0xf8, 0x68, 0x0b, 0x56, 0x6c, 0x21, 0x2c,
-	0xdc, 0xeb, 0x77, 0xc9, 0xec, 0x88, 0x0e, 0xd1, 0x09, 0xaa, 0x81, 0x25, 0x5e, 0xd8, 0xe4, 0x65,
-	0x74, 0xa0, 0xfe, 0x10, 0xd6, 0x3c, 0xea, 0xf0, 0x93, 0xcd, 0x51, 0xb2, 0x55, 0xb7, 0xdc, 0x4b,
-	0x29, 0xfe, 0xba, 0x00, 0x17, 0x43, 0xb4, 0xcf, 0x2d, 0x6d, 0xb7, 0x41, 0x98, 0xb2, 0x0d, 0x35,
-	0x48, 0xea, 0xcf, 0xb0, 0xf1, 0x4c, 0xc5, 0xcf, 0xb9, 0x55, 0x6e, 0x47, 0xc5, 0x7b, 0x43, 0xd1,
-	0xcc, 0x23, 0xdd, 0xe8, 0xd1, 0x88, 0x5b, 0xe7, 0x44, 0x92, 0x43, 0x4e, 0xdd, 0x43, 0x3a, 0x87,
-	0x7b, 0x18, 0x2f, 0xec, 0x1e, 0xc6, 0x9f, 0x24, 0xf7, 0x30, 0xc6, 0xb8, 0x87, 0x11, 0xed, 0x1e,
-	0xd2, 0x1f, 0x67, 0xf7, 0xf8, 0xef, 0x02, 0xac, 0xb8, 0x7a, 0x9e, 0xc4, 0x37, 0x5e, 0xea, 0xb8,
-	0x67, 0x6b, 0x20, 0xfe, 0xb2, 0xac, 0x38, 0x1b, 0x69, 0x45, 0xf1, 0x21, 0xac, 0x06, 0x5b, 0xca,
-	0xed, 0xf0, 0x09, 0xcc, 0x19, 0x74, 0x6d, 0xca, 0x2d, 0x31, 0xa6, 0x29, 0x6c, 0x1d, 0x2b, 0x71,
-	0x1a, 0xf1, 0xdf, 0xc4, 0x60, 0xa9, 0x3e, 0xb0, 0xfa, 0x03, 0xab, 0xc1, 0xb2, 0xb0, 0xbc, 0x6d,
-	0x9f, 0xd8, 0x99, 0x83, 0xd1, 0x4c, 0xb7, 0xd5, 0xce, 0x83, 0x01, 0x36, 0xce, 0x02, 0x19, 0x84,
-	0x2f, 0x21, 0xab, 0x53, 0xa6, 0xb2, 0xd9, 0x3a, 0xc6, 0x3d, 0x85, 0xaf, 0x2e, 0xbf, 0x13, 0xc1,
-	0x25, 0x44, 0x00, 0x1b, 0x46, 0xc9, 0xa5, 0x8c, 0xee, 0xf9, 0x12, 0x7f, 0x45, 0x80, 0x8c, 0xb7,
-	0x18, 0x5d, 0x81, 0x8b, 0xf5, 0x83, 0xe6, 0xfe, 0x41, 0x53, 0x6e, 0x94, 0xaa, 0x95, 0xdd, 0x62,
-	0x20, 0x09, 0xb3, 0x08, 0xd9, 0xed, 0x62, 0xa3, 0x56, 0x92, 0x4b, 0xf5, 0x9d, 0x83, 0xdd, 0xbd,
-	0x46, 0x5e, 0x40, 0x0b, 0x90, 0xbe, 0x57, 0x6a, 0x38, 0x80, 0x18, 0x5a, 0x81, 0xc5, 0x72, 0xb1,
-	0x59, 0x6c, 0x34, 0xeb, 0x52, 0xc5, 0x01, 0xc7, 0x09, 0x78, 0xbb, 0x76, 0x4f, 0x7e, 0x70, 0x50,
-	0x91, 0x1e, 0x39, 0xe0, 0x59, 0x42, 0x5e, 0xdc, 0xd9, 0x71, 0x00, 0x89, 0xed, 0x39, 0x96, 0x6a,
-	0x12, 0x5b, 0x6e, 0xe2, 0xab, 0x61, 0x29, 0x96, 0xf9, 0x82, 0x89, 0xaf, 0x65, 0x48, 0xb4, 0xf4,
-	0x81, 0x66, 0xf1, 0x89, 0x2a, 0xfb, 0x10, 0x7f, 0x34, 0x0b, 0x6b, 0xdc, 0x9a, 0x65, 0xc5, 0x52,
-	0x1a, 0xfa, 0xc0, 0x68, 0xe1, 0x32, 0xb6, 0x14, 0xb5, 0x6b, 0xa2, 0x1e, 0x89, 0x7e, 0xb4, 0x13,
-	0xe0, 0xb6, 0x93, 0xc7, 0x64, 0x4e, 0x3e, 0x26, 0xdf, 0x37, 0xc4, 0x6b, 0x43, 0xb2, 0x19, 0xf1,
-	0x9c, 0x26, 0x09, 0x8b, 0x7e, 0x08, 0xda, 0x73, 0xbc, 0x8f, 0xf5, 0x82, 0x0f, 0xa6, 0xaf, 0xc3,
-	0xeb, 0x8f, 0x85, 0xdf, 0x13, 0x20, 0x1f, 0xac, 0x16, 0x1d, 0xc2, 0x45, 0x53, 0x53, 0xfa, 0xe6,
-	0xb1, 0x6e, 0xc9, 0xc1, 0x9e, 0xc3, 0x95, 0x7a, 0x63, 0x74, 0xbd, 0x76, 0x5f, 0x92, 0x2e, 0xd8,
-	0x8c, 0x02, 0x05, 0xe8, 0x2e, 0xc0, 0x13, 0xfd, 0xd0, 0x1f, 0xdb, 0xdf, 0x18, 0xcd, 0xf4, 0xbe,
-	0x7e, 0xc8, 0x03, 0x43, 0xea, 0x89, 0xfd, 0xb3, 0xf0, 0xf7, 0x05, 0x98, 0xe3, 0xb9, 0xa2, 0x37,
-	0x60, 0xa1, 0x6f, 0xe8, 0x2d, 0x6c, 0x9a, 0xb8, 0x2d, 0x93, 0x09, 0xa7, 0xc9, 0x17, 0x21, 0x39,
-	0x07, 0x4c, 0xb3, 0x88, 0x24, 0x20, 0x58, 0xba, 0xa5, 0x74, 0x65, 0x6c, 0x5a, 0x6a, 0x4f, 0xb1,
-	0x1c, 0x74, 0x66, 0xf6, 0x25, 0x5a, 0x58, 0xb1, 0xcb, 0x18, 0xcd, 0x0e, 0x2c, 0x38, 0x8e, 0x25,
-	0x9b, 0xc4, 0xd7, 0x78, 0x56, 0xf7, 0xb5, 0x31, 0xee, 0x45, 0xfd, 0x92, 0x84, 0x32, 0xcf, 0xa7,
-	0xf8, 0x6b, 0x02, 0x2c, 0xd9, 0x08, 0x65, 0x6c, 0xb6, 0x0c, 0x95, 0xaa, 0x9e, 0x4c, 0x0c, 0x3d,
-	0x19, 0x02, 0xfa, 0x1b, 0xbd, 0x0a, 0x99, 0xb6, 0x6a, 0xf6, 0xbb, 0xca, 0x19, 0x8b, 0x5a, 0x6c,
-	0x62, 0x97, 0xe6, 0x30, 0x3a, 0xe6, 0xec, 0x42, 0xc6, 0x1c, 0xf4, 0xfb, 0xba, 0xc1, 0x9a, 0x42,
-	0x25, 0xcb, 0x6d, 0xad, 0x8f, 0x93, 0xcc, 0x26, 0xd9, 0x3e, 0x93, 0xd2, 0xa6, 0xfb, 0x21, 0x36,
-	0x60, 0x79, 0x47, 0x35, 0x2d, 0x27, 0x55, 0x6f, 0x47, 0xf9, 0xeb, 0x90, 0xed, 0x2a, 0x5a, 0x67,
-	0x40, 0xd6, 0x1e, 0x2d, 0xbd, 0x6d, 0x8b, 0x99, 0xb1, 0x81, 0x25, 0xbd, 0x8d, 0xc9, 0x50, 0x70,
-	0xa4, 0x76, 0x2d, 0x6c, 0x70, 0x41, 0xf9, 0x97, 0x78, 0x08, 0x2b, 0x01, 0xa6, 0x3c, 0xa0, 0xd6,
-	0x42, 0xf6, 0x60, 0xc6, 0x89, 0xee, 0xd1, 0x99, 0x67, 0x3b, 0x46, 0xfc, 0x6f, 0x02, 0xac, 0x48,
-	0xaa, 0x79, 0x52, 0xd4, 0x94, 0xee, 0x99, 0xa9, 0x9a, 0x8e, 0xc7, 0x90, 0x81, 0x88, 0xb3, 0x92,
-	0x7b, 0xd8, 0x32, 0xd4, 0xd6, 0x98, 0x40, 0xbb, 0xcf, 0x3e, 0x77, 0x29, 0xae, 0x94, 0xed, 0x7b,
-	0x3f, 0xd1, 0x3d, 0xc8, 0x98, 0xb4, 0x53, 0xc9, 0x2c, 0x66, 0xc7, 0x26, 0x8f, 0xd9, 0x52, 0x9a,
-	0x51, 0xb2, 0xdc, 0xec, 0x77, 0x60, 0x9e, 0xad, 0x28, 0x6c, 0x67, 0xba, 0x12, 0xc1, 0xa3, 0x48,
-	0xb1, 0x24, 0x1b, 0x5b, 0xfc, 0xc5, 0x05, 0xc8, 0xfa, 0x44, 0x44, 0x4f, 0x61, 0x55, 0x1b, 0xf4,
-	0xb0, 0xa1, 0xb6, 0x94, 0x2e, 0xf3, 0x4f, 0xbb, 0x6f, 0xb1, 0x86, 0x7e, 0x34, 0x49, 0x43, 0x37,
-	0xf6, 0x6c, 0x16, 0xd4, 0x4d, 0x99, 0xee, 0xaa, 0x33, 0xd2, 0xb2, 0x16, 0x02, 0x47, 0xcf, 0x61,
-	0xad, 0xa5, 0x58, 0xb8, 0xa3, 0x87, 0x54, 0xca, 0x54, 0xf2, 0xf1, 0x44, 0x95, 0x96, 0x5c, 0x26,
-	0xfe, 0x6a, 0x57, 0x5b, 0xa1, 0x25, 0x08, 0x03, 0x3a, 0x91, 0x15, 0x4d, 0xd7, 0xce, 0x7a, 0xaa,
-	0x75, 0xe6, 0x8f, 0x21, 0xef, 0x4f, 0x54, 0xe5, 0x67, 0x45, 0x9b, 0xda, 0xa9, 0x2c, 0x7f, 0x12,
-	0x80, 0x91, 0x6a, 0xba, 0x72, 0x5b, 0xa5, 0x59, 0x24, 0xb7, 0x9a, 0xd9, 0x29, 0xaa, 0xd9, 0x29,
-	0xdb, 0xd4, 0x6e, 0x35, 0xdd, 0x00, 0x0c, 0x19, 0x70, 0xe1, 0x44, 0xee, 0x29, 0x7d, 0x3b, 0x1a,
-	0xb9, 0xeb, 0x79, 0x9e, 0x5d, 0x9b, 0xcc, 0x74, 0x9f, 0xed, 0x2a, 0xfd, 0x8a, 0xc3, 0xc1, 0x35,
-	0xdd, 0x49, 0x08, 0xbc, 0xb0, 0x03, 0xcb, 0x61, 0xa6, 0x46, 0xef, 0x41, 0x82, 0x26, 0x93, 0xb8,
-	0xd3, 0x8c, 0xcb, 0x3c, 0x31, 0xe4, 0xc2, 0x1e, 0xac, 0x86, 0xdb, 0xf0, 0x9c, 0xfc, 0xbe, 0x2f,
-	0x40, 0x3e, 0x68, 0x21, 0xf4, 0x31, 0xa4, 0x9e, 0x0e, 0x14, 0x53, 0x95, 0xd5, 0xf6, 0xa4, 0x3b,
-	0x19, 0x49, 0x4a, 0x50, 0x6b, 0xd3, 0x69, 0x01, 0x99, 0x55, 0x5b, 0x67, 0x6e, 0x56, 0x2d, 0x6a,
-	0x5a, 0x50, 0xa1, 0x78, 0x84, 0x1a, 0xf3, 0x5f, 0x85, 0xdf, 0x10, 0x20, 0x1f, 0x34, 0xe5, 0x8b,
-	0xc9, 0x53, 0x87, 0x25, 0x13, 0x6b, 0xa6, 0x6a, 0xa9, 0xcf, 0xb0, 0xac, 0x58, 0x96, 0xa1, 0x1e,
-	0x0e, 0x2c, 0x3c, 0x61, 0xbe, 0x0f, 0x39, 0xa4, 0x45, 0x9b, 0xb2, 0xf0, 0xcd, 0x1c, 0x2c, 0x87,
-	0x79, 0x00, 0x3a, 0x1c, 0x16, 0xb3, 0x72, 0x6e, 0x7f, 0xda, 0x68, 0x2a, 0x9d, 0x0e, 0x6e, 0x53,
-	0x41, 0x3c, 0xad, 0xb9, 0x0a, 0x69, 0x03, 0x77, 0x98, 0xdf, 0xb6, 0xed, 0x01, 0x0a, 0x18, 0x88,
-	0x8e, 0x09, 0x26, 0xe4, 0x95, 0xc1, 0xa9, 0xda, 0x55, 0x15, 0xe3, 0x8c, 0xc5, 0x4c, 0x3b, 0xe0,
-	0x55, 0xcf, 0x2f, 0x4b, 0xd1, 0xe6, 0xc8, 0x02, 0xeb, 0x82, 0xe2, 0xfb, 0x36, 0x0b, 0xff, 0x49,
-	0x80, 0xb4, 0x47, 0xde, 0xf3, 0xf9, 0xa2, 0x3f, 0x2d, 0x15, 0x9b, 0x3e, 0x2d, 0x75, 0x15, 0x80,
-	0x6f, 0x9c, 0x5b, 0x4a, 0xc7, 0xd9, 0x2f, 0x4c, 0x31, 0x58, 0x53, 0x21, 0x5d, 0x84, 0x20, 0x63,
-	0xc3, 0xc0, 0x6d, 0x1e, 0x5b, 0x56, 0x87, 0x72, 0xde, 0x95, 0x5e, 0xdf, 0x3a, 0xe3, 0x6c, 0x29,
-	0xe6, 0x76, 0x02, 0xe2, 0x96, 0xd2, 0x29, 0xfc, 0xcf, 0x18, 0xe4, 0xfc, 0x7a, 0x40, 0x77, 0xec,
-	0x95, 0x44, 0x7c, 0x8a, 0x51, 0x89, 0xaf, 0x23, 0x8c, 0x61, 0x67, 0x39, 0x78, 0x59, 0x06, 0xda,
-	0x78, 0xc0, 0xdc, 0x25, 0xe8, 0x3c, 0xbb, 0x80, 0x0c, 0xdc, 0x55, 0x68, 0x4f, 0x38, 0xa2, 0xf3,
-	0x5d, 0xad, 0x75, 0x36, 0x61, 0x4f, 0x58, 0xb4, 0x29, 0xef, 0xda, 0x84, 0x85, 0x16, 0x64, 0xbc,
-	0x15, 0x9d, 0xd3, 0xea, 0x57, 0x7c, 0x56, 0x63, 0x0e, 0xed, 0xda, 0xcc, 0x59, 0x7e, 0xfc, 0xaf,
-	0x57, 0xe0, 0x32, 0x9d, 0x6b, 0x7c, 0x8d, 0xdd, 0x99, 0x36, 0x99, 0x80, 0xd8, 0xab, 0x83, 0xaf,
-	0x60, 0xcd, 0x5d, 0x1d, 0xbc, 0xc0, 0x04, 0x64, 0xd5, 0xe1, 0xe2, 0x1f, 0xf5, 0x1f, 0x83, 0x5b,
-	0x22, 0x9f, 0x7b, 0x4e, 0xb2, 0xec, 0xf0, 0x68, 0x78, 0x26, 0x27, 0xdf, 0x13, 0x86, 0xa7, 0x14,
-	0xbe, 0xb5, 0x47, 0x54, 0xdf, 0x1d, 0xa5, 0x91, 0xc0, 0x0c, 0x83, 0xcd, 0xdc, 0x87, 0x67, 0x18,
-	0x7c, 0x46, 0xff, 0xe7, 0x84, 0xb0, 0x29, 0x06, 0x17, 0x82, 0x75, 0x96, 0xfb, 0xe7, 0x11, 0x22,
-	0x38, 0x5a, 0x39, 0x62, 0x0c, 0xcd, 0x38, 0xb8, 0x20, 0x96, 0x7f, 0xc6, 0xc1, 0x25, 0x60, 0xc3,
-	0x73, 0xf9, 0x3c, 0x12, 0xb8, 0xc3, 0x9b, 0x53, 0xb7, 0x67, 0x02, 0xe2, 0xd6, 0xea, 0x9d, 0x80,
-	0xf0, 0x5a, 0xe7, 0xce, 0x5f, 0xab, 0x3b, 0x88, 0xb9, 0xb5, 0x76, 0x03, 0x30, 0xf4, 0x0b, 0x42,
-	0xc8, 0x84, 0x84, 0xd7, 0x3d, 0x7f, 0x7e, 0xc3, 0xfb, 0x43, 0x84, 0x6b, 0xf8, 0x93, 0x10, 0x78,
-	0xe1, 0xc7, 0x42, 0x70, 0x82, 0xc2, 0x85, 0xfb, 0x08, 0x52, 0x3d, 0x55, 0x93, 0xd9, 0xe9, 0x8b,
-	0xd1, 0x1b, 0xc7, 0xec, 0x64, 0x41, 0xb2, 0xa7, 0x6a, 0xf4, 0x17, 0x25, 0x55, 0x4e, 0x39, 0x69,
-	0x6c, 0x22, 0x52, 0xe5, 0x94, 0x91, 0x56, 0x60, 0xe1, 0xe9, 0x40, 0xd1, 0x2c, 0xb5, 0x8b, 0x65,
-	0x7e, 0xaa, 0x61, 0x76, 0x82, 0x53, 0x0d, 0x39, 0x9b, 0x88, 0x7e, 0x9a, 0x85, 0xef, 0xcf, 0x0e,
-	0x4f, 0x94, 0x78, 0xbb, 0xfe, 0xa1, 0x00, 0xaf, 0x52, 0xce, 0x6e, 0x0c, 0x94, 0x8f, 0x55, 0xd3,
-	0xd2, 0x3b, 0x86, 0xd2, 0x93, 0x0f, 0x07, 0xad, 0x13, 0x6c, 0xd9, 0xdb, 0x3b, 0x4f, 0x5e, 0x9e,
-	0xcb, 0x0f, 0x81, 0xab, 0x76, 0x9d, 0xdb, 0xb4, 0x4a, 0xe9, 0x15, 0x2a, 0x94, 0x13, 0x5e, 0x03,
-	0xc5, 0x66, 0xe1, 0x1f, 0xc7, 0xe0, 0xea, 0x18, 0x1e, 0xe8, 0xbb, 0x70, 0x29, 0xd8, 0xb4, 0xae,
-	0xfe, 0x1c, 0x1b, 0x32, 0xdd, 0xb5, 0xe3, 0x6b, 0xf4, 0x35, 0x7f, 0x45, 0x3b, 0x04, 0x81, 0x6e,
-	0xe2, 0x85, 0x91, 0x0f, 0xfa, 0x7d, 0x87, 0x3c, 0x16, 0x46, 0x7e, 0x40, 0x10, 0x18, 0xf9, 0x55,
-	0x48, 0x33, 0xf5, 0xc9, 0xa6, 0xfa, 0x35, 0x1b, 0x15, 0xe3, 0x12, 0x30, 0x50, 0x43, 0xfd, 0x1a,
-	0xa3, 0xfb, 0x90, 0xe5, 0x08, 0x3e, 0xd3, 0xbe, 0x3e, 0xca, 0xb4, 0x4e, 0x45, 0x52, 0x86, 0xd1,
-	0x32, 0x0b, 0xa3, 0x5b, 0x80, 0xbc, 0xbc, 0x64, 0x96, 0x4d, 0x4a, 0xd0, 0x3a, 0xf3, 0x1e, 0xcc,
-	0x12, 0x81, 0x17, 0xbe, 0x49, 0x78, 0xe7, 0xb9, 0xdc, 0x13, 0x7e, 0x4b, 0x80, 0xeb, 0xf8, 0xe9,
-	0x40, 0x7d, 0xa6, 0x74, 0xb1, 0xd6, 0xc2, 0x72, 0xab, 0xab, 0x98, 0x66, 0xa4, 0x2f, 0x7c, 0xf5,
-	0x32, 0x82, 0x8f, 0x07, 0x10, 0xb4, 0xff, 0x35, 0x8f, 0x28, 0x25, 0x22, 0xc9, 0x90, 0x07, 0xfc,
-	0xaa, 0x00, 0x05, 0x97, 0xbe, 0x12, 0x40, 0x47, 0x77, 0x21, 0xef, 0x4c, 0x29, 0xe4, 0x29, 0x4e,
-	0x04, 0xe5, 0xec, 0x09, 0x02, 0xd7, 0xec, 0x7b, 0xb0, 0x3a, 0xac, 0x15, 0x6a, 0x51, 0xe6, 0x00,
-	0xcb, 0x41, 0x41, 0x89, 0x6d, 0x0b, 0xbf, 0x1c, 0x87, 0x8b, 0x91, 0x8d, 0x43, 0xf7, 0x41, 0x0c,
-	0xe7, 0x19, 0xe2, 0x9f, 0xaf, 0x84, 0xf1, 0xf7, 0x78, 0x69, 0x34, 0xaf, 0x61, 0x67, 0x0d, 0xe5,
-	0x35, 0x8d, 0xcb, 0xfe, 0xa2, 0x10, 0xee, 0xb3, 0xf2, 0x4b, 0xf6, 0x86, 0xa0, 0x35, 0x5f, 0xc8,
-	0xdb, 0xff, 0xe6, 0xbc, 0x77, 0x15, 0xc5, 0xbd, 0xfd, 0x77, 0x05, 0x78, 0xcb, 0x5d, 0x09, 0x4d,
-	0x1a, 0x01, 0xbf, 0x7a, 0x19, 0x83, 0x9f, 0x07, 0x10, 0xf4, 0xfa, 0x37, 0x1c, 0x91, 0x1e, 0x8e,
-	0x0e, 0x7f, 0xbf, 0x1d, 0x83, 0x82, 0xcb, 0xe6, 0x8f, 0x97, 0xf3, 0xa3, 0x22, 0x5c, 0xd1, 0x06,
-	0x3d, 0xb9, 0xad, 0x9a, 0x96, 0xaa, 0xb5, 0x2c, 0x39, 0xa0, 0x67, 0x93, 0x3b, 0x56, 0x41, 0x1b,
-	0xf4, 0xca, 0x1c, 0xa7, 0xe1, 0x6b, 0xb7, 0x89, 0x3e, 0x87, 0x65, 0x4b, 0xef, 0x0f, 0x53, 0x4e,
-	0x15, 0x22, 0x91, 0xa5, 0xf7, 0x03, 0x8c, 0x0b, 0x3f, 0x88, 0xc3, 0xc5, 0x48, 0xfd, 0xa3, 0x7d,
-	0x78, 0x3d, 0xda, 0x29, 0x86, 0xfb, 0xe6, 0xab, 0x11, 0xe6, 0xf2, 0x74, 0xcf, 0x91, 0x1c, 0x87,
-	0x7b, 0x68, 0x14, 0xc7, 0x3f, 0xb2, 0x4e, 0x3a, 0xc2, 0x79, 0x5f, 0x6a, 0x27, 0xfd, 0x6b, 0x89,
-	0x60, 0x1e, 0x81, 0x77, 0xd4, 0xbf, 0x25, 0x40, 0x61, 0x68, 0x56, 0xe8, 0xf4, 0x4f, 0xee, 0xd5,
-	0x47, 0x2f, 0x6b, 0x62, 0x18, 0x00, 0x06, 0xfb, 0xe7, 0x85, 0x93, 0xf0, 0xe2, 0xc2, 0x5f, 0x11,
-	0xe0, 0x92, 0x9f, 0x94, 0x2f, 0x06, 0xb9, 0x32, 0x5e, 0x56, 0x87, 0xdc, 0x84, 0x25, 0x77, 0xef,
-	0xc0, 0x59, 0x17, 0x70, 0xe7, 0x41, 0x4e, 0x91, 0x13, 0x48, 0x0b, 0xff, 0x3c, 0x06, 0x57, 0x46,
-	0xb6, 0x09, 0x5d, 0x87, 0x2c, 0x99, 0xd9, 0xba, 0xcc, 0x98, 0x6f, 0x67, 0x7a, 0xaa, 0xe6, 0xb0,
-	0xa1, 0x48, 0xca, 0xe9, 0x50, 0x8d, 0x99, 0x9e, 0x72, 0xea, 0x22, 0x05, 0x3c, 0x33, 0x31, 0xe4,
-	0x99, 0xbf, 0x3c, 0xe4, 0x99, 0xec, 0x24, 0x7f, 0xfb, 0x5b, 0x32, 0x9f, 0xcf, 0x06, 0x13, 0xb9,
-	0xe7, 0x7c, 0xb8, 0x7b, 0x6e, 0x27, 0xed, 0xed, 0x2f, 0xf1, 0x31, 0xe4, 0xfc, 0x5d, 0x13, 0x6d,
-	0xd9, 0x87, 0xb2, 0x27, 0x59, 0x16, 0xf0, 0x03, 0xdb, 0xe1, 0x1b, 0x7e, 0xbf, 0x1e, 0x87, 0x04,
-	0x9b, 0xf8, 0xbf, 0x0e, 0x59, 0x55, 0xb3, 0x70, 0x07, 0x1b, 0x9e, 0x25, 0x47, 0xbc, 0x3a, 0x23,
-	0x65, 0x38, 0x98, 0xa1, 0xbd, 0x0a, 0xe9, 0xa3, 0xae, 0xae, 0x58, 0x9e, 0xc5, 0x85, 0x50, 0x9d,
-	0x91, 0x80, 0x02, 0x19, 0xca, 0x75, 0xc8, 0x98, 0x96, 0xa1, 0x6a, 0x1d, 0xd9, 0x7f, 0x72, 0x3c,
-	0xcd, 0xa0, 0x4e, 0x75, 0x87, 0xba, 0xde, 0xc5, 0x8a, 0xbd, 0xc2, 0x99, 0xe5, 0x27, 0x98, 0x32,
-	0x1c, 0xec, 0x2c, 0x47, 0x9c, 0x73, 0x92, 0x1c, 0x31, 0x31, 0xee, 0xb4, 0x64, 0x75, 0x46, 0xca,
-	0x39, 0x44, 0x8c, 0xcd, 0x77, 0x00, 0x08, 0x84, 0x73, 0x98, 0xf3, 0xe7, 0x9e, 0xac, 0xb3, 0x3e,
-	0xa6, 0xd4, 0xf5, 0xa3, 0xb2, 0x72, 0x56, 0x9d, 0x91, 0x52, 0x04, 0x97, 0x11, 0x6e, 0x01, 0xb4,
-	0x15, 0xcb, 0x26, 0x64, 0x6b, 0xc2, 0x45, 0x1f, 0x61, 0x59, 0xb1, 0x30, 0xa1, 0x21, 0x68, 0x8c,
-	0xa6, 0x04, 0x8b, 0x6d, 0xe5, 0x4c, 0xd6, 0x8f, 0xe4, 0xe7, 0x18, 0x9f, 0x70, 0xd2, 0x24, 0xdd,
-	0xa6, 0x5e, 0x0d, 0x90, 0x9e, 0xd5, 0x8f, 0x3e, 0xc7, 0xf8, 0x84, 0x48, 0xdc, 0xb6, 0x3f, 0x28,
-	0x13, 0x27, 0xef, 0xf2, 0x33, 0x90, 0x72, 0x0e, 0x19, 0xa3, 0x4f, 0xe9, 0xb9, 0x77, 0x7e, 0xaa,
-	0x79, 0x74, 0x86, 0xae, 0xcc, 0x8f, 0x33, 0x57, 0x67, 0xa4, 0x64, 0x9b, 0xff, 0xde, 0xce, 0x41,
-	0xa6, 0xaf, 0x18, 0x26, 0x6e, 0xb3, 0xcb, 0x32, 0xe2, 0x5f, 0x8c, 0x41, 0xd2, 0x46, 0x44, 0xaf,
-	0xd3, 0xdb, 0x08, 0xb6, 0x4f, 0x0d, 0x37, 0x92, 0x5e, 0x50, 0xc0, 0xe8, 0x03, 0x48, 0x7b, 0x5a,
-	0xc7, 0x2f, 0x01, 0x45, 0xb4, 0x8b, 0x68, 0x85, 0xff, 0x44, 0xeb, 0x30, 0x4b, 0xc5, 0x8e, 0x8f,
-	0x52, 0xbe, 0x44, 0x71, 0x50, 0x05, 0xa8, 0x09, 0xe4, 0xaf, 0x75, 0xcd, 0xbe, 0x60, 0x70, 0x73,
-	0x4c, 0x3b, 0x29, 0x8f, 0xc7, 0xba, 0x86, 0xa5, 0xa4, 0xc5, 0x7f, 0x15, 0xde, 0x81, 0xa4, 0x0d,
-	0x45, 0xaf, 0x43, 0x8e, 0x9d, 0x6d, 0x95, 0x7b, 0xaa, 0x36, 0xb0, 0x37, 0x4c, 0x13, 0x52, 0x96,
-	0x41, 0x77, 0x19, 0x50, 0xfc, 0xdf, 0x02, 0xe4, 0x83, 0x47, 0x76, 0x50, 0x17, 0x2e, 0xba, 0x1b,
-	0xa2, 0x96, 0xef, 0xe8, 0x88, 0xc9, 0xd5, 0xb5, 0x31, 0x26, 0x51, 0xea, 0x3f, 0x70, 0x62, 0x56,
-	0x67, 0xa4, 0x0b, 0x6a, 0x78, 0x11, 0xc2, 0xb0, 0xca, 0x8f, 0xd5, 0x06, 0xab, 0x62, 0x16, 0xbf,
-	0x35, 0xf2, 0x88, 0xed, 0x70, 0x45, 0x2b, 0x46, 0x58, 0xc1, 0x76, 0x1e, 0x72, 0x7e, 0xfe, 0xe2,
-	0x4f, 0xe6, 0xe1, 0xc2, 0xbe, 0xa1, 0xf6, 0xe8, 0x64, 0xc0, 0x8f, 0x8e, 0x24, 0xc8, 0x19, 0xb8,
-	0xdf, 0x55, 0xc8, 0x94, 0xcc, 0xbb, 0xd7, 0xf6, 0x66, 0xa4, 0x30, 0x14, 0x99, 0xc7, 0x33, 0xbe,
-	0x41, 0x93, 0xe5, 0x2c, 0xb8, 0x5a, 0xef, 0x03, 0x3f, 0xd9, 0xe7, 0xdf, 0x49, 0xbb, 0x3e, 0xf2,
-	0x48, 0xa7, 0xc3, 0x2c, 0x63, 0x78, 0xbe, 0xd1, 0x9f, 0x82, 0x95, 0xd6, 0xb1, 0x42, 0x8f, 0xff,
-	0x19, 0xf4, 0x4e, 0x9e, 0x7f, 0xab, 0x2c, 0x6a, 0x93, 0xb5, 0x64, 0xd3, 0xec, 0x2a, 0xe6, 0x89,
-	0xc3, 0x7a, 0xa9, 0x35, 0x0c, 0x46, 0x16, 0x5c, 0x69, 0x19, 0x67, 0x7d, 0x4b, 0x97, 0x6d, 0x45,
-	0x1c, 0x1d, 0x9d, 0xca, 0x47, 0x7d, 0xec, 0xdf, 0x2d, 0x8b, 0xba, 0x0b, 0x54, 0xa2, 0xb4, 0x5c,
-	0x2d, 0x77, 0x8f, 0x4e, 0xef, 0xf6, 0x5d, 0xbd, 0x5c, 0x6c, 0x45, 0x15, 0xa2, 0x3e, 0x5c, 0x3a,
-	0x52, 0x4f, 0x71, 0x9b, 0xad, 0xaf, 0xd8, 0x20, 0x41, 0x22, 0xab, 0x6f, 0xd7, 0x6c, 0x33, 0x32,
-	0xd3, 0x7b, 0x8a, 0xdb, 0x64, 0x18, 0xdc, 0xb6, 0xe9, 0x9c, 0x2a, 0xd7, 0x8e, 0x22, 0xca, 0x50,
-	0x03, 0xf2, 0x43, 0xd5, 0xcc, 0x8d, 0x3e, 0x01, 0x3b, 0xc4, 0x7d, 0xe1, 0x30, 0xc0, 0xd4, 0x82,
-	0x2b, 0xb6, 0xd6, 0x9e, 0xab, 0xd6, 0xb1, 0x7b, 0x5f, 0xcc, 0xae, 0x61, 0x7e, 0xa4, 0xf2, 0xb8,
-	0x66, 0x3e, 0x57, 0xad, 0x63, 0xbb, 0x43, 0xb9, 0xca, 0x33, 0xa2, 0x0a, 0xd1, 0x03, 0xc8, 0xd3,
-	0x30, 0xd2, 0x57, 0x0c, 0xc7, 0xc7, 0x92, 0x23, 0x2f, 0x1a, 0x90, 0x70, 0xb1, 0xaf, 0x18, 0xae,
-	0x97, 0xd1, 0x81, 0xc4, 0x85, 0xa0, 0xcf, 0x01, 0x71, 0x2f, 0x38, 0x56, 0xcc, 0x63, 0x9b, 0x69,
-	0x6a, 0xe4, 0x99, 0x0e, 0x66, 0xfa, 0xaa, 0x62, 0x1e, 0xbb, 0x5b, 0xa3, 0xad, 0x00, 0x8c, 0x9e,
-	0x3c, 0x25, 0xa1, 0xdd, 0x3c, 0x56, 0x8f, 0x1c, 0x61, 0xd3, 0x23, 0xf5, 0x4e, 0x42, 0x5f, 0x83,
-	0xa0, 0xbb, 0x7a, 0x6f, 0xfb, 0x41, 0x21, 0x9d, 0xfc, 0x1b, 0x01, 0x72, 0xfe, 0x56, 0xa2, 0x87,
-	0xb0, 0x40, 0x35, 0x64, 0xe9, 0x32, 0x3f, 0x42, 0xcb, 0xef, 0xb5, 0x6d, 0x4c, 0xa4, 0x25, 0xe7,
-	0x53, 0xca, 0x12, 0x36, 0x4d, 0xbd, 0xc2, 0x98, 0x88, 0xdf, 0x13, 0x58, 0xfc, 0x25, 0x65, 0xe8,
-	0x22, 0xac, 0x34, 0x6b, 0xbb, 0x15, 0x79, 0xbf, 0x28, 0x35, 0x03, 0x87, 0xa8, 0x92, 0x30, 0xfb,
-	0xa8, 0x52, 0x94, 0xf2, 0x02, 0x4a, 0x41, 0x62, 0xb7, 0xbe, 0xd7, 0xac, 0xe6, 0x63, 0x28, 0x0f,
-	0x99, 0x72, 0xf1, 0x91, 0x5c, 0xbf, 0x2b, 0x33, 0x48, 0x1c, 0x2d, 0x40, 0x9a, 0x43, 0x3e, 0xaf,
-	0x54, 0x3e, 0xcb, 0xcf, 0x12, 0x14, 0xf2, 0x8b, 0x40, 0x28, 0x7d, 0x82, 0xa0, 0x54, 0xeb, 0x07,
-	0x12, 0x81, 0x94, 0x8b, 0x8f, 0xf2, 0x73, 0x62, 0x03, 0xf2, 0x41, 0xed, 0xa3, 0x9f, 0x02, 0xe0,
-	0x26, 0x1c, 0x7f, 0x6d, 0x81, 0x11, 0xd3, 0x6b, 0x0b, 0x2d, 0xfb, 0xa7, 0x58, 0x07, 0x34, 0x1c,
-	0xde, 0xd0, 0x47, 0x90, 0xd2, 0xf0, 0xf3, 0x69, 0xd2, 0xb5, 0x1a, 0x7e, 0x4e, 0x7f, 0x89, 0x97,
-	0xe0, 0x62, 0xa4, 0x87, 0x8b, 0x39, 0xc8, 0x78, 0x23, 0x9f, 0xf8, 0x93, 0x18, 0x64, 0x49, 0xd8,
-	0x32, 0x9b, 0x7a, 0xad, 0xa3, 0xe9, 0x06, 0x46, 0x1b, 0x80, 0x9c, 0x80, 0x65, 0x12, 0x2b, 0x9a,
-	0x27, 0x2a, 0xbb, 0x03, 0x90, 0xa2, 0xae, 0xe6, 0x94, 0x35, 0xf5, 0xc6, 0x89, 0xda, 0x47, 0x67,
-	0x70, 0xa9, 0xa5, 0xf7, 0x7a, 0xba, 0x26, 0xfb, 0xc9, 0x54, 0xca, 0x8e, 0x8f, 0xe8, 0x1f, 0x8e,
-	0x88, 0x98, 0x4e, 0xd5, 0x1b, 0x25, 0xca, 0xc7, 0x07, 0x23, 0xc1, 0xa5, 0xe5, 0x80, 0xed, 0x8a,
-	0x59, 0x99, 0xf8, 0x43, 0x01, 0x96, 0x42, 0x68, 0xd0, 0x0d, 0x10, 0x4b, 0xf5, 0xdd, 0xdd, 0xfa,
-	0x9e, 0x5c, 0xaa, 0x16, 0xa5, 0x86, 0xdc, 0xac, 0xcb, 0xb5, 0x7b, 0x7b, 0x75, 0x29, 0x78, 0xe9,
-	0x31, 0x0d, 0xf3, 0x7b, 0x07, 0xbb, 0x15, 0xa9, 0x56, 0xca, 0x0b, 0x68, 0x19, 0xf2, 0xc5, 0x9d,
-	0xfd, 0x6a, 0x51, 0x3e, 0xd8, 0xdf, 0xaf, 0x48, 0x72, 0xa9, 0xd8, 0xa8, 0xe4, 0x63, 0x2e, 0x74,
-	0xa7, 0xfe, 0xb9, 0x0d, 0xa5, 0xce, 0xb3, 0x7f, 0xb0, 0x57, 0x6a, 0x1e, 0x14, 0x9b, 0xb5, 0xfa,
-	0x5e, 0x7e, 0x16, 0xe5, 0x00, 0x3e, 0xaf, 0xd6, 0x9a, 0x95, 0xc6, 0x7e, 0xb1, 0x54, 0xc9, 0x27,
-	0xb6, 0x33, 0x00, 0xae, 0x36, 0xc4, 0xff, 0x4a, 0xe4, 0x0c, 0x19, 0x04, 0xde, 0x82, 0x45, 0x32,
-	0xb8, 0xd0, 0xd0, 0x68, 0x17, 0xf3, 0xa3, 0x41, 0x79, 0x5e, 0xe0, 0x90, 0xa1, 0xd7, 0x20, 0xa7,
-	0x0d, 0x7a, 0x87, 0xd8, 0x20, 0xca, 0x25, 0xa5, 0xfc, 0x12, 0x46, 0x86, 0x41, 0x9b, 0x3a, 0x61,
-	0x4c, 0xd6, 0x39, 0x06, 0x26, 0xeb, 0x5b, 0x2c, 0xeb, 0x46, 0x1b, 0xb3, 0x03, 0xfa, 0x49, 0x32,
-	0xbc, 0x51, 0x60, 0x9d, 0xc0, 0xd0, 0x43, 0x58, 0x0e, 0xb5, 0xd5, 0xec, 0xc8, 0x73, 0x59, 0x3e,
-	0x1d, 0x4b, 0xa8, 0x35, 0x6c, 0x8f, 0x7f, 0x24, 0xc0, 0x5a, 0xd4, 0x28, 0x81, 0xbe, 0x0b, 0xe9,
-	0x60, 0x02, 0x62, 0x9c, 0x4f, 0x43, 0xd7, 0x9b, 0xcc, 0x4e, 0x07, 0xb3, 0x0d, 0x63, 0xc9, 0x07,
-	0x23, 0x93, 0x0e, 0x82, 0x77, 0x69, 0x27, 0xfe, 0x4a, 0x0c, 0x16, 0x82, 0x22, 0xdf, 0x83, 0x79,
-	0x3b, 0x7d, 0xc6, 0xd6, 0xba, 0xb7, 0x27, 0x1b, 0xb3, 0xf8, 0xb7, 0x64, 0x53, 0xd3, 0xb3, 0x76,
-	0x7c, 0xb5, 0xba, 0x01, 0xf1, 0x9e, 0xaa, 0x4d, 0xd4, 0x7c, 0x82, 0x48, 0xf1, 0x95, 0xd3, 0x89,
-	0xda, 0x4b, 0x10, 0x51, 0x0d, 0x16, 0xf9, 0x10, 0x46, 0xef, 0x9b, 0xb9, 0x6b, 0xa6, 0x71, 0xd4,
-	0x79, 0x0f, 0x19, 0x0b, 0x24, 0xbf, 0x3f, 0x0b, 0x17, 0x23, 0x27, 0x1a, 0x2f, 0x1c, 0xf8, 0xd0,
-	0x87, 0x30, 0x4f, 0xaf, 0x01, 0xf2, 0x2b, 0x17, 0x13, 0x5c, 0xd7, 0xe2, 0xe8, 0xc8, 0x84, 0x05,
-	0x1e, 0x72, 0x94, 0x6e, 0xff, 0x58, 0x39, 0xc4, 0x6c, 0x4f, 0x33, 0x17, 0xb9, 0xbf, 0x16, 0xd9,
-	0x8a, 0x8d, 0xbb, 0x47, 0xa7, 0x2c, 0x82, 0xec, 0xd1, 0xed, 0xf0, 0x22, 0xe7, 0x47, 0xc6, 0x6a,
-	0x56, 0x85, 0x0d, 0x41, 0x6f, 0x02, 0xbf, 0x88, 0xef, 0x56, 0x9a, 0xe0, 0x41, 0x31, 0xc7, 0x0a,
-	0x1c, 0xd4, 0x55, 0x48, 0x18, 0x4a, 0x5b, 0x3d, 0xa5, 0x33, 0x9d, 0x44, 0x75, 0x46, 0x62, 0x9f,
-	0xf4, 0xf0, 0xca, 0xc0, 0x30, 0xf4, 0x8e, 0x62, 0x79, 0xde, 0x0e, 0xe0, 0x93, 0x88, 0xb1, 0xa7,
-	0x6d, 0x17, 0x1d, 0x5a, 0x1b, 0x24, 0xfe, 0x65, 0x01, 0x2e, 0x44, 0xb4, 0x00, 0xad, 0xc3, 0x8d,
-	0xbb, 0x77, 0xbf, 0x90, 0x79, 0x20, 0xdc, 0x2b, 0x36, 0x6b, 0x0f, 0x2b, 0x32, 0x8d, 0x65, 0xdb,
-	0x95, 0xe6, 0xa8, 0x40, 0x48, 0x86, 0xbd, 0xca, 0x17, 0xc5, 0x72, 0xa5, 0x54, 0xdb, 0x2d, 0xee,
-	0xe4, 0x63, 0xe8, 0x32, 0xac, 0xb9, 0x31, 0x91, 0xb1, 0x90, 0x6d, 0xf4, 0x38, 0x5a, 0x84, 0xac,
-	0x1f, 0x34, 0xbb, 0x0d, 0x90, 0xb4, 0x75, 0x24, 0xfe, 0x1f, 0x01, 0x52, 0x8e, 0xf9, 0x51, 0x0d,
-	0x52, 0x74, 0x06, 0xa1, 0xda, 0x27, 0xde, 0xa3, 0xe7, 0xfc, 0x4d, 0x1b, 0xcf, 0xa1, 0xa6, 0x6b,
-	0x69, 0x1b, 0x4a, 0x58, 0x0d, 0xb4, 0xe7, 0x86, 0xd2, 0xef, 0x63, 0x3b, 0x1c, 0x44, 0xb1, 0x3a,
-	0xb0, 0xf1, 0x7c, 0xac, 0x1c, 0x6a, 0xb4, 0x0b, 0xe9, 0x93, 0x9e, 0x29, 0xdb, 0xcc, 0x46, 0x4f,
-	0xf2, 0x3f, 0xeb, 0x99, 0x9f, 0x0f, 0x73, 0x83, 0x13, 0x07, 0xbc, 0x9d, 0x84, 0x39, 0x76, 0xa2,
-	0x40, 0xbc, 0x09, 0x68, 0xb8, 0x19, 0x61, 0x67, 0x55, 0xc5, 0x1b, 0x80, 0x86, 0xa5, 0x44, 0x79,
-	0x88, 0xdb, 0x9d, 0x2b, 0x23, 0x91, 0x9f, 0xe2, 0x57, 0xb0, 0x14, 0x22, 0x00, 0x09, 0x6f, 0x9c,
-	0x58, 0x76, 0x09, 0x80, 0x83, 0x08, 0xc2, 0x0d, 0x58, 0x70, 0x7b, 0xab, 0xf7, 0x38, 0x6c, 0xd6,
-	0xe9, 0x90, 0xf4, 0xf8, 0xfe, 0x1f, 0x0a, 0xb0, 0x10, 0x98, 0x09, 0xa2, 0x9b, 0x90, 0xf7, 0x84,
-	0x5e, 0xb9, 0xad, 0x9c, 0xd9, 0xcb, 0xdd, 0x9c, 0x1b, 0x61, 0xcb, 0xca, 0x99, 0x49, 0x30, 0x3d,
-	0x31, 0x9e, 0x61, 0xb2, 0x51, 0x2a, 0xe7, 0x86, 0x72, 0x8a, 0xe9, 0xe9, 0xfc, 0xf1, 0xe9, 0x3a,
-	0x7f, 0xd1, 0x17, 0x77, 0x66, 0x27, 0x8b, 0x3b, 0xf4, 0xe4, 0x90, 0xfd, 0x41, 0x0c, 0xd4, 0xc3,
-	0xd6, 0xb1, 0xde, 0x16, 0x7f, 0x14, 0x83, 0x0b, 0x11, 0x8b, 0x6a, 0xa4, 0xc3, 0xc2, 0xf0, 0xea,
-	0x7c, 0xd4, 0x31, 0xb0, 0x08, 0x46, 0x11, 0x70, 0x29, 0xc8, 0xbd, 0xf0, 0xcf, 0x04, 0x58, 0x0d,
-	0xc7, 0x7d, 0xe1, 0xe7, 0x56, 0x54, 0x58, 0xeb, 0xdb, 0x6b, 0xf1, 0x40, 0x22, 0x80, 0xf7, 0x9d,
-	0x8d, 0xe8, 0xe3, 0x34, 0x61, 0x4b, 0x78, 0xe9, 0x42, 0x3f, 0xbc, 0x40, 0xfc, 0x5e, 0x1c, 0x96,
-	0xa8, 0xd1, 0x02, 0x4d, 0xf8, 0x00, 0xe6, 0xe8, 0x11, 0xa1, 0x49, 0xcf, 0xfc, 0x71, 0x6c, 0x54,
-	0x86, 0x54, 0x4b, 0xd7, 0xda, 0xaa, 0xe7, 0x5a, 0xee, 0x8d, 0x91, 0x39, 0x8b, 0x92, 0x8d, 0x2d,
-	0xb9, 0x84, 0xe8, 0x64, 0x84, 0x02, 0x66, 0xcf, 0xa3, 0x80, 0xea, 0x4c, 0xa4, 0x0a, 0x46, 0x67,
-	0x78, 0x12, 0x2f, 0x39, 0xc3, 0x13, 0xb2, 0x2a, 0xfb, 0xb1, 0x00, 0x2b, 0xa1, 0xf9, 0x1b, 0x24,
-	0xc3, 0x0a, 0xbb, 0x23, 0x1d, 0xee, 0xd9, 0xeb, 0xa3, 0x6c, 0x12, 0x70, 0x80, 0xe5, 0xa3, 0x61,
-	0xa0, 0x89, 0x1e, 0xc1, 0x12, 0x4f, 0x37, 0x99, 0x83, 0x7e, 0xdf, 0xc0, 0xa6, 0xc9, 0x73, 0x4d,
-	0xf1, 0x11, 0x59, 0x37, 0x26, 0x6b, 0xc3, 0x25, 0x90, 0x90, 0x11, 0x04, 0x99, 0xe2, 0x23, 0x58,
-	0x1c, 0x42, 0xf4, 0x7b, 0x87, 0x70, 0x4e, 0xef, 0x10, 0x7f, 0x23, 0x01, 0x0b, 0x81, 0x62, 0xd4,
-	0x84, 0x34, 0x3e, 0x75, 0x5b, 0x30, 0xfa, 0x71, 0xa1, 0x00, 0xf1, 0x46, 0xc5, 0xa5, 0x94, 0xbc,
-	0x6c, 0x0a, 0xbf, 0x4b, 0x86, 0x43, 0xa7, 0x8e, 0xf3, 0x9d, 0xb1, 0xab, 0x40, 0x52, 0xef, 0x63,
-	0x43, 0xb1, 0xf8, 0xfd, 0xdb, 0xdc, 0x88, 0xbc, 0x59, 0x97, 0xda, 0x45, 0xe9, 0xd6, 0x39, 0x81,
-	0xe4, 0x90, 0xba, 0x69, 0xff, 0xd9, 0x89, 0xd3, 0xfe, 0x85, 0xaf, 0x00, 0x1c, 0xe9, 0x4d, 0xb4,
-	0x0f, 0xe0, 0xe8, 0xd0, 0x76, 0xa1, 0xb7, 0x27, 0xd4, 0x90, 0x6b, 0x07, 0x0f, 0x8f, 0xc2, 0x0f,
-	0x63, 0x90, 0xf6, 0xe8, 0x0e, 0xf5, 0xc8, 0x80, 0xd2, 0xa1, 0x47, 0xd8, 0x9c, 0x26, 0xb3, 0x6c,
-	0xc2, 0xf6, 0xf4, 0x96, 0xd8, 0xd8, 0x61, 0xac, 0x1c, 0x5d, 0x2c, 0x74, 0xfd, 0x00, 0xd4, 0xf0,
-	0x35, 0x88, 0x99, 0xfc, 0x9d, 0x69, 0x1b, 0x44, 0x3a, 0xab, 0x87, 0x8d, 0xf8, 0x09, 0x2c, 0x04,
-	0x2a, 0x46, 0xd7, 0xe0, 0xf2, 0x4e, 0xfd, 0x5e, 0xad, 0x54, 0xdc, 0x91, 0xeb, 0xfb, 0x15, 0xa9,
-	0xd8, 0xac, 0x4b, 0x81, 0x19, 0xd9, 0x3c, 0xc4, 0x8b, 0x7b, 0xe5, 0xbc, 0xe0, 0x64, 0xee, 0xff,
-	0x8e, 0x00, 0xab, 0xe1, 0xf7, 0x0c, 0xc9, 0x32, 0xd2, 0xe9, 0xce, 0x81, 0x1b, 0x39, 0x79, 0x4f,
-	0x01, 0xbb, 0x8e, 0xd3, 0x81, 0x35, 0x7f, 0xdf, 0x97, 0xcd, 0x41, 0xaf, 0xa7, 0x18, 0xaa, 0x73,
-	0xb2, 0xf8, 0xd6, 0x44, 0xb7, 0x1c, 0x1b, 0x94, 0xea, 0x4c, 0xba, 0x60, 0x85, 0x80, 0x55, 0x6c,
-	0x8a, 0x3f, 0x9c, 0x83, 0x95, 0x50, 0x92, 0x17, 0xbc, 0x6a, 0xe6, 0xf4, 0x99, 0xd8, 0x34, 0x7d,
-	0xe6, 0x61, 0x30, 0x48, 0x72, 0xeb, 0x4e, 0x3b, 0xec, 0x05, 0xb8, 0x44, 0x07, 0xd4, 0xc4, 0x4b,
-	0x0a, 0xa8, 0x0f, 0x9c, 0xd7, 0x4d, 0xec, 0x80, 0xca, 0xf3, 0xa7, 0x93, 0x07, 0xd3, 0x9c, 0x3f,
-	0x98, 0xa2, 0x26, 0xcc, 0xb3, 0xbd, 0x40, 0x7b, 0x63, 0xfd, 0xce, 0x34, 0x16, 0xdf, 0xb0, 0x2d,
-	0xcf, 0xee, 0xc3, 0xd9, 0xac, 0xc2, 0xbd, 0x70, 0x3e, 0xdc, 0x0b, 0x0b, 0xbf, 0x2a, 0x40, 0xd6,
-	0xc7, 0xc7, 0xdd, 0x50, 0x14, 0x3c, 0x1b, 0x8a, 0xe8, 0x11, 0xcc, 0x3a, 0x27, 0xe3, 0x73, 0x91,
-	0x13, 0xaf, 0x70, 0x39, 0x03, 0xea, 0xa5, 0xd5, 0x94, 0xf4, 0x36, 0x96, 0x28, 0x4b, 0xb4, 0x06,
-	0xf3, 0x6d, 0xb6, 0x13, 0xcb, 0xb6, 0x14, 0x25, 0xfb, 0x53, 0xfc, 0x0a, 0xd6, 0xa2, 0x68, 0xc9,
-	0xaa, 0xaa, 0x29, 0x15, 0xf7, 0x1a, 0x77, 0xeb, 0xd2, 0x2e, 0x4d, 0xfe, 0xc8, 0x52, 0xa5, 0x71,
-	0xb0, 0xd3, 0x94, 0x4b, 0xf5, 0x72, 0x48, 0x7a, 0xa9, 0x71, 0x50, 0x2a, 0x55, 0x1a, 0x0d, 0x96,
-	0x8c, 0xac, 0x48, 0x52, 0x5d, 0xca, 0xc7, 0x44, 0x1d, 0x92, 0x8d, 0xd6, 0x31, 0x6e, 0x0f, 0xba,
-	0x18, 0x3d, 0x82, 0x82, 0x81, 0x5b, 0x03, 0xc3, 0xa0, 0xe7, 0x53, 0xfa, 0xd8, 0x50, 0xf5, 0xb6,
-	0x6c, 0x3f, 0x24, 0xc8, 0x3b, 0xc7, 0xc5, 0xa1, 0xcd, 0xc9, 0x32, 0x47, 0xa8, 0xce, 0x48, 0x6b,
-	0x2e, 0xf9, 0x3e, 0xa5, 0xb6, 0xcb, 0xc8, 0x2c, 0x97, 0x5d, 0xab, 0x14, 0xff, 0x5e, 0x0c, 0x16,
-	0x82, 0xd7, 0x08, 0xcf, 0x79, 0x61, 0xee, 0x1a, 0xa4, 0xdb, 0xee, 0x15, 0x32, 0xae, 0x39, 0x2f,
-	0x28, 0xf8, 0x5a, 0xd2, 0xec, 0x54, 0xaf, 0x25, 0x7d, 0x0c, 0xe9, 0x41, 0xdf, 0xdd, 0x94, 0x4c,
-	0x8c, 0x27, 0x66, 0xe8, 0x94, 0x78, 0xf8, 0xce, 0xf4, 0xdc, 0xb9, 0xef, 0x4c, 0x8b, 0xff, 0x34,
-	0x06, 0xa8, 0x3c, 0x74, 0xdd, 0xfc, 0x4f, 0xa2, 0xda, 0x42, 0x5f, 0xa9, 0x98, 0x7b, 0xc1, 0x57,
-	0x2a, 0xc4, 0xa7, 0x90, 0xa8, 0x18, 0x86, 0x6e, 0xa0, 0x5b, 0x6e, 0x3f, 0x63, 0xee, 0x8c, 0x6c,
-	0xa6, 0x46, 0xbf, 0xb5, 0xd1, 0xa0, 0x0f, 0x57, 0x3a, 0x7d, 0x0f, 0xdd, 0x61, 0x5b, 0xeb, 0x54,
-	0x4a, 0x7b, 0xda, 0x38, 0xb2, 0x21, 0x2e, 0xb6, 0xf8, 0xa3, 0x04, 0xc0, 0x7d, 0xfd, 0xb0, 0x69,
-	0xa8, 0x9d, 0x0e, 0x36, 0xbe, 0x3d, 0x53, 0xdd, 0x87, 0xb4, 0xed, 0x67, 0x4f, 0xf4, 0x43, 0x6e,
-	0xaa, 0x49, 0xaf, 0xe0, 0x92, 0xc9, 0x81, 0xea, 0xc0, 0xc8, 0x5c, 0xce, 0x62, 0xf2, 0xda, 0x43,
-	0x46, 0xd4, 0x5c, 0xce, 0x6d, 0xd9, 0x06, 0xff, 0x2b, 0x39, 0xa4, 0xe8, 0x3d, 0x98, 0xc3, 0x44,
-	0xdb, 0xf6, 0x81, 0x94, 0xa8, 0xc9, 0x1c, 0x35, 0x89, 0xc4, 0x71, 0x83, 0x3e, 0x37, 0xff, 0x22,
-	0x3e, 0x97, 0x9c, 0xca, 0xe7, 0x3e, 0x85, 0x6c, 0x57, 0x31, 0x2d, 0xd9, 0x18, 0x68, 0x8c, 0x3c,
-	0x35, 0x96, 0x3c, 0x4d, 0x08, 0xa4, 0x81, 0x46, 0xe9, 0x7f, 0x1a, 0xe6, 0xd8, 0x93, 0xa7, 0x6b,
-	0x40, 0x47, 0x86, 0x9b, 0xe3, 0x95, 0xc6, 0x3d, 0x8d, 0xd3, 0x15, 0x1a, 0x30, 0x6f, 0x3b, 0xca,
-	0x77, 0x21, 0x69, 0xf2, 0x78, 0x3c, 0x66, 0x3a, 0x62, 0x87, 0xed, 0xea, 0x8c, 0xe4, 0x90, 0x6c,
-	0xa7, 0x60, 0x9e, 0xdb, 0x41, 0xac, 0xc2, 0x1c, 0xab, 0x06, 0xad, 0x02, 0x6a, 0x34, 0x8b, 0xcd,
-	0x83, 0xc6, 0xf0, 0x98, 0x50, 0xad, 0x14, 0x77, 0x9a, 0xd5, 0x47, 0x79, 0x01, 0x01, 0xcc, 0xed,
-	0x17, 0x0f, 0x1a, 0x95, 0x32, 0x7b, 0x56, 0xb1, 0x54, 0xdc, 0x2b, 0x55, 0x76, 0x76, 0x2a, 0xe5,
-	0x7c, 0x7c, 0x3b, 0x01, 0xf1, 0x27, 0xfa, 0xa1, 0xf8, 0x7b, 0x71, 0x98, 0x63, 0x57, 0x58, 0xd1,
-	0x03, 0xc8, 0x9a, 0xca, 0x33, 0x2c, 0x7b, 0x5e, 0xf5, 0x1b, 0x95, 0xa6, 0x62, 0x54, 0x1b, 0x0d,
-	0xe5, 0x19, 0xb6, 0xdf, 0x9e, 0xac, 0xce, 0x48, 0x19, 0xd3, 0xf3, 0x8d, 0xaa, 0x30, 0xdf, 0x1f,
-	0x1c, 0xca, 0xe6, 0xe0, 0x70, 0xcc, 0x03, 0x17, 0x9c, 0xd9, 0xfe, 0xe0, 0xb0, 0xab, 0x9a, 0xc7,
-	0x4d, 0x7d, 0x7f, 0x70, 0xd8, 0x18, 0x1c, 0x56, 0x67, 0xa4, 0xb9, 0x3e, 0xfd, 0x85, 0x4e, 0xe0,
-	0x42, 0x9f, 0x15, 0xf2, 0xe9, 0xe4, 0x99, 0x6c, 0xe9, 0x72, 0xcb, 0x6c, 0xb5, 0xc6, 0x2c, 0x9c,
-	0xfc, 0x9c, 0xf9, 0xd0, 0xdd, 0xd4, 0x4b, 0x66, 0xab, 0x55, 0x9d, 0x91, 0x96, 0xfb, 0x21, 0xf0,
-	0x82, 0x0c, 0x19, 0x6f, 0xb3, 0x50, 0xdd, 0x79, 0xc4, 0xc1, 0x77, 0x98, 0x60, 0x7d, 0xf2, 0x47,
-	0x1c, 0xec, 0x77, 0x1b, 0xf8, 0x25, 0xcf, 0x37, 0x60, 0x21, 0xd0, 0x54, 0x32, 0x3d, 0xb1, 0xf4,
-	0x3e, 0xbf, 0x7c, 0x94, 0x92, 0xd8, 0x47, 0x61, 0x15, 0x96, 0xc3, 0x24, 0x27, 0x43, 0x2f, 0xbb,
-	0x70, 0x2c, 0xfe, 0xa6, 0x00, 0x97, 0x4b, 0xb4, 0xd3, 0x04, 0x2f, 0xf8, 0x8f, 0x79, 0x00, 0xe4,
-	0x01, 0xe4, 0x87, 0x5e, 0x10, 0x88, 0x4d, 0xf5, 0x82, 0xc0, 0x42, 0xe0, 0x79, 0x0e, 0x74, 0x15,
-	0xd2, 0xce, 0x33, 0x1e, 0x6a, 0x9b, 0x47, 0x36, 0xb0, 0x41, 0xb5, 0xb6, 0xf8, 0xfb, 0x02, 0x5c,
-	0x3e, 0xa0, 0x9d, 0x34, 0x42, 0xd8, 0xb0, 0x90, 0xfa, 0x2d, 0x08, 0xea, 0x86, 0x16, 0xba, 0xcf,
-	0x15, 0x8f, 0x88, 0x0d, 0x74, 0x12, 0xbd, 0xab, 0x98, 0x27, 0x76, 0x68, 0x21, 0xbf, 0xc5, 0x4d,
-	0xb8, 0x78, 0x0f, 0x5b, 0x93, 0x37, 0x40, 0x7c, 0x0a, 0x97, 0xd8, 0xfd, 0x7a, 0x1f, 0x85, 0x39,
-	0xce, 0x40, 0x57, 0x00, 0xfa, 0x4a, 0x07, 0xcb, 0x96, 0x7e, 0xc2, 0x5f, 0xa9, 0x4a, 0x49, 0x29,
-	0x02, 0x69, 0x12, 0x00, 0xba, 0x04, 0xf4, 0xc3, 0xdd, 0x6e, 0x4a, 0x48, 0x49, 0x02, 0xa0, 0x9b,
-	0x4d, 0xbf, 0x26, 0xc0, 0xe5, 0xf0, 0x3a, 0xf9, 0xd5, 0xfe, 0x06, 0x2c, 0x06, 0x95, 0x6a, 0x2f,
-	0xb0, 0x27, 0xd5, 0x6a, 0x3e, 0xa0, 0x55, 0x13, 0xdd, 0x80, 0x05, 0x0d, 0x9f, 0x5a, 0xf2, 0x90,
-	0xd8, 0x59, 0x02, 0xde, 0xb7, 0x45, 0x17, 0xb7, 0xe0, 0x72, 0x19, 0x77, 0xf1, 0x34, 0x5e, 0x40,
-	0x77, 0x22, 0x98, 0x9f, 0xbb, 0x21, 0x77, 0x9c, 0x06, 0xb7, 0x21, 0xfd, 0x44, 0x3f, 0x94, 0x79,
-	0xf0, 0xe4, 0x4e, 0xf3, 0xea, 0xd8, 0x48, 0x2e, 0xc1, 0x13, 0x77, 0x90, 0xbf, 0x02, 0xc0, 0xe9,
-	0x5d, 0x97, 0x4e, 0x71, 0x48, 0xad, 0x4d, 0x56, 0xcd, 0x17, 0x98, 0x47, 0x0f, 0x8b, 0x15, 0xe6,
-	0xcc, 0x2f, 0x43, 0xa4, 0x17, 0xf2, 0xde, 0x75, 0x58, 0xbe, 0x87, 0xad, 0x89, 0x84, 0x15, 0x7f,
-	0x22, 0xc0, 0x12, 0xd3, 0x79, 0xb9, 0xdb, 0xbf, 0xaf, 0x1f, 0x8e, 0xd3, 0x77, 0x60, 0xde, 0x12,
-	0x7b, 0x91, 0x79, 0x4b, 0x0d, 0x92, 0x86, 0x6a, 0x9e, 0x50, 0x46, 0xf1, 0xd1, 0x07, 0xc9, 0xc2,
-	0x9e, 0x95, 0xa8, 0xce, 0x48, 0xf3, 0x84, 0x9e, 0xb0, 0x5a, 0x81, 0x39, 0xa2, 0x73, 0xb5, 0xcd,
-	0x9f, 0x15, 0x4a, 0x3c, 0xd1, 0x0f, 0x6b, 0x6d, 0x7b, 0x04, 0xfc, 0x25, 0x01, 0x56, 0x49, 0x57,
-	0x71, 0x55, 0xf2, 0x6d, 0xf6, 0x4c, 0x74, 0x11, 0x92, 0x74, 0xdf, 0x5c, 0x3e, 0x3c, 0xe3, 0xe2,
-	0xcc, 0xd3, 0xef, 0xed, 0x33, 0x22, 0xc9, 0x85, 0x21, 0x49, 0x78, 0x7f, 0x2d, 0x43, 0xc6, 0xe3,
-	0x37, 0x76, 0x57, 0x9d, 0xc0, 0x71, 0xd2, 0xae, 0xe3, 0x4c, 0xde, 0x41, 0x6f, 0xc3, 0x05, 0xd6,
-	0x41, 0x27, 0xf3, 0x93, 0xbf, 0x1a, 0x83, 0x7c, 0xd0, 0x9c, 0x64, 0xb1, 0xc4, 0x9f, 0xb3, 0xf7,
-	0x8f, 0x9a, 0x51, 0x8b, 0x25, 0xff, 0x78, 0x99, 0x35, 0x7d, 0x8f, 0x30, 0xbd, 0xd4, 0xd7, 0xaa,
-	0x22, 0x5f, 0x9d, 0x8a, 0x47, 0xbf, 0x1d, 0xe6, 0x79, 0x0f, 0x64, 0x76, 0xaa, 0xf7, 0x40, 0xfe,
-	0x45, 0x02, 0xe6, 0x58, 0xef, 0x09, 0x8d, 0x07, 0xef, 0xf3, 0x97, 0xb9, 0x47, 0x3f, 0x4e, 0xcf,
-	0x18, 0x78, 0x9e, 0xe2, 0xfe, 0x84, 0xbe, 0xe5, 0x69, 0x61, 0x9e, 0x9e, 0xbd, 0x31, 0x92, 0x8e,
-	0xb8, 0x03, 0x99, 0x35, 0x62, 0x89, 0x11, 0xa1, 0x2f, 0x20, 0x43, 0xfb, 0x96, 0xbd, 0x6c, 0x62,
-	0x0b, 0x8c, 0x77, 0xcf, 0x71, 0xc6, 0xbc, 0x3a, 0x23, 0xa5, 0x0d, 0xcf, 0xad, 0xea, 0xc7, 0x60,
-	0x8f, 0xb5, 0x0e, 0xf3, 0xd1, 0x67, 0xfe, 0xa2, 0x5e, 0x43, 0xaa, 0xce, 0x48, 0xb6, 0xc5, 0x6d,
-	0xde, 0x2f, 0xf4, 0x4a, 0xf2, 0x47, 0x00, 0xf4, 0xbd, 0xd3, 0x49, 0x17, 0x22, 0x29, 0x8a, 0x4d,
-	0x49, 0xdf, 0x87, 0x24, 0xd6, 0xda, 0x93, 0x2e, 0x42, 0xe6, 0xb1, 0xd6, 0xa6, 0x64, 0x37, 0x21,
-	0xef, 0xe9, 0xb1, 0xcc, 0xc1, 0x80, 0x5a, 0x3e, 0xe7, 0x76, 0x49, 0xea, 0x5b, 0xee, 0xda, 0x2a,
-	0x3d, 0xf9, 0xda, 0x4a, 0x6c, 0x41, 0xd2, 0xb6, 0x2b, 0xba, 0x08, 0x2b, 0xf7, 0xeb, 0xdb, 0x32,
-	0x59, 0x10, 0x84, 0xe4, 0x88, 0xf6, 0x2b, 0x7b, 0xe5, 0xda, 0xde, 0xbd, 0xbc, 0x40, 0x3e, 0xa4,
-	0x83, 0xbd, 0x3d, 0xf2, 0x11, 0x43, 0x49, 0x98, 0x2d, 0xd7, 0xf7, 0x2a, 0xf9, 0x38, 0xca, 0x40,
-	0x92, 0x2d, 0x0d, 0x2a, 0xe5, 0xfc, 0x2c, 0x59, 0x34, 0xdc, 0x2d, 0xd6, 0xc8, 0xef, 0x04, 0x59,
-	0x7a, 0xd8, 0x49, 0xab, 0x1b, 0x90, 0xbf, 0x87, 0x2d, 0xff, 0x40, 0x10, 0x16, 0x0c, 0x7e, 0x47,
-	0x00, 0x44, 0xa2, 0x18, 0xc3, 0x0c, 0x89, 0xa5, 0xb3, 0xbe, 0x58, 0xea, 0x3e, 0x4a, 0x24, 0x78,
-	0x1f, 0x25, 0xf2, 0x07, 0xd1, 0x58, 0x20, 0x88, 0xfa, 0x03, 0x70, 0x3c, 0x18, 0x80, 0xed, 0x4e,
-	0x95, 0x98, 0xaa, 0x53, 0x89, 0x7d, 0x58, 0xf2, 0x09, 0xce, 0x43, 0xef, 0x3b, 0x30, 0xfb, 0x44,
-	0x3f, 0xb4, 0x43, 0xee, 0x95, 0x91, 0xdc, 0x24, 0x8a, 0x3a, 0x71, 0x9c, 0x7d, 0x13, 0x96, 0x4a,
-	0x8a, 0xd6, 0xc2, 0xdd, 0xf1, 0x6a, 0x7d, 0x13, 0x96, 0x58, 0x48, 0x1e, 0x8f, 0xfa, 0xdb, 0x02,
-	0x5c, 0xe5, 0xc3, 0xf6, 0x50, 0x7e, 0x69, 0xdc, 0xd0, 0xf6, 0x18, 0x96, 0x42, 0x9e, 0xd0, 0x1c,
-	0x73, 0xfc, 0x21, 0xa4, 0x1a, 0x34, 0xfc, 0xd0, 0xe6, 0xf8, 0xe5, 0xc1, 0xbf, 0x15, 0xe0, 0x2a,
-	0x9b, 0x4c, 0x45, 0x0b, 0x1e, 0x16, 0x44, 0xbf, 0x4d, 0xa1, 0x5f, 0x68, 0xb2, 0xb5, 0x05, 0x97,
-	0x49, 0x9f, 0x99, 0xa6, 0x31, 0xa2, 0x05, 0xaf, 0x50, 0x2f, 0x1c, 0x22, 0xfa, 0x56, 0x17, 0x0c,
-	0x7f, 0x5b, 0x80, 0xab, 0x91, 0xd5, 0xf2, 0x8e, 0xf0, 0x25, 0x2c, 0x87, 0xa8, 0xd9, 0xee, 0x18,
-	0x53, 0xe8, 0x79, 0x69, 0x58, 0xcf, 0x93, 0xf7, 0x99, 0xf7, 0xe1, 0x2a, 0xef, 0x08, 0xd3, 0xa8,
-	0x75, 0x7d, 0x17, 0xb2, 0xbe, 0xff, 0x52, 0x82, 0x2e, 0xc0, 0x52, 0xa9, 0xbe, 0xd7, 0xac, 0xec,
-	0x05, 0xcf, 0x2a, 0xe5, 0x21, 0x63, 0x17, 0x34, 0x2b, 0x5f, 0x34, 0xf3, 0x02, 0x5a, 0x84, 0xac,
-	0x0d, 0x61, 0xff, 0xc3, 0x22, 0xb6, 0xbe, 0xef, 0xbe, 0x12, 0xe7, 0x79, 0xac, 0x8d, 0x04, 0xe2,
-	0xca, 0xde, 0xc1, 0x6e, 0xd8, 0x3f, 0xc0, 0x48, 0xc3, 0x7c, 0x8d, 0x02, 0x38, 0x47, 0xa9, 0xd6,
-	0xf8, 0x4c, 0x2e, 0xee, 0x15, 0x77, 0x1e, 0x35, 0x6a, 0x8d, 0x7c, 0x6c, 0xfd, 0x9f, 0x08, 0x80,
-	0x86, 0xb7, 0x53, 0xd1, 0x75, 0xb8, 0x2a, 0x55, 0x76, 0xe8, 0x4e, 0x40, 0xf4, 0x66, 0x5e, 0x06,
-	0x92, 0x95, 0x07, 0x07, 0xc5, 0x1d, 0xb9, 0x59, 0xcf, 0x0b, 0xa4, 0x01, 0x7b, 0xf5, 0xa6, 0xec,
-	0x40, 0xe8, 0xe9, 0xe4, 0x7b, 0x52, 0xa5, 0xd8, 0xac, 0x48, 0x72, 0xb3, 0x5a, 0xdc, 0x63, 0xff,
-	0x55, 0x63, 0xa7, 0xd2, 0x68, 0xb0, 0xcf, 0x59, 0x54, 0x80, 0x55, 0x2f, 0x82, 0x5c, 0x97, 0x18,
-	0x79, 0x23, 0x9f, 0x20, 0x8a, 0x72, 0x50, 0x3d, 0x05, 0x73, 0x64, 0xa0, 0xa8, 0x7c, 0x51, 0x6b,
-	0x34, 0x1b, 0xf9, 0xf9, 0x75, 0x09, 0xc0, 0x8d, 0xa7, 0xe8, 0x32, 0xac, 0x95, 0x77, 0xf6, 0x65,
-	0x32, 0x26, 0x85, 0x68, 0x62, 0x01, 0xd2, 0x5c, 0x13, 0x04, 0x23, 0x2f, 0xa0, 0x15, 0x58, 0xf4,
-	0x69, 0x83, 0x82, 0x63, 0x5b, 0xff, 0x4f, 0xa4, 0x4c, 0x1b, 0xd8, 0x78, 0xa6, 0xb6, 0x30, 0xfa,
-	0x1b, 0x02, 0xe4, 0xfc, 0x2f, 0x7f, 0xa2, 0x5b, 0x63, 0xa7, 0x7f, 0x9e, 0xa7, 0x50, 0x0b, 0xb7,
-	0x27, 0xc4, 0x66, 0xee, 0x2e, 0x6e, 0xfd, 0x99, 0x1f, 0xff, 0x97, 0xbf, 0x14, 0xbb, 0x25, 0xbe,
-	0xb1, 0xf9, 0x6c, 0x6b, 0xf3, 0x67, 0x59, 0x1f, 0xfb, 0x6e, 0xdf, 0xd0, 0x9f, 0xe0, 0x96, 0x65,
-	0x6e, 0xae, 0xff, 0xfc, 0x26, 0xff, 0x1f, 0x03, 0x77, 0xf8, 0x3c, 0xe5, 0x8e, 0xb0, 0x8e, 0x7e,
-	0x20, 0x40, 0xda, 0xf3, 0x56, 0x34, 0x7a, 0x73, 0xe2, 0xf7, 0xbe, 0x0b, 0xeb, 0x93, 0xa0, 0x72,
-	0xd1, 0x36, 0xa9, 0x68, 0x6f, 0x8a, 0xaf, 0x45, 0x89, 0x46, 0xdf, 0xa3, 0xbe, 0xc3, 0xae, 0x9c,
-	0x10, 0xb9, 0x7e, 0x4b, 0x80, 0xc5, 0xa1, 0xf7, 0x8d, 0xd1, 0xe6, 0x24, 0xd9, 0x77, 0xaf, 0x06,
-	0xdf, 0x9e, 0x9c, 0x80, 0x4b, 0xfa, 0x3e, 0x95, 0x74, 0x53, 0x5c, 0x1f, 0xa7, 0x44, 0x37, 0x24,
-	0xd8, 0xf2, 0x4a, 0x13, 0xcb, 0x2b, 0x4d, 0x2b, 0xaf, 0xf4, 0xe2, 0xf2, 0x1a, 0x3e, 0x79, 0x7f,
-	0x41, 0x80, 0xac, 0xef, 0x0d, 0x45, 0xf4, 0x56, 0xe4, 0xff, 0x0f, 0x19, 0x7e, 0xbe, 0xb1, 0x70,
-	0x6b, 0x32, 0x64, 0x2e, 0xe3, 0x0a, 0x95, 0x71, 0x01, 0x65, 0x89, 0x8c, 0xee, 0x11, 0xac, 0xff,
-	0x20, 0xc0, 0x4a, 0x68, 0x26, 0x10, 0xbd, 0x1b, 0x79, 0x7a, 0x2d, 0x3a, 0x6f, 0x58, 0x98, 0x30,
-	0x0d, 0x24, 0x76, 0xa8, 0x34, 0x8a, 0x78, 0xdb, 0xab, 0x31, 0xdd, 0xe8, 0x28, 0x9a, 0xfa, 0x35,
-	0xdb, 0x62, 0xa6, 0x0e, 0x19, 0xc8, 0x15, 0xdd, 0x11, 0xd6, 0x1f, 0xdf, 0x16, 0x6f, 0x46, 0xfa,
-	0xef, 0x30, 0x3a, 0x6d, 0x5f, 0x68, 0xf2, 0x30, 0xb2, 0x7d, 0xa3, 0x52, 0x8d, 0xd3, 0xb6, 0x6f,
-	0x8b, 0xb5, 0x8f, 0x8c, 0x25, 0xc1, 0xd6, 0x0d, 0x49, 0xbb, 0xb9, 0xfe, 0xf3, 0xb4, 0x7d, 0x5b,
-	0x37, 0x5d, 0x1a, 0xb7, 0x75, 0x11, 0xe8, 0xe8, 0x0f, 0x04, 0x40, 0xc3, 0x89, 0x45, 0x14, 0xe5,
-	0xc3, 0x91, 0x39, 0xc8, 0x89, 0x5b, 0xa6, 0xd0, 0x96, 0xfd, 0x0c, 0x9a, 0xae, 0x65, 0x8f, 0xd7,
-	0xd1, 0xc4, 0xcd, 0x42, 0x3f, 0x11, 0xec, 0x07, 0x4b, 0x03, 0xa9, 0xc2, 0xad, 0x91, 0x1e, 0x1f,
-	0x9a, 0x28, 0x2d, 0xbc, 0x3b, 0x15, 0x0d, 0xef, 0x2c, 0xfe, 0x46, 0x4e, 0xea, 0x9e, 0x4e, 0x23,
-	0x27, 0xf0, 0x4d, 0xf4, 0x2f, 0x05, 0x58, 0x09, 0xcd, 0x67, 0x46, 0x3a, 0xe6, 0xa8, 0xec, 0x67,
-	0x21, 0xe2, 0x91, 0x39, 0xbb, 0x25, 0xeb, 0xd3, 0x9a, 0x6b, 0x7d, 0x72, 0x73, 0xfd, 0xa1, 0x00,
-	0x6b, 0x51, 0x2b, 0x07, 0xf4, 0xc1, 0xc8, 0x28, 0x12, 0x39, 0x1b, 0x2b, 0x4c, 0x3e, 0x31, 0x14,
-	0x7b, 0xb4, 0x89, 0x1d, 0xf1, 0xed, 0x91, 0xc6, 0x0a, 0x99, 0x3d, 0x92, 0xee, 0xf6, 0xb6, 0xf8,
-	0x56, 0x94, 0xc9, 0xc2, 0x29, 0x68, 0x73, 0xa3, 0xd6, 0x1b, 0x91, 0xcd, 0x1d, 0xb3, 0x40, 0x39,
-	0x47, 0x73, 0xb7, 0xde, 0x8e, 0xb6, 0x68, 0x88, 0xe4, 0x3c, 0xba, 0xbc, 0xbd, 0xf5, 0x56, 0xa8,
-	0x5d, 0x23, 0x29, 0xd0, 0x7f, 0x14, 0x60, 0x25, 0x74, 0x39, 0x12, 0xe9, 0xa7, 0xa3, 0x16, 0x2f,
-	0xd3, 0x34, 0x94, 0xc7, 0x50, 0x34, 0x75, 0x43, 0x1f, 0xdf, 0x46, 0xd3, 0xb4, 0x12, 0xfd, 0x0f,
-	0x9e, 0x42, 0x0d, 0x59, 0xc6, 0xa0, 0xf7, 0x47, 0x84, 0x8f, 0xe8, 0xd5, 0x56, 0xe1, 0x83, 0x69,
-	0xc9, 0x78, 0xe0, 0xf1, 0xb7, 0x79, 0x0a, 0x5f, 0x76, 0xda, 0x3c, 0x99, 0x23, 0xa3, 0x1f, 0x0b,
-	0xb0, 0x16, 0xb5, 0x22, 0x8a, 0xf4, 0xe2, 0x31, 0x4b, 0xa8, 0xc8, 0x20, 0xc4, 0x5b, 0xb5, 0x7e,
-	0x0e, 0x4b, 0xae, 0x4f, 0x65, 0xc9, 0x1f, 0x08, 0x90, 0x0f, 0xee, 0xf7, 0xa0, 0x8d, 0x91, 0x21,
-	0x68, 0x28, 0x59, 0x5d, 0x18, 0x9f, 0x1f, 0x17, 0x37, 0x68, 0x83, 0x6e, 0x8a, 0xd7, 0xa3, 0x54,
-	0xee, 0xc9, 0x9f, 0xf3, 0x19, 0x7e, 0x3e, 0xb8, 0xe1, 0x13, 0x29, 0x57, 0xc4, 0xce, 0xd0, 0x14,
-	0x72, 0x6d, 0x5d, 0x0f, 0x55, 0x9a, 0x47, 0x28, 0xde, 0xb9, 0xff, 0x82, 0x00, 0x59, 0xdf, 0xc6,
-	0x4e, 0xe4, 0x0c, 0x34, 0x6c, 0xfb, 0x67, 0x12, 0x89, 0xde, 0xa2, 0x12, 0xbd, 0x8e, 0x26, 0x91,
-	0x08, 0xfd, 0x75, 0x01, 0x16, 0x02, 0x7b, 0x19, 0xe8, 0xf6, 0x88, 0x9e, 0x34, 0xbc, 0xfb, 0x52,
-	0xd8, 0x98, 0x14, 0x9d, 0x77, 0x38, 0xbf, 0x7c, 0xa3, 0x2d, 0x89, 0x7e, 0x89, 0x3e, 0x9c, 0xe0,
-	0xdf, 0xe2, 0x88, 0x34, 0x63, 0xc4, 0x5e, 0x48, 0x64, 0x27, 0xe1, 0x92, 0xac, 0x4f, 0xa4, 0xa9,
-	0x3f, 0x2b, 0x40, 0xc6, 0xbb, 0xc9, 0x86, 0xd6, 0x47, 0x8f, 0xb3, 0xde, 0xf4, 0x5f, 0x61, 0x74,
-	0x36, 0x52, 0x5c, 0xa7, 0x82, 0xbc, 0x26, 0x5e, 0x8d, 0x8c, 0x27, 0x2c, 0xd7, 0x49, 0x1c, 0xe8,
-	0xfb, 0x02, 0xa4, 0x3d, 0xe9, 0xcf, 0xc8, 0xa5, 0xeb, 0x70, 0x6e, 0x37, 0x72, 0xe9, 0x1a, 0x92,
-	0x4d, 0x15, 0xdf, 0xa0, 0x22, 0xbd, 0x8a, 0xc6, 0x89, 0x84, 0x7e, 0x0e, 0x52, 0x4e, 0xbe, 0x19,
-	0xbd, 0x31, 0x62, 0x80, 0x9a, 0x46, 0x21, 0xfe, 0xda, 0x87, 0x42, 0x11, 0xab, 0x9a, 0x58, 0xe5,
-	0x67, 0x21, 0xe3, 0x4d, 0xb7, 0x46, 0x1a, 0x25, 0x24, 0x27, 0x1b, 0xe9, 0x16, 0xbc, 0xf2, 0xf5,
-	0xb1, 0x95, 0x53, 0x97, 0xf0, 0xe4, 0x85, 0xa3, 0x5d, 0x62, 0x38, 0x79, 0x1c, 0x59, 0xfb, 0x3b,
-	0xb4, 0xf6, 0xb7, 0xc4, 0x1b, 0x63, 0x6a, 0xbf, 0xd3, 0xa2, 0x4c, 0xef, 0x08, 0xeb, 0xdb, 0xdf,
-	0x17, 0xe0, 0x62, 0x4b, 0xef, 0x85, 0x57, 0xbe, 0x9d, 0x2c, 0x77, 0xfb, 0xfb, 0xa4, 0x8e, 0x7d,
-	0xe1, 0xf1, 0x87, 0x1c, 0xa5, 0xa3, 0x77, 0x15, 0xad, 0xb3, 0xa1, 0x1b, 0x9d, 0xcd, 0x0e, 0xd6,
-	0xa8, 0x04, 0x9b, 0xac, 0x48, 0xe9, 0xab, 0x66, 0xe0, 0xdf, 0x5d, 0x7f, 0xdc, 0xee, 0xf6, 0x7f,
-	0x33, 0xb6, 0x74, 0x8f, 0x91, 0x96, 0xba, 0xfa, 0xa0, 0x4d, 0xec, 0xb4, 0xf1, 0x70, 0xeb, 0x5f,
-	0xdb, 0xd0, 0x2f, 0x29, 0xf4, 0xcb, 0x72, 0xb7, 0xff, 0xe5, 0xc3, 0xad, 0xc3, 0x39, 0xca, 0xf0,
-	0xdd, 0xff, 0x1f, 0x00, 0x00, 0xff, 0xff, 0x68, 0x82, 0x86, 0x5c, 0x94, 0x7b, 0x00, 0x00,
+var fileDescriptor_dlp_9184f835f60c3220 = []byte{
+	// 9262 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xdc, 0x7d, 0x5b, 0x8c, 0x1b, 0x59,
+	0x76, 0x58, 0x17, 0xd9, 0xec, 0x26, 0x0f, 0x9b, 0x6c, 0xf6, 0xed, 0x87, 0x5a, 0x94, 0xb4, 0xd2,
+	0x94, 0x66, 0x24, 0x4d, 0x4b, 0xea, 0x9e, 0xe9, 0x79, 0x3f, 0x76, 0x76, 0xd9, 0x24, 0x25, 0x52,
+	0xd3, 0x2f, 0x15, 0xd9, 0xd2, 0x48, 0x1e, 0x4c, 0xa5, 0x9a, 0xbc, 0xcd, 0x2e, 0x35, 0xc9, 0xa2,
+	0xaa, 0x8a, 0x52, 0xf7, 0xd8, 0x0e, 0xd6, 0x41, 0x12, 0xc3, 0x88, 0x07, 0xde, 0xc0, 0xd9, 0x6c,
+	0x62, 0x3b, 0x1b, 0x27, 0x0e, 0x10, 0xc4, 0x80, 0x9d, 0x04, 0x8e, 0x1d, 0x24, 0xb1, 0xf3, 0x61,
+	0x07, 0x36, 0x60, 0x38, 0xc1, 0x6e, 0x26, 0x1f, 0x09, 0x82, 0x05, 0x92, 0x4d, 0x9c, 0x18, 0x18,
+	0xff, 0x04, 0xc8, 0x8f, 0x93, 0x9f, 0xe0, 0x3e, 0xea, 0xc9, 0x2a, 0xb2, 0xd8, 0xd2, 0x64, 0x8d,
+	0xfd, 0x22, 0xef, 0xb9, 0xe7, 0x9c, 0x7b, 0xee, 0xb9, 0xe7, 0x9e, 0x7b, 0xee, 0xb3, 0xe0, 0x62,
+	0x4b, 0xd3, 0x5a, 0x6d, 0xbc, 0xd6, 0xd3, 0xd5, 0x27, 0x4a, 0xe3, 0x64, 0xad, 0xd9, 0xee, 0xad,
+	0x3d, 0x59, 0x27, 0x3f, 0xab, 0x3d, 0x5d, 0x33, 0x35, 0xb4, 0xc8, 0x10, 0x56, 0x39, 0xc2, 0x2a,
+	0xc9, 0x79, 0xb2, 0x9e, 0x3f, 0xcf, 0xe9, 0x94, 0x9e, 0xba, 0xa6, 0x74, 0xbb, 0x9a, 0xa9, 0x98,
+	0xaa, 0xd6, 0x35, 0x18, 0x51, 0xfe, 0x72, 0x30, 0x57, 0xc3, 0xd4, 0x74, 0xa5, 0x85, 0x39, 0xd2,
+	0x57, 0x6c, 0x24, 0xcd, 0xd4, 0xf6, 0xfb, 0x07, 0x6b, 0xcd, 0xbe, 0x4e, 0xb9, 0xf0, 0xfc, 0x73,
+	0xfe, 0x7c, 0xdc, 0xe9, 0x99, 0x27, 0x3c, 0xf3, 0x92, 0x3f, 0xf3, 0x40, 0xc5, 0xed, 0xa6, 0xdc,
+	0x51, 0x8c, 0x23, 0x8e, 0x71, 0xd1, 0x8f, 0x61, 0xaa, 0x1d, 0x6c, 0x98, 0x4a, 0x87, 0xd7, 0x2c,
+	0x7f, 0x86, 0x23, 0xe8, 0xbd, 0xc6, 0x9a, 0x61, 0x2a, 0x66, 0xdf, 0x92, 0x7e, 0x89, 0x67, 0x98,
+	0x27, 0x3d, 0xbc, 0xd6, 0x54, 0x4c, 0xec, 0x13, 0x88, 0xc3, 0x4f, 0xb4, 0x83, 0xa7, 0x18, 0x1f,
+	0x05, 0x65, 0x92, 0xa2, 0xb4, 0x83, 0xa6, 0xc2, 0xa5, 0x15, 0x25, 0xc8, 0x95, 0x8f, 0x1b, 0xed,
+	0x7e, 0x13, 0x57, 0xbb, 0x07, 0x5a, 0xfd, 0xa4, 0x87, 0x0d, 0xf4, 0x01, 0x80, 0xda, 0x3d, 0xd0,
+	0x64, 0x42, 0x60, 0x2c, 0x0b, 0x97, 0xe2, 0xd7, 0xd2, 0xeb, 0x17, 0x57, 0x03, 0xb5, 0xbd, 0x6a,
+	0x51, 0x49, 0x29, 0xd5, 0xa2, 0x17, 0x3f, 0x8f, 0x41, 0x86, 0x32, 0x35, 0x54, 0xad, 0x2b, 0xf5,
+	0xdb, 0x18, 0x49, 0x00, 0x4d, 0xb5, 0x41, 0x34, 0xa8, 0xe8, 0x27, 0xcb, 0xc2, 0x25, 0xe1, 0x5a,
+	0x7a, 0xfd, 0x95, 0x10, 0x8e, 0xc5, 0xbe, 0x61, 0x6a, 0x1d, 0x8b, 0xef, 0x6a, 0xc9, 0xa6, 0xab,
+	0x4c, 0x48, 0x2e, 0x2e, 0xa8, 0x08, 0x09, 0x1d, 0xb7, 0xf0, 0xf1, 0x72, 0x8c, 0xb2, 0xbb, 0x1e,
+	0x8d, 0x9d, 0x44, 0x48, 0x2a, 0x13, 0x12, 0xa3, 0x45, 0xf7, 0x01, 0x61, 0x56, 0x7d, 0xd9, 0x55,
+	0xe5, 0x38, 0xe5, 0x78, 0x35, 0x84, 0xa3, 0x5f, 0x5f, 0x95, 0x09, 0x29, 0x87, 0xfd, 0x3a, 0xac,
+	0x40, 0xa6, 0xa3, 0x98, 0x8d, 0x43, 0xb5, 0xdb, 0xa2, 0x4c, 0x97, 0x27, 0x2f, 0x09, 0xd7, 0xb2,
+	0xeb, 0x97, 0x43, 0x78, 0x6e, 0x71, 0x5c, 0xaa, 0xca, 0x99, 0x8e, 0x2b, 0xb5, 0x31, 0x05, 0x93,
+	0x84, 0x81, 0xf8, 0x6f, 0x05, 0xc8, 0x56, 0xbb, 0x46, 0x0f, 0x53, 0x0d, 0x50, 0xb5, 0x36, 0x61,
+	0xe6, 0x50, 0x33, 0x9f, 0x6a, 0x7a, 0x53, 0xd6, 0xfb, 0x6d, 0xcc, 0x15, 0xfb, 0xb5, 0x88, 0x8a,
+	0xc5, 0xa6, 0xc3, 0x6a, 0xb5, 0xc2, 0xf8, 0x90, 0xff, 0x95, 0x09, 0x29, 0x7d, 0xe8, 0x24, 0xd1,
+	0x16, 0x64, 0xb1, 0xd5, 0x9a, 0xac, 0x1c, 0xa6, 0xf1, 0x17, 0x87, 0xe9, 0xc7, 0x6a, 0xfa, 0xca,
+	0x84, 0x94, 0xc1, 0x6e, 0x80, 0x5d, 0x9f, 0x6f, 0x0a, 0x30, 0xe7, 0xad, 0x4f, 0x0d, 0x9b, 0xcf,
+	0x6a, 0x7b, 0xe8, 0x3d, 0x48, 0x10, 0x11, 0x8d, 0xe5, 0x18, 0x25, 0x7d, 0x29, 0x94, 0xd4, 0x5d,
+	0xb0, 0xc4, 0x68, 0xc4, 0xcf, 0xa6, 0x21, 0xc3, 0x73, 0x8a, 0x5a, 0xf7, 0x40, 0x6d, 0x3d, 0xb3,
+	0x38, 0x15, 0xc8, 0x76, 0xd4, 0xae, 0xdc, 0x56, 0x8f, 0x70, 0x5b, 0x3d, 0xd4, 0xb4, 0x26, 0xd5,
+	0x5d, 0x76, 0xfd, 0x85, 0x10, 0x1e, 0x9b, 0x36, 0xa2, 0x94, 0xe9, 0xa8, 0x5d, 0x27, 0x89, 0xee,
+	0xc0, 0x54, 0x5b, 0xed, 0xa8, 0xa6, 0x65, 0x9d, 0xeb, 0xc3, 0x6b, 0xc6, 0xe4, 0x5f, 0xbd, 0xa5,
+	0x76, 0x9b, 0x6a, 0xb7, 0xb5, 0x49, 0x29, 0x25, 0xce, 0x01, 0x5d, 0x86, 0x8c, 0xda, 0x65, 0x56,
+	0xff, 0xb8, 0xaf, 0x99, 0xcc, 0x38, 0x93, 0xd2, 0x0c, 0x07, 0xde, 0x25, 0x30, 0x74, 0x23, 0xb0,
+	0x6b, 0x24, 0x28, 0xe6, 0xa0, 0xbd, 0xdf, 0x85, 0xb9, 0x06, 0xb5, 0x2f, 0x37, 0xf2, 0xd4, 0xd0,
+	0x36, 0xf0, 0xda, 0xa3, 0x34, 0xdb, 0xf0, 0xa4, 0x0d, 0xb4, 0x05, 0xb3, 0x0d, 0xad, 0x6b, 0xe2,
+	0xae, 0x29, 0x6b, 0x3d, 0xea, 0xc3, 0x97, 0x93, 0x97, 0xe2, 0xd7, 0xb2, 0xa1, 0x86, 0x57, 0x64,
+	0xd8, 0x3b, 0x14, 0x59, 0xca, 0x36, 0xdc, 0x49, 0x03, 0x15, 0x21, 0x49, 0x5a, 0x59, 0x36, 0xb0,
+	0xb9, 0x0c, 0x54, 0xb0, 0x6b, 0x91, 0x8c, 0xa3, 0x86, 0x4d, 0x69, 0x5a, 0x67, 0x7f, 0xf2, 0x5f,
+	0xc4, 0x20, 0xe3, 0xd1, 0x29, 0x7a, 0x15, 0x16, 0x3b, 0xca, 0xb1, 0x7c, 0xc0, 0x80, 0x86, 0xdc,
+	0xc3, 0xba, 0xac, 0x9a, 0xb8, 0x43, 0x3b, 0x63, 0x42, 0x42, 0x1d, 0xe5, 0x98, 0x13, 0x18, 0xbb,
+	0x58, 0xaf, 0x9a, 0xb8, 0x83, 0xde, 0x82, 0xe5, 0x01, 0x12, 0x1d, 0x3f, 0xee, 0x63, 0xc3, 0xa4,
+	0xe6, 0x91, 0x90, 0x16, 0xbd, 0x54, 0x12, 0xcb, 0x44, 0x3f, 0x01, 0xf9, 0xc1, 0xb2, 0x2c, 0x75,
+	0x2f, 0xc7, 0x69, 0xa5, 0xbe, 0x3e, 0xbe, 0x5d, 0xd8, 0x96, 0x4b, 0x93, 0xd2, 0x92, 0x4f, 0x64,
+	0x9e, 0x99, 0xef, 0x91, 0xce, 0xe1, 0x42, 0x44, 0xef, 0x43, 0xca, 0x29, 0x9d, 0xf9, 0x9e, 0x91,
+	0x7d, 0x23, 0x69, 0xf5, 0x0d, 0xf4, 0x02, 0xcc, 0xb8, 0x2b, 0xc3, 0x6b, 0x9e, 0x76, 0x15, 0x2e,
+	0x7e, 0x21, 0xc0, 0xec, 0xc6, 0x89, 0x89, 0x79, 0xc3, 0x52, 0xe5, 0x95, 0x98, 0xfb, 0xa0, 0xe5,
+	0x65, 0x43, 0x07, 0x11, 0x1f, 0x15, 0x4d, 0x1b, 0x54, 0x00, 0x4a, 0x8d, 0x10, 0x4c, 0x36, 0x15,
+	0x53, 0xa1, 0x85, 0xce, 0x48, 0xf4, 0xbf, 0xf8, 0x17, 0x21, 0x65, 0xa3, 0xa1, 0x3c, 0x2c, 0x6d,
+	0x3c, 0xa8, 0x97, 0x6b, 0x72, 0xfd, 0xc1, 0x6e, 0x59, 0xde, 0xdb, 0xae, 0xed, 0x96, 0x8b, 0xd5,
+	0x5b, 0xd5, 0x72, 0x29, 0x37, 0x81, 0x52, 0x90, 0xa8, 0x6e, 0x15, 0x6e, 0x97, 0x73, 0x53, 0x28,
+	0x0b, 0x40, 0xff, 0xca, 0x77, 0x76, 0xcb, 0xb7, 0x73, 0x02, 0xca, 0x40, 0x8a, 0xa5, 0x37, 0xb6,
+	0x76, 0x73, 0x31, 0x27, 0xb9, 0xbb, 0x7d, 0x3b, 0x17, 0x77, 0x92, 0xb5, 0x7b, 0xb7, 0x73, 0x93,
+	0x24, 0x59, 0x2f, 0x7f, 0x54, 0x97, 0xf7, 0xea, 0xb7, 0xde, 0xce, 0x25, 0xc4, 0x7f, 0x2c, 0x40,
+	0xda, 0x5d, 0xd3, 0x25, 0x48, 0x3c, 0x51, 0xda, 0x7d, 0x4c, 0x3b, 0x7c, 0x8a, 0x8c, 0x59, 0x34,
+	0x89, 0x5e, 0x87, 0x84, 0xa9, 0xec, 0xb7, 0x59, 0xaf, 0x4d, 0xaf, 0x9f, 0x0f, 0x51, 0x41, 0x9d,
+	0xe0, 0x10, 0x2a, 0x8a, 0x8c, 0xca, 0x90, 0xda, 0x3f, 0x31, 0x31, 0xb3, 0xcd, 0x04, 0xa5, 0xbc,
+	0x12, 0x4d, 0x79, 0x95, 0x09, 0x29, 0x49, 0x48, 0xc9, 0xff, 0x8d, 0x34, 0xa4, 0x88, 0xb2, 0x28,
+	0x1b, 0xf1, 0x9f, 0x09, 0x90, 0xa0, 0xc5, 0xa0, 0xb7, 0x61, 0xfa, 0x10, 0x2b, 0x4d, 0xac, 0x5b,
+	0x4e, 0xf2, 0x2b, 0x21, 0xbc, 0x6f, 0x91, 0x60, 0xa8, 0xda, 0x94, 0x2c, 0x74, 0xf4, 0x3a, 0x4c,
+	0xea, 0xda, 0x53, 0xcb, 0x5f, 0x5f, 0x1a, 0x56, 0x99, 0x55, 0x49, 0x7b, 0x2a, 0x51, 0xec, 0xfc,
+	0x7b, 0x10, 0x97, 0xb4, 0xa7, 0xe8, 0x75, 0x98, 0xa2, 0x3a, 0xb1, 0x4a, 0x0d, 0xd3, 0xc5, 0x3d,
+	0x82, 0x24, 0x71, 0x5c, 0xf1, 0x53, 0xdb, 0xcb, 0x4b, 0xd8, 0xe8, 0xb7, 0x4d, 0xf4, 0x2e, 0x24,
+	0x6d, 0x33, 0x1c, 0x25, 0x3e, 0x45, 0x93, 0x6c, 0x7c, 0x74, 0x13, 0x90, 0xdd, 0x1f, 0x4d, 0xbd,
+	0xdf, 0x6d, 0x28, 0x26, 0x66, 0x5e, 0x3e, 0x29, 0xcd, 0x59, 0x39, 0x75, 0x2b, 0x43, 0xfc, 0xcf,
+	0x31, 0x98, 0xe6, 0x4c, 0xd0, 0x02, 0x24, 0x98, 0xfb, 0x25, 0xb6, 0x9c, 0x92, 0x58, 0xc2, 0xdb,
+	0xab, 0x62, 0xe3, 0xf6, 0xaa, 0x02, 0x80, 0x6b, 0xb0, 0x89, 0x47, 0x1d, 0x6c, 0x5c, 0x44, 0xe8,
+	0x3d, 0x48, 0xb6, 0xb5, 0x06, 0x8d, 0x77, 0xb9, 0x89, 0x85, 0x95, 0xbf, 0xc9, 0xd1, 0x24, 0x9b,
+	0x00, 0xbd, 0x07, 0xe9, 0x86, 0x8e, 0x15, 0x13, 0xcb, 0x24, 0xd2, 0x5c, 0x9e, 0xa2, 0xf4, 0x79,
+	0x87, 0x9e, 0x45, 0xbc, 0xab, 0x75, 0x2b, 0xe2, 0x95, 0x80, 0xa1, 0x13, 0x00, 0xfa, 0x1a, 0x00,
+	0xd5, 0x01, 0x75, 0x6a, 0xcb, 0xd3, 0x94, 0x36, 0xcc, 0x22, 0xe8, 0x20, 0x45, 0x14, 0x20, 0xa5,
+	0x1e, 0x5b, 0x7f, 0xc5, 0xff, 0x26, 0x40, 0x72, 0xd3, 0x11, 0x05, 0xa8, 0xc5, 0xeb, 0x4a, 0xb7,
+	0x65, 0xf9, 0xa7, 0x30, 0x03, 0x91, 0x08, 0x8e, 0x44, 0x7b, 0x08, 0xfd, 0x8b, 0xca, 0x64, 0xf0,
+	0x69, 0xe2, 0x9e, 0xa6, 0x76, 0x4d, 0xce, 0x21, 0x16, 0x81, 0x43, 0xd6, 0x26, 0x62, 0x6c, 0x6a,
+	0x30, 0x67, 0x8d, 0x61, 0x96, 0x8a, 0x8c, 0xe5, 0x69, 0x6a, 0x62, 0x57, 0x86, 0x8f, 0x62, 0xb6,
+	0x6e, 0x73, 0x0d, 0x2f, 0xc0, 0x10, 0xff, 0x79, 0x1c, 0x66, 0x7d, 0x58, 0xe8, 0x25, 0xa0, 0xe3,
+	0x9d, 0xa2, 0x76, 0xb1, 0x2e, 0x77, 0x95, 0x8e, 0x65, 0x54, 0x19, 0x1b, 0xba, 0xad, 0x74, 0x30,
+	0xda, 0x85, 0x59, 0x1d, 0x37, 0x48, 0xc0, 0x68, 0x37, 0x31, 0xab, 0x56, 0xd8, 0x20, 0x2d, 0x51,
+	0x6c, 0xab, 0x98, 0xca, 0x84, 0x94, 0xd5, 0x3d, 0x10, 0x12, 0x1d, 0xaa, 0x1d, 0xa5, 0x85, 0x1d,
+	0x86, 0xf1, 0xa1, 0xd1, 0x61, 0x95, 0x20, 0xbb, 0xf8, 0x65, 0x54, 0x37, 0x00, 0xdd, 0x83, 0xb9,
+	0xa6, 0xd6, 0xe8, 0x77, 0xdc, 0x1a, 0xe3, 0xee, 0x2a, 0x2c, 0x1e, 0x2f, 0x71, 0x7c, 0x17, 0xd3,
+	0x5c, 0xd3, 0x07, 0x43, 0x1f, 0xc2, 0xbc, 0xa3, 0x1f, 0x7b, 0xbe, 0x15, 0xc1, 0x3e, 0x91, 0x4d,
+	0x66, 0xc3, 0xd0, 0x75, 0xd6, 0xaa, 0x8c, 0xd9, 0x13, 0xac, 0x93, 0xd8, 0x96, 0x9a, 0x6b, 0x8a,
+	0xb5, 0x16, 0xcd, 0xb8, 0xc7, 0xe0, 0x1b, 0xe0, 0x74, 0x27, 0xf1, 0x35, 0xc8, 0xf9, 0xa5, 0x45,
+	0x17, 0x21, 0x7d, 0xa0, 0xb6, 0xb1, 0xac, 0x1d, 0x1c, 0x90, 0xd0, 0x84, 0x34, 0x5b, 0x5c, 0x02,
+	0x02, 0xda, 0xa1, 0x10, 0xf1, 0x3f, 0x09, 0x90, 0xf5, 0x36, 0x03, 0xe9, 0x28, 0xbc, 0x19, 0x8f,
+	0xb0, 0x35, 0x9f, 0xba, 0x34, 0xb4, 0x05, 0x3f, 0xc4, 0x27, 0x52, 0x4a, 0xb7, 0xfe, 0xa2, 0x77,
+	0x88, 0xc7, 0x23, 0xd3, 0x52, 0xb5, 0xc9, 0x0d, 0x60, 0xa4, 0xc3, 0x3e, 0x60, 0x7f, 0xd0, 0x87,
+	0x90, 0xa5, 0x23, 0x4a, 0xd4, 0x06, 0xa7, 0xae, 0xdb, 0xb6, 0xe6, 0x8c, 0xe9, 0x4e, 0x8a, 0x37,
+	0x20, 0xe3, 0xc9, 0x47, 0xe7, 0x20, 0xa5, 0x6b, 0x4f, 0x65, 0xb5, 0xdb, 0xc4, 0xc7, 0x5c, 0x17,
+	0x49, 0x5d, 0x7b, 0x5a, 0x25, 0x69, 0x71, 0x0d, 0x12, 0xac, 0x5b, 0x2d, 0x40, 0xc2, 0x30, 0x15,
+	0xdd, 0xd2, 0x16, 0x4b, 0xa0, 0x1c, 0xc4, 0x71, 0x97, 0xd5, 0x27, 0x2e, 0x91, 0xbf, 0xe2, 0x43,
+	0xc8, 0x78, 0xec, 0x0d, 0x55, 0x21, 0xbb, 0xaf, 0xf5, 0xa9, 0xfb, 0x95, 0xf7, 0xb5, 0x63, 0x7b,
+	0xe0, 0x10, 0xc3, 0x86, 0x42, 0x8e, 0xbc, 0xa1, 0x1d, 0x4b, 0x99, 0x7d, 0x27, 0x81, 0x0d, 0x51,
+	0x81, 0xb4, 0x2b, 0x97, 0x14, 0x6e, 0x6a, 0x3d, 0x1e, 0xf5, 0x91, 0xbf, 0x24, 0xc6, 0x68, 0xe3,
+	0x03, 0x2b, 0xa4, 0xa3, 0xff, 0x89, 0xe0, 0x4f, 0xd5, 0xa6, 0x79, 0x48, 0x75, 0x96, 0x90, 0x58,
+	0x02, 0x2d, 0xc1, 0xd4, 0x21, 0x56, 0x5b, 0x87, 0x26, 0xf5, 0xb7, 0x09, 0x89, 0xa7, 0xc4, 0xdf,
+	0x9c, 0x04, 0x24, 0xe1, 0xa6, 0xd2, 0x30, 0x69, 0x2d, 0xac, 0x30, 0x70, 0x09, 0xa6, 0x7a, 0x8a,
+	0x8e, 0xbb, 0x26, 0xef, 0xe3, 0x3c, 0x45, 0x5a, 0x46, 0x65, 0xe3, 0x9a, 0xdc, 0xa0, 0x61, 0xde,
+	0x88, 0x89, 0x9a, 0x27, 0x24, 0x94, 0x32, 0xaa, 0x67, 0xe6, 0xf3, 0x04, 0xce, 0xb0, 0x7e, 0xad,
+	0x53, 0x01, 0xc8, 0xdc, 0x8f, 0x31, 0x25, 0x73, 0x00, 0xa2, 0xb2, 0x0f, 0x42, 0xed, 0xcd, 0x2f,
+	0xf0, 0x2a, 0x4f, 0x70, 0x3e, 0xbc, 0xbc, 0x45, 0x35, 0x00, 0x6a, 0xa0, 0x97, 0x21, 0x67, 0xcd,
+	0x4d, 0xec, 0x31, 0x79, 0x8a, 0x8e, 0xa6, 0xb3, 0x1c, 0x6e, 0x85, 0x87, 0xa8, 0xe8, 0x0e, 0x69,
+	0xa6, 0xc7, 0x09, 0x69, 0x9c, 0x80, 0x26, 0xff, 0x3d, 0x01, 0x16, 0x82, 0xe4, 0x43, 0x1f, 0x8c,
+	0x1f, 0xdd, 0x92, 0x48, 0xc9, 0x1e, 0x89, 0xaf, 0x11, 0x57, 0x4b, 0x58, 0xca, 0x4a, 0xbb, 0x2d,
+	0x9b, 0xf8, 0x98, 0x59, 0x42, 0x92, 0xf8, 0x3c, 0x96, 0x51, 0x68, 0xb7, 0xeb, 0xf8, 0xd8, 0x24,
+	0x63, 0x8d, 0x5b, 0xc9, 0x6d, 0x4d, 0xe7, 0x5d, 0xea, 0x7c, 0xe8, 0x10, 0xd1, 0xd6, 0x74, 0xe2,
+	0x89, 0x6d, 0x89, 0xdb, 0x9a, 0xbe, 0x91, 0x84, 0x29, 0x53, 0xd1, 0x5b, 0xd8, 0x14, 0x8b, 0x90,
+	0xa0, 0x20, 0x62, 0x94, 0x3a, 0x6e, 0x52, 0xe9, 0x63, 0x12, 0xf9, 0x4b, 0x0c, 0xb0, 0xa5, 0x63,
+	0xcc, 0xdc, 0x7e, 0x4c, 0x62, 0x09, 0x62, 0xaa, 0xfb, 0x56, 0xa4, 0x19, 0x93, 0xe8, 0x7f, 0xf1,
+	0x9f, 0x08, 0x30, 0xef, 0x69, 0x4b, 0xa3, 0xa7, 0x75, 0x0d, 0x4c, 0x46, 0x1a, 0x56, 0x30, 0x6e,
+	0xca, 0xb4, 0x09, 0x29, 0xfb, 0x19, 0xab, 0x52, 0xb8, 0x49, 0xd1, 0x09, 0x1a, 0x3e, 0x36, 0x75,
+	0x86, 0x67, 0xd7, 0x3e, 0x25, 0x65, 0x6c, 0x28, 0xad, 0xbb, 0xcb, 0x66, 0x75, 0x1a, 0x8c, 0x8d,
+	0x1a, 0x3e, 0xdc, 0x81, 0x9b, 0x6d, 0xb3, 0x2c, 0x29, 0xfe, 0xdf, 0x18, 0x2c, 0x97, 0xb0, 0xda,
+	0xc4, 0x5d, 0x53, 0x3d, 0x38, 0xe1, 0xed, 0x3d, 0xaa, 0xd7, 0xd4, 0x61, 0xae, 0x69, 0xd3, 0x78,
+	0x3b, 0x4e, 0xe8, 0x88, 0xe3, 0x2e, 0x83, 0xd8, 0x72, 0xae, 0xe9, 0x83, 0x04, 0xf4, 0xc5, 0xf8,
+	0xe9, 0xfb, 0xe2, 0x9b, 0x30, 0x49, 0x6d, 0x9c, 0x45, 0x63, 0xe2, 0xf0, 0xc0, 0x81, 0xda, 0x37,
+	0xc5, 0x47, 0xeb, 0xb0, 0x68, 0x09, 0x61, 0xe2, 0x4e, 0xaf, 0x4d, 0xc2, 0x32, 0x1a, 0x1b, 0x24,
+	0xa8, 0x06, 0xe6, 0x79, 0x66, 0x9d, 0xe7, 0xd1, 0x08, 0xe1, 0x6d, 0x58, 0x76, 0xa9, 0xc3, 0x4b,
+	0x36, 0x45, 0xc9, 0x96, 0x9c, 0x7c, 0x37, 0xa5, 0xf8, 0x1d, 0x01, 0xce, 0x06, 0x68, 0x9f, 0x9b,
+	0x8d, 0x55, 0x07, 0x61, 0xcc, 0x3a, 0x54, 0x21, 0xa9, 0x3d, 0xc1, 0xfa, 0x13, 0x15, 0x3f, 0xe5,
+	0xad, 0x72, 0x33, 0x6c, 0xa0, 0xd1, 0x95, 0xae, 0x71, 0xa0, 0xe9, 0x1d, 0xea, 0xea, 0x77, 0x38,
+	0x91, 0x64, 0x93, 0x53, 0xf3, 0x90, 0x4e, 0x61, 0x1e, 0xfa, 0x33, 0x9b, 0x87, 0xfe, 0xa3, 0x64,
+	0x1e, 0xfa, 0x08, 0xf3, 0xd0, 0xc3, 0xcd, 0x43, 0xfa, 0xf3, 0x6c, 0x1e, 0x7f, 0x22, 0xc0, 0xa2,
+	0xa3, 0xe7, 0x28, 0xb6, 0xf1, 0x5c, 0x07, 0x5c, 0x4b, 0x03, 0xf1, 0xe7, 0xd5, 0x8a, 0x93, 0xa1,
+	0xad, 0x28, 0xde, 0x83, 0x25, 0x7f, 0x4d, 0x79, 0x3b, 0xbc, 0x0f, 0x53, 0xdc, 0x0f, 0x0b, 0x63,
+	0xf8, 0x61, 0x4e, 0x23, 0xfe, 0x51, 0x0c, 0xe6, 0x77, 0xfa, 0x66, 0xaf, 0x6f, 0xd6, 0xd8, 0x86,
+	0x0a, 0xaf, 0xdb, 0xfb, 0xd6, 0x92, 0xc5, 0x70, 0xa6, 0x1b, 0x6a, 0xeb, 0x6e, 0x1f, 0xeb, 0x27,
+	0xbe, 0xa5, 0x8b, 0x8f, 0x21, 0xa3, 0x51, 0xa6, 0xb2, 0xd1, 0x38, 0xc4, 0x1d, 0x85, 0x4f, 0x6b,
+	0xdf, 0x0a, 0xe1, 0x12, 0x20, 0x80, 0x05, 0xa3, 0xe4, 0xd2, 0x8c, 0xe6, 0x4a, 0x89, 0xdf, 0x14,
+	0x60, 0xc6, 0x9d, 0x8d, 0x2e, 0xc0, 0xd9, 0x9d, 0xbd, 0xfa, 0xee, 0x5e, 0x5d, 0xae, 0x15, 0x2b,
+	0xe5, 0xad, 0x82, 0x6f, 0xf5, 0x67, 0x0e, 0x32, 0x1b, 0x85, 0x5a, 0xb5, 0x28, 0x17, 0x77, 0x36,
+	0xf7, 0xb6, 0xb6, 0x6b, 0x39, 0x01, 0xcd, 0x42, 0xfa, 0x76, 0xb1, 0x66, 0x03, 0x62, 0x68, 0x11,
+	0xe6, 0x4a, 0x85, 0x7a, 0xa1, 0x56, 0xdf, 0x91, 0xca, 0x36, 0x38, 0x4e, 0xc0, 0x1b, 0xd5, 0xdb,
+	0xf2, 0xdd, 0xbd, 0xb2, 0xf4, 0xc0, 0x06, 0x4f, 0x12, 0xf2, 0xc2, 0xe6, 0xa6, 0x0d, 0x48, 0xd8,
+	0x4b, 0xe4, 0x0d, 0x67, 0xc5, 0xad, 0x66, 0x2a, 0xa6, 0xf1, 0x8c, 0x2b, 0x6e, 0x0b, 0x90, 0x68,
+	0x68, 0xfd, 0xae, 0xc9, 0x23, 0x64, 0x96, 0x10, 0xbf, 0x3b, 0x09, 0xcb, 0xbc, 0x35, 0x4b, 0x8a,
+	0xa9, 0xd4, 0xb4, 0xbe, 0xde, 0xc0, 0x25, 0x6c, 0x2a, 0x6a, 0xdb, 0x40, 0x1d, 0xe2, 0xfd, 0x68,
+	0x27, 0xc0, 0x4d, 0x7b, 0x15, 0x96, 0x19, 0xf9, 0x88, 0x85, 0xc6, 0x01, 0x5e, 0xab, 0x92, 0xc5,
+	0x88, 0xaf, 0xc8, 0x12, 0xb7, 0xe8, 0x85, 0xa0, 0x6d, 0xdb, 0xfa, 0x58, 0x2f, 0x78, 0x73, 0xfc,
+	0x32, 0xdc, 0xf6, 0x98, 0xff, 0xd7, 0x02, 0xe4, 0xfc, 0xc5, 0xa2, 0x7d, 0x38, 0x6b, 0x74, 0x95,
+	0x9e, 0x71, 0xa8, 0x99, 0xb2, 0xbf, 0xe7, 0x70, 0xa5, 0x5e, 0x19, 0x5e, 0xae, 0xd5, 0x97, 0xa4,
+	0x33, 0x16, 0x23, 0x5f, 0x06, 0xba, 0x05, 0xf0, 0x48, 0xdb, 0xf7, 0xfa, 0xf6, 0xab, 0xc3, 0x99,
+	0xde, 0xd1, 0xf6, 0xb9, 0x63, 0x48, 0x3d, 0xb2, 0xfe, 0xe6, 0x7f, 0x43, 0x80, 0x29, 0xbe, 0x48,
+	0x75, 0x15, 0x66, 0x7b, 0xba, 0xd6, 0xc0, 0x86, 0x81, 0x9b, 0x32, 0x09, 0x5f, 0x0d, 0x3e, 0xfb,
+	0xc9, 0xda, 0x60, 0xba, 0x7c, 0x49, 0x1c, 0x82, 0xa9, 0x99, 0x4a, 0x5b, 0xc6, 0x86, 0xa9, 0x76,
+	0x14, 0xd3, 0x46, 0x67, 0xcd, 0x3e, 0x4f, 0x33, 0xcb, 0x56, 0x1e, 0xa3, 0xd9, 0x84, 0x59, 0xdb,
+	0xb0, 0x64, 0x83, 0xd8, 0x1a, 0x5f, 0x4e, 0x7e, 0x71, 0x84, 0x79, 0x51, 0xbb, 0x24, 0xae, 0xcc,
+	0x95, 0x14, 0x7f, 0x47, 0x80, 0x79, 0x0b, 0xa1, 0x84, 0x8d, 0x86, 0xae, 0x52, 0xd5, 0x93, 0x30,
+	0xd3, 0xb5, 0x34, 0x41, 0xff, 0xa3, 0x17, 0x60, 0xa6, 0xa9, 0x1a, 0xbd, 0xb6, 0x72, 0xc2, 0xbc,
+	0x16, 0x8b, 0x12, 0xd3, 0x1c, 0x46, 0xc7, 0x9c, 0x2d, 0x98, 0x31, 0xfa, 0xbd, 0x9e, 0xa6, 0xb3,
+	0xaa, 0x50, 0xc9, 0xb2, 0xeb, 0x2b, 0xa3, 0x24, 0xb3, 0x48, 0x36, 0x4e, 0xa4, 0xb4, 0xe1, 0x24,
+	0xd0, 0x25, 0x48, 0x37, 0x1d, 0xa1, 0xb8, 0x9b, 0x74, 0x83, 0xc4, 0x1a, 0x2c, 0x6c, 0xaa, 0x86,
+	0x69, 0x6f, 0x45, 0x58, 0xe3, 0xc0, 0x65, 0xc8, 0xb4, 0x95, 0x6e, 0xab, 0x4f, 0xa6, 0x45, 0x0d,
+	0xad, 0x69, 0x55, 0x64, 0xc6, 0x02, 0x16, 0xb5, 0x26, 0x26, 0x83, 0xc5, 0x81, 0xda, 0x36, 0xb1,
+	0xce, 0xab, 0xc2, 0x53, 0xe2, 0x3e, 0x2c, 0xfa, 0x98, 0x72, 0x97, 0x5b, 0x0d, 0xd8, 0x63, 0x1a,
+	0x55, 0x39, 0x97, 0x56, 0xdd, 0x3b, 0xaf, 0xff, 0x43, 0x80, 0x45, 0x49, 0x35, 0x8e, 0x0a, 0x5d,
+	0xa5, 0x7d, 0x62, 0xa8, 0x86, 0x6d, 0x53, 0x64, 0xa8, 0xe2, 0xac, 0xe4, 0x0e, 0x36, 0x75, 0xb5,
+	0x31, 0xc2, 0x15, 0xef, 0xb2, 0xe4, 0x16, 0xc5, 0x95, 0x32, 0x3d, 0x77, 0x12, 0xdd, 0x86, 0x19,
+	0x83, 0x76, 0x3b, 0x99, 0x79, 0xf5, 0x58, 0x74, 0xaf, 0x2e, 0xa5, 0x19, 0x25, 0x5b, 0x36, 0x7e,
+	0x0b, 0xa6, 0xd9, 0x0c, 0xc6, 0x32, 0xb7, 0x0b, 0x21, 0x3c, 0x0a, 0x6c, 0x3b, 0xc6, 0xc2, 0x16,
+	0xbf, 0x2f, 0xc0, 0xf4, 0xdd, 0xbe, 0x62, 0xa8, 0xd5, 0x26, 0x7a, 0x1d, 0x12, 0x74, 0x6d, 0x82,
+	0xd7, 0x68, 0xd4, 0x42, 0x06, 0x43, 0xf6, 0x4e, 0xef, 0x62, 0xe3, 0x4f, 0xef, 0x2e, 0x02, 0xf0,
+	0x0d, 0x2f, 0x53, 0x69, 0xd9, 0x4b, 0xf4, 0x29, 0x06, 0xab, 0x2b, 0x2d, 0xf4, 0x3a, 0x10, 0x64,
+	0xac, 0x93, 0x09, 0x18, 0x8b, 0xcc, 0x96, 0x06, 0x96, 0x99, 0xca, 0x9d, 0x9e, 0x79, 0xc2, 0xd9,
+	0x52, 0xcc, 0x8d, 0x04, 0xc4, 0x4d, 0xa5, 0x25, 0xfe, 0x71, 0x0c, 0x72, 0xa4, 0x2f, 0xa9, 0x86,
+	0xa9, 0x36, 0x94, 0x36, 0xd3, 0xd6, 0xbb, 0xd6, 0x28, 0x1a, 0x1f, 0x43, 0xdf, 0x7c, 0x0c, 0x7d,
+	0x00, 0xa9, 0xc7, 0x44, 0x5f, 0xb2, 0xda, 0xb4, 0x6c, 0xec, 0xfd, 0x10, 0x7a, 0x7f, 0xb9, 0xab,
+	0x5c, 0xd1, 0x34, 0x70, 0x53, 0xb1, 0x4e, 0x15, 0x29, 0x25, 0x1f, 0x33, 0xa8, 0x81, 0xb6, 0x00,
+	0xe9, 0xb8, 0xad, 0x98, 0xea, 0x13, 0x2c, 0x1f, 0x50, 0x97, 0xde, 0x6d, 0x9c, 0x44, 0x5c, 0x55,
+	0x9a, 0xb3, 0x28, 0x6f, 0x59, 0x84, 0xf9, 0x23, 0x58, 0x08, 0x2a, 0xf0, 0x94, 0xcd, 0x7c, 0xc1,
+	0xd3, 0x4c, 0xac, 0x47, 0x3a, 0x8d, 0x24, 0xfe, 0xc9, 0x1c, 0x64, 0x3c, 0xa6, 0x8e, 0x1e, 0xc3,
+	0x52, 0xb7, 0xdf, 0xc1, 0x3a, 0xa9, 0x3e, 0xf3, 0x84, 0x96, 0x17, 0x67, 0xe5, 0xbe, 0x13, 0xa5,
+	0xc3, 0xac, 0x6e, 0x5b, 0x2c, 0xa8, 0x43, 0x64, 0x7d, 0xb0, 0x32, 0x21, 0x2d, 0x74, 0x03, 0xe0,
+	0xe8, 0x29, 0x2c, 0x37, 0x14, 0x13, 0xb7, 0xb4, 0x80, 0x42, 0x99, 0x1a, 0xdf, 0x8b, 0x54, 0x68,
+	0xd1, 0x61, 0xe2, 0x2d, 0x76, 0xa9, 0x11, 0x98, 0x83, 0x30, 0xa0, 0x23, 0x59, 0xe9, 0x6a, 0xdd,
+	0x93, 0x8e, 0x6a, 0x9e, 0x78, 0x47, 0xab, 0x37, 0x22, 0x15, 0xf9, 0x61, 0xc1, 0xa2, 0xb6, 0x0b,
+	0xcb, 0x1d, 0xf9, 0x60, 0xa4, 0x98, 0xb6, 0xdc, 0x54, 0xe9, 0x42, 0xa9, 0x53, 0xcc, 0xe4, 0x18,
+	0xc5, 0x6c, 0x96, 0x2c, 0x6a, 0xa7, 0x98, 0xb6, 0x0f, 0x86, 0x74, 0x38, 0x73, 0x24, 0x77, 0x94,
+	0x9e, 0x35, 0xee, 0x39, 0x4b, 0x56, 0x7c, 0x01, 0x39, 0x5a, 0xd3, 0x7d, 0xb8, 0xa5, 0xf4, 0xca,
+	0x36, 0x07, 0xa7, 0xe9, 0x8e, 0x02, 0xe0, 0xe8, 0x33, 0x01, 0x2e, 0x35, 0x71, 0xdb, 0x54, 0xe4,
+	0x9e, 0x8e, 0x0d, 0xdc, 0x6d, 0xe0, 0x80, 0xd2, 0xd9, 0x22, 0xf3, 0x46, 0xa4, 0xd2, 0x4b, 0x84,
+	0xd9, 0x2e, 0xe7, 0x15, 0x20, 0xc6, 0x85, 0xe6, 0x30, 0x84, 0xfc, 0x26, 0x2c, 0x04, 0x99, 0xde,
+	0xe9, 0x3a, 0x4f, 0x7e, 0x1b, 0x96, 0x82, 0x6d, 0xea, 0x94, 0xfc, 0x3e, 0x13, 0x20, 0xe7, 0xb7,
+	0x18, 0xf4, 0xde, 0xa0, 0x67, 0x1a, 0xc5, 0xce, 0xf1, 0x3d, 0xef, 0x43, 0x8a, 0x78, 0x09, 0xf3,
+	0xc4, 0x59, 0xc8, 0x0e, 0xf3, 0xe2, 0x65, 0x8a, 0x47, 0xa8, 0x31, 0xff, 0x97, 0xff, 0x65, 0x01,
+	0x72, 0x7e, 0xd3, 0x7a, 0x36, 0x79, 0x76, 0x60, 0xde, 0xc0, 0x5d, 0x43, 0xa5, 0xce, 0x50, 0x31,
+	0x4d, 0x5d, 0xdd, 0xef, 0x9b, 0x38, 0xa2, 0x33, 0x44, 0x36, 0x69, 0xc1, 0xa2, 0xcc, 0x7f, 0x31,
+	0x05, 0x0b, 0x41, 0x16, 0x89, 0xf6, 0x07, 0xc5, 0x2c, 0x9f, 0xda, 0xbe, 0x57, 0xeb, 0x4a, 0xab,
+	0x85, 0x9b, 0x7e, 0xcf, 0x7e, 0x11, 0xd2, 0x3a, 0x6e, 0x31, 0x4b, 0x6e, 0x5a, 0xa1, 0x19, 0x30,
+	0x10, 0x8d, 0x75, 0x0c, 0xc8, 0x29, 0xfd, 0x63, 0xb5, 0xad, 0x2a, 0xfa, 0x09, 0x8b, 0x05, 0xac,
+	0x81, 0xbc, 0x72, 0x7a, 0x59, 0x0a, 0x16, 0x47, 0x36, 0x80, 0xcd, 0x2a, 0x9e, 0xb4, 0x91, 0xff,
+	0xaf, 0x02, 0xa4, 0x5d, 0xf2, 0xfe, 0x28, 0x8e, 0xff, 0xf9, 0xff, 0x1d, 0x83, 0xac, 0x57, 0x0f,
+	0xcf, 0x34, 0xfa, 0xeb, 0x83, 0xc6, 0xb2, 0xf7, 0xbc, 0x1a, 0xc8, 0x0a, 0x0f, 0xbe, 0xe4, 0xb0,
+	0xa0, 0x01, 0x33, 0xee, 0x82, 0xbe, 0x94, 0x70, 0x20, 0xff, 0x3d, 0x01, 0x2e, 0x0c, 0xf5, 0xc0,
+	0xe3, 0x78, 0x07, 0x2e, 0xee, 0x38, 0xfd, 0x49, 0x0a, 0xed, 0x4f, 0x57, 0x23, 0x06, 0x6b, 0x03,
+	0xdd, 0xc5, 0x5e, 0x4c, 0xf8, 0xf9, 0x2b, 0x70, 0x9e, 0xce, 0x0b, 0x3e, 0xc5, 0xce, 0xbc, 0x99,
+	0x4c, 0x16, 0xac, 0xb9, 0xfe, 0x27, 0xb0, 0xec, 0xcc, 0xf5, 0x9f, 0x61, 0xb2, 0xb0, 0x64, 0x73,
+	0xf1, 0x46, 0x56, 0x0f, 0xc1, 0xc9, 0x91, 0x4f, 0x3d, 0x7f, 0x58, 0xb0, 0x79, 0xd4, 0x5c, 0x13,
+	0x89, 0x6f, 0x08, 0x83, 0x61, 0x9b, 0x67, 0x25, 0x21, 0xcc, 0x1f, 0x0d, 0xd3, 0x88, 0x2f, 0x8a,
+	0x63, 0xf3, 0xf0, 0xc1, 0x28, 0x8e, 0xcf, 0xcf, 0xff, 0xaa, 0x10, 0x14, 0xc6, 0x71, 0x21, 0x98,
+	0x03, 0xb8, 0x73, 0x1a, 0x21, 0xfc, 0x23, 0xb0, 0x2d, 0xc6, 0x40, 0x54, 0xc7, 0x05, 0x31, 0xbd,
+	0x51, 0x1d, 0x97, 0x80, 0x85, 0x40, 0xa5, 0xd3, 0x48, 0xe0, 0x0c, 0xd9, 0x76, 0xd9, 0xae, 0x20,
+	0xcf, 0x29, 0xd5, 0x1d, 0xe4, 0xf1, 0x52, 0xa7, 0x4e, 0x5f, 0xaa, 0x33, 0x30, 0x3b, 0xa5, 0xb6,
+	0x7d, 0x30, 0xf4, 0x53, 0x42, 0x40, 0xd0, 0xc7, 0xcb, 0x9e, 0x3e, 0x7d, 0xc3, 0x7b, 0xdd, 0x9e,
+	0xd3, 0xf0, 0x47, 0x01, 0x70, 0xf4, 0x4b, 0x43, 0x63, 0x40, 0x2e, 0x4c, 0x8a, 0x0a, 0x73, 0xf7,
+	0x34, 0xc2, 0x84, 0x38, 0x24, 0x5b, 0xaa, 0xb0, 0x90, 0x90, 0x21, 0xe4, 0x3f, 0x17, 0xfc, 0x31,
+	0x21, 0x97, 0xfb, 0x1d, 0x48, 0x75, 0xd4, 0xae, 0xcc, 0xce, 0x98, 0x0d, 0x3f, 0x1e, 0xc3, 0xce,
+	0x4f, 0x25, 0x3b, 0x6a, 0x97, 0xfe, 0xa3, 0xa4, 0xca, 0x31, 0x27, 0x8d, 0x45, 0x22, 0x55, 0x8e,
+	0x19, 0x69, 0x19, 0x66, 0x1f, 0xf7, 0x95, 0xae, 0xa9, 0xb6, 0xb1, 0xcc, 0xcf, 0x6e, 0x4d, 0x46,
+	0x38, 0xbb, 0x95, 0xb5, 0x88, 0x68, 0xd2, 0xc8, 0x7f, 0x36, 0x39, 0x18, 0x9b, 0xf2, 0x7a, 0xfd,
+	0xa6, 0x00, 0x2f, 0x50, 0xce, 0xce, 0xb0, 0x23, 0x1f, 0xaa, 0x86, 0xa9, 0xb5, 0x74, 0xa5, 0x23,
+	0xef, 0xf7, 0x1b, 0x47, 0xd8, 0xb4, 0x36, 0xb1, 0x1f, 0x3d, 0xbf, 0x1e, 0x39, 0x00, 0xae, 0x58,
+	0x65, 0x6e, 0xd0, 0x22, 0xa5, 0xaf, 0x50, 0xa1, 0xec, 0x11, 0xcd, 0x97, 0x6d, 0xe4, 0xff, 0x65,
+	0x0c, 0x2e, 0x8e, 0xe0, 0x81, 0xbe, 0x0a, 0xe7, 0xfc, 0x55, 0x6b, 0x6b, 0x4f, 0xb1, 0x2e, 0xd3,
+	0xb3, 0x09, 0x7c, 0x41, 0x70, 0xd9, 0x5b, 0xd0, 0x26, 0x41, 0xa0, 0x47, 0x15, 0x82, 0xc8, 0xfb,
+	0xbd, 0x9e, 0x4d, 0x1e, 0x0b, 0x22, 0xdf, 0x23, 0x08, 0x8c, 0xfc, 0x22, 0xa4, 0x99, 0xfa, 0x64,
+	0x43, 0xfd, 0x94, 0x05, 0x22, 0x71, 0x09, 0x18, 0xa8, 0xa6, 0x7e, 0x8a, 0xd1, 0x1d, 0xc8, 0x70,
+	0x04, 0x4f, 0xd3, 0xbe, 0x34, 0xac, 0x69, 0xed, 0x82, 0xa4, 0x19, 0x46, 0xcb, 0x5a, 0x18, 0xdd,
+	0x00, 0xe4, 0xe6, 0x25, 0xb3, 0xa5, 0xeb, 0x04, 0x2d, 0x33, 0xe7, 0xc2, 0x2c, 0x12, 0x78, 0xfe,
+	0x8b, 0x84, 0x7b, 0x6a, 0xc1, 0x2d, 0xe1, 0xd7, 0x04, 0xb8, 0x8c, 0x1f, 0xf7, 0xd5, 0x27, 0x4a,
+	0x9b, 0x76, 0xcb, 0x46, 0x5b, 0x31, 0x8c, 0x50, 0x5b, 0xf8, 0xe4, 0x79, 0xf8, 0x46, 0x17, 0xc0,
+	0xdf, 0xfe, 0x97, 0x5c, 0xa2, 0x14, 0x89, 0x24, 0x03, 0x16, 0xf0, 0x0b, 0x02, 0xe4, 0x1d, 0xfa,
+	0xb2, 0x0f, 0x1d, 0xdd, 0x82, 0x9c, 0x1d, 0x7b, 0xc8, 0x63, 0x9c, 0x7b, 0xcc, 0x5a, 0x01, 0x08,
+	0xd7, 0xec, 0xeb, 0xb0, 0x34, 0xa8, 0x15, 0xda, 0xa2, 0xcc, 0x00, 0x16, 0xfc, 0x82, 0x92, 0xb6,
+	0xcd, 0xff, 0x4c, 0x1c, 0xce, 0x86, 0x56, 0x0e, 0xdd, 0x01, 0x31, 0x98, 0x67, 0x80, 0x7d, 0x7e,
+	0x25, 0x88, 0xbf, 0xcb, 0x4a, 0xc3, 0x79, 0x0d, 0x1a, 0x6b, 0x20, 0xaf, 0x71, 0x4c, 0xf6, 0x2f,
+	0x0b, 0xc1, 0x36, 0x2b, 0x3f, 0x67, 0x6b, 0xf0, 0xb7, 0xe6, 0x33, 0x59, 0xfb, 0xdf, 0x9f, 0x76,
+	0x4f, 0x5c, 0xb9, 0xb5, 0xff, 0xb6, 0x00, 0xd7, 0x9d, 0xc9, 0x67, 0x54, 0x0f, 0xf8, 0xc9, 0xf3,
+	0x18, 0x9b, 0x5d, 0x00, 0xbf, 0xd5, 0x5f, 0xb5, 0x45, 0xba, 0x37, 0xdc, 0xfd, 0xfd, 0x56, 0x0c,
+	0xf2, 0x0e, 0x9b, 0x3f, 0x5f, 0xc6, 0x8f, 0x0a, 0x70, 0xa1, 0xdb, 0xef, 0xc8, 0x4d, 0x12, 0x6a,
+	0x77, 0x1b, 0xa6, 0xec, 0xd3, 0xb3, 0xc1, 0x0d, 0x2b, 0xdf, 0xed, 0x77, 0x4a, 0x1c, 0xa7, 0xe6,
+	0xa9, 0xb7, 0x81, 0xee, 0xc3, 0x82, 0xa9, 0xf5, 0x06, 0x29, 0xc7, 0x72, 0x91, 0xc8, 0xd4, 0x7a,
+	0x3e, 0xc6, 0xf9, 0x6f, 0xc5, 0xe1, 0x6c, 0xa8, 0xfe, 0xd1, 0x2e, 0xbc, 0x14, 0x6e, 0x14, 0x83,
+	0x7d, 0xf3, 0x85, 0x90, 0xe6, 0x72, 0x75, 0xcf, 0xa1, 0x1c, 0x07, 0x7b, 0x68, 0x18, 0xc7, 0x1f,
+	0x5a, 0x27, 0x1d, 0x62, 0xbc, 0xcf, 0xb5, 0x93, 0xfe, 0x52, 0xc2, 0xbf, 0x74, 0xc3, 0x3b, 0xea,
+	0xaf, 0x08, 0x90, 0x1f, 0x08, 0x5a, 0xed, 0xfe, 0xc9, 0xad, 0xfa, 0xe0, 0x79, 0xc5, 0xad, 0x3e,
+	0xa0, 0xbf, 0x7f, 0x9e, 0x39, 0x0a, 0xce, 0xce, 0xff, 0x4d, 0x01, 0xce, 0x79, 0x49, 0xf9, 0x84,
+	0x96, 0x2b, 0xe3, 0x79, 0x75, 0xc8, 0x35, 0x98, 0x77, 0x36, 0x2a, 0xed, 0x69, 0x0b, 0x37, 0x1e,
+	0x64, 0x67, 0xd9, 0x8e, 0x34, 0xff, 0x6f, 0x62, 0x70, 0x61, 0x68, 0x9d, 0xd0, 0x65, 0xc8, 0x90,
+	0xc8, 0xd6, 0x61, 0xc6, 0x6c, 0x7b, 0xa6, 0xa3, 0x76, 0x6d, 0x36, 0x14, 0x49, 0x39, 0x1e, 0x28,
+	0x71, 0xa6, 0xa3, 0x1c, 0x3b, 0x48, 0x3e, 0xcb, 0x4c, 0x0c, 0x58, 0xe6, 0xcf, 0x0c, 0x58, 0x26,
+	0xbb, 0xf4, 0xd4, 0xfc, 0x92, 0x9a, 0xcf, 0xd3, 0x06, 0x91, 0xcc, 0x73, 0x3a, 0xc4, 0x3c, 0xff,
+	0x2c, 0x11, 0xba, 0xd6, 0xc1, 0xed, 0xf4, 0x0f, 0x04, 0xb8, 0x1c, 0x3e, 0xb1, 0xf1, 0x1b, 0xec,
+	0xf1, 0x73, 0x9f, 0xdb, 0x84, 0xe5, 0x0e, 0x04, 0x56, 0xcd, 0x11, 0x78, 0xf9, 0x5f, 0x11, 0xe0,
+	0xc5, 0x10, 0x66, 0x5f, 0x8e, 0x51, 0xbf, 0x06, 0x8b, 0x8e, 0x51, 0xf7, 0x74, 0x6d, 0x5f, 0xd9,
+	0x57, 0xdb, 0x96, 0x91, 0x09, 0xd2, 0x82, 0x9d, 0xb9, 0xeb, 0xe4, 0xe5, 0xff, 0x67, 0x0c, 0xae,
+	0x44, 0xab, 0x32, 0xba, 0x0a, 0xb3, 0xc4, 0xc2, 0xdd, 0x9c, 0x05, 0xca, 0x39, 0xdb, 0x51, 0xbb,
+	0x2e, 0x9e, 0x14, 0x51, 0x39, 0x0e, 0x10, 0x21, 0xdb, 0x51, 0x8e, 0xdd, 0x88, 0x23, 0x2d, 0xfd,
+	0x17, 0x43, 0x2c, 0xfd, 0xc9, 0xff, 0xb7, 0x76, 0x7f, 0x6e, 0xb6, 0xbf, 0x91, 0xb4, 0xce, 0x99,
+	0x88, 0x0f, 0x21, 0xeb, 0x1d, 0x96, 0xd0, 0xba, 0x75, 0xed, 0x2a, 0xca, 0x94, 0x98, 0x5f, 0xc9,
+	0x0a, 0x3e, 0x59, 0xf3, 0x9d, 0x38, 0x24, 0xd8, 0xa4, 0xf7, 0x25, 0xc8, 0xa8, 0x5d, 0x13, 0xb7,
+	0xb0, 0xee, 0x9a, 0x6e, 0xc7, 0x2b, 0x13, 0xd2, 0x0c, 0x07, 0x33, 0xb4, 0x17, 0x20, 0x7d, 0xd0,
+	0xd6, 0x14, 0xd3, 0x35, 0xb1, 0x16, 0x2a, 0x13, 0x12, 0x50, 0x20, 0x43, 0xb9, 0x0c, 0x33, 0x86,
+	0xa9, 0xab, 0xdd, 0x96, 0xec, 0xbd, 0x1b, 0x96, 0x66, 0x50, 0xbb, 0xb8, 0x7d, 0x4d, 0x6b, 0x63,
+	0xc5, 0x9a, 0xdd, 0x4f, 0xf2, 0x83, 0xc7, 0x33, 0x1c, 0x6c, 0x4f, 0xc5, 0xed, 0x9b, 0x10, 0x1c,
+	0x31, 0x31, 0xea, 0x3e, 0x44, 0x65, 0x42, 0xca, 0xda, 0x44, 0x8c, 0xcd, 0x5b, 0x00, 0x04, 0xc2,
+	0x39, 0x4c, 0x79, 0x97, 0xba, 0xcd, 0x93, 0x1e, 0xa6, 0xd4, 0x3b, 0x07, 0x25, 0xe5, 0xa4, 0x32,
+	0x21, 0xa5, 0x08, 0x2e, 0x23, 0x5c, 0x07, 0x68, 0x2a, 0xa6, 0x45, 0xc8, 0x96, 0x6b, 0xe6, 0x3c,
+	0x84, 0x25, 0xc5, 0xc4, 0x84, 0x86, 0xa0, 0x31, 0x9a, 0x22, 0xcc, 0x35, 0x95, 0x13, 0x59, 0x3b,
+	0x90, 0x9f, 0x62, 0x7c, 0xc4, 0x49, 0x93, 0xf4, 0x3c, 0xd8, 0x92, 0x8f, 0xf4, 0x64, 0xe7, 0xe0,
+	0x3e, 0xc6, 0x47, 0x44, 0xe2, 0xa6, 0x95, 0xa0, 0x4c, 0xec, 0x25, 0xd1, 0x1f, 0x83, 0x94, 0x7d,
+	0x8d, 0x08, 0x7d, 0x40, 0x6f, 0xb6, 0xf1, 0x7b, 0x4b, 0xc3, 0x37, 0x04, 0x4a, 0xfc, 0xc2, 0x52,
+	0x65, 0x42, 0x4a, 0x36, 0xf9, 0xff, 0x8d, 0x2c, 0xcc, 0xf4, 0x14, 0xdd, 0xc0, 0x4d, 0x76, 0xa7,
+	0x56, 0xfc, 0xb9, 0x18, 0x24, 0x2d, 0x44, 0xf4, 0x12, 0xbd, 0x6f, 0x68, 0xd9, 0xd4, 0x60, 0x25,
+	0xe9, 0x15, 0x44, 0x8c, 0xde, 0x84, 0xb4, 0xab, 0x76, 0xfc, 0xae, 0x70, 0x48, 0xbd, 0x88, 0x56,
+	0xf8, 0x5f, 0xb4, 0x02, 0x93, 0x54, 0xec, 0xf8, 0x30, 0xe5, 0x4b, 0x14, 0x07, 0x95, 0x81, 0x36,
+	0x81, 0xfc, 0xa9, 0xd6, 0xb5, 0xae, 0x10, 0x5e, 0x1b, 0x51, 0x4f, 0xca, 0xe3, 0xa1, 0xd6, 0xc5,
+	0x52, 0xd2, 0xe4, 0xff, 0xf2, 0xaf, 0x42, 0xd2, 0x82, 0xa2, 0x97, 0x20, 0xcb, 0x6e, 0xaf, 0xc8,
+	0x1d, 0xb5, 0xdb, 0xb7, 0x4e, 0x26, 0x25, 0xa4, 0x0c, 0x83, 0x6e, 0x31, 0xa0, 0xf8, 0x67, 0x02,
+	0xe4, 0xfc, 0x67, 0x63, 0x51, 0x1b, 0xce, 0x3a, 0x27, 0x8f, 0x4c, 0xcf, 0x19, 0x4d, 0x83, 0xab,
+	0x6b, 0x75, 0xc4, 0xbe, 0x8c, 0xf7, 0x64, 0xa7, 0x51, 0x99, 0x90, 0xce, 0xa8, 0xc1, 0x59, 0x08,
+	0xc3, 0x12, 0xbf, 0x38, 0xe3, 0x2f, 0x8a, 0xb5, 0xf8, 0x8d, 0xa1, 0x97, 0x68, 0x06, 0x0b, 0x5a,
+	0xd4, 0x83, 0x32, 0x36, 0x72, 0x90, 0xf5, 0xf2, 0x17, 0x7f, 0x30, 0x0d, 0x67, 0x76, 0x75, 0xb5,
+	0x43, 0x03, 0x61, 0x2f, 0x3a, 0x92, 0x20, 0xab, 0xe3, 0x5e, 0x5b, 0x21, 0xd3, 0x11, 0xf7, 0x51,
+	0x83, 0x97, 0x43, 0x85, 0xa1, 0xc8, 0xdc, 0x9f, 0xf1, 0x8d, 0xe1, 0x0c, 0x67, 0xc1, 0xd5, 0x7a,
+	0x07, 0xf8, 0x79, 0x7c, 0xef, 0x41, 0x82, 0xcb, 0x43, 0x2f, 0x6d, 0xd8, 0xcc, 0x66, 0x74, 0x57,
+	0x1a, 0xfd, 0x05, 0x58, 0x6c, 0x1c, 0x2a, 0xf4, 0xd0, 0xbe, 0x4e, 0xdf, 0xb1, 0xf0, 0x9e, 0x14,
+	0x08, 0x3b, 0xab, 0x54, 0xb4, 0x68, 0xb6, 0x14, 0xe3, 0xc8, 0x66, 0x3d, 0xdf, 0x18, 0x04, 0x23,
+	0x13, 0x2e, 0x34, 0xf4, 0x93, 0x9e, 0xa9, 0xc9, 0x96, 0x22, 0x0e, 0x0e, 0x8e, 0xe5, 0x83, 0x1e,
+	0xf6, 0x1e, 0x16, 0x08, 0x7d, 0x32, 0x82, 0xd2, 0x72, 0xb5, 0xdc, 0x3a, 0x38, 0xbe, 0xd5, 0x73,
+	0xf4, 0x72, 0xb6, 0x11, 0x96, 0x89, 0x7a, 0x70, 0xee, 0x40, 0x3d, 0xc6, 0x4d, 0xb6, 0xb6, 0xc0,
+	0x06, 0x09, 0xe2, 0x59, 0x3d, 0x87, 0x06, 0xd6, 0x42, 0x37, 0x96, 0x8e, 0x71, 0x93, 0x0c, 0x8c,
+	0x1b, 0x16, 0x9d, 0x5d, 0xe4, 0xf2, 0x41, 0x48, 0x1e, 0xaa, 0x41, 0x6e, 0xa0, 0x98, 0xa9, 0xe1,
+	0x17, 0x57, 0x06, 0xb8, 0xcf, 0xee, 0xfb, 0x98, 0x9a, 0x70, 0xc1, 0xd2, 0xda, 0x53, 0xd5, 0x3c,
+	0x74, 0x6e, 0x84, 0x5b, 0x25, 0x4c, 0x0f, 0x55, 0x1e, 0xd7, 0xcc, 0x7d, 0xd5, 0x3c, 0xb4, 0x3a,
+	0x94, 0xa3, 0x3c, 0x3d, 0x2c, 0x13, 0xdd, 0x85, 0x1c, 0x75, 0x23, 0x3d, 0x45, 0xb7, 0x6d, 0x2c,
+	0x39, 0xf4, 0x2a, 0x21, 0x71, 0x17, 0xbb, 0x8a, 0xee, 0x58, 0x19, 0x1d, 0x48, 0x1c, 0x08, 0xba,
+	0x0f, 0x88, 0x5b, 0xc1, 0xa1, 0x62, 0x1c, 0x5a, 0x4c, 0x53, 0x43, 0x0f, 0x4f, 0xb2, 0xa6, 0xaf,
+	0x28, 0xc6, 0xa1, 0x73, 0x32, 0xa4, 0xe1, 0x83, 0xd1, 0x2b, 0x1e, 0xc4, 0xb5, 0x1b, 0x87, 0xea,
+	0x81, 0x2d, 0x6c, 0x7a, 0xa8, 0xde, 0x89, 0xeb, 0xab, 0x11, 0x74, 0x47, 0xef, 0x4d, 0x2f, 0x28,
+	0xa0, 0x93, 0x7f, 0x21, 0x40, 0xd6, 0x5b, 0x4b, 0x74, 0x0f, 0x66, 0xa9, 0x86, 0x4c, 0x4d, 0xe6,
+	0x17, 0x5f, 0xf8, 0xcd, 0xf5, 0xd5, 0x48, 0x5a, 0xb2, 0x93, 0x52, 0x86, 0xb0, 0xa9, 0x6b, 0x65,
+	0xc6, 0x44, 0xfc, 0x86, 0xc0, 0xfc, 0x2f, 0xc9, 0x43, 0x67, 0x61, 0xb1, 0x5e, 0xdd, 0x2a, 0xcb,
+	0xbb, 0x05, 0xa9, 0xee, 0x3b, 0xad, 0x9c, 0x84, 0xc9, 0x07, 0xe5, 0x82, 0x94, 0x13, 0x50, 0x0a,
+	0x12, 0x5b, 0x3b, 0xdb, 0xf5, 0x4a, 0x2e, 0x86, 0x72, 0x30, 0x53, 0x2a, 0x3c, 0x90, 0x77, 0x6e,
+	0xc9, 0x0c, 0x12, 0x47, 0xb3, 0x90, 0xe6, 0x90, 0xfb, 0xe5, 0xf2, 0x87, 0xb9, 0x49, 0x82, 0x42,
+	0xfe, 0x11, 0x08, 0xa5, 0x4f, 0x10, 0x94, 0xca, 0xce, 0x9e, 0x44, 0x20, 0xa5, 0xc2, 0x83, 0xdc,
+	0x94, 0x58, 0x83, 0x9c, 0x5f, 0xfb, 0xe8, 0x6b, 0x00, 0xbc, 0x09, 0x47, 0x5f, 0x4c, 0x64, 0xc4,
+	0xf4, 0x62, 0x62, 0xc3, 0xfa, 0x2b, 0xee, 0x00, 0x1a, 0x74, 0x6f, 0xe8, 0x1d, 0x48, 0x75, 0xf1,
+	0xd3, 0x71, 0xb6, 0x2a, 0xba, 0xf8, 0x29, 0xfd, 0x27, 0x9e, 0x83, 0xb3, 0xa1, 0x16, 0x2e, 0x66,
+	0x61, 0xc6, 0xed, 0xf9, 0xc4, 0x1f, 0xc4, 0x20, 0x43, 0xdc, 0x96, 0x51, 0xd7, 0xaa, 0xad, 0xae,
+	0xa6, 0x63, 0xb4, 0x0a, 0xc8, 0x76, 0x58, 0x06, 0x69, 0x45, 0xe3, 0x48, 0x65, 0xb7, 0xfc, 0x52,
+	0xd4, 0xd4, 0xec, 0xbc, 0xba, 0x56, 0x3b, 0x52, 0x7b, 0xe8, 0x04, 0xce, 0x35, 0xb4, 0x4e, 0x47,
+	0xeb, 0xca, 0x5e, 0x32, 0x95, 0xb2, 0xe3, 0x23, 0xfa, 0xdb, 0x43, 0x3c, 0xa6, 0x5d, 0xf4, 0x6a,
+	0x91, 0xf2, 0xf1, 0xc0, 0x88, 0x73, 0x69, 0xd8, 0x60, 0xab, 0x60, 0x96, 0x27, 0x7e, 0x5b, 0x80,
+	0xf9, 0x00, 0x1a, 0x74, 0x05, 0xc4, 0xe2, 0xce, 0xd6, 0xd6, 0xce, 0xb6, 0x5c, 0xac, 0x14, 0xa4,
+	0x9a, 0x5c, 0xdf, 0x91, 0xab, 0xb7, 0xb7, 0x77, 0x24, 0xff, 0xb3, 0x06, 0x69, 0x98, 0xde, 0xde,
+	0xdb, 0x2a, 0x4b, 0xd5, 0x62, 0x4e, 0x40, 0x0b, 0x90, 0x2b, 0x6c, 0xee, 0x56, 0x0a, 0xf2, 0xde,
+	0xee, 0x6e, 0x59, 0x92, 0x8b, 0x85, 0x5a, 0x39, 0x17, 0x73, 0xa0, 0x9b, 0x3b, 0xf7, 0x2d, 0x28,
+	0x35, 0x9e, 0xdd, 0xbd, 0xed, 0x62, 0x7d, 0xaf, 0x50, 0xaf, 0xee, 0x6c, 0xe7, 0x26, 0x51, 0x16,
+	0xe0, 0x7e, 0xa5, 0x5a, 0x2f, 0xd7, 0x76, 0x0b, 0xc5, 0x72, 0x2e, 0xb1, 0x31, 0x03, 0xe0, 0x68,
+	0x43, 0xfc, 0x63, 0x22, 0x67, 0xc0, 0x20, 0x70, 0x1d, 0xe6, 0xc8, 0xe0, 0x42, 0x5d, 0xa3, 0x95,
+	0xcd, 0x4f, 0xd8, 0xe6, 0x78, 0x86, 0x4d, 0x86, 0x5e, 0x84, 0x6c, 0xb7, 0xdf, 0xd9, 0xc7, 0x3a,
+	0x51, 0x2e, 0xc9, 0xe5, 0xd7, 0x2c, 0x67, 0x18, 0xb4, 0xae, 0x11, 0xc6, 0x64, 0x8e, 0xaf, 0xe3,
+	0x27, 0x58, 0x37, 0xb0, 0xac, 0xe9, 0x4d, 0xcc, 0xee, 0xd5, 0x25, 0xc9, 0xf0, 0x46, 0x81, 0x3b,
+	0x04, 0x86, 0xee, 0xc1, 0x42, 0x60, 0x5b, 0x4d, 0x0e, 0x3d, 0x00, 0xed, 0xd1, 0xb1, 0x84, 0x1a,
+	0x83, 0xed, 0xf1, 0x2f, 0x04, 0x58, 0x0e, 0x1b, 0x25, 0xd0, 0x57, 0x21, 0xed, 0x5f, 0x7c, 0x1b,
+	0x65, 0xd3, 0xd0, 0x76, 0x6f, 0xe4, 0xa4, 0xfd, 0x2b, 0x6d, 0x23, 0xc9, 0xfb, 0x43, 0x17, 0xdc,
+	0x04, 0xf7, 0x64, 0x4f, 0xfc, 0x66, 0x0c, 0x66, 0xfd, 0x22, 0xdf, 0x86, 0x69, 0x6b, 0xe9, 0x98,
+	0x4d, 0x89, 0x6f, 0x46, 0x1b, 0xb3, 0x78, 0x5a, 0xb2, 0xa8, 0xe9, 0xa1, 0x76, 0x3e, 0x8f, 0x5d,
+	0x85, 0x78, 0x47, 0xed, 0x46, 0xaa, 0x3e, 0x41, 0xa4, 0xf8, 0xca, 0x71, 0xa4, 0xfa, 0x12, 0x44,
+	0x54, 0x85, 0x39, 0x3e, 0x84, 0xd1, 0x1b, 0xe5, 0xce, 0x9c, 0x69, 0x14, 0x75, 0xce, 0x45, 0xc6,
+	0x1c, 0xc9, 0xef, 0x4e, 0xc2, 0xd9, 0xd0, 0x40, 0xe3, 0x99, 0x1d, 0x1f, 0x7a, 0x1b, 0xa6, 0xe9,
+	0x45, 0x7f, 0x7e, 0x51, 0x32, 0xc2, 0x85, 0x6c, 0x8e, 0x8e, 0x0c, 0x98, 0xe5, 0x2e, 0x47, 0x69,
+	0xf7, 0x0e, 0x95, 0x7d, 0x6c, 0xf2, 0xc7, 0xa6, 0x2a, 0xe3, 0x86, 0x4b, 0xab, 0xb7, 0x0e, 0x8e,
+	0x99, 0x07, 0xd9, 0xa6, 0xa7, 0x6f, 0x0a, 0x9c, 0x1f, 0x19, 0xab, 0x59, 0x11, 0x16, 0x04, 0xbd,
+	0x0c, 0xfc, 0xbd, 0x1e, 0xa7, 0xd0, 0x04, 0x77, 0x8a, 0x59, 0x96, 0x61, 0xa3, 0x2e, 0x41, 0x42,
+	0x57, 0x9a, 0xea, 0x31, 0x8d, 0x74, 0x12, 0xf4, 0xed, 0x2d, 0x92, 0xa4, 0x67, 0xe5, 0xfa, 0xba,
+	0xae, 0xb5, 0x14, 0xd3, 0xf5, 0xc4, 0x10, 0x0f, 0x22, 0x46, 0x5e, 0x6b, 0x99, 0xb3, 0x69, 0x2d,
+	0x90, 0xf8, 0x37, 0x04, 0x38, 0x13, 0x52, 0x03, 0xb4, 0x02, 0x57, 0x6e, 0xdd, 0xfa, 0x48, 0xe6,
+	0x8e, 0x70, 0xbb, 0x50, 0xaf, 0xde, 0x2b, 0xcb, 0xd4, 0x97, 0x6d, 0x94, 0xeb, 0xc3, 0x1c, 0x21,
+	0x19, 0xf6, 0xca, 0x1f, 0x15, 0x4a, 0xe5, 0x62, 0x75, 0xab, 0xb0, 0x99, 0x8b, 0xa1, 0xf3, 0xb0,
+	0xec, 0xf8, 0x44, 0xc6, 0x42, 0xb6, 0xd0, 0xe3, 0x68, 0x0e, 0x32, 0x5e, 0xd0, 0xe4, 0x06, 0x40,
+	0xd2, 0xd2, 0x91, 0xf8, 0x7f, 0x04, 0x48, 0xd9, 0xcd, 0x8f, 0xaa, 0x90, 0xa2, 0x11, 0x84, 0x6a,
+	0x5d, 0x2d, 0x0b, 0x8f, 0xf9, 0xeb, 0x16, 0x9e, 0x4d, 0x4d, 0xe7, 0xd2, 0x16, 0x94, 0xb0, 0xea,
+	0x77, 0x9f, 0xea, 0x4a, 0xaf, 0x87, 0x2d, 0x77, 0x10, 0xc6, 0x6a, 0xcf, 0xc2, 0xf3, 0xb0, 0xb2,
+	0xa9, 0xd1, 0x16, 0xa4, 0x8f, 0x3a, 0x86, 0x6c, 0x31, 0x1b, 0x1e, 0xe4, 0x7f, 0xd8, 0x31, 0xee,
+	0x0f, 0x72, 0x83, 0x23, 0x1b, 0xbc, 0x91, 0x84, 0x29, 0x76, 0xd8, 0x47, 0xbc, 0x06, 0x68, 0xb0,
+	0x1a, 0x41, 0x97, 0x42, 0xc4, 0x2b, 0x80, 0x06, 0xa5, 0x44, 0x39, 0x88, 0x5b, 0x9d, 0x6b, 0x46,
+	0x22, 0x7f, 0xc5, 0x4f, 0x60, 0x3e, 0x40, 0x00, 0xe2, 0xde, 0x38, 0xb1, 0xec, 0x10, 0x00, 0x07,
+	0x11, 0x84, 0x2b, 0x30, 0xeb, 0xf4, 0x56, 0xf7, 0xbd, 0x93, 0x8c, 0xdd, 0x21, 0xe9, 0x3d, 0xb9,
+	0x3f, 0x15, 0x60, 0xd6, 0x17, 0x09, 0xa2, 0x6b, 0x90, 0x73, 0xb9, 0x5e, 0xb9, 0xa9, 0x9c, 0x58,
+	0xd3, 0xdd, 0xac, 0xe3, 0x61, 0x4b, 0xca, 0x89, 0x41, 0x30, 0x5d, 0x3e, 0x9e, 0x61, 0xb2, 0x51,
+	0x2a, 0xeb, 0xb8, 0x72, 0x8a, 0xe9, 0xea, 0xfc, 0xf1, 0xf1, 0x3a, 0x7f, 0xc1, 0xe3, 0x77, 0x26,
+	0xa3, 0xf9, 0x1d, 0x7a, 0x50, 0xd1, 0x4a, 0x90, 0x06, 0xea, 0x60, 0xf3, 0x50, 0x6b, 0x8a, 0xdf,
+	0x8d, 0xc1, 0x99, 0x90, 0x49, 0x35, 0xd2, 0x60, 0x76, 0x70, 0x76, 0x3e, 0xec, 0xd4, 0x69, 0x08,
+	0xa3, 0x10, 0xb8, 0xe4, 0xe7, 0x9e, 0xff, 0x3d, 0x01, 0x96, 0x82, 0x71, 0x9f, 0xf9, 0x55, 0x36,
+	0x15, 0x96, 0x7b, 0xd6, 0x5c, 0xdc, 0xb7, 0x10, 0xc0, 0xfb, 0xce, 0x6a, 0xf8, 0x49, 0xb7, 0xa0,
+	0x29, 0xbc, 0x74, 0xa6, 0x17, 0x9c, 0x21, 0x7e, 0x23, 0x0e, 0xf3, 0xb4, 0xd1, 0x7c, 0x55, 0x78,
+	0x13, 0xa6, 0xe8, 0x89, 0xc4, 0xa8, 0x47, 0x8c, 0x39, 0x36, 0x2a, 0x41, 0xaa, 0xa1, 0x75, 0x9b,
+	0xaa, 0xeb, 0xe1, 0x8d, 0x2b, 0x43, 0xd7, 0x2c, 0x8a, 0x16, 0xb6, 0xe4, 0x10, 0xa2, 0xa3, 0x21,
+	0x0a, 0x98, 0x3c, 0x8d, 0x02, 0x2a, 0x13, 0xa1, 0x2a, 0x18, 0xbe, 0xc2, 0x93, 0x78, 0xce, 0x2b,
+	0x3c, 0x01, 0xb3, 0xb2, 0xcf, 0x05, 0x58, 0x0c, 0x5c, 0xbf, 0x41, 0x32, 0x2c, 0xb2, 0x57, 0x50,
+	0x82, 0x2d, 0x7b, 0x65, 0x58, 0x9b, 0xf8, 0x0c, 0x60, 0xe1, 0x60, 0x10, 0x68, 0xa0, 0x07, 0x30,
+	0xcf, 0x97, 0x9b, 0x8c, 0x7e, 0xaf, 0xa7, 0x63, 0xc3, 0xe0, 0x6b, 0x4d, 0xc3, 0x9e, 0x9f, 0x63,
+	0xb2, 0xd6, 0x1c, 0x02, 0x09, 0xe9, 0x7e, 0x90, 0x21, 0x3e, 0x80, 0xb9, 0x01, 0x44, 0xaf, 0x75,
+	0x08, 0xa7, 0xb4, 0x0e, 0xf1, 0x97, 0x13, 0x30, 0xeb, 0xcb, 0x46, 0x75, 0x48, 0xe3, 0x63, 0xa7,
+	0x06, 0xc3, 0xdf, 0x20, 0xf4, 0x11, 0xaf, 0x96, 0x1d, 0x4a, 0xc9, 0xcd, 0x26, 0xff, 0xdb, 0x64,
+	0x38, 0xb4, 0xcb, 0x38, 0xdd, 0x91, 0xde, 0x32, 0x24, 0xb5, 0x1e, 0xd6, 0x15, 0x93, 0x3f, 0x9b,
+	0x91, 0x1d, 0xb2, 0x6e, 0xd6, 0xa6, 0xed, 0xa2, 0xb4, 0x77, 0x38, 0x81, 0x64, 0x93, 0x3a, 0xcb,
+	0xfe, 0x93, 0x91, 0x97, 0xfd, 0xf3, 0x9f, 0x00, 0xd8, 0xd2, 0x1b, 0x68, 0x17, 0xc0, 0xd6, 0xa1,
+	0x65, 0x42, 0xaf, 0x44, 0xd4, 0x90, 0xd3, 0x0e, 0x2e, 0x1e, 0xf9, 0x6f, 0xc7, 0x20, 0xed, 0xd2,
+	0x1d, 0xea, 0x90, 0x01, 0xa5, 0x45, 0x4f, 0x97, 0xda, 0x55, 0x66, 0xab, 0x09, 0x1b, 0xe3, 0xb7,
+	0xc4, 0xea, 0x26, 0x63, 0x65, 0xeb, 0x62, 0xb6, 0xed, 0x05, 0xa0, 0x9a, 0xa7, 0x42, 0xac, 0xc9,
+	0x5f, 0x1d, 0xb7, 0x42, 0xa4, 0xb3, 0xba, 0xd8, 0x88, 0xef, 0xc3, 0xac, 0xaf, 0x60, 0x74, 0x09,
+	0xce, 0x6f, 0xee, 0xdc, 0xae, 0x16, 0x0b, 0x9b, 0xf2, 0xce, 0x6e, 0x59, 0x2a, 0xd4, 0x77, 0x24,
+	0x5f, 0x44, 0x36, 0x0d, 0xf1, 0xc2, 0x76, 0x29, 0x27, 0xd8, 0x2b, 0xf7, 0xbf, 0x2e, 0xc0, 0x52,
+	0xf0, 0x85, 0x7e, 0x32, 0x8d, 0xb4, 0xbb, 0xb3, 0xef, 0xea, 0x6b, 0xce, 0x95, 0xc1, 0xee, 0xbd,
+	0xb6, 0x60, 0xd9, 0xdb, 0xf7, 0x65, 0xa3, 0xdf, 0xe9, 0x28, 0xba, 0x6a, 0x1f, 0xbc, 0xbe, 0x11,
+	0xe9, 0x39, 0x81, 0x1a, 0xa5, 0x3a, 0x91, 0xce, 0x98, 0x01, 0x60, 0x15, 0x1b, 0xe2, 0xb7, 0xa7,
+	0x60, 0x31, 0x90, 0xe4, 0x19, 0xef, 0x74, 0xdb, 0x7d, 0x26, 0x36, 0x4e, 0x9f, 0xb9, 0xe7, 0x77,
+	0x92, 0xbc, 0x75, 0xc7, 0x1d, 0xf6, 0x7c, 0x5c, 0xc2, 0x1d, 0x6a, 0xe2, 0x39, 0x39, 0xd4, 0xbb,
+	0xf6, 0xfb, 0x65, 0x96, 0x43, 0xe5, 0xeb, 0xa7, 0xd1, 0x9d, 0x69, 0xd6, 0xeb, 0x4c, 0x51, 0x1d,
+	0xa6, 0xd9, 0x5e, 0xa0, 0x75, 0xa8, 0xe4, 0xdd, 0x71, 0x5a, 0x7c, 0xd5, 0x6a, 0x79, 0x76, 0xf1,
+	0xdc, 0x62, 0x15, 0x6c, 0x85, 0xd3, 0xc1, 0x56, 0x98, 0xff, 0x05, 0x01, 0x32, 0x1e, 0x3e, 0xce,
+	0x86, 0xa2, 0xe0, 0xda, 0x50, 0x44, 0x0f, 0x60, 0xd2, 0xbe, 0x38, 0x90, 0x0d, 0x0d, 0xbc, 0x82,
+	0xe5, 0xf4, 0xa9, 0x97, 0x16, 0x53, 0xd4, 0x9a, 0x58, 0xa2, 0x2c, 0xd1, 0x32, 0x4c, 0x37, 0xd9,
+	0xde, 0x2c, 0xdb, 0x52, 0x94, 0xac, 0xa4, 0xf8, 0x09, 0x2c, 0x87, 0xd1, 0x92, 0x59, 0x55, 0x5d,
+	0x2a, 0x6c, 0xd7, 0x6e, 0xed, 0x48, 0x5b, 0x74, 0xf1, 0x47, 0x96, 0xca, 0xb5, 0xbd, 0xcd, 0xba,
+	0x5c, 0xdc, 0x29, 0x05, 0x2c, 0x2f, 0xd5, 0xf6, 0x8a, 0xc5, 0x72, 0xad, 0xc6, 0x16, 0x23, 0xcb,
+	0x92, 0xb4, 0x23, 0xe5, 0x62, 0xa2, 0x06, 0xc9, 0x5a, 0xe3, 0x10, 0x37, 0xfb, 0xf4, 0x96, 0x6a,
+	0x5e, 0xc7, 0x8d, 0xbe, 0xae, 0xd3, 0xc3, 0x06, 0x3d, 0xac, 0xab, 0x5a, 0x53, 0xb6, 0x1e, 0xdf,
+	0xe6, 0x9d, 0xe3, 0xec, 0xc0, 0xe6, 0x64, 0x89, 0x23, 0x54, 0x26, 0xa4, 0x65, 0x87, 0x7c, 0x97,
+	0x52, 0x5b, 0x79, 0x24, 0xca, 0x65, 0xef, 0x17, 0x88, 0xff, 0x34, 0x06, 0xb3, 0xfe, 0xfb, 0xfa,
+	0xa7, 0xbc, 0x99, 0xee, 0xbb, 0x4a, 0x1e, 0x1f, 0xb8, 0x4a, 0xee, 0x7f, 0x0f, 0x71, 0x72, 0xac,
+	0xf7, 0x10, 0xdf, 0x83, 0x74, 0xbf, 0xe7, 0x6c, 0x4a, 0x26, 0x46, 0x13, 0x33, 0x74, 0x4a, 0x3c,
+	0xf8, 0x38, 0xc9, 0xd4, 0xa9, 0x1f, 0x27, 0x11, 0x7f, 0x27, 0x06, 0xa8, 0x34, 0xf0, 0xae, 0xcb,
+	0x8f, 0xa2, 0xda, 0x02, 0x9f, 0x83, 0x9a, 0x7a, 0xc6, 0xe7, 0xa0, 0xc4, 0xc7, 0x90, 0x28, 0xeb,
+	0xba, 0xa6, 0xa3, 0x1b, 0x4e, 0x3f, 0x63, 0xe6, 0x8c, 0x2c, 0xa6, 0x7a, 0xaf, 0x41, 0x6f, 0xf3,
+	0xf4, 0x0d, 0xbb, 0xef, 0xa1, 0x77, 0xd9, 0xd6, 0x3a, 0x95, 0xd2, 0x0a, 0x1b, 0x87, 0x56, 0xc4,
+	0xc1, 0x16, 0xbf, 0x9b, 0x00, 0xb8, 0xa3, 0xed, 0xd7, 0x75, 0xb5, 0xd5, 0xc2, 0xfa, 0x97, 0xd7,
+	0x54, 0x77, 0x20, 0x6d, 0xd9, 0xd9, 0x23, 0x6d, 0x9f, 0x37, 0x55, 0xd4, 0xb7, 0x2e, 0x48, 0x70,
+	0xa0, 0xda, 0x30, 0x12, 0xcb, 0x99, 0x4c, 0x5e, 0x6b, 0xc8, 0x08, 0x8b, 0xe5, 0x9c, 0x9a, 0xad,
+	0xf2, 0x5f, 0xc9, 0x26, 0x45, 0xaf, 0xc3, 0x14, 0x26, 0xda, 0xb6, 0x8e, 0xa8, 0x84, 0x05, 0x73,
+	0xb4, 0x49, 0x24, 0x8e, 0xeb, 0xb7, 0xb9, 0xe9, 0x67, 0xb1, 0xb9, 0xe4, 0x58, 0x36, 0xf7, 0x01,
+	0x64, 0xda, 0x8a, 0x61, 0xca, 0x7a, 0xbf, 0xcb, 0xc8, 0x53, 0x23, 0xc9, 0xd3, 0x84, 0x40, 0xea,
+	0x77, 0x29, 0xfd, 0xd7, 0x61, 0x8a, 0x7d, 0x26, 0x60, 0x19, 0xe8, 0xc8, 0x70, 0x6d, 0xb4, 0xd2,
+	0xb8, 0xa5, 0x71, 0xba, 0x7c, 0x0d, 0xa6, 0x2d, 0x43, 0xf9, 0x2a, 0x24, 0x0d, 0xee, 0x8f, 0x47,
+	0x84, 0x23, 0x96, 0xdb, 0xae, 0x4c, 0x48, 0x36, 0xc9, 0x46, 0x0a, 0xa6, 0x79, 0x3b, 0x88, 0x15,
+	0x98, 0x62, 0xc5, 0xa0, 0x25, 0x40, 0xb5, 0x7a, 0xa1, 0xbe, 0x57, 0x1b, 0x1c, 0x13, 0x2a, 0xe5,
+	0xc2, 0x66, 0xbd, 0xf2, 0x20, 0x27, 0x20, 0x80, 0xa9, 0xdd, 0xc2, 0x5e, 0xad, 0x5c, 0x62, 0x0f,
+	0x27, 0x17, 0x0b, 0xdb, 0xc5, 0xf2, 0xe6, 0x66, 0xb9, 0x94, 0x8b, 0x6f, 0x24, 0x20, 0xfe, 0x48,
+	0xdb, 0x17, 0x7f, 0x7f, 0x12, 0xa6, 0xd8, 0x4b, 0x10, 0xe8, 0x2e, 0x64, 0x0c, 0xe5, 0x89, 0xeb,
+	0x8d, 0x40, 0x61, 0xe8, 0x32, 0x15, 0xa3, 0x5a, 0xad, 0x29, 0x4f, 0xec, 0xe7, 0x03, 0x2b, 0x13,
+	0xd2, 0x8c, 0xe1, 0x4a, 0xa3, 0x0a, 0x4c, 0xf7, 0xfa, 0xfb, 0xb2, 0xd1, 0xdf, 0x1f, 0xf1, 0x92,
+	0x14, 0x67, 0xb6, 0xdb, 0xdf, 0x6f, 0xab, 0xc6, 0x61, 0x5d, 0xdb, 0xed, 0xef, 0xd7, 0xfa, 0xfb,
+	0x95, 0x09, 0x69, 0xaa, 0x47, 0xff, 0xa1, 0x23, 0x38, 0xd3, 0x63, 0x99, 0x3c, 0x9c, 0x3c, 0x91,
+	0x4d, 0x4d, 0x6e, 0x18, 0x8d, 0xc6, 0x88, 0x89, 0x93, 0x97, 0x33, 0x1f, 0xba, 0xeb, 0x5a, 0xd1,
+	0x68, 0x34, 0x2a, 0x13, 0xd2, 0x42, 0x2f, 0x00, 0x8e, 0x3a, 0x70, 0xe6, 0x91, 0xb6, 0x2f, 0x77,
+	0x35, 0x53, 0x3d, 0x50, 0xd9, 0x33, 0x97, 0x32, 0xee, 0x50, 0x0f, 0xc3, 0xac, 0xf0, 0xb5, 0xe1,
+	0x85, 0xdd, 0xd1, 0xf6, 0xb7, 0x5d, 0xb4, 0x65, 0x4a, 0x5a, 0x99, 0x90, 0x16, 0x1f, 0x05, 0x65,
+	0xe4, 0x65, 0x98, 0x71, 0x6b, 0x11, 0xed, 0xd8, 0x8f, 0x33, 0x79, 0xce, 0x2e, 0xac, 0x44, 0x7f,
+	0x9c, 0xc9, 0x7a, 0x8f, 0x89, 0x5f, 0x61, 0xbf, 0x0a, 0xb3, 0x3e, 0xcd, 0x92, 0x68, 0xc8, 0xd4,
+	0x7a, 0xfc, 0x1a, 0x62, 0x4a, 0x62, 0x89, 0xfc, 0x12, 0x2c, 0x04, 0x29, 0x2a, 0x7f, 0x06, 0x16,
+	0x03, 0xeb, 0x44, 0x42, 0x00, 0xf6, 0x7e, 0x88, 0xf8, 0xab, 0x02, 0x9c, 0x2f, 0xd2, 0xce, 0xeb,
+	0x7f, 0xd1, 0x67, 0xc4, 0x8b, 0x5f, 0x77, 0x21, 0x37, 0xf0, 0x64, 0x50, 0x6c, 0xac, 0x27, 0x83,
+	0x66, 0x7d, 0xef, 0x71, 0xa1, 0x8b, 0x90, 0xb6, 0xdf, 0xed, 0x52, 0x9b, 0xdc, 0xc3, 0x82, 0x05,
+	0xaa, 0x36, 0xc5, 0xdf, 0x15, 0xe0, 0xfc, 0x1e, 0x75, 0x16, 0x21, 0xc2, 0x06, 0xb9, 0xf6, 0x2f,
+	0x41, 0x50, 0xc7, 0xc5, 0xd1, 0xfd, 0xb6, 0x78, 0x88, 0x8f, 0xa2, 0xc1, 0xfc, 0x96, 0x62, 0x1c,
+	0x59, 0x2e, 0x8e, 0xfc, 0x17, 0xd7, 0xe0, 0xec, 0x6d, 0x6c, 0x46, 0xaf, 0x80, 0xf8, 0xb3, 0x02,
+	0x9c, 0x63, 0xef, 0xe5, 0x78, 0x48, 0x8c, 0x51, 0x2d, 0x74, 0x01, 0xa0, 0xa7, 0xb4, 0xb0, 0x6c,
+	0x6a, 0x47, 0xfc, 0x95, 0xcb, 0x94, 0x94, 0x22, 0x90, 0x3a, 0x01, 0xa0, 0x73, 0x40, 0x13, 0xce,
+	0xbe, 0x57, 0x42, 0x4a, 0x12, 0x00, 0x3d, 0xe2, 0x78, 0x16, 0x92, 0x74, 0x9b, 0x50, 0xde, 0x3f,
+	0xe1, 0xcf, 0x02, 0x4d, 0xd3, 0xf4, 0xc6, 0x89, 0xf8, 0x8b, 0x02, 0x9c, 0x0f, 0x16, 0x87, 0xbf,
+	0xe2, 0x53, 0x83, 0x39, 0xbf, 0xc2, 0xad, 0x45, 0x80, 0xa8, 0x1a, 0xcf, 0xf9, 0x34, 0x6e, 0xa0,
+	0x2b, 0x30, 0xdb, 0xc5, 0xc7, 0xa6, 0x3c, 0x50, 0xa3, 0x0c, 0x01, 0xef, 0x5a, 0xb5, 0x12, 0xd7,
+	0xe1, 0x7c, 0x09, 0xb7, 0xf1, 0x38, 0x16, 0x42, 0x77, 0x4b, 0x58, 0x1f, 0x70, 0x86, 0x85, 0x51,
+	0xca, 0xdd, 0x80, 0x34, 0xf1, 0x35, 0xdc, 0xc1, 0x73, 0x83, 0x7a, 0x61, 0xe4, 0x68, 0x23, 0xc1,
+	0x23, 0x27, 0x10, 0xb9, 0x00, 0xc0, 0xe9, 0x1d, 0x73, 0x4f, 0x71, 0x48, 0xb5, 0x49, 0x0c, 0x85,
+	0x38, 0xa6, 0x27, 0x81, 0x72, 0x05, 0xd5, 0xe3, 0xd7, 0x05, 0x38, 0xc3, 0xba, 0x47, 0x24, 0xfc,
+	0xe7, 0x52, 0x87, 0x67, 0xea, 0x0a, 0x2b, 0xb0, 0x70, 0x1b, 0x9b, 0xd1, 0x2a, 0xf7, 0x03, 0x01,
+	0xe6, 0x59, 0x23, 0x95, 0xda, 0xbd, 0x3b, 0xda, 0xfe, 0xa8, 0x06, 0xf2, 0x05, 0x63, 0xb1, 0x67,
+	0x09, 0xc6, 0xaa, 0x90, 0xd4, 0x55, 0xe3, 0x88, 0x32, 0x8a, 0x0f, 0x3f, 0x1d, 0x17, 0xf4, 0xe4,
+	0x54, 0x65, 0x42, 0x9a, 0x26, 0xf4, 0x84, 0xd5, 0x22, 0x4c, 0x11, 0x9d, 0xab, 0x4d, 0xde, 0xad,
+	0x12, 0x8f, 0xb4, 0xfd, 0x6a, 0xd3, 0x1a, 0xd6, 0xff, 0xae, 0x00, 0x4b, 0xa4, 0x6f, 0x39, 0x2a,
+	0xf9, 0x21, 0xf5, 0x72, 0xd7, 0xdb, 0x5d, 0x09, 0xcf, 0xdb, 0x5d, 0x3f, 0x2d, 0xc0, 0x99, 0x01,
+	0x09, 0x79, 0xc7, 0x2f, 0xc1, 0x8c, 0xcb, 0x9e, 0xac, 0x3e, 0x1f, 0xc1, 0xa0, 0xd2, 0x8e, 0x41,
+	0x45, 0xef, 0xe9, 0x37, 0xe1, 0x0c, 0xeb, 0xe9, 0xd1, 0xec, 0xe7, 0x6f, 0xc7, 0x20, 0xe7, 0x6f,
+	0x66, 0x32, 0x33, 0xe4, 0xdf, 0xbb, 0xf2, 0x8e, 0xd9, 0x2f, 0x86, 0xbe, 0x31, 0xe0, 0x1e, 0xad,
+	0x33, 0x86, 0xe7, 0x69, 0xc7, 0xe7, 0xfa, 0x06, 0x66, 0xe8, 0x5b, 0x96, 0xf1, 0xf0, 0x17, 0x49,
+	0x5d, 0x6f, 0x88, 0x4d, 0x8e, 0xf5, 0x86, 0xd8, 0xef, 0x27, 0x60, 0x8a, 0xf5, 0xaa, 0x40, 0x3f,
+	0xf1, 0x06, 0xff, 0xd0, 0xc8, 0xf0, 0x0f, 0xf6, 0x30, 0x06, 0xae, 0x2f, 0x8b, 0xbc, 0x4f, 0x9f,
+	0x26, 0x37, 0x31, 0x5f, 0x8b, 0xbe, 0x32, 0x94, 0x8e, 0x98, 0x03, 0x09, 0x91, 0xb1, 0xc4, 0x88,
+	0xd0, 0x47, 0x30, 0x43, 0xfb, 0x9c, 0x35, 0x47, 0x9c, 0x1c, 0x1e, 0xc1, 0x0d, 0x39, 0x62, 0x5f,
+	0x99, 0x90, 0xd2, 0xba, 0xeb, 0x75, 0x87, 0x87, 0x60, 0x0d, 0xe8, 0x36, 0xf3, 0xe1, 0x07, 0x1c,
+	0xc3, 0xde, 0x58, 0xac, 0x4c, 0x48, 0x56, 0x8b, 0x5b, 0xbc, 0x9f, 0xe9, 0xa3, 0x0f, 0xef, 0x00,
+	0xd0, 0xe7, 0xdb, 0xa3, 0xce, 0xba, 0x52, 0x14, 0x9b, 0x92, 0xbe, 0x01, 0x49, 0xdc, 0x6d, 0x46,
+	0x9d, 0x71, 0x4d, 0xe3, 0x6e, 0x93, 0x92, 0x5d, 0x83, 0x9c, 0xab, 0xc7, 0x32, 0x03, 0x03, 0xda,
+	0xf2, 0x59, 0xa7, 0x4b, 0x52, 0xdb, 0x72, 0x26, 0x92, 0xe9, 0xe8, 0x13, 0x49, 0xb1, 0x01, 0x49,
+	0xab, 0x5d, 0xd1, 0x59, 0x58, 0xbc, 0xb3, 0xb3, 0x21, 0x93, 0xd9, 0x4f, 0xc0, 0x82, 0xd8, 0x6e,
+	0x79, 0xbb, 0x54, 0xdd, 0xbe, 0x9d, 0x13, 0x48, 0x42, 0xda, 0xdb, 0xde, 0x26, 0x89, 0x18, 0x4a,
+	0xc2, 0x64, 0x69, 0x67, 0xbb, 0x9c, 0x8b, 0xa3, 0x19, 0x48, 0xb2, 0x79, 0x50, 0xb9, 0x94, 0x9b,
+	0x24, 0x33, 0xa4, 0x5b, 0x85, 0x2a, 0xf9, 0x9f, 0x20, 0xf3, 0x2c, 0x6b, 0x85, 0xee, 0x0a, 0xe4,
+	0x6e, 0x63, 0xd3, 0x3b, 0x40, 0x04, 0x39, 0x83, 0x7f, 0x2f, 0x00, 0x22, 0x5e, 0x8c, 0x61, 0x06,
+	0xf8, 0xd8, 0x49, 0x8f, 0x8f, 0x75, 0x9c, 0xa1, 0xe0, 0x76, 0x86, 0x5e, 0xe7, 0x1a, 0xf3, 0x39,
+	0x57, 0xaf, 0x63, 0x8e, 0xfb, 0x1d, 0xb3, 0xd5, 0xa9, 0x12, 0xe3, 0x75, 0x2a, 0xb7, 0xcb, 0x9e,
+	0xf2, 0x06, 0x66, 0x3d, 0x98, 0xf7, 0xd4, 0x89, 0x7b, 0xe5, 0x57, 0x61, 0xf2, 0x91, 0xb6, 0x6f,
+	0x79, 0xe3, 0x0b, 0x43, 0x0b, 0x92, 0x28, 0x6a, 0x64, 0x17, 0xfc, 0x32, 0xcc, 0x17, 0x95, 0x6e,
+	0x03, 0xb7, 0x47, 0x6b, 0xfc, 0x65, 0x98, 0x67, 0xde, 0x7a, 0x34, 0xea, 0x6f, 0x09, 0x70, 0x91,
+	0x8f, 0xf4, 0x03, 0xeb, 0x6c, 0xa3, 0x46, 0xc3, 0x87, 0x30, 0x1f, 0xf0, 0x66, 0xf7, 0x88, 0x63,
+	0x20, 0x01, 0xc5, 0xa0, 0xc1, 0x97, 0xbd, 0x47, 0x4f, 0x4f, 0xfe, 0x9d, 0x00, 0x17, 0x59, 0xfc,
+	0x15, 0x2e, 0x78, 0x90, 0x7f, 0xfd, 0x32, 0x85, 0x7e, 0xa6, 0xf8, 0x6c, 0x1d, 0xce, 0x93, 0xee,
+	0x34, 0x4e, 0x65, 0xc4, 0x9f, 0x13, 0xe0, 0x2b, 0xd4, 0x0c, 0x07, 0xa8, 0x7e, 0x58, 0x13, 0x96,
+	0x7f, 0x28, 0xc0, 0xc5, 0x50, 0x89, 0x78, 0x27, 0xf9, 0x18, 0x16, 0x02, 0x9a, 0xc0, 0xea, 0x34,
+	0x63, 0xb4, 0xc1, 0xfc, 0x60, 0x1b, 0x44, 0xef, 0x4f, 0x6f, 0xc0, 0x45, 0xde, 0x49, 0xc6, 0x52,
+	0xf9, 0x3f, 0x88, 0xc1, 0xb9, 0x4d, 0x45, 0x6f, 0x61, 0xf6, 0x1d, 0x39, 0xe7, 0x3b, 0x91, 0x3c,
+	0x96, 0xa8, 0x40, 0x9a, 0x2f, 0x4c, 0xf4, 0x14, 0xf3, 0x90, 0x87, 0x38, 0xa1, 0xc7, 0xc8, 0xdb,
+	0x5a, 0xbf, 0xc9, 0xe3, 0x9c, 0x5d, 0xc5, 0x3c, 0x94, 0x80, 0xd1, 0x92, 0xff, 0x48, 0x81, 0xa5,
+	0x06, 0xc9, 0x97, 0xad, 0xa8, 0x89, 0x7e, 0xaf, 0xc5, 0xc0, 0xd6, 0x49, 0xbd, 0x95, 0x08, 0x4c,
+	0x6f, 0xa9, 0xf4, 0x03, 0x72, 0xf4, 0x02, 0xc4, 0x20, 0x18, 0x6d, 0xc3, 0xec, 0xbe, 0xda, 0x92,
+	0x1f, 0xf7, 0xb1, 0x7e, 0x22, 0xb3, 0x0d, 0xbd, 0x68, 0xcf, 0x7c, 0x51, 0x13, 0xae, 0x4c, 0x48,
+	0x99, 0x7d, 0x37, 0xc0, 0x75, 0xe8, 0xea, 0x7b, 0x02, 0x2c, 0x90, 0xc2, 0x70, 0xd3, 0x77, 0x80,
+	0xdf, 0xbf, 0xf8, 0x2b, 0x8c, 0x5c, 0xfc, 0x8d, 0x0d, 0x2e, 0xfe, 0xb6, 0xe1, 0x4c, 0x9b, 0xb4,
+	0x81, 0xcc, 0x0f, 0x03, 0xba, 0xbe, 0xf2, 0x39, 0x7c, 0xa5, 0x6b, 0x48, 0xcb, 0x55, 0x26, 0xa4,
+	0xc5, 0x76, 0x50, 0xb6, 0xbd, 0xfb, 0xfb, 0xd7, 0x63, 0xb0, 0xe8, 0xad, 0x13, 0xff, 0xd8, 0x0e,
+	0x2a, 0xc2, 0x94, 0x27, 0xa4, 0xbd, 0x3e, 0x24, 0xa4, 0xf5, 0x6b, 0x44, 0xe2, 0xa4, 0xfe, 0x70,
+	0x26, 0x36, 0x56, 0x38, 0xf3, 0x75, 0x6f, 0xfc, 0xb7, 0x12, 0x49, 0x00, 0x4f, 0x0c, 0xe8, 0x04,
+	0x1d, 0x93, 0x63, 0x04, 0x1d, 0xff, 0x41, 0x80, 0xac, 0x97, 0x69, 0xa0, 0xd7, 0xdd, 0x83, 0x59,
+	0xb6, 0x41, 0x66, 0xda, 0x1f, 0x2e, 0x1a, 0x7e, 0xf3, 0x29, 0x50, 0xcf, 0x52, 0x96, 0x33, 0xb1,
+	0xf4, 0x7e, 0x1f, 0x72, 0x3d, 0xcc, 0x3e, 0xab, 0xc3, 0xd9, 0x8e, 0xda, 0x3f, 0x0f, 0xe6, 0x3b,
+	0xcb, 0xb9, 0xf0, 0xb4, 0x21, 0xfe, 0x23, 0x01, 0xce, 0xb1, 0x61, 0xd1, 0x4b, 0x30, 0xca, 0xab,
+	0x3a, 0x86, 0x10, 0x3b, 0xbd, 0x21, 0xdc, 0x84, 0x79, 0x83, 0xe6, 0xbb, 0xee, 0xd4, 0xd8, 0x63,
+	0x60, 0xce, 0xf0, 0x90, 0x56, 0x9b, 0xe2, 0x6f, 0x08, 0x70, 0x8e, 0x8d, 0x84, 0xc1, 0xb2, 0x06,
+	0xb5, 0xc7, 0x73, 0x91, 0xf3, 0x99, 0x86, 0xbb, 0x55, 0x58, 0xbe, 0x8d, 0xcd, 0xc8, 0x12, 0x8b,
+	0x7f, 0x4d, 0x80, 0x3c, 0x19, 0x58, 0xbc, 0x14, 0x3f, 0xac, 0x61, 0xee, 0x6f, 0xf1, 0x65, 0xc2,
+	0x01, 0x69, 0xf8, 0x10, 0x77, 0x17, 0xe6, 0xfc, 0x4d, 0x68, 0x8d, 0x6f, 0x2f, 0x45, 0x52, 0xb5,
+	0x34, 0xeb, 0x6d, 0xe7, 0xe8, 0xe3, 0xda, 0xab, 0x70, 0x8e, 0x8d, 0x6b, 0x91, 0x75, 0xbb, 0xb2,
+	0x05, 0x19, 0xcf, 0x47, 0x4c, 0xd1, 0x19, 0x98, 0x2f, 0xee, 0x6c, 0xd7, 0xcb, 0xdb, 0xfe, 0x33,
+	0xca, 0x39, 0x98, 0xb1, 0x32, 0xea, 0xe5, 0x8f, 0xea, 0x39, 0x01, 0xcd, 0x41, 0xc6, 0x82, 0xb0,
+	0xaf, 0x53, 0xc6, 0x56, 0x3e, 0x13, 0x60, 0xc6, 0xfd, 0x65, 0x61, 0x74, 0x01, 0xce, 0x6e, 0x15,
+	0xea, 0xc5, 0x4a, 0x75, 0xfb, 0x76, 0xd0, 0x87, 0x2d, 0xcf, 0xc3, 0xb2, 0x37, 0xfb, 0xd6, 0xde,
+	0xe6, 0xa6, 0x4c, 0x41, 0x39, 0x01, 0x5d, 0x84, 0x73, 0xde, 0xdc, 0xdd, 0x82, 0x54, 0xaf, 0x16,
+	0x2c, 0x84, 0xd8, 0x20, 0x42, 0x75, 0xfb, 0x5e, 0x59, 0xaa, 0x95, 0x39, 0x42, 0x7c, 0x65, 0xd7,
+	0x79, 0x16, 0xde, 0xf5, 0x3a, 0x3b, 0x99, 0x23, 0x95, 0xb7, 0xf7, 0xb6, 0x82, 0x24, 0x4a, 0xc3,
+	0x74, 0x95, 0x02, 0x78, 0x0d, 0xa5, 0x6a, 0xed, 0x43, 0xb9, 0xb0, 0x5d, 0xd8, 0x7c, 0x50, 0xab,
+	0xd6, 0x72, 0xb1, 0x95, 0x7f, 0x25, 0x00, 0x1a, 0x3c, 0xd6, 0x85, 0x2e, 0xc3, 0x45, 0xa9, 0xbc,
+	0x49, 0x4f, 0x24, 0x84, 0x1f, 0x2a, 0x9a, 0x81, 0x64, 0xf9, 0xee, 0x5e, 0x61, 0x53, 0xae, 0xef,
+	0xe4, 0x04, 0xa2, 0xd0, 0xed, 0x9d, 0xba, 0x6c, 0x43, 0xe8, 0x2d, 0xa9, 0xdb, 0x52, 0xb9, 0x50,
+	0x2f, 0x4b, 0x72, 0xbd, 0x52, 0xd8, 0x66, 0xdf, 0xef, 0xdc, 0x2c, 0xd7, 0x6a, 0x2c, 0x39, 0x89,
+	0xf2, 0xb0, 0xe4, 0x46, 0x90, 0x77, 0x24, 0x46, 0x5e, 0xcb, 0x25, 0x48, 0xc3, 0xd9, 0xa8, 0xae,
+	0x8c, 0x29, 0x32, 0x87, 0x2b, 0x7f, 0x54, 0xad, 0xd5, 0x6b, 0xb9, 0xe9, 0x15, 0x09, 0xc0, 0x99,
+	0xea, 0x10, 0xed, 0x97, 0x36, 0x77, 0x65, 0x32, 0x5d, 0x0c, 0xd0, 0xc4, 0x2c, 0xa4, 0xb9, 0x26,
+	0x08, 0x46, 0x4e, 0x40, 0x8b, 0x30, 0xe7, 0xd1, 0x06, 0x05, 0xc7, 0x56, 0xba, 0x30, 0x1f, 0x30,
+	0xb6, 0xa0, 0x2b, 0x20, 0xd2, 0xaf, 0x51, 0x94, 0xe4, 0xea, 0xf6, 0xad, 0x1d, 0x56, 0xc0, 0xc8,
+	0x49, 0x69, 0x0a, 0x12, 0x52, 0xb9, 0x50, 0x7a, 0x90, 0x8b, 0xb9, 0xa6, 0x9e, 0x71, 0xd6, 0x28,
+	0xf7, 0x0a, 0x9b, 0xd5, 0x52, 0x6e, 0x72, 0xfd, 0x0f, 0x6f, 0xd0, 0x4a, 0xd4, 0xb0, 0xfe, 0x44,
+	0x6d, 0x60, 0xf4, 0xf7, 0x9c, 0xaf, 0x54, 0x73, 0x4b, 0x46, 0x37, 0x46, 0xae, 0x04, 0xb9, 0xbe,
+	0xb5, 0x92, 0xbf, 0x19, 0x11, 0x9b, 0xf5, 0x6f, 0x71, 0xfd, 0x2f, 0x7d, 0xfe, 0xdf, 0x7f, 0x3e,
+	0x76, 0x43, 0xbc, 0xba, 0xf6, 0x64, 0x7d, 0xed, 0xc7, 0x99, 0xaf, 0xf9, 0x6a, 0x4f, 0xd7, 0x1e,
+	0xe1, 0x86, 0x69, 0xac, 0xad, 0xfc, 0xe4, 0x1a, 0xff, 0x7a, 0xe2, 0xbb, 0x7c, 0xc9, 0xe2, 0x5d,
+	0x61, 0x05, 0x7d, 0x4b, 0x80, 0xb4, 0xeb, 0xcb, 0x56, 0xe8, 0xe5, 0xc8, 0x5f, 0x32, 0xcb, 0xaf,
+	0x44, 0x41, 0xe5, 0xa2, 0xad, 0x51, 0xd1, 0x5e, 0x16, 0x5f, 0x0c, 0x13, 0x8d, 0x7e, 0x3d, 0xeb,
+	0x5d, 0x76, 0xd5, 0x96, 0xc8, 0xf5, 0x6b, 0x02, 0xcc, 0x0d, 0x7c, 0x40, 0x09, 0xad, 0x45, 0x39,
+	0x75, 0xe0, 0xd6, 0xe0, 0x2b, 0xd1, 0x09, 0xb8, 0xa4, 0x6f, 0x50, 0x49, 0xd7, 0xc4, 0x95, 0x51,
+	0x4a, 0x74, 0xc2, 0x7c, 0x4b, 0x5e, 0x29, 0xb2, 0xbc, 0xd2, 0xb8, 0xf2, 0x4a, 0xcf, 0x2e, 0xaf,
+	0xee, 0x91, 0xf7, 0xa7, 0x04, 0xc8, 0x78, 0x3e, 0xc1, 0x80, 0xae, 0x87, 0x7e, 0x19, 0x75, 0xf0,
+	0xeb, 0x0f, 0xf9, 0x1b, 0xd1, 0x90, 0xb9, 0x8c, 0x8b, 0x54, 0xc6, 0x59, 0x94, 0x21, 0x32, 0x3a,
+	0x47, 0xcf, 0xbf, 0x2f, 0xc0, 0x62, 0xe0, 0xce, 0x23, 0x7a, 0x2d, 0xf4, 0xd4, 0x7e, 0xf8, 0x3e,
+	0x65, 0x3e, 0xe2, 0xd6, 0x92, 0xd8, 0xa2, 0xd2, 0x28, 0xe2, 0x4d, 0xb7, 0xc6, 0x34, 0xbd, 0xa5,
+	0x74, 0xd5, 0x4f, 0xd9, 0xd1, 0x3a, 0x6a, 0x90, 0xbe, 0xfd, 0xa7, 0x77, 0x85, 0x95, 0x87, 0x37,
+	0xc5, 0x6b, 0xa1, 0xf6, 0x3b, 0x88, 0x4e, 0xeb, 0x17, 0xb8, 0x59, 0x19, 0x5a, 0xbf, 0x61, 0x5b,
+	0x9b, 0xe3, 0xd6, 0x6f, 0x9d, 0xd5, 0x8f, 0x8c, 0xa5, 0xfe, 0xda, 0x0d, 0x48, 0xbb, 0xb6, 0xf2,
+	0x93, 0xb4, 0x7e, 0xeb, 0xd7, 0x1c, 0x1a, 0xa7, 0x76, 0x21, 0xe8, 0xe8, 0x7b, 0x02, 0xa0, 0xc1,
+	0x8d, 0x4c, 0x14, 0x66, 0xc3, 0xa1, 0x7b, 0x9e, 0x91, 0x6b, 0xa6, 0xd0, 0x9a, 0xfd, 0x18, 0x1a,
+	0xaf, 0x66, 0x0f, 0x57, 0x50, 0xe4, 0x6a, 0xa1, 0x1f, 0x08, 0xd6, 0xf7, 0x4e, 0x7c, 0xdb, 0x8f,
+	0xeb, 0x43, 0x2d, 0x3e, 0x70, 0x5f, 0x36, 0xff, 0xda, 0x58, 0x34, 0xbc, 0xb3, 0x78, 0x2b, 0x19,
+	0xd5, 0x3c, 0xed, 0x4a, 0x46, 0xb0, 0x4d, 0xf4, 0x07, 0x02, 0x2c, 0x06, 0xee, 0x91, 0x86, 0x1a,
+	0xe6, 0xb0, 0x1d, 0xd5, 0x7c, 0xc8, 0x5b, 0xde, 0x56, 0x4d, 0x56, 0xc6, 0x6d, 0xae, 0x95, 0xe8,
+	0xcd, 0xf5, 0xa7, 0x02, 0x2c, 0x87, 0xad, 0x14, 0xa2, 0x37, 0x87, 0x7a, 0x91, 0xd0, 0x15, 0x96,
+	0x7c, 0xf4, 0xc5, 0x1e, 0xb1, 0x43, 0xab, 0xd8, 0x12, 0x5f, 0x19, 0xda, 0x58, 0x01, 0x2b, 0x42,
+	0xa4, 0xbb, 0xbd, 0x22, 0x5e, 0x0f, 0x6b, 0xb2, 0x60, 0x0a, 0x5a, 0xdd, 0xb0, 0xf5, 0xc5, 0xd0,
+	0xea, 0x8e, 0x58, 0x90, 0x3c, 0x45, 0x75, 0xd7, 0x5f, 0x09, 0x6f, 0xd1, 0x00, 0xc9, 0xb9, 0x77,
+	0x79, 0x65, 0xfd, 0x7a, 0x60, 0xbb, 0x86, 0x52, 0xa0, 0xff, 0x22, 0xc0, 0x62, 0xe0, 0xf2, 0x63,
+	0xa8, 0x9d, 0x0e, 0x5b, 0xac, 0x1c, 0xa7, 0xa2, 0xdc, 0x87, 0xa2, 0xb1, 0x2b, 0xfa, 0xf0, 0x26,
+	0x1a, 0xa7, 0x96, 0xe8, 0x7f, 0xf1, 0xdd, 0xd4, 0x80, 0xa5, 0x49, 0xf4, 0xc6, 0x10, 0xf7, 0x11,
+	0xbe, 0xb8, 0x9a, 0x7f, 0x73, 0x5c, 0x32, 0xee, 0x78, 0xbc, 0x75, 0x1e, 0xc3, 0x96, 0xed, 0x3a,
+	0x47, 0x33, 0x64, 0xf4, 0xb9, 0x00, 0xcb, 0x61, 0xab, 0x9c, 0xa1, 0x56, 0x3c, 0x62, 0x59, 0x34,
+	0xd4, 0x09, 0xf1, 0x5a, 0xad, 0x9c, 0xa2, 0x25, 0x57, 0xc6, 0x6a, 0xc9, 0x6f, 0x09, 0x90, 0xf3,
+	0x9f, 0x21, 0x41, 0xab, 0x43, 0x5d, 0xd0, 0xc0, 0xbe, 0x75, 0x7e, 0xf4, 0x56, 0xb9, 0xb8, 0x4a,
+	0x2b, 0x74, 0x4d, 0xbc, 0x1c, 0xa6, 0x72, 0xd7, 0x56, 0x3a, 0x8f, 0xf0, 0x73, 0xfe, 0x33, 0x21,
+	0xa1, 0x72, 0x85, 0x1c, 0x1e, 0x19, 0x43, 0xae, 0xf5, 0xcb, 0x81, 0x4a, 0x73, 0x09, 0xc5, 0x3b,
+	0xf7, 0xcf, 0x0a, 0x90, 0xf1, 0x9c, 0xfd, 0x08, 0x8d, 0x40, 0x83, 0x4e, 0x88, 0x44, 0x91, 0xe8,
+	0x3a, 0x95, 0xe8, 0x25, 0x14, 0x45, 0x22, 0xf4, 0x77, 0x04, 0x98, 0xf5, 0x1d, 0x6b, 0x40, 0x37,
+	0x87, 0xf4, 0xa4, 0xc1, 0x03, 0x1a, 0xf9, 0xd5, 0xa8, 0xe8, 0xbc, 0xc3, 0x79, 0xe5, 0x1b, 0xde,
+	0x92, 0xe8, 0xa7, 0xe9, 0x83, 0x51, 0xde, 0xd3, 0x0e, 0xa1, 0xcd, 0x18, 0x72, 0x2c, 0x22, 0xb4,
+	0x93, 0x70, 0x49, 0x56, 0x22, 0x69, 0xea, 0x3b, 0x02, 0xa0, 0xc1, 0x63, 0x49, 0xa1, 0x61, 0x5f,
+	0xe8, 0x09, 0xa6, 0xfc, 0xf0, 0x9d, 0x48, 0xf1, 0x2d, 0x2a, 0xd4, 0xab, 0xe2, 0x8d, 0x28, 0x06,
+	0xa5, 0xf0, 0x52, 0x88, 0x65, 0xfd, 0x15, 0x01, 0x66, 0xdc, 0x07, 0x85, 0xd0, 0xca, 0xf0, 0x40,
+	0xc0, 0xbd, 0x1f, 0x39, 0x4a, 0xa8, 0x15, 0x2a, 0xd4, 0x8b, 0xe2, 0xc5, 0x50, 0x87, 0xc7, 0x36,
+	0x5f, 0x89, 0x1c, 0x9f, 0x09, 0x90, 0x76, 0xed, 0xc7, 0x86, 0xce, 0xad, 0x07, 0xf7, 0xa1, 0x43,
+	0xe7, 0xd6, 0x01, 0xdb, 0xbb, 0xe2, 0x55, 0x2a, 0xd2, 0x0b, 0x68, 0x94, 0x48, 0xe8, 0x27, 0x20,
+	0x65, 0xef, 0x8d, 0xa3, 0xab, 0x43, 0x46, 0xd0, 0x71, 0x14, 0xe2, 0x2d, 0x7d, 0xc0, 0x57, 0xb2,
+	0xa2, 0x89, 0xd9, 0xfc, 0x38, 0xcc, 0xb8, 0xf7, 0x7f, 0x43, 0x1b, 0x25, 0x60, 0x93, 0x38, 0xd4,
+	0x6e, 0x79, 0xe1, 0x2b, 0x23, 0x0b, 0xa7, 0x26, 0xe1, 0xda, 0xa8, 0x0e, 0x37, 0x89, 0xc1, 0xdd,
+	0xec, 0xd0, 0xd2, 0x5f, 0xa5, 0xa5, 0x5f, 0x17, 0xaf, 0x8c, 0x28, 0xfd, 0xdd, 0x06, 0x65, 0x4a,
+	0x4c, 0xe2, 0x3f, 0x0a, 0xb0, 0x10, 0xb4, 0x84, 0x1f, 0x3a, 0xbd, 0x18, 0xb2, 0xde, 0x9f, 0x8f,
+	0xb6, 0x68, 0x2b, 0x62, 0x2a, 0xa6, 0xcc, 0xfb, 0x51, 0xd8, 0xb8, 0xee, 0x5b, 0xd9, 0x25, 0x01,
+	0xdb, 0x90, 0x95, 0xa4, 0x41, 0x6c, 0x5a, 0xb5, 0xa0, 0x15, 0xff, 0xd0, 0xaa, 0x0d, 0xd9, 0x1e,
+	0x18, 0xb3, 0x6a, 0xeb, 0x37, 0xc2, 0x07, 0x77, 0x9f, 0xa4, 0x3c, 0x16, 0xbd, 0xb1, 0x7e, 0x35,
+	0xb0, 0xd1, 0x02, 0xb1, 0xd1, 0x1f, 0x09, 0x30, 0x37, 0xb0, 0x2f, 0x10, 0xba, 0xb8, 0x13, 0xb6,
+	0x83, 0x10, 0xb5, 0x52, 0x32, 0xad, 0xd4, 0x03, 0x34, 0x56, 0xa5, 0x1e, 0xbe, 0x8c, 0xa2, 0xd6,
+	0x08, 0x7d, 0x5f, 0x60, 0xe7, 0x44, 0x7c, 0xfb, 0x04, 0xe8, 0xd5, 0x21, 0x4e, 0x27, 0x78, 0x87,
+	0x23, 0xbf, 0x3e, 0x0e, 0x09, 0xf7, 0x57, 0xde, 0xfa, 0x45, 0xb4, 0x47, 0xbb, 0x7e, 0xa3, 0x8d,
+	0x11, 0xfd, 0x9e, 0x00, 0x0b, 0x41, 0xbb, 0x0d, 0xa1, 0x96, 0x38, 0x64, 0x6b, 0x22, 0xb4, 0xf3,
+	0xf3, 0x5a, 0xac, 0x8c, 0xd9, 0x4a, 0x2b, 0x51, 0x5b, 0x69, 0xe3, 0x33, 0x01, 0xce, 0x36, 0xb4,
+	0x4e, 0xb0, 0xc8, 0x1b, 0xc9, 0x52, 0xbb, 0xb7, 0x4b, 0x24, 0xda, 0x15, 0x1e, 0xbe, 0xcd, 0x51,
+	0x5a, 0x5a, 0x5b, 0xe9, 0xb6, 0x56, 0x35, 0xbd, 0xb5, 0xd6, 0xc2, 0x5d, 0x2a, 0xef, 0x1a, 0xcb,
+	0x52, 0x7a, 0xaa, 0xb1, 0xc6, 0x39, 0x10, 0xc7, 0xb4, 0xf6, 0x64, 0xfd, 0xbd, 0x66, 0xbb, 0xf7,
+	0xab, 0xb1, 0xf9, 0xdb, 0x8c, 0x94, 0x6e, 0xcf, 0x13, 0x97, 0xbe, 0x7a, 0x6f, 0xfd, 0x0f, 0x2d,
+	0xe8, 0xc7, 0x14, 0xfa, 0x71, 0xa9, 0xdd, 0xfb, 0xf8, 0xde, 0xfa, 0xfe, 0x14, 0x65, 0xf8, 0xda,
+	0xff, 0x0b, 0x00, 0x00, 0xff, 0xff, 0xd4, 0xe5, 0x13, 0xb2, 0x8c, 0x94, 0x00, 0x00,
 }

@@ -1,4 +1,4 @@
-// Copyright 2015 Garrett D'Amore
+// Copyright 2018 Garrett D'Amore
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -16,18 +16,18 @@ package encoding
 
 import (
 	"bytes"
-	"golang.org/x/text/encoding"
+	"testing"
 	"unicode/utf8"
 
-	. "github.com/smartystreets/goconvey/convey"
+	"golang.org/x/text/encoding"
 )
 
-func verifyMap(enc encoding.Encoding, b byte, r rune) {
-	verifyFromUTF(enc, b, r)
-	verifyToUTF(enc, b, r)
+func verifyMap(t *testing.T, enc encoding.Encoding, b byte, r rune) {
+	verifyFromUTF(t, enc, b, r)
+	verifyToUTF(t, enc, b, r)
 }
 
-func verifyFromUTF(enc encoding.Encoding, b byte, r rune) {
+func verifyFromUTF(t *testing.T, enc encoding.Encoding, b byte, r rune) {
 
 	encoder := enc.NewEncoder()
 
@@ -36,13 +36,21 @@ func verifyFromUTF(enc encoding.Encoding, b byte, r rune) {
 	utf8.EncodeRune(utf, r)
 
 	ndst, nsrc, err := encoder.Transform(out, utf, true)
-	So(err, ShouldBeNil)
-	So(nsrc, ShouldEqual, len(utf))
-	So(ndst, ShouldEqual, 1)
-	So(b, ShouldEqual, out[0])
+	if err != nil {
+		t.Errorf("Transform failed: %v", err)
+	}
+	if nsrc != len(utf) {
+		t.Errorf("Length of source incorrect: %d != %d", nsrc, len(utf))
+	}
+	if ndst != 1 {
+		t.Errorf("Dest length (%d) != 1", ndst)
+	}
+	if b != out[0] {
+		t.Errorf("From UTF incorrect map %v != %v", b, out[0])
+	}
 }
 
-func verifyToUTF(enc encoding.Encoding, b byte, r rune) {
+func verifyToUTF(t *testing.T, enc encoding.Encoding, b byte, r rune) {
 	decoder := enc.NewDecoder()
 
 	out := make([]byte, 6)
@@ -51,10 +59,13 @@ func verifyToUTF(enc encoding.Encoding, b byte, r rune) {
 	utf8.EncodeRune(utf, r)
 
 	ndst, nsrc, err := decoder.Transform(out, nat, true)
-	So(err, ShouldBeNil)
-	So(nsrc, ShouldEqual, 1)
-	if !bytes.Equal(utf, out[:ndst]) {
-		Printf("UTF expected %v, but got %v for %x\n", utf, out, b)
+	if err != nil {
+		t.Errorf("Transform failed: %v", err)
 	}
-	So(bytes.Equal(utf, out[:ndst]), ShouldBeTrue)
+	if nsrc != 1 {
+		t.Errorf("Src length (%d) != 1", nsrc)
+	}
+	if !bytes.Equal(utf, out[:ndst]) {
+		t.Errorf("UTF expected %v, but got %v for %x\n", utf, out, b)
+	}
 }

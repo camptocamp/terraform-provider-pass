@@ -33,6 +33,12 @@ _Note:_ installing in Ubuntu 16.04 will require you to install `gnupg2`.
 yum install gnupg2 git rng-tools
 ```
 
+#### Arch Linux
+
+```bash
+pacman -S gnupg2 git rng-tools
+```
+
 #### MacOS
 
 If you haven't already, install [homebrew](http://brew.sh). And then:
@@ -58,6 +64,20 @@ For OpenBSD 6.2 and earlier, install via `go get`.
 Please note that the OpenBSD builds uses `pledge(2)` to disable some syscalls,
 so some features (e.g. version checks, auto-update) are unavailable.
 
+#### Docker
+
+Build it
+
+```bash
+docker build -t gopass github.com/gopasspw/gopass#master
+```
+
+Use it
+
+```bash
+alias gopass="docker run --rm -ti -v $HOME:/root gopass"
+```
+
 ### Set up a GPG key pair
 
 gopass depends on the `gpg` program for encryption and decryption. You **must** have a
@@ -71,6 +91,11 @@ If there is no output, then you don't have any keys. To create a new key:
 
 ```bash
 gpg --gen-key
+```
+
+For macOS you have to use the following to get all options
+```bash
+gpg --full-generate-key
 ```
 
 You will be presented with several options:
@@ -116,6 +141,13 @@ brew install gopass
 ```
 
 Alternatively, you can install gopass from the appropriate Darwin release from the repository [releases page](https://github.com/gopasspw/gopass/releases).
+
+If you're using a password on your gpg key, you also have to install pinentry-mac from brew and configure it in your ~/gpg/gpg-agent.conf
+
+```bash
+brew install pinentry-mac
+echo "pinentry-program /usr/local/bin/pinentry-mac" >> ~/.gnupg/gpg-agent.conf
+```
 
 ### Ubuntu & Debian
 
@@ -165,6 +197,25 @@ layman -a go-overlay
 emerge -av gopass
 ```
 
+### RedHat / CentOS
+
+There is an unofficial RPM build maintained by a contributor.
+
+```bash
+# if you're using dnf (needs dnf-plugins-core)
+dnf copr enable daftaupe/gopass
+dnf install gopass
+# of if you're using an older distribution (needs yum-plugin-copr)
+yum copr enable daftaupe/gopass
+yum install gopass
+```
+
+### Arch Linux
+```bash
+pacman -S gopass
+```
+
+
 ### Windows
 
 **WARNING**: Windows is not yet officially supported. We try to support it in the future. These are steps are only meant to help you setup gopass on Windows so you can provide us with feedback about the current state of our Windows support.
@@ -175,7 +226,7 @@ Download and install a suitable Windows build from the repository [releases page
 
 If you have [Go](https://golang.org/) already installed, you can use `go get` to automatically download the latest version:
 
-```
+```bash
 go get -u github.com/gopasspw/gopass
 ```
 
@@ -207,15 +258,15 @@ Before migrating to gopass, you may have been using other password managers (suc
 
 ### Enable Bash Auto completion
 
-If you use Bash, you can run one of the following commands to enable auto completion for sub commands like `gopass show`, `gopass ls` and others.
+If you use Bash, you can run one of the following commands to enable auto completion for sub-commands like `gopass show`, `gopass ls` and others.
 
-```
+```bash
 source <(gopass completion bash)
 ```
 
 **MacOS**: The version of bash shipped with MacOS may [require a workaround](https://stackoverflow.com/questions/32596123/why-source-command-doesnt-work-with-process-substitution-in-bash-3-2) to enable auto completion. If the instructions above do not work try the following one:
 
-```
+```bash
 source /dev/stdin <<<"$(gopass completion bash)"
 ```
 
@@ -246,29 +297,35 @@ You can then bind these command lines to your preferred shortcuts in your window
 
 ### Filling in passwords from browser
 
-Gopass allows filling in passwords in browsers leveraging a browser plugin like [gopass bridge](https://github.com/martinhoefling/gopassbridge).
+Gopass allows filling in passwords in browsers leveraging a browser plugin like [gopass bridge](https://github.com/gopasspw/gopassbridge).
 The browser plugin communicates with gopass via JSON messages. To allow the plugin to start gopass, a [native messaging manifest](https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Native_messaging) must be installed for each browser.
-Chrome, chromium and Firefox are supported, currently. Further a wrapper must be installed to setup gpg-agent and execute `gopass jsonapi listen`.
+Chrome, Chromium and Firefox are supported, currently. Further a wrapper must be installed to setup gpg-agent and execute `gopass jsonapi listen`.
 
 ```bash
 # Asks all questions concerning browser and setup
 gopass jsonapi configure
 
 # Do not copy / install any files, just print their location and content
-gopass jsonapi configure --print-only
+gopass jsonapi configure --print
 
 # Specify browser and wrapper path
 gopass jsonapi configure --browser chrome --path /home/user/.local/
-
 ```
 
 The user name/login is determined from `login`, `username` and `user` yaml attributes (after the --- separator) like this:
+
 ```
 <your password>
 ---
 username: <your username>
 ```
+
 As fallback, the last part of the path is used, e.g. `theuser1` for `Internet/github.com/theuser1` entry.
+
+**Windows**:
+The jsonapi setup copies the current gopass binary as wrapper (`gopass_native_host.exe` calls directly the listener).
+It is recommend to run `gopass jsonapi configure` after **update** to use also the latest version in the browser.
+The **global** setup requires to run `gopass jsonapi configure` as Administrator.
 
 ### Storing and Syncing your Password Store with Google Drive / Dropbox / etc.
 
@@ -290,6 +347,8 @@ Because gopass is fully backwards compatible with pass, you can use some existin
 * iOS - [Pass for iOS](https://github.com/davidjb/pass-ios#readme)
 * Windows / MacOS / Linux -  [QtPass](https://qtpass.org/)
 
+There is also [Gopass UI](https://github.com/codecentric/gopass-ui) which was exclusively implemented for gopass and is available for MacOS, Linux and Windows.
+
 Others can be found at the "Compatible Clients" section of the [official pass website](https://www.passwordstore.org/).
 
 ## Using gopass
@@ -303,7 +362,7 @@ will guide you through the setup of gopass.
 
 ### Batch bootstrapping
 
-In order to simplify the setup of gopass for your team members if can be run in a fully scripted bootstrap mode.
+In order to simplify the setup of gopass for your team members it can be run in a fully scripted bootstrap mode.
 
 ```bash
 # First initialize a new shared store and push it to an empty remote

@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "service": "<fullname>AWS CodePipeline</fullname> <p> <b>Overview</b> </p> <p>This is the AWS CodePipeline API Reference. This guide provides descriptions of the actions and data types for AWS CodePipeline. Some functionality for your pipeline is only configurable through the API. For additional information, see the <a href=\"http://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html\">AWS CodePipeline User Guide</a>.</p> <p>You can use the AWS CodePipeline API to work with pipelines, stages, actions, and transitions, as described below.</p> <p> <i>Pipelines</i> are models of automated release processes. Each pipeline is uniquely named, and consists of stages, actions, and transitions. </p> <p>You can work with pipelines by calling:</p> <ul> <li> <p> <a>CreatePipeline</a>, which creates a uniquely-named pipeline.</p> </li> <li> <p> <a>DeletePipeline</a>, which deletes the specified pipeline.</p> </li> <li> <p> <a>GetPipeline</a>, which returns information about the pipeline structure and pipeline metadata, including the pipeline Amazon Resource Name (ARN).</p> </li> <li> <p> <a>GetPipelineExecution</a>, which returns information about a specific execution of a pipeline.</p> </li> <li> <p> <a>GetPipelineState</a>, which returns information about the current state of the stages and actions of a pipeline.</p> </li> <li> <p> <a>ListPipelines</a>, which gets a summary of all of the pipelines associated with your account.</p> </li> <li> <p> <a>ListPipelineExecutions</a>, which gets a summary of the most recent executions for a pipeline.</p> </li> <li> <p> <a>StartPipelineExecution</a>, which runs the the most recent revision of an artifact through the pipeline.</p> </li> <li> <p> <a>UpdatePipeline</a>, which updates a pipeline with edits or changes to the structure of the pipeline.</p> </li> </ul> <p>Pipelines include <i>stages</i>. Each stage contains one or more actions that must complete before the next stage begins. A stage will result in success or failure. If a stage fails, then the pipeline stops at that stage and will remain stopped until either a new version of an artifact appears in the source location, or a user takes action to re-run the most recent artifact through the pipeline. You can call <a>GetPipelineState</a>, which displays the status of a pipeline, including the status of stages in the pipeline, or <a>GetPipeline</a>, which returns the entire structure of the pipeline, including the stages of that pipeline. For more information about the structure of stages and actions, also refer to the <a href=\"http://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-structure.html\">AWS CodePipeline Pipeline Structure Reference</a>.</p> <p>Pipeline stages include <i>actions</i>, which are categorized into categories such as source or build actions performed within a stage of a pipeline. For example, you can use a source action to import artifacts into a pipeline from a source such as Amazon S3. Like stages, you do not work with actions directly in most cases, but you do define and interact with actions when working with pipeline operations such as <a>CreatePipeline</a> and <a>GetPipelineState</a>. Valid action categories are:</p> <ul> <li> <p>Source</p> </li> <li> <p>Build</p> </li> <li> <p>Test</p> </li> <li> <p>Deploy</p> </li> <li> <p>Approval</p> </li> <li> <p>Invoke</p> </li> </ul> <p>Pipelines also include <i>transitions</i>, which allow the transition of artifacts from one stage to the next in a pipeline after the actions in one stage complete.</p> <p>You can work with transitions by calling:</p> <ul> <li> <p> <a>DisableStageTransition</a>, which prevents artifacts from transitioning to the next stage in a pipeline.</p> </li> <li> <p> <a>EnableStageTransition</a>, which enables transition of artifacts between stages in a pipeline. </p> </li> </ul> <p> <b>Using the API to integrate with AWS CodePipeline</b> </p> <p>For third-party integrators or developers who want to create their own integrations with AWS CodePipeline, the expected sequence varies from the standard API user. In order to integrate with AWS CodePipeline, developers will need to work with the following items:</p> <p> <b>Jobs</b>, which are instances of an action. For example, a job for a source action might import a revision of an artifact from a source. </p> <p>You can work with jobs by calling:</p> <ul> <li> <p> <a>AcknowledgeJob</a>, which confirms whether a job worker has received the specified job,</p> </li> <li> <p> <a>GetJobDetails</a>, which returns the details of a job,</p> </li> <li> <p> <a>PollForJobs</a>, which determines whether there are any jobs to act upon, </p> </li> <li> <p> <a>PutJobFailureResult</a>, which provides details of a job failure, and</p> </li> <li> <p> <a>PutJobSuccessResult</a>, which provides details of a job success.</p> </li> </ul> <p> <b>Third party jobs</b>, which are instances of an action created by a partner action and integrated into AWS CodePipeline. Partner actions are created by members of the AWS Partner Network.</p> <p>You can work with third party jobs by calling:</p> <ul> <li> <p> <a>AcknowledgeThirdPartyJob</a>, which confirms whether a job worker has received the specified job,</p> </li> <li> <p> <a>GetThirdPartyJobDetails</a>, which requests the details of a job for a partner action,</p> </li> <li> <p> <a>PollForThirdPartyJobs</a>, which determines whether there are any jobs to act upon, </p> </li> <li> <p> <a>PutThirdPartyJobFailureResult</a>, which provides details of a job failure, and</p> </li> <li> <p> <a>PutThirdPartyJobSuccessResult</a>, which provides details of a job success.</p> </li> </ul>",
+  "service": "<fullname>AWS CodePipeline</fullname> <p> <b>Overview</b> </p> <p>This is the AWS CodePipeline API Reference. This guide provides descriptions of the actions and data types for AWS CodePipeline. Some functionality for your pipeline is only configurable through the API. For additional information, see the <a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/welcome.html\">AWS CodePipeline User Guide</a>.</p> <p>You can use the AWS CodePipeline API to work with pipelines, stages, actions, and transitions, as described below.</p> <p> <i>Pipelines</i> are models of automated release processes. Each pipeline is uniquely named, and consists of stages, actions, and transitions. </p> <p>You can work with pipelines by calling:</p> <ul> <li> <p> <a>CreatePipeline</a>, which creates a uniquely-named pipeline.</p> </li> <li> <p> <a>DeletePipeline</a>, which deletes the specified pipeline.</p> </li> <li> <p> <a>GetPipeline</a>, which returns information about the pipeline structure and pipeline metadata, including the pipeline Amazon Resource Name (ARN).</p> </li> <li> <p> <a>GetPipelineExecution</a>, which returns information about a specific execution of a pipeline.</p> </li> <li> <p> <a>GetPipelineState</a>, which returns information about the current state of the stages and actions of a pipeline.</p> </li> <li> <p> <a>ListPipelines</a>, which gets a summary of all of the pipelines associated with your account.</p> </li> <li> <p> <a>ListPipelineExecutions</a>, which gets a summary of the most recent executions for a pipeline.</p> </li> <li> <p> <a>StartPipelineExecution</a>, which runs the the most recent revision of an artifact through the pipeline.</p> </li> <li> <p> <a>UpdatePipeline</a>, which updates a pipeline with edits or changes to the structure of the pipeline.</p> </li> </ul> <p>Pipelines include <i>stages</i>. Each stage contains one or more actions that must complete before the next stage begins. A stage will result in success or failure. If a stage fails, then the pipeline stops at that stage and will remain stopped until either a new version of an artifact appears in the source location, or a user takes action to re-run the most recent artifact through the pipeline. You can call <a>GetPipelineState</a>, which displays the status of a pipeline, including the status of stages in the pipeline, or <a>GetPipeline</a>, which returns the entire structure of the pipeline, including the stages of that pipeline. For more information about the structure of stages and actions, also refer to the <a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/pipeline-structure.html\">AWS CodePipeline Pipeline Structure Reference</a>.</p> <p>Pipeline stages include <i>actions</i>, which are categorized into categories such as source or build actions performed within a stage of a pipeline. For example, you can use a source action to import artifacts into a pipeline from a source such as Amazon S3. Like stages, you do not work with actions directly in most cases, but you do define and interact with actions when working with pipeline operations such as <a>CreatePipeline</a> and <a>GetPipelineState</a>. Valid action categories are:</p> <ul> <li> <p>Source</p> </li> <li> <p>Build</p> </li> <li> <p>Test</p> </li> <li> <p>Deploy</p> </li> <li> <p>Approval</p> </li> <li> <p>Invoke</p> </li> </ul> <p>Pipelines also include <i>transitions</i>, which allow the transition of artifacts from one stage to the next in a pipeline after the actions in one stage complete.</p> <p>You can work with transitions by calling:</p> <ul> <li> <p> <a>DisableStageTransition</a>, which prevents artifacts from transitioning to the next stage in a pipeline.</p> </li> <li> <p> <a>EnableStageTransition</a>, which enables transition of artifacts between stages in a pipeline. </p> </li> </ul> <p> <b>Using the API to integrate with AWS CodePipeline</b> </p> <p>For third-party integrators or developers who want to create their own integrations with AWS CodePipeline, the expected sequence varies from the standard API user. In order to integrate with AWS CodePipeline, developers will need to work with the following items:</p> <p> <b>Jobs</b>, which are instances of an action. For example, a job for a source action might import a revision of an artifact from a source. </p> <p>You can work with jobs by calling:</p> <ul> <li> <p> <a>AcknowledgeJob</a>, which confirms whether a job worker has received the specified job,</p> </li> <li> <p> <a>GetJobDetails</a>, which returns the details of a job,</p> </li> <li> <p> <a>PollForJobs</a>, which determines whether there are any jobs to act upon, </p> </li> <li> <p> <a>PutJobFailureResult</a>, which provides details of a job failure, and</p> </li> <li> <p> <a>PutJobSuccessResult</a>, which provides details of a job success.</p> </li> </ul> <p> <b>Third party jobs</b>, which are instances of an action created by a partner action and integrated into AWS CodePipeline. Partner actions are created by members of the AWS Partner Network.</p> <p>You can work with third party jobs by calling:</p> <ul> <li> <p> <a>AcknowledgeThirdPartyJob</a>, which confirms whether a job worker has received the specified job,</p> </li> <li> <p> <a>GetThirdPartyJobDetails</a>, which requests the details of a job for a partner action,</p> </li> <li> <p> <a>PollForThirdPartyJobs</a>, which determines whether there are any jobs to act upon, </p> </li> <li> <p> <a>PutThirdPartyJobFailureResult</a>, which provides details of a job failure, and</p> </li> <li> <p> <a>PutThirdPartyJobSuccessResult</a>, which provides details of a job success.</p> </li> </ul>",
   "operations": {
     "AcknowledgeJob": "<p>Returns information about a specified job and whether that job has been received by the job worker. Only used for custom actions.</p>",
     "AcknowledgeThirdPartyJob": "<p>Confirms a job worker has received the specified job. Only used for partner actions.</p>",
@@ -15,8 +15,9 @@
     "GetJobDetails": "<p>Returns information about a job. Only used for custom actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>",
     "GetPipeline": "<p>Returns the metadata, structure, stages, and actions of a pipeline. Can be used to return the entire structure of a pipeline in JSON format, which can then be modified and used to update the pipeline structure with <a>UpdatePipeline</a>.</p>",
     "GetPipelineExecution": "<p>Returns information about an execution of a pipeline, including details about artifacts, the pipeline execution ID, and the name, version, and status of the pipeline.</p>",
-    "GetPipelineState": "<p>Returns information about the state of a pipeline, including the stages and actions.</p>",
+    "GetPipelineState": "<p>Returns information about the state of a pipeline, including the stages and actions.</p> <note> <p>Values returned in the revisionId and revisionUrl fields indicate the source revision information, such as the commit ID, for the current state.</p> </note>",
     "GetThirdPartyJobDetails": "<p>Requests the details of a job for a third party action. Only used for partner actions.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the Amazon S3 bucket used to store artifacts for the pipeline, if the action requires access to that Amazon S3 bucket for input or output artifacts. Additionally, this API returns any secret values defined for the action.</p> </important>",
+    "ListActionExecutions": "<p>Lists the action executions that have occurred in a pipeline.</p>",
     "ListActionTypes": "<p>Gets a summary of all AWS CodePipeline action types associated with your account.</p>",
     "ListPipelineExecutions": "<p>Gets a summary of the most recent executions for a pipeline.</p>",
     "ListPipelines": "<p>Gets a summary of all of the pipelines associated with your account.</p>",
@@ -36,6 +37,14 @@
     "UpdatePipeline": "<p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure in conjunction with UpdatePipeline to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>"
   },
   "shapes": {
+    "AWSRegionName": {
+      "base": null,
+      "refs": {
+        "ActionDeclaration$region": "<p>The action declaration's AWS Region, such as us-east-1.</p>",
+        "ActionExecutionInput$region": "<p>The AWS Region for the action, such as us-east-1.</p>",
+        "ArtifactStoreMap$key": null
+      }
+    },
     "AWSSessionCredentials": {
       "base": "<p>Represents an AWS session credentials object. These credentials are temporary credentials that are issued by AWS Secure Token Service (STS). They can be used to access input and output artifacts in the Amazon S3 bucket used to store artifact for the pipeline in AWS CodePipeline.</p>",
       "refs": {
@@ -103,7 +112,8 @@
       "base": null,
       "refs": {
         "ActionConfiguration$configuration": "<p>The configuration data for the action.</p>",
-        "ActionDeclaration$configuration": "<p>The action declaration's configuration.</p>"
+        "ActionDeclaration$configuration": "<p>The action declaration's configuration.</p>",
+        "ActionExecutionInput$configuration": "<p>Configuration data for an action execution.</p>"
       }
     },
     "ActionConfigurationProperty": {
@@ -116,7 +126,7 @@
       "base": null,
       "refs": {
         "ActionType$actionConfigurationProperties": "<p>The configuration properties for the action type.</p>",
-        "CreateCustomActionTypeInput$configurationProperties": "<p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href=\"http://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html\">Create a Custom Action for a Pipeline</a>.</p> </note>"
+        "CreateCustomActionTypeInput$configurationProperties": "<p>The configuration properties for the custom action.</p> <note> <p>You can refer to a name in the configuration properties of the custom action within the URL templates by following the format of {Config:name}, as long as the configuration property is both required and not secret. For more information, see <a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/how-to-create-custom-action.html\">Create a Custom Action for a Pipeline</a>.</p> </note>"
       }
     },
     "ActionConfigurationPropertyType": {
@@ -155,10 +165,53 @@
         "ActionState$latestExecution": "<p>Represents information about the run of an action.</p>"
       }
     },
+    "ActionExecutionDetail": {
+      "base": "<p>Returns information about an execution of an action, including the action execution ID, and the name, version, and timing of the action. </p>",
+      "refs": {
+        "ActionExecutionDetailList$member": null
+      }
+    },
+    "ActionExecutionDetailList": {
+      "base": null,
+      "refs": {
+        "ListActionExecutionsOutput$actionExecutionDetails": "<p>The details for a list of recent executions, such as action execution ID.</p>"
+      }
+    },
+    "ActionExecutionFilter": {
+      "base": "<p>Filter values for the action execution.</p>",
+      "refs": {
+        "ListActionExecutionsInput$filter": "<p>Input information used to filter action execution history.</p>"
+      }
+    },
+    "ActionExecutionId": {
+      "base": "<p>The system-generated unique ID that corresponds to an action's execution.</p>",
+      "refs": {
+        "ActionExecutionDetail$actionExecutionId": "<p>The action execution ID.</p>"
+      }
+    },
+    "ActionExecutionInput": {
+      "base": "<p>Input information used for an action execution.</p>",
+      "refs": {
+        "ActionExecutionDetail$input": "<p>Input details for the action execution, such as role ARN, Region, and input artifacts.</p>"
+      }
+    },
+    "ActionExecutionOutput": {
+      "base": "<p>Output details listed for an action execution, such as the action execution result.</p>",
+      "refs": {
+        "ActionExecutionDetail$output": "<p>Output details for the action execution, such as the action execution result.</p>"
+      }
+    },
+    "ActionExecutionResult": {
+      "base": "<p>Execution result information, such as the external execution ID.</p>",
+      "refs": {
+        "ActionExecutionOutput$executionResult": "<p>Execution result information listed in the output details for an action execution.</p>"
+      }
+    },
     "ActionExecutionStatus": {
       "base": null,
       "refs": {
-        "ActionExecution$status": "<p>The status of the action, or for a completed action, the last status of the action.</p>"
+        "ActionExecution$status": "<p>The status of the action, or for a completed action, the last status of the action.</p>",
+        "ActionExecutionDetail$status": "<p> The status of the action execution. Status categories are InProgress, Succeeded, and Failed.</p>"
       }
     },
     "ActionExecutionToken": {
@@ -172,10 +225,11 @@
       "refs": {
         "ActionContext$name": "<p>The name of the action within the context of a job.</p>",
         "ActionDeclaration$name": "<p>The action declaration's name.</p>",
+        "ActionExecutionDetail$actionName": "<p>The name of the action.</p>",
         "ActionState$actionName": "<p>The name of the action.</p>",
         "PutActionRevisionInput$actionName": "<p>The name of the action that will process the revision.</p>",
         "PutApprovalResultInput$actionName": "<p>The name of the action for which approval is requested.</p>",
-        "SourceRevision$actionName": null,
+        "SourceRevision$actionName": "<p>The name of the action that processed the revision to the source artifact.</p>",
         "WebhookDefinition$targetAction": "<p>The name of the action in a pipeline you want to connect to the webhook. The action must be from the source (first) stage of the pipeline.</p>"
       }
     },
@@ -194,7 +248,7 @@
     "ActionProvider": {
       "base": null,
       "refs": {
-        "ActionTypeId$provider": "<p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy.</p>",
+        "ActionTypeId$provider": "<p>The provider of the service being called by the action. Valid providers are determined by the action category. For example, an action in the Deploy category type might have a provider of AWS CodeDeploy, which would be specified as CodeDeploy. To reference a list of action providers by action type, see <a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#actions-valid-providers\">Valid Action Types and Providers in CodePipeline</a>.</p>",
         "CreateCustomActionTypeInput$provider": "<p>The provider of the service used in the custom action, such as AWS CodeDeploy.</p>",
         "DeleteCustomActionTypeInput$provider": "<p>The provider of the service used in the custom action, such as AWS CodeDeploy.</p>"
       }
@@ -235,6 +289,7 @@
       "base": "<p>Represents information about an action type.</p>",
       "refs": {
         "ActionDeclaration$actionTypeId": "<p>The configuration information for the action type.</p>",
+        "ActionExecutionInput$actionTypeId": null,
         "ActionType$id": "<p>Represents information about an action type.</p>",
         "JobData$actionTypeId": "<p>Represents information about an action type.</p>",
         "PollForJobsInput$actionTypeId": "<p>Represents information about an action type.</p>",
@@ -295,6 +350,19 @@
         "ArtifactList$member": null
       }
     },
+    "ArtifactDetail": {
+      "base": "<p>Artifact details for the action execution, such as the artifact location.</p>",
+      "refs": {
+        "ArtifactDetailList$member": null
+      }
+    },
+    "ArtifactDetailList": {
+      "base": null,
+      "refs": {
+        "ActionExecutionInput$inputArtifacts": "<p>Details of input artifacts of the action that correspond to the action execution.</p>",
+        "ActionExecutionOutput$outputArtifacts": "<p>Details of output artifacts of the action that correspond to the action execution.</p>"
+      }
+    },
     "ArtifactDetails": {
       "base": "<p>Returns information about the details of an artifact.</p>",
       "refs": {
@@ -329,6 +397,7 @@
       "base": null,
       "refs": {
         "Artifact$name": "<p>The artifact's name.</p>",
+        "ArtifactDetail$name": "<p>The artifact object name for the action execution.</p>",
         "ArtifactRevision$name": "<p>The name of an artifact. This name might be system-generated, such as \"MyApp\", or might be defined by the user when an action is created.</p>",
         "InputArtifact$name": "<p>The name of the artifact to be worked on, for example, \"My App\".</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p>",
         "OutputArtifact$name": "<p>The name of the output of an artifact, such as \"My App\".</p> <p>The input artifact of an action must exactly match the output artifact declared in a preceding action, but the input artifact does not have to be the next action in strict sequence from the action that provided the output artifact. Actions in parallel can declare different output artifacts, which are in turn consumed by different following actions.</p> <p>Output artifact names must be unique within a pipeline.</p>"
@@ -349,6 +418,7 @@
     "ArtifactStore": {
       "base": "<p>The Amazon S3 bucket where artifacts are stored for the pipeline.</p>",
       "refs": {
+        "ArtifactStoreMap$value": null,
         "PipelineDeclaration$artifactStore": "<p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>"
       }
     },
@@ -356,6 +426,12 @@
       "base": null,
       "refs": {
         "ArtifactStore$location": "<p>The Amazon S3 bucket used for storing the artifacts for a pipeline. You can specify the name of an S3 bucket but not a folder within the bucket. A folder to contain the pipeline artifacts is created for you based on the name of the pipeline. You can use any Amazon S3 bucket in the same AWS Region as the pipeline to store your pipeline artifacts.</p>"
+      }
+    },
+    "ArtifactStoreMap": {
+      "base": null,
+      "refs": {
+        "PipelineDeclaration$artifactStores": "<p>A mapping of artifactStore objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either artifactStore or artifactStores, not both.</p> <p>If you create a cross-region action in your pipeline, you must use artifactStores.</p>"
       }
     },
     "ArtifactStoreType": {
@@ -396,6 +472,12 @@
       "base": null,
       "refs": {
         "ThirdPartyJob$clientId": "<p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>"
+      }
+    },
+    "ClientRequestToken": {
+      "base": null,
+      "refs": {
+        "StartPipelineExecutionInput$clientRequestToken": "<p>The system-generated unique ID used to identify a unique execution request.</p>"
       }
     },
     "ClientToken": {
@@ -554,6 +636,18 @@
       "refs": {
         "ActionExecution$summary": "<p>A summary of the run of the action.</p>",
         "ExecutionDetails$summary": "<p>The summary of the current status of the actions.</p>"
+      }
+    },
+    "ExternalExecutionId": {
+      "base": null,
+      "refs": {
+        "ActionExecutionResult$externalExecutionId": "<p>The action provider's external ID for the action execution.</p>"
+      }
+    },
+    "ExternalExecutionSummary": {
+      "base": null,
+      "refs": {
+        "ActionExecutionResult$externalExecutionSummary": "<p>The action provider's summary for the action execution.</p>"
       }
     },
     "FailureDetails": {
@@ -769,6 +863,16 @@
       "refs": {
       }
     },
+    "ListActionExecutionsInput": {
+      "base": null,
+      "refs": {
+      }
+    },
+    "ListActionExecutionsOutput": {
+      "base": null,
+      "refs": {
+      }
+    },
     "ListActionTypesInput": {
       "base": "<p>Represents the input of a ListActionTypes action.</p>",
       "refs": {
@@ -819,7 +923,7 @@
     "MatchEquals": {
       "base": null,
       "refs": {
-        "WebhookFilterRule$matchEquals": "<p>The value selected by the JsonPath expression must match what is supplied in the MatchEquals field, otherwise the request will be ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly braces. For example, if the value supplied here is \"refs/heads/{Branch}\" and the target action has an action configuration property called \"Branch\" with a value of \"master\", the MatchEquals value will be evaluated as \"refs/heads/master\". A list of action configuration properties for built-in action types can be found here: <a href=\"http://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements\">Pipeline Structure Reference Action Requirements</a>.</p>"
+        "WebhookFilterRule$matchEquals": "<p>The value selected by the JsonPath expression must match what is supplied in the MatchEquals field, otherwise the request will be ignored. Properties from the target action configuration can be included as placeholders in this value by surrounding the action configuration key with curly braces. For example, if the value supplied here is \"refs/heads/{Branch}\" and the target action has an action configuration property called \"Branch\" with a value of \"master\", the MatchEquals value will be evaluated as \"refs/heads/master\". A list of action configuration properties for built-in action types can be found here: <a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-pipeline-structure.html#action-requirements\">Pipeline Structure Reference Action Requirements</a>.</p>"
       }
     },
     "MaxBatchSize": {
@@ -832,6 +936,7 @@
     "MaxResults": {
       "base": null,
       "refs": {
+        "ListActionExecutionsInput$maxResults": "<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. The action execution history is limited to the most recent 12 months, based on action execution start times. Default value is 100. </p>",
         "ListPipelineExecutionsInput$maxResults": "<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. The available pipeline execution history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>",
         "ListWebhooksInput$MaxResults": "<p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value.</p>"
       }
@@ -858,6 +963,8 @@
     "NextToken": {
       "base": null,
       "refs": {
+        "ListActionExecutionsInput$nextToken": "<p>The token that was returned from the previous ListActionExecutions call, which can be used to return the next set of action executions in the list.</p>",
+        "ListActionExecutionsOutput$nextToken": "<p>If the amount of returned information is significantly large, an identifier is also returned and can be used in a subsequent ListActionExecutions call to return the next set of action executions in the list.</p>",
         "ListActionTypesInput$nextToken": "<p>An identifier that was returned from the previous list action types call, which can be used to return the next set of action types in the list.</p>",
         "ListActionTypesOutput$nextToken": "<p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list action types call to return the next set of action types in the list.</p>",
         "ListPipelineExecutionsInput$nextToken": "<p>The token that was returned from the previous ListPipelineExecutions call, which can be used to return the next set of pipeline executions in the list.</p>",
@@ -933,6 +1040,8 @@
     "PipelineExecutionId": {
       "base": null,
       "refs": {
+        "ActionExecutionDetail$pipelineExecutionId": "<p>The pipeline execution ID for the action execution.</p>",
+        "ActionExecutionFilter$pipelineExecutionId": "<p>The pipeline execution ID used to filter action execution history.</p>",
         "GetPipelineExecutionInput$pipelineExecutionId": "<p>The ID of the pipeline execution about which you want to get execution details.</p>",
         "PipelineExecution$pipelineExecutionId": "<p>The ID of the pipeline execution.</p>",
         "PipelineExecutionSummary$pipelineExecutionId": "<p>The ID of the pipeline execution.</p>",
@@ -989,6 +1098,7 @@
         "GetPipelineInput$name": "<p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>",
         "GetPipelineStateInput$name": "<p>The name of the pipeline about which you want to get information.</p>",
         "GetPipelineStateOutput$pipelineName": "<p>The name of the pipeline for which you want to get the state.</p>",
+        "ListActionExecutionsInput$pipelineName": "<p> The name of the pipeline for which you want to list action execution history.</p>",
         "ListPipelineExecutionsInput$pipelineName": "<p>The name of the pipeline for which you want to get execution summary information.</p>",
         "PipelineContext$pipelineName": "<p>The name of the pipeline. This is a user-specified value. Pipeline names must be unique across all pipeline names under an Amazon Web Services account.</p>",
         "PipelineDeclaration$name": "<p>The name of the action to be performed.</p>",
@@ -1026,6 +1136,7 @@
     "PipelineVersion": {
       "base": null,
       "refs": {
+        "ActionExecutionDetail$pipelineVersion": "<p>The version of the pipeline where the action was run.</p>",
         "GetPipelineInput$version": "<p>The version number of the pipeline. If you do not specify a version, defaults to the most current version.</p>",
         "GetPipelineStateOutput$pipelineVersion": "<p>The version number of the pipeline.</p> <note> <p>A newly-created pipeline is always assigned a version number of <code>1</code>.</p> </note>",
         "PipelineDeclaration$version": "<p>The version number of the pipeline. A new pipeline always has a version number of 1. This number is automatically incremented when a pipeline is updated.</p>",
@@ -1141,7 +1252,7 @@
         "Artifact$revision": "<p>The artifact's revision ID. Depending on the type of object, this could be a commit ID (GitHub) or a revision ID (Amazon S3).</p>",
         "ArtifactRevision$revisionId": "<p>The revision ID of the artifact.</p>",
         "CurrentRevision$revision": "<p>The revision ID of the current version of an artifact.</p>",
-        "SourceRevision$revisionId": null
+        "SourceRevision$revisionId": "<p>The system-generated unique ID that identifies the revision number of the artifact.</p>"
       }
     },
     "RevisionChangeIdentifier": {
@@ -1157,13 +1268,14 @@
       "refs": {
         "ArtifactRevision$revisionSummary": "<p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>",
         "CurrentRevision$revisionSummary": "<p>The summary of the most recent revision of the artifact.</p>",
-        "SourceRevision$revisionSummary": null
+        "SourceRevision$revisionSummary": "<p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>"
       }
     },
     "RoleArn": {
       "base": null,
       "refs": {
         "ActionDeclaration$roleArn": "<p>The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.</p>",
+        "ActionExecutionInput$roleArn": "<p>The ARN of the IAM service role that performs the declared action. This is assumed through the roleArn for the pipeline. </p>",
         "PipelineDeclaration$roleArn": "<p>The Amazon Resource Name (ARN) for AWS CodePipeline to use to either perform actions with no actionRoleArn, or to use to assume roles for actions with an actionRoleArn.</p>"
       }
     },
@@ -1173,10 +1285,28 @@
         "ArtifactLocation$s3Location": "<p>The Amazon S3 bucket that contains the artifact.</p>"
       }
     },
+    "S3Bucket": {
+      "base": null,
+      "refs": {
+        "S3Location$bucket": "<p>The Amazon S3 artifact bucket for an action's artifacts.</p>"
+      }
+    },
     "S3BucketName": {
       "base": null,
       "refs": {
         "S3ArtifactLocation$bucketName": "<p>The name of the Amazon S3 bucket.</p>"
+      }
+    },
+    "S3Key": {
+      "base": null,
+      "refs": {
+        "S3Location$key": "<p>The artifact name.</p>"
+      }
+    },
+    "S3Location": {
+      "base": "<p>The Amazon S3 artifact location for an action's artifacts.</p>",
+      "refs": {
+        "ArtifactDetail$s3location": "<p>The Amazon S3 artifact location for the action execution.</p>"
       }
     },
     "S3ObjectKey": {
@@ -1198,7 +1328,7 @@
       }
     },
     "SourceRevision": {
-      "base": null,
+      "base": "<p>Information about the version (or revision) of a source artifact that initiated a pipeline execution.</p>",
       "refs": {
         "SourceRevisionList$member": null
       }
@@ -1206,7 +1336,7 @@
     "SourceRevisionList": {
       "base": null,
       "refs": {
-        "PipelineExecutionSummary$sourceRevisions": null
+        "PipelineExecutionSummary$sourceRevisions": "<p>A list of the source artifact revisions that initiated a pipeline execution.</p>"
       }
     },
     "StageActionDeclarationList": {
@@ -1248,6 +1378,7 @@
     "StageName": {
       "base": null,
       "refs": {
+        "ActionExecutionDetail$stageName": "<p>The name of the stage that contains the action.</p>",
         "DisableStageTransitionInput$stageName": "<p>The name of the stage where you want to disable the inbound or outbound transition of artifacts.</p>",
         "EnableStageTransitionInput$stageName": "<p>The name of the stage where you want to enable the transition of artifacts, either into the stage (inbound) or from that stage to the next stage (outbound).</p>",
         "PutActionRevisionInput$stageName": "<p>The name of the stage that contains the action that will act upon the revision.</p>",
@@ -1347,6 +1478,8 @@
       "base": null,
       "refs": {
         "ActionExecution$lastStatusChange": "<p>The last status change of the action.</p>",
+        "ActionExecutionDetail$startTime": "<p>The start time of the action execution.</p>",
+        "ActionExecutionDetail$lastUpdateTime": "<p>The last update time of the action execution.</p>",
         "ActionRevision$created": "<p>The date and time when the most recent version of the action was created, in timestamp format.</p>",
         "ArtifactRevision$created": "<p>The date and time when the most recent revision of the artifact was created, in timestamp format.</p>",
         "GetPipelineStateOutput$created": "<p>The date and time the pipeline was created, in timestamp format.</p>",
@@ -1380,11 +1513,12 @@
       "base": null,
       "refs": {
         "ActionExecution$externalExecutionUrl": "<p>The URL of a resource external to AWS that will be used when running the action, for example an external repository URL.</p>",
+        "ActionExecutionResult$externalExecutionUrl": "<p>The deepest external link to the external resource (for example, a repository URL or deployment endpoint) that is used when running the action.</p>",
         "ActionState$entityUrl": "<p>A URL link for more information about the state of the action, such as a deployment group details page.</p>",
         "ActionState$revisionUrl": "<p>A URL link for more information about the revision, such as a commit details page.</p>",
         "ActionTypeSettings$thirdPartyConfigurationUrl": "<p>The URL of a sign-up page where users can sign up for an external service and perform initial configuration of the action provided by that service.</p>",
         "ArtifactRevision$revisionUrl": "<p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>",
-        "SourceRevision$revisionUrl": null
+        "SourceRevision$revisionUrl": "<p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>"
       }
     },
     "UrlTemplate": {
@@ -1415,7 +1549,7 @@
       }
     },
     "WebhookAuthConfiguration": {
-      "base": null,
+      "base": "<p>The authentication applied to incoming webhook trigger requests.</p>",
       "refs": {
         "WebhookDefinition$authenticationConfiguration": "<p>Properties that configure the authentication applied to incoming webhook trigger requests. The required properties depend on the authentication type. For GITHUB_HMAC, only the SecretToken property must be set. For IP, only the AllowedIPRange property must be set to a valid CIDR range. For UNAUTHENTICATED, no properties can be set.</p>"
       }
@@ -1423,13 +1557,13 @@
     "WebhookAuthConfigurationAllowedIPRange": {
       "base": null,
       "refs": {
-        "WebhookAuthConfiguration$AllowedIPRange": null
+        "WebhookAuthConfiguration$AllowedIPRange": "<p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the AllowedIPRange property must be set, and this property must be set to a valid CIDR range.</p>"
       }
     },
     "WebhookAuthConfigurationSecretToken": {
       "base": null,
       "refs": {
-        "WebhookAuthConfiguration$SecretToken": null
+        "WebhookAuthConfiguration$SecretToken": "<p>The property used to configure GitHub authentication. For GITHUB_HMAC, only the SecretToken property must be set.</p>"
       }
     },
     "WebhookAuthenticationType": {

@@ -1,7 +1,6 @@
-import Ember from 'ember';
-import hbs from 'htmlbars-inline-precompile';
-import { hrefTo } from 'vault/helpers/href-to';
-const { computed } = Ember;
+import { computed } from '@ember/object';
+import Component from '@ember/component';
+import { encodePath } from 'vault/utils/path-encoding-helpers';
 
 export function linkParams({ mode, secret, queryParams }) {
   let params;
@@ -10,7 +9,7 @@ export function linkParams({ mode, secret, queryParams }) {
   if (!secret || secret === ' ') {
     params = [route + '-root'];
   } else {
-    params = [route, secret];
+    params = [route, encodePath(secret)];
   }
 
   if (queryParams) {
@@ -20,7 +19,8 @@ export function linkParams({ mode, secret, queryParams }) {
   return params;
 }
 
-export default Ember.Component.extend({
+export default Component.extend({
+  tagName: '',
   mode: 'list',
 
   secret: null,
@@ -28,16 +28,7 @@ export default Ember.Component.extend({
   ariaLabel: null,
 
   linkParams: computed('mode', 'secret', 'queryParams', function() {
-    return linkParams(this.getProperties('mode', 'secret', 'queryParams'));
+    let data = this.getProperties('mode', 'secret', 'queryParams');
+    return linkParams(data);
   }),
-
-  attributeBindings: ['href', 'aria-label:ariaLabel'],
-
-  href: computed('linkParams', function() {
-    return hrefTo(this, ...this.get('linkParams'));
-  }),
-
-  layout: hbs`{{yield}}`,
-
-  tagName: 'a',
 });

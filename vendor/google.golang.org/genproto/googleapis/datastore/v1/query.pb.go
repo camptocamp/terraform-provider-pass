@@ -47,16 +47,16 @@ var EntityResult_ResultType_name = map[int32]string{
 }
 var EntityResult_ResultType_value = map[string]int32{
 	"RESULT_TYPE_UNSPECIFIED": 0,
-	"FULL":       1,
-	"PROJECTION": 2,
-	"KEY_ONLY":   3,
+	"FULL":                    1,
+	"PROJECTION":              2,
+	"KEY_ONLY":                3,
 }
 
 func (x EntityResult_ResultType) String() string {
 	return proto.EnumName(EntityResult_ResultType_name, int32(x))
 }
 func (EntityResult_ResultType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{0, 0}
+	return fileDescriptor_query_469190755d01ba40, []int{0, 0}
 }
 
 // The sort direction.
@@ -86,7 +86,7 @@ func (x PropertyOrder_Direction) String() string {
 	return proto.EnumName(PropertyOrder_Direction_name, int32(x))
 }
 func (PropertyOrder_Direction) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{5, 0}
+	return fileDescriptor_query_469190755d01ba40, []int{5, 0}
 }
 
 // A composite filter operator.
@@ -105,14 +105,14 @@ var CompositeFilter_Operator_name = map[int32]string{
 }
 var CompositeFilter_Operator_value = map[string]int32{
 	"OPERATOR_UNSPECIFIED": 0,
-	"AND": 1,
+	"AND":                  1,
 }
 
 func (x CompositeFilter_Operator) String() string {
 	return proto.EnumName(CompositeFilter_Operator_name, int32(x))
 }
 func (CompositeFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{7, 0}
+	return fileDescriptor_query_469190755d01ba40, []int{7, 0}
 }
 
 // A property filter operator.
@@ -158,7 +158,7 @@ func (x PropertyFilter_Operator) String() string {
 	return proto.EnumName(PropertyFilter_Operator_name, int32(x))
 }
 func (PropertyFilter_Operator) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{8, 0}
+	return fileDescriptor_query_469190755d01ba40, []int{8, 0}
 }
 
 // The possible values for the `more_results` field.
@@ -197,7 +197,7 @@ func (x QueryResultBatch_MoreResultsType) String() string {
 	return proto.EnumName(QueryResultBatch_MoreResultsType_name, int32(x))
 }
 func (QueryResultBatch_MoreResultsType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{11, 0}
+	return fileDescriptor_query_469190755d01ba40, []int{11, 0}
 }
 
 // The result of fetching an entity from Datastore.
@@ -207,12 +207,12 @@ type EntityResult struct {
 	// The version of the entity, a strictly positive number that monotonically
 	// increases with changes to the entity.
 	//
-	// This field is set for [`FULL`][google.datastore.v1.EntityResult.ResultType.FULL] entity
-	// results.
+	// This field is set for
+	// [`FULL`][google.datastore.v1.EntityResult.ResultType.FULL] entity results.
 	//
-	// For [missing][google.datastore.v1.LookupResponse.missing] entities in `LookupResponse`, this
-	// is the version of the snapshot that was used to look up the entity, and it
-	// is always set except for eventually consistent reads.
+	// For [missing][google.datastore.v1.LookupResponse.missing] entities in
+	// `LookupResponse`, this is the version of the snapshot that was used to look
+	// up the entity, and it is always set except for eventually consistent reads.
 	Version int64 `protobuf:"varint,4,opt,name=version,proto3" json:"version,omitempty"`
 	// A cursor that points to the position after the result entity.
 	// Set only when the `EntityResult` is part of a `QueryResultBatch` message.
@@ -226,7 +226,7 @@ func (m *EntityResult) Reset()         { *m = EntityResult{} }
 func (m *EntityResult) String() string { return proto.CompactTextString(m) }
 func (*EntityResult) ProtoMessage()    {}
 func (*EntityResult) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{0}
+	return fileDescriptor_query_469190755d01ba40, []int{0}
 }
 func (m *EntityResult) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_EntityResult.Unmarshal(m, b)
@@ -284,11 +284,13 @@ type Query struct {
 	DistinctOn []*PropertyReference `protobuf:"bytes,6,rep,name=distinct_on,json=distinctOn,proto3" json:"distinct_on,omitempty"`
 	// A starting point for the query results. Query cursors are
 	// returned in query result batches and
-	// [can only be used to continue the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
+	// [can only be used to continue the same
+	// query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
 	StartCursor []byte `protobuf:"bytes,7,opt,name=start_cursor,json=startCursor,proto3" json:"start_cursor,omitempty"`
 	// An ending point for the query results. Query cursors are
 	// returned in query result batches and
-	// [can only be used to limit the same query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
+	// [can only be used to limit the same
+	// query](https://cloud.google.com/datastore/docs/concepts/queries#cursors_limits_and_offsets).
 	EndCursor []byte `protobuf:"bytes,8,opt,name=end_cursor,json=endCursor,proto3" json:"end_cursor,omitempty"`
 	// The number of results to skip. Applies before limit, but after all other
 	// constraints. Optional. Must be >= 0 if specified.
@@ -307,7 +309,7 @@ func (m *Query) Reset()         { *m = Query{} }
 func (m *Query) String() string { return proto.CompactTextString(m) }
 func (*Query) ProtoMessage()    {}
 func (*Query) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{1}
+	return fileDescriptor_query_469190755d01ba40, []int{1}
 }
 func (m *Query) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Query.Unmarshal(m, b)
@@ -403,7 +405,7 @@ func (m *KindExpression) Reset()         { *m = KindExpression{} }
 func (m *KindExpression) String() string { return proto.CompactTextString(m) }
 func (*KindExpression) ProtoMessage()    {}
 func (*KindExpression) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{2}
+	return fileDescriptor_query_469190755d01ba40, []int{2}
 }
 func (m *KindExpression) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_KindExpression.Unmarshal(m, b)
@@ -444,7 +446,7 @@ func (m *PropertyReference) Reset()         { *m = PropertyReference{} }
 func (m *PropertyReference) String() string { return proto.CompactTextString(m) }
 func (*PropertyReference) ProtoMessage()    {}
 func (*PropertyReference) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{3}
+	return fileDescriptor_query_469190755d01ba40, []int{3}
 }
 func (m *PropertyReference) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyReference.Unmarshal(m, b)
@@ -484,7 +486,7 @@ func (m *Projection) Reset()         { *m = Projection{} }
 func (m *Projection) String() string { return proto.CompactTextString(m) }
 func (*Projection) ProtoMessage()    {}
 func (*Projection) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{4}
+	return fileDescriptor_query_469190755d01ba40, []int{4}
 }
 func (m *Projection) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Projection.Unmarshal(m, b)
@@ -526,7 +528,7 @@ func (m *PropertyOrder) Reset()         { *m = PropertyOrder{} }
 func (m *PropertyOrder) String() string { return proto.CompactTextString(m) }
 func (*PropertyOrder) ProtoMessage()    {}
 func (*PropertyOrder) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{5}
+	return fileDescriptor_query_469190755d01ba40, []int{5}
 }
 func (m *PropertyOrder) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyOrder.Unmarshal(m, b)
@@ -577,7 +579,7 @@ func (m *Filter) Reset()         { *m = Filter{} }
 func (m *Filter) String() string { return proto.CompactTextString(m) }
 func (*Filter) ProtoMessage()    {}
 func (*Filter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{6}
+	return fileDescriptor_query_469190755d01ba40, []int{6}
 }
 func (m *Filter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Filter.Unmarshal(m, b)
@@ -604,12 +606,14 @@ type isFilter_FilterType interface {
 type Filter_CompositeFilter struct {
 	CompositeFilter *CompositeFilter `protobuf:"bytes,1,opt,name=composite_filter,json=compositeFilter,proto3,oneof"`
 }
+
 type Filter_PropertyFilter struct {
 	PropertyFilter *PropertyFilter `protobuf:"bytes,2,opt,name=property_filter,json=propertyFilter,proto3,oneof"`
 }
 
 func (*Filter_CompositeFilter) isFilter_FilterType() {}
-func (*Filter_PropertyFilter) isFilter_FilterType()  {}
+
+func (*Filter_PropertyFilter) isFilter_FilterType() {}
 
 func (m *Filter) GetFilterType() isFilter_FilterType {
 	if m != nil {
@@ -722,7 +726,7 @@ func (m *CompositeFilter) Reset()         { *m = CompositeFilter{} }
 func (m *CompositeFilter) String() string { return proto.CompactTextString(m) }
 func (*CompositeFilter) ProtoMessage()    {}
 func (*CompositeFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{7}
+	return fileDescriptor_query_469190755d01ba40, []int{7}
 }
 func (m *CompositeFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CompositeFilter.Unmarshal(m, b)
@@ -773,7 +777,7 @@ func (m *PropertyFilter) Reset()         { *m = PropertyFilter{} }
 func (m *PropertyFilter) String() string { return proto.CompactTextString(m) }
 func (*PropertyFilter) ProtoMessage()    {}
 func (*PropertyFilter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{8}
+	return fileDescriptor_query_469190755d01ba40, []int{8}
 }
 func (m *PropertyFilter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PropertyFilter.Unmarshal(m, b)
@@ -814,7 +818,8 @@ func (m *PropertyFilter) GetValue() *Value {
 	return nil
 }
 
-// A [GQL query](https://cloud.google.com/datastore/docs/apis/gql/gql_reference).
+// A [GQL
+// query](https://cloud.google.com/datastore/docs/apis/gql/gql_reference).
 type GqlQuery struct {
 	// A string of the format described
 	// [here](https://cloud.google.com/datastore/docs/apis/gql/gql_reference).
@@ -845,7 +850,7 @@ func (m *GqlQuery) Reset()         { *m = GqlQuery{} }
 func (m *GqlQuery) String() string { return proto.CompactTextString(m) }
 func (*GqlQuery) ProtoMessage()    {}
 func (*GqlQuery) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{9}
+	return fileDescriptor_query_469190755d01ba40, []int{9}
 }
 func (m *GqlQuery) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GqlQuery.Unmarshal(m, b)
@@ -910,7 +915,7 @@ func (m *GqlQueryParameter) Reset()         { *m = GqlQueryParameter{} }
 func (m *GqlQueryParameter) String() string { return proto.CompactTextString(m) }
 func (*GqlQueryParameter) ProtoMessage()    {}
 func (*GqlQueryParameter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{10}
+	return fileDescriptor_query_469190755d01ba40, []int{10}
 }
 func (m *GqlQueryParameter) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GqlQueryParameter.Unmarshal(m, b)
@@ -937,11 +942,13 @@ type isGqlQueryParameter_ParameterType interface {
 type GqlQueryParameter_Value struct {
 	Value *Value `protobuf:"bytes,2,opt,name=value,proto3,oneof"`
 }
+
 type GqlQueryParameter_Cursor struct {
 	Cursor []byte `protobuf:"bytes,3,opt,name=cursor,proto3,oneof"`
 }
 
-func (*GqlQueryParameter_Value) isGqlQueryParameter_ParameterType()  {}
+func (*GqlQueryParameter_Value) isGqlQueryParameter_ParameterType() {}
+
 func (*GqlQueryParameter_Cursor) isGqlQueryParameter_ParameterType() {}
 
 func (m *GqlQueryParameter) GetParameterType() isGqlQueryParameter_ParameterType {
@@ -1069,7 +1076,7 @@ func (m *QueryResultBatch) Reset()         { *m = QueryResultBatch{} }
 func (m *QueryResultBatch) String() string { return proto.CompactTextString(m) }
 func (*QueryResultBatch) ProtoMessage()    {}
 func (*QueryResultBatch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_query_1ba6ff8bae21b87f, []int{11}
+	return fileDescriptor_query_469190755d01ba40, []int{11}
 }
 func (m *QueryResultBatch) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_QueryResultBatch.Unmarshal(m, b)
@@ -1160,10 +1167,10 @@ func init() {
 }
 
 func init() {
-	proto.RegisterFile("google/datastore/v1/query.proto", fileDescriptor_query_1ba6ff8bae21b87f)
+	proto.RegisterFile("google/datastore/v1/query.proto", fileDescriptor_query_469190755d01ba40)
 }
 
-var fileDescriptor_query_1ba6ff8bae21b87f = []byte{
+var fileDescriptor_query_469190755d01ba40 = []byte{
 	// 1313 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xdd, 0x72, 0xd3, 0x46,
 	0x14, 0x8e, 0x64, 0x3b, 0x89, 0x8f, 0xff, 0xc4, 0xd2, 0x82, 0x08, 0x50, 0x12, 0x41, 0x4b, 0x3a,

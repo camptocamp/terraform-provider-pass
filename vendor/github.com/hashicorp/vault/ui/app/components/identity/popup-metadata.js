@@ -1,11 +1,11 @@
 import Base from './_popup-base';
-import Ember from 'ember';
-const { computed } = Ember;
+import { computed } from '@ember/object';
+import { alias } from '@ember/object/computed';
 
 export default Base.extend({
-  model: computed.alias('params.firstObject'),
+  model: alias('params.firstObject'),
   key: computed('params', function() {
-    return this.get('params').objectAt(1);
+    return this.params.objectAt(1);
   }),
 
   messageArgs(model, key) {
@@ -21,7 +21,7 @@ export default Base.extend({
   },
 
   transaction(model, key) {
-    let metadata = model.get('metadata');
+    let metadata = model.metadata;
     delete metadata[key];
     model.set('metadata', { ...metadata });
     return model.save();

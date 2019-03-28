@@ -1,6 +1,7 @@
 ---
 layout: "docs"
 page_title: "Sentinel Examples"
+sidebar_title: "Examples"
 sidebar_current: "docs-vault-enterprise-sentinel-examples"
 description: |-
   An overview of how Sentinel interacts with Vault Enterprise.
@@ -23,6 +24,7 @@ authenticate using LDAP.
 ```python
 import "sockaddr"
 import "mfa"
+import "strings"
 
 # We expect logins to come only from our private IP range
 cidrcheck = rule {

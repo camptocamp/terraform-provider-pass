@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/go-sockaddr"
+	sockaddr "github.com/hashicorp/go-sockaddr"
 )
 
 // ipv6HostMask is an unexported big.Int representing a /128 IPv6 address
@@ -427,7 +427,7 @@ func TestSockAddr_IPv6Addr(t *testing.T) {
 				t.Errorf("[%d] Expected %+q's LastUsable() to be %+q, received %+q", idx, test.z00_input, test.z14_lastUsable, l)
 			}
 
-			if p := ipv6.IPPort(); sockaddr.IPPort(p) != test.z16_portInt || sockaddr.IPPort(p) != test.z16_portInt {
+			if p := ipv6.IPPort(); sockaddr.IPPort(p) != test.z16_portInt {
 				t.Errorf("[%d] Expected %+q's port to be %+v, received %+v", idx, test.z00_input, test.z16_portInt, p)
 			}
 

@@ -23,19 +23,25 @@ import (
 // Initialized returns an error if the store is not properly
 // prepared.
 func (s *Action) Initialized(ctx context.Context, c *cli.Context) error {
-	if !s.Store.Initialized(ctx) {
-		out.Debug(ctx, "Store needs to be initialized")
-		if !ctxutil.IsInteractive(ctx) {
-			return ExitError(ctx, ExitNotInitialized, nil, "password-store is not initialized. Try '%s init'", s.Name)
-		}
-		if ok, err := termio.AskForBool(ctx, "It seems you are new to gopass. Do you want to run the onboarding wizard?", true); err == nil && ok {
-			if err := s.InitOnboarding(ctx, c); err != nil {
-				return ExitError(ctx, ExitUnknown, err, "failed to run onboarding wizard: %s", err)
-			}
-			return nil
-		}
+	inited, err := s.Store.Initialized(ctx)
+	if err != nil {
+		return ExitError(ctx, ExitUnknown, err, "Failed to initialize store: %s", err)
 	}
-	out.Debug(ctx, "Store is already initialized")
+	if inited {
+		out.Debug(ctx, "Store is already initialized")
+		return nil
+	}
+
+	out.Debug(ctx, "Store needs to be initialized")
+	if !ctxutil.IsInteractive(ctx) {
+		return ExitError(ctx, ExitNotInitialized, nil, "password-store is not initialized. Try '%s init'", s.Name)
+	}
+	if ok, err := termio.AskForBool(ctx, "It seems you are new to gopass. Do you want to run the onboarding wizard?", true); err == nil && ok {
+		if err := s.InitOnboarding(ctx, c); err != nil {
+			return ExitError(ctx, ExitUnknown, err, "failed to run onboarding wizard: %s", err)
+		}
+		return nil
+	}
 	return nil
 }
 
@@ -45,8 +51,12 @@ func (s *Action) Init(ctx context.Context, c *cli.Context) error {
 	alias := c.String("store")
 
 	ctx = initParseContext(ctx, c)
-	if s.Store.Initialized(ctx) {
-		out.Red(ctx, "WARNING: Store is already initialized")
+	inited, err := s.Store.Initialized(ctx)
+	if err != nil {
+		return ExitError(ctx, ExitUnknown, err, "Failed to initialized store: %s", err)
+	}
+	if inited {
+		out.Error(ctx, "WARNING: Store is already initialized")
 	}
 
 	if err := s.init(ctx, alias, path, c.Args()...); err != nil {
@@ -63,7 +73,7 @@ func initParseContext(ctx context.Context, c *cli.Context) context.Context {
 		ctx = backend.WithRCSBackendString(ctx, c.String("rcs"))
 	} else {
 		if c.IsSet("nogit") && c.Bool("nogit") {
-			out.Red(ctx, "DEPRECATION WARNING: Use '--rcs noop' instead")
+			out.Error(ctx, "DEPRECATION WARNING: Use '--rcs noop' instead")
 			ctx = backend.WithRCSBackend(ctx, backend.Noop)
 		}
 	}
@@ -91,8 +101,9 @@ func (s *Action) init(ctx context.Context, alias, path string, keys ...string) e
 	out.Debug(ctx, "action.init(%s, %s, %+v)", alias, path, keys)
 
 	out.Debug(ctx, "Checking private keys ...")
+	crypto := s.getCryptoFor(ctx, alias)
 	if len(keys) < 1 {
-		nk, err := cui.AskForPrivateKey(ctx, s.Store.Crypto(ctx, alias), alias, color.CyanString("Please select a private key for encrypting secrets:"))
+		nk, err := cui.AskForPrivateKey(ctx, crypto, alias, color.CyanString("Please select a private key for encrypting secrets:"))
 		if err != nil {
 			return errors.Wrapf(err, "failed to read user input")
 		}
@@ -116,7 +127,7 @@ func (s *Action) init(ctx context.Context, alias, path string, keys ...string) e
 		out.Debug(ctx, "Initializing RCS (%s) ...", bn)
 		if err := s.rcsInit(ctx, alias, "", ""); err != nil {
 			out.Debug(ctx, "Stacktrace: %+v\n", err)
-			out.Red(ctx, "Failed to init RCS (%s): %s", bn, err)
+			out.Error(ctx, "Failed to init RCS (%s): %s", bn, err)
 		}
 	} else {
 		out.Debug(ctx, "not initializing RCS backend ...")
@@ -144,6 +155,19 @@ func (s *Action) printRecipients(ctx context.Context, alias string) {
 	}
 }
 
+func (s *Action) getCryptoFor(ctx context.Context, name string) backend.Crypto {
+	crypto := s.Store.Crypto(ctx, name)
+	if crypto != nil {
+		return crypto
+	}
+	c, err := sub.GetCryptoBackend(ctx, backend.GetCryptoBackend(ctx), config.Directory(), client.New(config.Directory()))
+	if err != nil {
+		//return errors.Wrapf(err, "failed to init crypto backend")
+		return nil
+	}
+	return c
+}
+
 // InitOnboarding will invoke the onboarding / setup wizard
 func (s *Action) InitOnboarding(ctx context.Context, c *cli.Context) error {
 	remote := c.String("remote")
@@ -164,14 +188,7 @@ func (s *Action) InitOnboarding(ctx context.Context, c *cli.Context) error {
 	ctx = out.AddPrefix(ctx, "[init] ")
 	out.Debug(ctx, "Starting Onboarding Wizard - remote: %s - team: %s - create: %t - name: %s - email: %s", remote, team, create, name, email)
 
-	crypto := s.Store.Crypto(ctx, name)
-	if crypto == nil {
-		c, err := sub.GetCryptoBackend(ctx, backend.GetCryptoBackend(ctx), config.Directory(), client.New(config.Directory()))
-		if err != nil {
-			return errors.Wrapf(err, "failed to init crypto backend")
-		}
-		crypto = c
-	}
+	crypto := s.getCryptoFor(ctx, name)
 
 	out.Debug(ctx, "Crypto Backend initialized as: %s", crypto.Name())
 

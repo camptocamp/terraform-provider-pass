@@ -21,7 +21,8 @@ _{{ $prog }} () {
               {{- end }}
               {{ if .Flags }}_arguments :{{ range .Flags }} "{{ . | formatFlag }}"{{ end }}{{ end }}
               _describe -t commands "{{ $prog }} {{ .Name }}" subcommands
-              {{ if or (eq .Name "copy") (eq .Name "move") (eq .Name "delete") (eq .Name "show") (eq .Name "edit") }}_{{ $prog }}_complete_passwords{{ end -}}
+              {{ if or (eq .Name "insert") (eq .Name "generate")  (eq .Name "list") }}_{{ $prog }}_complete_folders{{ end }}
+              {{ if or (eq .Name "copy") (eq .Name "move") (eq .Name "delete") (eq .Name "show") (eq .Name "edit") (eq .Name "insert") (eq .Name "generate") }}_{{ $prog }}_complete_passwords{{ end }}
               ;;
 {{- end }}
           *)
@@ -48,6 +49,12 @@ _{{ $prog }}_complete_passwords () {
     _arguments : \
         "--clip[Copy the first line of the secret into the clipboard]"
     _values 'passwords' $({{ $prog }} ls --flat)
+}
+
+_{{ $prog }}_complete_folders () {
+    local -a folders
+    folders=("${(@f)$({{ $prog }} ls --folders --flat)}")
+    _describe -t folders "folders" folders -qS /
 }
 
 _{{ $prog }}`

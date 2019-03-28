@@ -106,7 +106,7 @@ func (s *Action) insertStdin(ctx context.Context, name string, content []byte, a
 	}
 	sec, err := secret.Parse(content)
 	if err != nil {
-		out.Red(ctx, "WARNING: Invalid YAML: %s", err)
+		out.Error(ctx, "WARNING: Invalid YAML: %s", err)
 	}
 	if err := s.Store.Set(sub.WithReason(ctx, "Read secret from STDIN"), name, sec); err != nil {
 		return ExitError(ctx, ExitEncrypt, err, "failed to set '%s': %s", name, err)
@@ -124,6 +124,13 @@ func (s *Action) insertSingle(ctx context.Context, name, pw string, kvps map[str
 		}
 	} else {
 		sec = &secret.Secret{}
+
+		if content, found := s.renderTemplate(ctx, name, []byte(pw)); found {
+			nSec, err := secret.Parse(content)
+			if err == nil {
+				sec = nSec
+			}
+		}
 	}
 	setMetadata(sec, kvps)
 	sec.SetPassword(pw)
@@ -184,7 +191,7 @@ func (s *Action) insertMultiline(ctx context.Context, c *cli.Context, name strin
 	}
 	sec, err := secret.Parse(content)
 	if err != nil {
-		out.Red(ctx, "WARNING: Invalid YAML: %s", err)
+		out.Error(ctx, "WARNING: Invalid YAML: %s", err)
 	}
 	if err := s.Store.Set(sub.WithReason(ctx, fmt.Sprintf("Inserted user supplied password with %s", ed)), name, sec); err != nil {
 		return ExitError(ctx, ExitEncrypt, err, "failed to store secret '%s': %s", name, err)

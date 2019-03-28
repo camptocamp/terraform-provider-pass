@@ -1,7 +1,12 @@
 package filesystem
 
 import (
+	"io/ioutil"
+	"os"
+	"testing"
+
 	"gopkg.in/src-d/go-git.v4/plumbing"
+	"gopkg.in/src-d/go-git.v4/plumbing/cache"
 	"gopkg.in/src-d/go-git.v4/storage/filesystem/dotgit"
 
 	. "gopkg.in/check.v1"
@@ -10,22 +15,20 @@ import (
 
 type FsSuite struct {
 	fixtures.Suite
-	Types []plumbing.ObjectType
 }
 
-var _ = Suite(&FsSuite{
-	Types: []plumbing.ObjectType{
-		plumbing.CommitObject,
-		plumbing.TagObject,
-		plumbing.TreeObject,
-		plumbing.BlobObject,
-	},
-})
+var objectTypes = []plumbing.ObjectType{
+	plumbing.CommitObject,
+	plumbing.TagObject,
+	plumbing.TreeObject,
+	plumbing.BlobObject,
+}
+
+var _ = Suite(&FsSuite{})
 
 func (s *FsSuite) TestGetFromObjectFile(c *C) {
 	fs := fixtures.ByTag(".git").ByTag("unpacked").One().DotGit()
-	o, err := newObjectStorage(dotgit.New(fs))
-	c.Assert(err, IsNil)
+	o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
 
 	expected := plumbing.NewHash("f3dfe29d268303fc6e1bbce268605fc99573406e")
 	obj, err := o.EncodedObject(plumbing.AnyObject, expected)
@@ -36,8 +39,7 @@ func (s *FsSuite) TestGetFromObjectFile(c *C) {
 func (s *FsSuite) TestGetFromPackfile(c *C) {
 	fixtures.Basic().ByTag(".git").Test(c, func(f *fixtures.Fixture) {
 		fs := f.DotGit()
-		o, err := newObjectStorage(dotgit.New(fs))
-		c.Assert(err, IsNil)
+		o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
 
 		expected := plumbing.NewHash("6ecf0ef2c2dffb796033e5a02219af86ec6584e5")
 		obj, err := o.EncodedObject(plumbing.AnyObject, expected)
@@ -46,10 +48,82 @@ func (s *FsSuite) TestGetFromPackfile(c *C) {
 	})
 }
 
+func (s *FsSuite) TestGetFromPackfileKeepDescriptors(c *C) {
+	fixtures.Basic().ByTag(".git").Test(c, func(f *fixtures.Fixture) {
+		fs := f.DotGit()
+		dg := dotgit.NewWithOptions(fs, dotgit.Options{KeepDescriptors: true})
+		o := NewObjectStorageWithOptions(dg, cache.NewObjectLRUDefault(), Options{KeepDescriptors: true})
+
+		expected := plumbing.NewHash("6ecf0ef2c2dffb796033e5a02219af86ec6584e5")
+		obj, err := o.EncodedObject(plumbing.AnyObject, expected)
+		c.Assert(err, IsNil)
+		c.Assert(obj.Hash(), Equals, expected)
+
+		packfiles, err := dg.ObjectPacks()
+		c.Assert(err, IsNil)
+
+		pack1, err := dg.ObjectPack(packfiles[0])
+		c.Assert(err, IsNil)
+
+		pack1.Seek(42, os.SEEK_SET)
+
+		err = o.Close()
+		c.Assert(err, IsNil)
+
+		pack2, err := dg.ObjectPack(packfiles[0])
+		c.Assert(err, IsNil)
+
+		offset, err := pack2.Seek(0, os.SEEK_CUR)
+		c.Assert(err, IsNil)
+		c.Assert(offset, Equals, int64(0))
+
+		err = o.Close()
+		c.Assert(err, IsNil)
+
+	})
+}
+
+func (s *FsSuite) TestGetSizeOfObjectFile(c *C) {
+	fs := fixtures.ByTag(".git").ByTag("unpacked").One().DotGit()
+	o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
+
+	// Get the size of `tree_walker.go`.
+	expected := plumbing.NewHash("cbd81c47be12341eb1185b379d1c82675aeded6a")
+	size, err := o.EncodedObjectSize(expected)
+	c.Assert(err, IsNil)
+	c.Assert(size, Equals, int64(2412))
+}
+
+func (s *FsSuite) TestGetSizeFromPackfile(c *C) {
+	fixtures.Basic().ByTag(".git").Test(c, func(f *fixtures.Fixture) {
+		fs := f.DotGit()
+		o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
+
+		// Get the size of `binary.jpg`.
+		expected := plumbing.NewHash("d5c0f4ab811897cadf03aec358ae60d21f91c50d")
+		size, err := o.EncodedObjectSize(expected)
+		c.Assert(err, IsNil)
+		c.Assert(size, Equals, int64(76110))
+	})
+}
+
+func (s *FsSuite) TestGetSizeOfAllObjectFiles(c *C) {
+	fs := fixtures.ByTag(".git").One().DotGit()
+	o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
+
+	// Get the size of `tree_walker.go`.
+	err := o.ForEachObjectHash(func(h plumbing.Hash) error {
+		size, err := o.EncodedObjectSize(h)
+		c.Assert(err, IsNil)
+		c.Assert(size, Not(Equals), int64(0))
+		return nil
+	})
+	c.Assert(err, IsNil)
+}
+
 func (s *FsSuite) TestGetFromPackfileMultiplePackfiles(c *C) {
 	fs := fixtures.ByTag(".git").ByTag("multi-packfile").One().DotGit()
-	o, err := newObjectStorage(dotgit.New(fs))
-	c.Assert(err, IsNil)
+	o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
 
 	expected := plumbing.NewHash("8d45a34641d73851e01d3754320b33bb5be3c4d3")
 	obj, err := o.getFromPackfile(expected, false)
@@ -65,8 +139,7 @@ func (s *FsSuite) TestGetFromPackfileMultiplePackfiles(c *C) {
 func (s *FsSuite) TestIter(c *C) {
 	fixtures.ByTag(".git").ByTag("packfile").Test(c, func(f *fixtures.Fixture) {
 		fs := f.DotGit()
-		o, err := newObjectStorage(dotgit.New(fs))
-		c.Assert(err, IsNil)
+		o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
 
 		iter, err := o.IterEncodedObjects(plumbing.AnyObject)
 		c.Assert(err, IsNil)
@@ -84,10 +157,9 @@ func (s *FsSuite) TestIter(c *C) {
 
 func (s *FsSuite) TestIterWithType(c *C) {
 	fixtures.ByTag(".git").Test(c, func(f *fixtures.Fixture) {
-		for _, t := range s.Types {
+		for _, t := range objectTypes {
 			fs := f.DotGit()
-			o, err := newObjectStorage(dotgit.New(fs))
-			c.Assert(err, IsNil)
+			o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
 
 			iter, err := o.IterEncodedObjects(t)
 			c.Assert(err, IsNil)
@@ -108,23 +180,215 @@ func (s *FsSuite) TestPackfileIter(c *C) {
 		fs := f.DotGit()
 		dg := dotgit.New(fs)
 
-		for _, t := range s.Types {
+		for _, t := range objectTypes {
 			ph, err := dg.ObjectPacks()
 			c.Assert(err, IsNil)
 
 			for _, h := range ph {
 				f, err := dg.ObjectPack(h)
 				c.Assert(err, IsNil)
-				iter, err := NewPackfileIter(f, t)
+
+				idxf, err := dg.ObjectPackIdx(h)
 				c.Assert(err, IsNil)
+
+				iter, err := NewPackfileIter(fs, f, idxf, t, false)
+				c.Assert(err, IsNil)
+
 				err = iter.ForEach(func(o plumbing.EncodedObject) error {
 					c.Assert(o.Type(), Equals, t)
 					return nil
 				})
-
 				c.Assert(err, IsNil)
 			}
 		}
 	})
+}
 
+func (s *FsSuite) TestPackfileIterKeepDescriptors(c *C) {
+	fixtures.ByTag(".git").Test(c, func(f *fixtures.Fixture) {
+		fs := f.DotGit()
+		ops := dotgit.Options{KeepDescriptors: true}
+		dg := dotgit.NewWithOptions(fs, ops)
+
+		for _, t := range objectTypes {
+			ph, err := dg.ObjectPacks()
+			c.Assert(err, IsNil)
+
+			for _, h := range ph {
+				f, err := dg.ObjectPack(h)
+				c.Assert(err, IsNil)
+
+				idxf, err := dg.ObjectPackIdx(h)
+				c.Assert(err, IsNil)
+
+				iter, err := NewPackfileIter(fs, f, idxf, t, true)
+				c.Assert(err, IsNil)
+
+				err = iter.ForEach(func(o plumbing.EncodedObject) error {
+					c.Assert(o.Type(), Equals, t)
+					return nil
+				})
+				c.Assert(err, IsNil)
+
+				// test twice to check that packfiles are not closed
+				err = iter.ForEach(func(o plumbing.EncodedObject) error {
+					c.Assert(o.Type(), Equals, t)
+					return nil
+				})
+				c.Assert(err, IsNil)
+			}
+		}
+	})
+}
+
+func BenchmarkPackfileIter(b *testing.B) {
+	if err := fixtures.Init(); err != nil {
+		b.Fatal(err)
+	}
+
+	defer func() {
+		if err := fixtures.Clean(); err != nil {
+			b.Fatal(err)
+		}
+	}()
+
+	for _, f := range fixtures.ByTag(".git") {
+		b.Run(f.URL, func(b *testing.B) {
+			fs := f.DotGit()
+			dg := dotgit.New(fs)
+
+			for i := 0; i < b.N; i++ {
+				for _, t := range objectTypes {
+					ph, err := dg.ObjectPacks()
+					if err != nil {
+						b.Fatal(err)
+					}
+
+					for _, h := range ph {
+						f, err := dg.ObjectPack(h)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						idxf, err := dg.ObjectPackIdx(h)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						iter, err := NewPackfileIter(fs, f, idxf, t, false)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						err = iter.ForEach(func(o plumbing.EncodedObject) error {
+							if o.Type() != t {
+								b.Errorf("expecting %s, got %s", t, o.Type())
+							}
+							return nil
+						})
+
+						if err != nil {
+							b.Fatal(err)
+						}
+					}
+				}
+			}
+		})
+	}
+}
+
+func BenchmarkPackfileIterReadContent(b *testing.B) {
+	if err := fixtures.Init(); err != nil {
+		b.Fatal(err)
+	}
+
+	defer func() {
+		if err := fixtures.Clean(); err != nil {
+			b.Fatal(err)
+		}
+	}()
+
+	for _, f := range fixtures.ByTag(".git") {
+		b.Run(f.URL, func(b *testing.B) {
+			fs := f.DotGit()
+			dg := dotgit.New(fs)
+
+			for i := 0; i < b.N; i++ {
+				for _, t := range objectTypes {
+					ph, err := dg.ObjectPacks()
+					if err != nil {
+						b.Fatal(err)
+					}
+
+					for _, h := range ph {
+						f, err := dg.ObjectPack(h)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						idxf, err := dg.ObjectPackIdx(h)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						iter, err := NewPackfileIter(fs, f, idxf, t, false)
+						if err != nil {
+							b.Fatal(err)
+						}
+
+						err = iter.ForEach(func(o plumbing.EncodedObject) error {
+							if o.Type() != t {
+								b.Errorf("expecting %s, got %s", t, o.Type())
+							}
+
+							r, err := o.Reader()
+							if err != nil {
+								b.Fatal(err)
+							}
+
+							if _, err := ioutil.ReadAll(r); err != nil {
+								b.Fatal(err)
+							}
+
+							return r.Close()
+						})
+
+						if err != nil {
+							b.Fatal(err)
+						}
+					}
+				}
+			}
+		})
+	}
+}
+
+func BenchmarkGetObjectFromPackfile(b *testing.B) {
+	if err := fixtures.Init(); err != nil {
+		b.Fatal(err)
+	}
+
+	defer func() {
+		if err := fixtures.Clean(); err != nil {
+			b.Fatal(err)
+		}
+	}()
+
+	for _, f := range fixtures.Basic() {
+		b.Run(f.URL, func(b *testing.B) {
+			fs := f.DotGit()
+			o := NewObjectStorage(dotgit.New(fs), cache.NewObjectLRUDefault())
+			for i := 0; i < b.N; i++ {
+				expected := plumbing.NewHash("6ecf0ef2c2dffb796033e5a02219af86ec6584e5")
+				obj, err := o.EncodedObject(plumbing.AnyObject, expected)
+				if err != nil {
+					b.Fatal(err)
+				}
+
+				if obj.Hash() != expected {
+					b.Errorf("expecting %s, got %s", expected, obj.Hash())
+				}
+			}
+		})
+	}
 }

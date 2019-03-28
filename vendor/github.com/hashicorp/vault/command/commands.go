@@ -1,55 +1,44 @@
 package command
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
 
-	ad "github.com/hashicorp/vault-plugin-secrets-ad/plugin"
-	gcp "github.com/hashicorp/vault-plugin-secrets-gcp/plugin"
-	kv "github.com/hashicorp/vault-plugin-secrets-kv"
 	"github.com/hashicorp/vault/audit"
+	"github.com/hashicorp/vault/builtin/plugin"
 	"github.com/hashicorp/vault/logical"
 	"github.com/hashicorp/vault/physical"
 	"github.com/hashicorp/vault/version"
 	"github.com/mitchellh/cli"
 
-	"github.com/hashicorp/vault/builtin/logical/aws"
-	"github.com/hashicorp/vault/builtin/logical/cassandra"
-	"github.com/hashicorp/vault/builtin/logical/consul"
-	"github.com/hashicorp/vault/builtin/logical/database"
-	"github.com/hashicorp/vault/builtin/logical/mongodb"
-	"github.com/hashicorp/vault/builtin/logical/mssql"
-	"github.com/hashicorp/vault/builtin/logical/mysql"
-	"github.com/hashicorp/vault/builtin/logical/nomad"
-	"github.com/hashicorp/vault/builtin/logical/pki"
-	"github.com/hashicorp/vault/builtin/logical/postgresql"
-	"github.com/hashicorp/vault/builtin/logical/rabbitmq"
-	"github.com/hashicorp/vault/builtin/logical/ssh"
-	"github.com/hashicorp/vault/builtin/logical/totp"
-	"github.com/hashicorp/vault/builtin/logical/transit"
-	"github.com/hashicorp/vault/builtin/plugin"
+	/*
+		The builtinplugins package is initialized here because it, in turn,
+		initializes the database plugins.
+		They register multiple database drivers for the "database/sql" package.
+	*/
+	_ "github.com/hashicorp/vault/helper/builtinplugins"
 
 	auditFile "github.com/hashicorp/vault/builtin/audit/file"
 	auditSocket "github.com/hashicorp/vault/builtin/audit/socket"
 	auditSyslog "github.com/hashicorp/vault/builtin/audit/syslog"
 
-	credAzure "github.com/hashicorp/vault-plugin-auth-azure/plugin"
+	credAliCloud "github.com/hashicorp/vault-plugin-auth-alicloud"
 	credCentrify "github.com/hashicorp/vault-plugin-auth-centrify"
 	credGcp "github.com/hashicorp/vault-plugin-auth-gcp/plugin"
-	credKube "github.com/hashicorp/vault-plugin-auth-kubernetes"
-	credAppId "github.com/hashicorp/vault/builtin/credential/app-id"
-	credAppRole "github.com/hashicorp/vault/builtin/credential/approle"
+	credOIDC "github.com/hashicorp/vault-plugin-auth-jwt"
 	credAws "github.com/hashicorp/vault/builtin/credential/aws"
 	credCert "github.com/hashicorp/vault/builtin/credential/cert"
 	credGitHub "github.com/hashicorp/vault/builtin/credential/github"
 	credLdap "github.com/hashicorp/vault/builtin/credential/ldap"
 	credOkta "github.com/hashicorp/vault/builtin/credential/okta"
-	credRadius "github.com/hashicorp/vault/builtin/credential/radius"
 	credToken "github.com/hashicorp/vault/builtin/credential/token"
 	credUserpass "github.com/hashicorp/vault/builtin/credential/userpass"
 
+	logicalKv "github.com/hashicorp/vault-plugin-secrets-kv"
+	logicalDb "github.com/hashicorp/vault/builtin/logical/database"
+
+	physAliCloudOSS "github.com/hashicorp/vault/physical/alicloudoss"
 	physAzure "github.com/hashicorp/vault/physical/azure"
 	physCassandra "github.com/hashicorp/vault/physical/cassandra"
 	physCockroachDB "github.com/hashicorp/vault/physical/cockroachdb"
@@ -58,6 +47,7 @@ import (
 	physDynamoDB "github.com/hashicorp/vault/physical/dynamodb"
 	physEtcd "github.com/hashicorp/vault/physical/etcd"
 	physFile "github.com/hashicorp/vault/physical/file"
+	physFoundationDB "github.com/hashicorp/vault/physical/foundationdb"
 	physGCS "github.com/hashicorp/vault/physical/gcs"
 	physInmem "github.com/hashicorp/vault/physical/inmem"
 	physManta "github.com/hashicorp/vault/physical/manta"
@@ -76,14 +66,38 @@ const (
 	// EnvVaultFormat is the output format
 	EnvVaultFormat = `VAULT_FORMAT`
 
+	// flagNameAddress is the flag used in the base command to read in the
+	// address of the Vault server.
+	flagNameAddress = "address"
+	// flagnameCACert is the flag used in the base command to read in the CA
+	// cert.
+	flagNameCACert = "ca-cert"
+	// flagnameCAPath is the flag used in the base command to read in the CA
+	// cert path.
+	flagNameCAPath = "ca-path"
+	//flagNameClientCert is the flag used in the base command to read in the
+	//client key
+	flagNameClientKey = "client-key"
+	//flagNameClientCert is the flag used in the base command to read in the
+	//client cert
+	flagNameClientCert = "client-cert"
+	// flagNameTLSSkipVerify is the flag used in the base command to read in
+	// the option to ignore TLS certificate verification.
+	flagNameTLSSkipVerify = "tls-skip-verify"
 	// flagNameAuditNonHMACRequestKeys is the flag name used for auth/secrets enable
 	flagNameAuditNonHMACRequestKeys = "audit-non-hmac-request-keys"
 	// flagNameAuditNonHMACResponseKeys is the flag name used for auth/secrets enable
 	flagNameAuditNonHMACResponseKeys = "audit-non-hmac-response-keys"
+	// flagNameDescription is the flag name used for tuning the secret and auth mount description parameter
+	flagNameDescription = "description"
 	// flagListingVisibility is the flag to toggle whether to show the mount in the UI-specific listing endpoint
 	flagNameListingVisibility = "listing-visibility"
 	// flagNamePassthroughRequestHeaders is the flag name used to set passthrough request headers to the backend
 	flagNamePassthroughRequestHeaders = "passthrough-request-headers"
+	// flagNameAllowedResponseHeaders is used to set allowed response headers from a plugin
+	flagNameAllowedResponseHeaders = "allowed-response-headers"
+	// flagNameTokenType is the flag name used to force a specific token type
+	flagNameTokenType = "token-type"
 )
 
 var (
@@ -94,44 +108,19 @@ var (
 	}
 
 	credentialBackends = map[string]logical.Factory{
-		"app-id":     credAppId.Factory,
-		"approle":    credAppRole.Factory,
-		"aws":        credAws.Factory,
-		"azure":      credAzure.Factory,
-		"centrify":   credCentrify.Factory,
-		"cert":       credCert.Factory,
-		"gcp":        credGcp.Factory,
-		"github":     credGitHub.Factory,
-		"kubernetes": credKube.Factory,
-		"ldap":       credLdap.Factory,
-		"okta":       credOkta.Factory,
-		"plugin":     plugin.Factory,
-		"radius":     credRadius.Factory,
-		"userpass":   credUserpass.Factory,
+		"plugin": plugin.Factory,
 	}
 
 	logicalBackends = map[string]logical.Factory{
-		"ad":         ad.Factory,
-		"aws":        aws.Factory,
-		"cassandra":  cassandra.Factory,
-		"consul":     consul.Factory,
-		"database":   database.Factory,
-		"gcp":        gcp.Factory,
-		"kv":         kv.Factory,
-		"mongodb":    mongodb.Factory,
-		"mssql":      mssql.Factory,
-		"mysql":      mysql.Factory,
-		"nomad":      nomad.Factory,
-		"pki":        pki.Factory,
-		"plugin":     plugin.Factory,
-		"postgresql": postgresql.Factory,
-		"rabbitmq":   rabbitmq.Factory,
-		"ssh":        ssh.Factory,
-		"totp":       totp.Factory,
-		"transit":    transit.Factory,
+		"plugin":   plugin.Factory,
+		"database": logicalDb.Factory,
+		// This is also available in the plugin catalog, but is here due to the need to
+		// automatically mount it.
+		"kv": logicalKv.Factory,
 	}
 
 	physicalBackends = map[string]physical.Factory{
+		"alicloudoss":            physAliCloudOSS.NewAliCloudOSSBackend,
 		"azure":                  physAzure.NewAzureBackend,
 		"cassandra":              physCassandra.NewCassandraBackend,
 		"cockroachdb":            physCockroachDB.NewCockroachDBBackend,
@@ -142,6 +131,7 @@ var (
 		"etcd":                   physEtcd.NewEtcdBackend,
 		"file_transactional":     physFile.NewTransactionalFileBackend,
 		"file":                   physFile.NewFileBackend,
+		"foundationdb":           physFoundationDB.NewFDBBackend,
 		"gcs":                    physGCS.NewBackend,
 		"inmem_ha":               physInmem.NewInmemHA,
 		"inmem_transactional_ha": physInmem.NewTransactionalInmemHA,
@@ -158,52 +148,19 @@ var (
 	}
 )
 
-// DeprecatedCommand is a command that wraps an existing command and prints a
-// deprecation notice and points the user to the new command. Deprecated
-// commands are always hidden from help output.
-type DeprecatedCommand struct {
-	cli.Command
-	UI cli.Ui
-
-	// Old is the old command name, New is the new command name.
-	Old, New string
-}
-
-// Help wraps the embedded Help command and prints a warning about deprecations.
-func (c *DeprecatedCommand) Help() string {
-	c.warn()
-	return c.Command.Help()
-}
-
-// Run wraps the embedded Run command and prints a warning about deprecation.
-func (c *DeprecatedCommand) Run(args []string) int {
-	if Format(c.UI) == "table" {
-		c.warn()
-	}
-	return c.Command.Run(args)
-}
-
-func (c *DeprecatedCommand) warn() {
-	c.UI.Warn(wrapAtLength(fmt.Sprintf(
-		"WARNING! The \"vault %s\" command is deprecated. Please use \"vault %s\" "+
-			"instead. This command will be removed in Vault 0.11 (or later).",
-		c.Old,
-		c.New)))
-	c.UI.Warn("")
-}
-
 // Commands is the mapping of all the available commands.
 var Commands map[string]cli.CommandFactory
-var DeprecatedCommands map[string]cli.CommandFactory
 
 func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 	loginHandlers := map[string]LoginHandler{
+		"alicloud": &credAliCloud.CLIHandler{},
 		"aws":      &credAws.CLIHandler{},
 		"centrify": &credCentrify.CLIHandler{},
 		"cert":     &credCert.CLIHandler{},
 		"gcp":      &credGcp.CLIHandler{},
 		"github":   &credGitHub.CLIHandler{},
 		"ldap":     &credLdap.CLIHandler{},
+		"oidc":     &credOIDC.CLIHandler{},
 		"okta":     &credOkta.CLIHandler{},
 		"radius": &credUserpass.CLIHandler{
 			DefaultMount: "radius",
@@ -224,6 +181,14 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 	}
 
 	Commands = map[string]cli.CommandFactory{
+		"agent": func() (cli.Command, error) {
+			return &AgentCommand{
+				BaseCommand: &BaseCommand{
+					UI: serverCmdUi,
+				},
+				ShutdownCh: MakeShutdownCh(),
+			}, nil
+		},
 		"audit": func() (cli.Command, error) {
 			return &AuditCommand{
 				BaseCommand: getBaseCommand(),
@@ -252,7 +217,6 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 		"auth": func() (cli.Command, error) {
 			return &AuthCommand{
 				BaseCommand: getBaseCommand(),
-				Handlers:    loginHandlers,
 			}, nil
 		},
 		"auth disable": func() (cli.Command, error) {
@@ -307,6 +271,31 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 				Handlers:    loginHandlers,
 			}, nil
 		},
+		"namespace": func() (cli.Command, error) {
+			return &NamespaceCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"namespace list": func() (cli.Command, error) {
+			return &NamespaceListCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"namespace lookup": func() (cli.Command, error) {
+			return &NamespaceLookupCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"namespace create": func() (cli.Command, error) {
+			return &NamespaceCreateCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"namespace delete": func() (cli.Command, error) {
+			return &NamespaceDeleteCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
 		"operator": func() (cli.Command, error) {
 			return &OperatorCommand{
 				BaseCommand: getBaseCommand(),
@@ -325,6 +314,13 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 		"operator key-status": func() (cli.Command, error) {
 			return &OperatorKeyStatusCommand{
 				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"operator migrate": func() (cli.Command, error) {
+			return &OperatorMigrateCommand{
+				BaseCommand:      getBaseCommand(),
+				PhysicalBackends: physicalBackends,
+				ShutdownCh:       MakeShutdownCh(),
 			}, nil
 		},
 		"operator rekey": func() (cli.Command, error) {
@@ -357,6 +353,31 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 				BaseCommand: getBaseCommand(),
 			}, nil
 		},
+		"plugin": func() (cli.Command, error) {
+			return &PluginCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"plugin deregister": func() (cli.Command, error) {
+			return &PluginDeregisterCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"plugin info": func() (cli.Command, error) {
+			return &PluginInfoCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"plugin list": func() (cli.Command, error) {
+			return &PluginListCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"plugin register": func() (cli.Command, error) {
+			return &PluginRegisterCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
 		"policy": func() (cli.Command, error) {
 			return &PolicyCommand{
 				BaseCommand: getBaseCommand(),
@@ -384,6 +405,16 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 		},
 		"policy write": func() (cli.Command, error) {
 			return &PolicyWriteCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"print": func() (cli.Command, error) {
+			return &PrintCommand{
+				BaseCommand: getBaseCommand(),
+			}, nil
+		},
+		"print token": func() (cli.Command, error) {
+			return &PrintTokenCommand{
 				BaseCommand: getBaseCommand(),
 			}, nil
 		},
@@ -435,6 +466,7 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 				PhysicalBackends:   physicalBackends,
 				ShutdownCh:         MakeShutdownCh(),
 				SighupCh:           MakeSighupCh(),
+				SigUSR2Ch:          MakeSigUSR2Ch(),
 			}, nil
 		},
 		"ssh": func() (cli.Command, error) {
@@ -563,328 +595,6 @@ func initCommands(ui, serverCmdUi cli.Ui, runOpts *RunOptions) {
 				BaseCommand: getBaseCommand(),
 			}, nil
 		},
-	}
-
-	// Deprecated commands
-	//
-	// TODO: Remove not before 0.11.0
-	DeprecatedCommands = map[string]cli.CommandFactory{
-		"audit-disable": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "audit-disable",
-				New: "audit disable",
-				UI:  ui,
-				Command: &AuditDisableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"audit-enable": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "audit-enable",
-				New: "audit enable",
-				UI:  ui,
-				Command: &AuditEnableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"audit-list": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "audit-list",
-				New: "audit list",
-				UI:  ui,
-				Command: &AuditListCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"auth-disable": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "auth-disable",
-				New: "auth disable",
-				UI:  ui,
-				Command: &AuthDisableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"auth-enable": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "auth-enable",
-				New: "auth enable",
-				UI:  ui,
-				Command: &AuthEnableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"capabilities": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "capabilities",
-				New: "token capabilities",
-				UI:  ui,
-				Command: &TokenCapabilitiesCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"generate-root": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "generate-root",
-				New: "operator generate-root",
-				UI:  ui,
-				Command: &OperatorGenerateRootCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"init": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "init",
-				New: "operator init",
-				UI:  ui,
-				Command: &OperatorInitCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"key-status": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "key-status",
-				New: "operator key-status",
-				UI:  ui,
-				Command: &OperatorKeyStatusCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"renew": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "renew",
-				New: "lease renew",
-				UI:  ui,
-				Command: &LeaseRenewCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"revoke": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "revoke",
-				New: "lease revoke",
-				UI:  ui,
-				Command: &LeaseRevokeCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"mount": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "mount",
-				New: "secrets enable",
-				UI:  ui,
-				Command: &SecretsEnableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"mount-tune": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "mount-tune",
-				New: "secrets tune",
-				UI:  ui,
-				Command: &SecretsTuneCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"mounts": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "mounts",
-				New: "secrets list",
-				UI:  ui,
-				Command: &SecretsListCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"policies": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "policies",
-				New: "policy read\" or \"vault policy list", // lol
-				UI:  ui,
-				Command: &PoliciesDeprecatedCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"policy-delete": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "policy-delete",
-				New: "policy delete",
-				UI:  ui,
-				Command: &PolicyDeleteCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"policy-write": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "policy-write",
-				New: "policy write",
-				UI:  ui,
-				Command: &PolicyWriteCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"rekey": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "rekey",
-				New: "operator rekey",
-				UI:  ui,
-				Command: &OperatorRekeyCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"remount": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "remount",
-				New: "secrets move",
-				UI:  ui,
-				Command: &SecretsMoveCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"rotate": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "rotate",
-				New: "operator rotate",
-				UI:  ui,
-				Command: &OperatorRotateCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"seal": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "seal",
-				New: "operator seal",
-				UI:  ui,
-				Command: &OperatorSealCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"step-down": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "step-down",
-				New: "operator step-down",
-				UI:  ui,
-				Command: &OperatorStepDownCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"token-create": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "token-create",
-				New: "token create",
-				UI:  ui,
-				Command: &TokenCreateCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"token-lookup": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "token-lookup",
-				New: "token lookup",
-				UI:  ui,
-				Command: &TokenLookupCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"token-renew": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "token-renew",
-				New: "token renew",
-				UI:  ui,
-				Command: &TokenRenewCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"token-revoke": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "token-revoke",
-				New: "token revoke",
-				UI:  ui,
-				Command: &TokenRevokeCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"unmount": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "unmount",
-				New: "secrets disable",
-				UI:  ui,
-				Command: &SecretsDisableCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-
-		"unseal": func() (cli.Command, error) {
-			return &DeprecatedCommand{
-				Old: "unseal",
-				New: "operator unseal",
-				UI:  ui,
-				Command: &OperatorUnsealCommand{
-					BaseCommand: getBaseCommand(),
-				},
-			}, nil
-		},
-	}
-
-	// Add deprecated commands back to the main commands so they parse.
-	for k, v := range DeprecatedCommands {
-		if _, ok := Commands[k]; ok {
-			// Can't deprecate an existing command...
-			panic(fmt.Sprintf("command %q defined as deprecated and not at the same time!", k))
-		}
-		Commands[k] = v
 	}
 }
 

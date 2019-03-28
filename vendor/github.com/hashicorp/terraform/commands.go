@@ -30,15 +30,12 @@ const (
 	OutputPrefix = "o:"
 )
 
-func initCommands(config *Config) {
+func initCommands(config *Config, services *disco.Disco) {
 	var inAutomation bool
 	if v := os.Getenv(runningInAutomationEnvName); v != "" {
 		inAutomation = true
 	}
 
-	credsSrc := credentialsSource(config)
-	services := disco.NewDisco()
-	services.SetCredentialsSource(credsSrc)
 	for userHost, hostConfig := range config.Hosts {
 		host, err := svchost.ForComparison(userHost)
 		if err != nil {
@@ -57,8 +54,7 @@ func initCommands(config *Config) {
 		PluginOverrides:  &PluginOverrides,
 		Ui:               Ui,
 
-		Services:    services,
-		Credentials: credsSrc,
+		Services: services,
 
 		RunningInAutomation: inAutomation,
 		PluginCacheDir:      config.PluginCacheDir,
@@ -77,6 +73,8 @@ func initCommands(config *Config) {
 		"state":        struct{}{}, // includes all subcommands
 		"debug":        struct{}{}, // includes all subcommands
 		"force-unlock": struct{}{},
+		"push":         struct{}{},
+		"0.12upgrade":  struct{}{},
 	}
 
 	Commands = map[string]cli.CommandFactory{
@@ -188,6 +186,12 @@ func initCommands(config *Config) {
 			}, nil
 		},
 
+		"providers schema": func() (cli.Command, error) {
+			return &command.ProvidersSchemaCommand{
+				Meta: meta,
+			}, nil
+		},
+
 		"push": func() (cli.Command, error) {
 			return &command.PushCommand{
 				Meta: meta,
@@ -273,6 +277,12 @@ func initCommands(config *Config) {
 		//-----------------------------------------------------------
 		// Plumbing
 		//-----------------------------------------------------------
+
+		"0.12upgrade": func() (cli.Command, error) {
+			return &command.ZeroTwelveUpgradeCommand{
+				Meta: meta,
+			}, nil
+		},
 
 		"debug": func() (cli.Command, error) {
 			return &command.DebugCommand{

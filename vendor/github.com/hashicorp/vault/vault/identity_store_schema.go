@@ -13,12 +13,12 @@ const (
 	groupAliasesTable  = "group_aliases"
 )
 
-func identityStoreSchema() *memdb.DBSchema {
+func identityStoreSchema(lowerCaseName bool) *memdb.DBSchema {
 	iStoreSchema := &memdb.DBSchema{
 		Tables: make(map[string]*memdb.TableSchema),
 	}
 
-	schemas := []func() *memdb.TableSchema{
+	schemas := []func(bool) *memdb.TableSchema{
 		entitiesTableSchema,
 		aliasesTableSchema,
 		groupsTableSchema,
@@ -26,7 +26,7 @@ func identityStoreSchema() *memdb.DBSchema {
 	}
 
 	for _, schemaFunc := range schemas {
-		schema := schemaFunc()
+		schema := schemaFunc(lowerCaseName)
 		if _, ok := iStoreSchema.Tables[schema.Name]; ok {
 			panic(fmt.Sprintf("duplicate table name: %s", schema.Name))
 		}
@@ -36,7 +36,7 @@ func identityStoreSchema() *memdb.DBSchema {
 	return iStoreSchema
 }
 
-func aliasesTableSchema() *memdb.TableSchema {
+func aliasesTableSchema(lowerCaseName bool) *memdb.TableSchema {
 	return &memdb.TableSchema{
 		Name: entityAliasesTable,
 		Indexes: map[string]*memdb.IndexSchema{
@@ -45,13 +45,6 @@ func aliasesTableSchema() *memdb.TableSchema {
 				Unique: true,
 				Indexer: &memdb.StringFieldIndex{
 					Field: "ID",
-				},
-			},
-			"canonical_id": &memdb.IndexSchema{
-				Name:   "canonical_id",
-				Unique: false,
-				Indexer: &memdb.StringFieldIndex{
-					Field: "CanonicalID",
 				},
 			},
 			"factors": &memdb.IndexSchema{
@@ -63,24 +56,23 @@ func aliasesTableSchema() *memdb.TableSchema {
 							Field: "MountAccessor",
 						},
 						&memdb.StringFieldIndex{
-							Field: "Name",
+							Field:     "Name",
+							Lowercase: lowerCaseName,
 						},
 					},
 				},
 			},
-			"metadata": &memdb.IndexSchema{
-				Name:         "metadata",
-				Unique:       false,
-				AllowMissing: true,
-				Indexer: &memdb.StringMapFieldIndex{
-					Field: "Metadata",
+			"namespace_id": &memdb.IndexSchema{
+				Name: "namespace_id",
+				Indexer: &memdb.StringFieldIndex{
+					Field: "NamespaceID",
 				},
 			},
 		},
 	}
 }
 
-func entitiesTableSchema() *memdb.TableSchema {
+func entitiesTableSchema(lowerCaseName bool) *memdb.TableSchema {
 	return &memdb.TableSchema{
 		Name: entitiesTable,
 		Indexes: map[string]*memdb.IndexSchema{
@@ -94,16 +86,16 @@ func entitiesTableSchema() *memdb.TableSchema {
 			"name": &memdb.IndexSchema{
 				Name:   "name",
 				Unique: true,
-				Indexer: &memdb.StringFieldIndex{
-					Field: "Name",
-				},
-			},
-			"metadata": &memdb.IndexSchema{
-				Name:         "metadata",
-				Unique:       false,
-				AllowMissing: true,
-				Indexer: &memdb.StringMapFieldIndex{
-					Field: "Metadata",
+				Indexer: &memdb.CompoundIndex{
+					Indexes: []memdb.Indexer{
+						&memdb.StringFieldIndex{
+							Field: "NamespaceID",
+						},
+						&memdb.StringFieldIndex{
+							Field:     "Name",
+							Lowercase: lowerCaseName,
+						},
+					},
 				},
 			},
 			"merged_entity_ids": &memdb.IndexSchema{
@@ -115,18 +107,22 @@ func entitiesTableSchema() *memdb.TableSchema {
 				},
 			},
 			"bucket_key_hash": &memdb.IndexSchema{
-				Name:         "bucket_key_hash",
-				Unique:       false,
-				AllowMissing: false,
+				Name: "bucket_key_hash",
 				Indexer: &memdb.StringFieldIndex{
 					Field: "BucketKeyHash",
+				},
+			},
+			"namespace_id": &memdb.IndexSchema{
+				Name: "namespace_id",
+				Indexer: &memdb.StringFieldIndex{
+					Field: "NamespaceID",
 				},
 			},
 		},
 	}
 }
 
-func groupsTableSchema() *memdb.TableSchema {
+func groupsTableSchema(lowerCaseName bool) *memdb.TableSchema {
 	return &memdb.TableSchema{
 		Name: groupsTable,
 		Indexes: map[string]*memdb.IndexSchema{
@@ -140,13 +136,20 @@ func groupsTableSchema() *memdb.TableSchema {
 			"name": {
 				Name:   "name",
 				Unique: true,
-				Indexer: &memdb.StringFieldIndex{
-					Field: "Name",
+				Indexer: &memdb.CompoundIndex{
+					Indexes: []memdb.Indexer{
+						&memdb.StringFieldIndex{
+							Field: "NamespaceID",
+						},
+						&memdb.StringFieldIndex{
+							Field:     "Name",
+							Lowercase: lowerCaseName,
+						},
+					},
 				},
 			},
 			"member_entity_ids": {
 				Name:         "member_entity_ids",
-				Unique:       false,
 				AllowMissing: true,
 				Indexer: &memdb.StringSliceFieldIndex{
 					Field: "MemberEntityIDs",
@@ -154,33 +157,28 @@ func groupsTableSchema() *memdb.TableSchema {
 			},
 			"parent_group_ids": {
 				Name:         "parent_group_ids",
-				Unique:       false,
 				AllowMissing: true,
 				Indexer: &memdb.StringSliceFieldIndex{
 					Field: "ParentGroupIDs",
 				},
 			},
-			"policies": {
-				Name:         "policies",
-				Unique:       false,
-				AllowMissing: true,
-				Indexer: &memdb.StringSliceFieldIndex{
-					Field: "Policies",
-				},
-			},
 			"bucket_key_hash": &memdb.IndexSchema{
-				Name:         "bucket_key_hash",
-				Unique:       false,
-				AllowMissing: false,
+				Name: "bucket_key_hash",
 				Indexer: &memdb.StringFieldIndex{
 					Field: "BucketKeyHash",
+				},
+			},
+			"namespace_id": &memdb.IndexSchema{
+				Name: "namespace_id",
+				Indexer: &memdb.StringFieldIndex{
+					Field: "NamespaceID",
 				},
 			},
 		},
 	}
 }
 
-func groupAliasesTableSchema() *memdb.TableSchema {
+func groupAliasesTableSchema(lowerCaseName bool) *memdb.TableSchema {
 	return &memdb.TableSchema{
 		Name: groupAliasesTable,
 		Indexes: map[string]*memdb.IndexSchema{
@@ -189,13 +187,6 @@ func groupAliasesTableSchema() *memdb.TableSchema {
 				Unique: true,
 				Indexer: &memdb.StringFieldIndex{
 					Field: "ID",
-				},
-			},
-			"canonical_id": &memdb.IndexSchema{
-				Name:   "canonical_id",
-				Unique: false,
-				Indexer: &memdb.StringFieldIndex{
-					Field: "CanonicalID",
 				},
 			},
 			"factors": &memdb.IndexSchema{
@@ -207,9 +198,16 @@ func groupAliasesTableSchema() *memdb.TableSchema {
 							Field: "MountAccessor",
 						},
 						&memdb.StringFieldIndex{
-							Field: "Name",
+							Field:     "Name",
+							Lowercase: lowerCaseName,
 						},
 					},
+				},
+			},
+			"namespace_id": &memdb.IndexSchema{
+				Name: "namespace_id",
+				Indexer: &memdb.StringFieldIndex{
+					Field: "NamespaceID",
 				},
 			},
 		},

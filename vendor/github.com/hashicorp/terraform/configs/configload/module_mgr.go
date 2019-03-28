@@ -1,8 +1,11 @@
 package configload
 
 import (
+	"os"
+	"path/filepath"
+
+	"github.com/hashicorp/terraform/internal/modsdir"
 	"github.com/hashicorp/terraform/registry"
-	"github.com/hashicorp/terraform/svchost/auth"
 	"github.com/hashicorp/terraform/svchost/disco"
 	"github.com/spf13/afero"
 )
@@ -25,9 +28,6 @@ type moduleMgr struct {
 	// cached discovery information.
 	Services *disco.Disco
 
-	// Creds provides optional credentials for communicating with service hosts.
-	Creds auth.CredentialsSource
-
 	// Registry is a client for the module registry protocol, which is used
 	// when a module is requested from a registry source.
 	Registry *registry.Client
@@ -38,5 +38,39 @@ type moduleMgr struct {
 	// after a set of updates are completed the installer must call
 	// writeModuleManifestSnapshot to persist a snapshot of the manifest
 	// to disk for use on subsequent runs.
-	manifest moduleManifest
+	manifest modsdir.Manifest
+}
+
+func (m *moduleMgr) manifestSnapshotPath() string {
+	return filepath.Join(m.Dir, modsdir.ManifestSnapshotFilename)
+}
+
+// readModuleManifestSnapshot loads a manifest snapshot from the filesystem.
+func (m *moduleMgr) readModuleManifestSnapshot() error {
+	r, err := m.FS.Open(m.manifestSnapshotPath())
+	if err != nil {
+		if os.IsNotExist(err) {
+			// We'll treat a missing file as an empty manifest
+			m.manifest = make(modsdir.Manifest)
+			return nil
+		}
+		return err
+	}
+
+	m.manifest, err = modsdir.ReadManifestSnapshot(r)
+	return err
+}
+
+// writeModuleManifestSnapshot writes a snapshot of the current manifest
+// to the filesystem.
+//
+// The caller must guarantee no concurrent modifications of the manifest for
+// the duration of a call to this function, or the behavior is undefined.
+func (m *moduleMgr) writeModuleManifestSnapshot() error {
+	w, err := m.FS.Create(m.manifestSnapshotPath())
+	if err != nil {
+		return err
+	}
+
+	return m.manifest.WriteSnapshot(w)
 }

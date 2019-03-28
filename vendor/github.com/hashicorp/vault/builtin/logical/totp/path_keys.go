@@ -33,7 +33,7 @@ func pathListKeys(b *backend) *framework.Path {
 
 func pathKeys(b *backend) *framework.Path {
 	return &framework.Path{
-		Pattern: "keys/" + framework.GenericNameRegex("name"),
+		Pattern: "keys/" + framework.GenericNameWithAtRegex("name"),
 		Fields: map[string]*framework.FieldSchema{
 			"name": {
 				Type:        framework.TypeString,
@@ -375,7 +375,7 @@ func (b *backend) pathKeyCreate(ctx context.Context, req *logical.Request, data 
 			return logical.ErrorResponse("the key value is required"), nil
 		}
 
-		_, err := base32.StdEncoding.DecodeString(keyString)
+		_, err := base32.StdEncoding.DecodeString(strings.ToUpper(keyString))
 		if err != nil {
 			return logical.ErrorResponse(fmt.Sprintf(
 				"invalid key value: %s", err)), nil

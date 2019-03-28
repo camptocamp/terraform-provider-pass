@@ -1,4 +1,4 @@
-// Copyright 2015 Garrett D'Amore
+// Copyright 2018 Garrett D'Amore
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -16,30 +16,24 @@ package encoding
 
 import (
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 func TestASCII(t *testing.T) {
-	Convey("ASCII identity transforms", t, func() {
-		for i := 0; i < 128; i++ {
-			verifyMap(ASCII, byte(i), rune(i))
-		}
-	})
+	t.Logf("ASCII identity transforms")
+	for i := 0; i < 128; i++ {
+		verifyMap(t, ASCII, byte(i), rune(i))
+	}
 
-	Convey("High order bytes map to RuneError", t, func() {
-		for i := 128; i < 256; i++ {
-			verifyToUTF(ASCII, byte(i), RuneError)
-		}
-	})
+	t.Logf("High order bytes map to RuneError")
+	for i := 128; i < 256; i++ {
+		verifyToUTF(t, ASCII, byte(i), RuneError)
+	}
 
-	Convey("High order UTF maps to ASCIISub", t, func() {
-		for i := 128; i < 256; i++ {
-			verifyFromUTF(ASCII, ASCIISub, rune(i))
-		}
-	})
+	t.Logf("High order UTF maps to ASCIISub")
+	for i := 128; i < 256; i++ {
+		verifyFromUTF(t, ASCII, ASCIISub, rune(i))
+	}
 
-	Convey("Large UTF maps to ASCIISub", t, func() {
-		verifyFromUTF(ASCII, ASCIISub, '㿿')
-	})
+	t.Logf("Large UTF maps to ASCIISub")
+	verifyFromUTF(t, ASCII, ASCIISub, '㿿')
 }

@@ -1,3 +1,59 @@
+## 1.8.5 / 2019-03-03
+
+* [ENHANCEMENT] Improve template handling [#1029]
+* [ENHANCEMENT] Remove empty directories [#1009]
+* [ENHANCEMENT] Improve performance of unclip [#923]
+* [ENHANCEMENT] Add AutoPrint option [#1065]
+* [ENHANCEMENT] Follow the rsync convention for cp/mv commands [#1055]
+* [BUGFIX] Fix bash completion for MSYS on Windows [#1053]
+* [BUGFIX] Git clone failing [#1036]
+
+## 1.8.4 / 2018-12-26
+
+* [ENHANCEMENT] Evaluate templates when inserting single secrets [#1023]
+* [ENHANCEMENT] Add fuzzy search dialog for gopass otp [#1021]
+* [ENHANCEMENT] Add edit option to search dialog [#1019]
+* [ENHANCEMENT] Introduce build tags for experimental features [#1000]
+* [BUGFIX] Fix recursive delete [#1024]
+* [BUGFIX] Abort tests on critical failures [#997]
+* [BUGFIX] Zsh autocompletion [#996]
+
+## 1.8.3 / 2018-11-19
+
+* [ENHANCEMENT] Add zsh autocompletion for insert and generate [#988]
+* [ENHANCEMENT] Set exit code for filtered ls without result [#983]
+* [ENHANCEMENT] Improve generate command [#948]
+* [ENHANCEMENT] Print summary for grep [#943]
+* [ENHANCEMENT] Documentation updates [#924, #890, #918, #919, #920, #944, #952, #958, #969, #985]
+* [ENHANCEMENT] jsonapi: Add windows support for configure [#904]
+* [ENHANCEMENT] jsonapi: Add getVersion [#893]
+* [ENHANCEMENT] Support symlinks for fs storage backend [#886]
+* [BUGFIX] Offer store selection with exactly one mount point as well [#987]
+* [BUGFIX] Edit entry selected by fuzzy search [#979]
+* [BUGFIX] Fix path handling on windows [#970]
+* [BUGFIX] Remove quotes [#967]
+* [BUGFIX] Properly handle git add for removed files [#946]
+* [BUGFIX] HAndle already mounted and not initialized errors [#945]
+* [BUGFIX] Fix HIBP command options [#936]
+* [BUGFIX] Offer secret selection on edit command [#929]
+* [BUGFIX] jsonapi: add initialize [#903]
+* [BUGFIX] Update external dependencies [#884, #932, #981]
+* [BUGFIX] Use valid crypto backend for key selection [#889]
+
+## 1.8.2 / 2018-06-28
+
+* [ENHANCEMENT] Improve fsck output [#859]
+* [ENHANCEMENT] Enable notifications on FreeBSD [#863]
+* [ENHANCEMENT] Redirect errors to stderr [#880]
+* [ENHANCEMENT] Do not writer version to config [#883]
+* [BUGFIX] Fix commit on move [#860]
+* [BUGFIX] Properly check store initialization [#865]
+
+## 1.8.1 / 2018-06-08
+
+* [BUGFIX] Trim fsck path [#856]
+* [BUGFIX] Handle URL parse errors in create [#855]
+
 ## 1.8.0 / 2018-06-06
 
 This release includes several possibly breaking changes.
@@ -8,7 +64,7 @@ the runtime behaviour, but we could not test this on all platforms, yet.
 
 * [BREAKING] Make move work recursively and across stores [#821]
 * [FEATURE] Add git credential caching [#743]
-* [FEATURE] Add local recipient intregrity checks [#800 #826]
+* [FEATURE] Add local recipient integrity checks [#800 #826]
 * [ENHANCEMENT] Handle key-value pairs on generate and insert [#790]
 * [ENHANCEMENT] Add gpg.listKeys caching [#804]
 * [ENHANCEMENT] Add append mode for gopass insert [#807]
@@ -48,7 +104,7 @@ the runtime behaviour, but we could not test this on all platforms, yet.
 * [FEATURE] Consul backend [#697]
 * [FEATURE] HIBPv2 Dump and API support [#666] [#706]
 * [FEATURE] Select recipients per secret [#703]
-* [FEATURE] Add experiemental OpenPGP crypto backend [#670]
+* [FEATURE] Add experimental OpenPGP crypto backend [#670]
 * [ENHANCEMENT] Support HIBPv2 API and Dumps [#666]
 * [ENHANCEMENT] Robust K/V parser with YAML fallback [#659]
 * [ENHANCEMENT] Restrict fsck to given path [#721]

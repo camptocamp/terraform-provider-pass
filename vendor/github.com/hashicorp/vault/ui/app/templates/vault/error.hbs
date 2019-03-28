@@ -1,12 +1,10 @@
-<header data-test-header-without-nav>
-  <nav class="navbar has-dark-grey-gradient is-grouped-split">
-    <div class="navbar-brand">
-      {{#home-link class="navbar-item has-text-white has-current-color-fill"}}
-        {{partial 'svg/vault-logo'}}
-      {{/home-link}}
-    </div>
-  </nav>
-</header>
+<NavHeader data-test-header-without-nav as |Nav|>
+  <Nav.home>
+    <HomeLink @class="navbar-item splash-page-logo">
+      <LogoEdition />
+    </HomeLink>
+  </Nav.home>
+</NavHeader>
 <section class="section">
   <div class="container">
     {{#if (eq model.httpStatus 404)}}
@@ -23,14 +21,14 @@
           </h1>
         </p.levelLeft>
       </PageHeader>
-      <div class="box is-sideless has-background-white-bis has-text-grey has-text-centered">
+      <BlockError>
         {{#if model.message}}
           <p>{{model.message}}</p>
         {{/if}}
         {{#each model.errors as |error|}}
           <p>{{error}}</p>
         {{/each}}
-      </div>
+      </BlockError>
     {{/if}}
   </div>
 </section>

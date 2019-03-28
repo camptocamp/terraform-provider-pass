@@ -31,12 +31,10 @@ const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 type Context struct {
 	// Required. The unique identifier of the context. Format:
 	// `projects/<Project ID>/agent/sessions/<Session ID>/contexts/<Context ID>`,
-	// or
-	// `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
-	// ID>/sessions/<Session ID>/contexts/<Context ID>`. Note: Environments and
-	// users are under construction and will be available soon. The Context ID is
-	// always converted to lowercase. If <Environment ID> is not specified, we
-	// assume default 'draft' environment. If <User ID> is not specified, we
+	// or `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
+	// ID>/sessions/<Session ID>/contexts/<Context ID>`. The `Context ID` is
+	// always converted to lowercase. If `Environment ID` is not specified, we
+	// assume default 'draft' environment. If `User ID` is not specified, we
 	// assume default '-' user.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Optional. The number of conversational query requests after which the
@@ -57,7 +55,7 @@ func (m *Context) Reset()         { *m = Context{} }
 func (m *Context) String() string { return proto.CompactTextString(m) }
 func (*Context) ProtoMessage()    {}
 func (*Context) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{0}
+	return fileDescriptor_context_30d028ec7da853ff, []int{0}
 }
 func (m *Context) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Context.Unmarshal(m, b)
@@ -98,15 +96,15 @@ func (m *Context) GetParameters() *_struct.Struct {
 	return nil
 }
 
-// The request message for [Contexts.ListContexts][google.cloud.dialogflow.v2beta1.Contexts.ListContexts].
+// The request message for
+// [Contexts.ListContexts][google.cloud.dialogflow.v2beta1.Contexts.ListContexts].
 type ListContextsRequest struct {
 	// Required. The session to list all contexts from.
 	// Format: `projects/<Project ID>/agent/sessions/<Session ID>` or
 	// `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
-	// ID>/sessions/<Session ID>`. Note: Environments and users are under
-	// construction and will be available soon. If <Environment ID> is not
-	// specified, we assume default 'draft' environment. If <User ID> is not
-	// specified, we assume default '-' user.
+	// ID>/sessions/<Session ID>`. If `Environment ID` is not specified, we assume
+	// default 'draft' environment. If `User ID` is not specified, we assume
+	// default '-' user.
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	// Optional. The maximum number of items to return in a single page. By
 	// default 100 and at most 1000.
@@ -122,7 +120,7 @@ func (m *ListContextsRequest) Reset()         { *m = ListContextsRequest{} }
 func (m *ListContextsRequest) String() string { return proto.CompactTextString(m) }
 func (*ListContextsRequest) ProtoMessage()    {}
 func (*ListContextsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{1}
+	return fileDescriptor_context_30d028ec7da853ff, []int{1}
 }
 func (m *ListContextsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListContextsRequest.Unmarshal(m, b)
@@ -163,7 +161,8 @@ func (m *ListContextsRequest) GetPageToken() string {
 	return ""
 }
 
-// The response message for [Contexts.ListContexts][google.cloud.dialogflow.v2beta1.Contexts.ListContexts].
+// The response message for
+// [Contexts.ListContexts][google.cloud.dialogflow.v2beta1.Contexts.ListContexts].
 type ListContextsResponse struct {
 	// The list of contexts. There will be a maximum number of items
 	// returned based on the page_size field in the request.
@@ -180,7 +179,7 @@ func (m *ListContextsResponse) Reset()         { *m = ListContextsResponse{} }
 func (m *ListContextsResponse) String() string { return proto.CompactTextString(m) }
 func (*ListContextsResponse) ProtoMessage()    {}
 func (*ListContextsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{2}
+	return fileDescriptor_context_30d028ec7da853ff, []int{2}
 }
 func (m *ListContextsResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_ListContextsResponse.Unmarshal(m, b)
@@ -214,15 +213,15 @@ func (m *ListContextsResponse) GetNextPageToken() string {
 	return ""
 }
 
-// The request message for [Contexts.GetContext][google.cloud.dialogflow.v2beta1.Contexts.GetContext].
+// The request message for
+// [Contexts.GetContext][google.cloud.dialogflow.v2beta1.Contexts.GetContext].
 type GetContextRequest struct {
 	// Required. The name of the context. Format:
 	// `projects/<Project ID>/agent/sessions/<Session ID>/contexts/<Context ID>`
 	// or `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
-	// ID>/sessions/<Session ID>/contexts/<Context ID>`. Note: Environments and
-	// users are under construction and will be available soon. If <Environment
-	// ID> is not specified, we assume default 'draft' environment. If <User ID>
-	// is not specified, we assume default '-' user.
+	// ID>/sessions/<Session ID>/contexts/<Context ID>`. If `Environment ID` is
+	// not specified, we assume default 'draft' environment. If `User ID` is not
+	// specified, we assume default '-' user.
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -233,7 +232,7 @@ func (m *GetContextRequest) Reset()         { *m = GetContextRequest{} }
 func (m *GetContextRequest) String() string { return proto.CompactTextString(m) }
 func (*GetContextRequest) ProtoMessage()    {}
 func (*GetContextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{3}
+	return fileDescriptor_context_30d028ec7da853ff, []int{3}
 }
 func (m *GetContextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_GetContextRequest.Unmarshal(m, b)
@@ -260,15 +259,15 @@ func (m *GetContextRequest) GetName() string {
 	return ""
 }
 
-// The request message for [Contexts.CreateContext][google.cloud.dialogflow.v2beta1.Contexts.CreateContext].
+// The request message for
+// [Contexts.CreateContext][google.cloud.dialogflow.v2beta1.Contexts.CreateContext].
 type CreateContextRequest struct {
 	// Required. The session to create a context for.
 	// Format: `projects/<Project ID>/agent/sessions/<Session ID>` or
 	// `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
-	// ID>/sessions/<Session ID>`. Note: Environments and users are under
-	// construction and will be available soon. If <Environment ID> is not
-	// specified, we assume default 'draft' environment. If <User ID> is not
-	// specified, we assume default '-' user.
+	// ID>/sessions/<Session ID>`. If `Environment ID` is not specified, we assume
+	// default 'draft' environment. If `User ID` is not specified, we assume
+	// default '-' user.
 	Parent string `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	// Required. The context to create.
 	Context              *Context `protobuf:"bytes,2,opt,name=context,proto3" json:"context,omitempty"`
@@ -281,7 +280,7 @@ func (m *CreateContextRequest) Reset()         { *m = CreateContextRequest{} }
 func (m *CreateContextRequest) String() string { return proto.CompactTextString(m) }
 func (*CreateContextRequest) ProtoMessage()    {}
 func (*CreateContextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{4}
+	return fileDescriptor_context_30d028ec7da853ff, []int{4}
 }
 func (m *CreateContextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_CreateContextRequest.Unmarshal(m, b)
@@ -315,7 +314,8 @@ func (m *CreateContextRequest) GetContext() *Context {
 	return nil
 }
 
-// The request message for [Contexts.UpdateContext][google.cloud.dialogflow.v2beta1.Contexts.UpdateContext].
+// The request message for
+// [Contexts.UpdateContext][google.cloud.dialogflow.v2beta1.Contexts.UpdateContext].
 type UpdateContextRequest struct {
 	// Required. The context to update.
 	Context *Context `protobuf:"bytes,1,opt,name=context,proto3" json:"context,omitempty"`
@@ -330,7 +330,7 @@ func (m *UpdateContextRequest) Reset()         { *m = UpdateContextRequest{} }
 func (m *UpdateContextRequest) String() string { return proto.CompactTextString(m) }
 func (*UpdateContextRequest) ProtoMessage()    {}
 func (*UpdateContextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{5}
+	return fileDescriptor_context_30d028ec7da853ff, []int{5}
 }
 func (m *UpdateContextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_UpdateContextRequest.Unmarshal(m, b)
@@ -364,16 +364,15 @@ func (m *UpdateContextRequest) GetUpdateMask() *field_mask.FieldMask {
 	return nil
 }
 
-// The request message for [Contexts.DeleteContext][google.cloud.dialogflow.v2beta1.Contexts.DeleteContext].
+// The request message for
+// [Contexts.DeleteContext][google.cloud.dialogflow.v2beta1.Contexts.DeleteContext].
 type DeleteContextRequest struct {
 	// Required. The name of the context to delete. Format:
 	// `projects/<Project ID>/agent/sessions/<Session ID>/contexts/<Context ID>`
 	// or `projects/<Project ID>/agent/environments/<Environment ID>/users/<User
-	// ID>/sessions/<Session ID>/contexts/<Context ID>`. Note: Environments and
-	// users are under construction and will be available soon. If <Environment
-	// ID> is not specified, we assume default 'draft' environment. If <User ID>
-	// is not specified, we assume default
-	// '-' user.
+	// ID>/sessions/<Session ID>/contexts/<Context ID>`. If `Environment ID` is
+	// not specified, we assume default 'draft' environment. If `User ID` is not
+	// specified, we assume default '-' user.
 	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -384,7 +383,7 @@ func (m *DeleteContextRequest) Reset()         { *m = DeleteContextRequest{} }
 func (m *DeleteContextRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteContextRequest) ProtoMessage()    {}
 func (*DeleteContextRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{6}
+	return fileDescriptor_context_30d028ec7da853ff, []int{6}
 }
 func (m *DeleteContextRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteContextRequest.Unmarshal(m, b)
@@ -411,15 +410,14 @@ func (m *DeleteContextRequest) GetName() string {
 	return ""
 }
 
-// The request message for [Contexts.DeleteAllContexts][google.cloud.dialogflow.v2beta1.Contexts.DeleteAllContexts].
+// The request message for
+// [Contexts.DeleteAllContexts][google.cloud.dialogflow.v2beta1.Contexts.DeleteAllContexts].
 type DeleteAllContextsRequest struct {
 	// Required. The name of the session to delete all contexts from. Format:
 	// `projects/<Project ID>/agent/sessions/<Session ID>` or `projects/<Project
 	// ID>/agent/environments/<Environment ID>/users/<User ID>/sessions/<Session
-	// ID>`. Note: Environments and users are under construction and will be
-	// available soon. If <Environment ID> is not specified we assume default
-	// 'draft' environment. If <User ID> is not specified, we assume default
-	// '-' user.
+	// ID>`. If `Environment ID` is not specified we assume default 'draft'
+	// environment. If `User ID` is not specified, we assume default '-' user.
 	Parent               string   `protobuf:"bytes,1,opt,name=parent,proto3" json:"parent,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
@@ -430,7 +428,7 @@ func (m *DeleteAllContextsRequest) Reset()         { *m = DeleteAllContextsReque
 func (m *DeleteAllContextsRequest) String() string { return proto.CompactTextString(m) }
 func (*DeleteAllContextsRequest) ProtoMessage()    {}
 func (*DeleteAllContextsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_context_78d22983b607f049, []int{7}
+	return fileDescriptor_context_30d028ec7da853ff, []int{7}
 }
 func (m *DeleteAllContextsRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_DeleteAllContextsRequest.Unmarshal(m, b)
@@ -718,10 +716,10 @@ var _Contexts_serviceDesc = grpc.ServiceDesc{
 }
 
 func init() {
-	proto.RegisterFile("google/cloud/dialogflow/v2beta1/context.proto", fileDescriptor_context_78d22983b607f049)
+	proto.RegisterFile("google/cloud/dialogflow/v2beta1/context.proto", fileDescriptor_context_30d028ec7da853ff)
 }
 
-var fileDescriptor_context_78d22983b607f049 = []byte{
+var fileDescriptor_context_30d028ec7da853ff = []byte{
 	// 807 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcf, 0x6b, 0xdb, 0x48,
 	0x14, 0x66, 0x94, 0xdd, 0xfc, 0x98, 0xc4, 0xbb, 0x64, 0xd6, 0x64, 0x8d, 0x93, 0x25, 0x46, 0xcb,

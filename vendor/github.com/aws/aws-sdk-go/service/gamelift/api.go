@@ -18,7 +18,7 @@ const opAcceptMatch = "AcceptMatch"
 // AcceptMatchRequest generates a "aws/request.Request" representing the
 // client's request for the AcceptMatch operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -52,6 +52,7 @@ func (c *GameLift) AcceptMatchRequest(input *AcceptMatchInput) (req *request.Req
 
 	output = &AcceptMatchOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -79,8 +80,6 @@ func (c *GameLift) AcceptMatchRequest(input *AcceptMatchInput) (req *request.Req
 // For tickets where one or more players failed to accept the match, the ticket
 // status is set to FAILED, and processing is terminated. A new matchmaking
 // request for these players can be submitted as needed.
-//
-// Matchmaking-related operations include:
 //
 //    * StartMatchmaking
 //
@@ -143,7 +142,7 @@ const opCreateAlias = "CreateAlias"
 // CreateAliasRequest generates a "aws/request.Request" representing the
 // client's request for the CreateAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -201,8 +200,6 @@ func (c *GameLift) CreateAliasRequest(input *CreateAliasInput) (req *request.Req
 // have multiple aliases. If successful, a new alias record is returned, including
 // an alias ID, which you can reference when creating a game session. You can
 // reassign an alias to another fleet by calling UpdateAlias.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -272,7 +269,7 @@ const opCreateBuild = "CreateBuild"
 // CreateBuildRequest generates a "aws/request.Request" representing the
 // client's request for the CreateBuild operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -316,23 +313,19 @@ func (c *GameLift) CreateBuildRequest(input *CreateBuildInput) (req *request.Req
 // Storage Service (Amazon S3) location.
 //
 // Game server binaries must be combined into a .zip file for use with Amazon
-// GameLift. See Uploading Your Game (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html)
-// for more information.
+// GameLift.
 //
 // To create new builds quickly and easily, use the AWS CLI command upload-build
-// (http://docs.aws.amazon.com/cli/latest/reference/gamelift/upload-build.html).
+// (https://docs.aws.amazon.com/cli/latest/reference/gamelift/upload-build.html).
 // This helper command uploads your build and creates a new build record in
-// one step, and automatically handles the necessary permissions. See  Upload
-// Build Files to Amazon GameLift (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html)
-// for more help.
+// one step, and automatically handles the necessary permissions.
 //
 // The CreateBuild operation should be used only when you need to manually upload
 // your build files, as in the following scenarios:
 //
 //    * Store a build file in an Amazon S3 bucket under your own AWS account.
 //    To use this option, you must first give Amazon GameLift access to that
-//    Amazon S3 bucket. See  Create a Build with Files in Amazon S3 (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build)
-//    for detailed help. To create a new build record using files in your Amazon
+//    Amazon S3 bucket. To create a new build record using files in your Amazon
 //    S3 bucket, call CreateBuild and specify a build name, operating system,
 //    and the storage location of your game build.
 //
@@ -341,7 +334,7 @@ func (c *GameLift) CreateBuildRequest(input *CreateBuildInput) (req *request.Req
 //    system. This action creates a new build record and returns an Amazon S3
 //    storage location (bucket and key only) and temporary access credentials.
 //    Use the credentials to manually upload your build file to the storage
-//    location (see the Amazon S3 topic Uploading Objects (http://docs.aws.amazon.com/AmazonS3/latest/dev/UploadingObjects.html)).
+//    location (see the Amazon S3 topic Uploading Objects (https://docs.aws.amazon.com/AmazonS3/latest/dev/UploadingObjects.html)).
 //    You can upload files to a location only once.
 //
 // If successful, this operation creates a new build record with a unique build
@@ -349,7 +342,13 @@ func (c *GameLift) CreateBuildRequest(input *CreateBuildInput) (req *request.Req
 // the status of your build. A build must be in READY status before it can be
 // used to create fleets.
 //
-// Build-related operations include:
+// Learn more
+//
+// Uploading Your Game (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html)
+//
+// Create a Build with Files in Amazon S3 (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build)
+//
+// Related operations
 //
 //    * CreateBuild
 //
@@ -413,7 +412,7 @@ const opCreateFleet = "CreateFleet"
 // CreateFleetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateFleet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -455,31 +454,14 @@ func (c *GameLift) CreateFleetRequest(input *CreateFleetInput) (req *request.Req
 // Creates a new fleet to run your game servers. A fleet is a set of Amazon
 // Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple
 // server processes to host game sessions. You set up a fleet to use instances
-// with certain hardware specifications (see Amazon EC2 Instance Types (http://aws.amazon.com/ec2/instance-types/)
-// for more information), and deploy your game build to run on each instance.
+// with certain hardware specifications (see Amazon EC2 Instance Types (http://aws.amazon.com/ec2/instance-types/)),
+// and deploy your game build to the fleet.
 //
-// To create a new fleet, you must specify the following: (1) a fleet name,
-// (2) the build ID of a successfully uploaded game build, (3) an EC2 instance
-// type, and (4) a run-time configuration, which describes the server processes
-// to run on each instance in the fleet. If you don't specify a fleet type (on-demand
-// or spot), the new fleet uses on-demand instances by default.
-//
-// You can also configure the new fleet with the following settings:
-//
-//    * Fleet description
-//
-//    * Access permissions for inbound traffic
-//
-//    * Fleet-wide game session protection
-//
-//    * Resource usage limits
-//
-//    * VPC peering connection (see VPC Peering with Amazon GameLift Fleets
-//    (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html))
-//
-// If you use Amazon CloudWatch for metrics, you can add the new fleet to a
-// metric group. By adding multiple fleets to a metric group, you can view aggregated
-// metrics for all the fleets in the group.
+// To create a new fleet, you must provide the following: (1) a fleet name,
+// (2) an EC2 instance type, (3) the build ID for your game build, and (4) a
+// run-time configuration, which specifies the server processes to run on each
+// instance in the fleet. If fleet type is not set, the new fleet will use on-demand
+// instances by default.
 //
 // If the CreateFleet call is successful, Amazon GameLift performs the following
 // tasks. You can track the process of a fleet by checking the fleet status
@@ -503,7 +485,11 @@ func (c *GameLift) CreateFleetRequest(input *CreateFleetInput) (req *request.Req
 //    * Sets the fleet's status to ACTIVE as soon as one server process is ready
 //    to host a game session.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -603,7 +589,7 @@ const opCreateGameSession = "CreateGameSession"
 // CreateGameSessionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGameSession operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -672,8 +658,6 @@ func (c *GameLift) CreateGameSessionRequest(input *CreateGameSessionInput) (req 
 // days. To access the logs, call GetGameSessionLogUrl to download the log files.
 //
 // Available in Amazon GameLift Local.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -775,7 +759,7 @@ const opCreateGameSessionQueue = "CreateGameSessionQueue"
 // CreateGameSessionQueueRequest generates a "aws/request.Request" representing the
 // client's request for the CreateGameSessionQueue operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -845,8 +829,6 @@ func (c *GameLift) CreateGameSessionQueueRequest(input *CreateGameSessionQueueIn
 // and, if desired, a set of latency policies. If successful, a new queue object
 // is returned.
 //
-// Queue-related operations include:
-//
 //    * CreateGameSessionQueue
 //
 //    * DescribeGameSessionQueues
@@ -906,7 +888,7 @@ const opCreateMatchmakingConfiguration = "CreateMatchmakingConfiguration"
 // CreateMatchmakingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateMatchmakingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -970,11 +952,9 @@ func (c *GameLift) CreateMatchmakingConfigurationRequest(input *CreateMatchmakin
 // or (2) receiving notifications with Amazon Simple Notification Service (SNS).
 // To use notifications, you first need to set up an SNS topic to receive the
 // notifications, and provide the topic ARN in the matchmaking configuration
-// (see  Setting up Notifications for Matchmaking (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html)).
+// (see  Setting up Notifications for Matchmaking (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html)).
 // Since notifications promise only "best effort" delivery, we recommend calling
 // DescribeMatchmaking if no notifications are received within 30 seconds.
-//
-// Operations related to match configurations and rule sets include:
 //
 //    * CreateMatchmakingConfiguration
 //
@@ -989,6 +969,8 @@ func (c *GameLift) CreateMatchmakingConfigurationRequest(input *CreateMatchmakin
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1045,7 +1027,7 @@ const opCreateMatchmakingRuleSet = "CreateMatchmakingRuleSet"
 // CreateMatchmakingRuleSetRequest generates a "aws/request.Request" representing the
 // client's request for the CreateMatchmakingRuleSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1087,26 +1069,25 @@ func (c *GameLift) CreateMatchmakingRuleSetRequest(input *CreateMatchmakingRuleS
 // Creates a new rule set for FlexMatch matchmaking. A rule set describes the
 // type of match to create, such as the number and size of teams, and sets the
 // parameters for acceptable player matches, such as minimum skill level or
-// character type. Rule sets are used in matchmaking configurations, which define
-// how matchmaking requests are handled. Each MatchmakingConfiguration uses
-// one rule set; you can set up multiple rule sets to handle the scenarios that
-// suit your game (such as for different game modes), and create a separate
-// matchmaking configuration for each rule set. See additional information on
-// rule set content in the MatchmakingRuleSet structure. For help creating rule
-// sets, including useful examples, see the topic  Adding FlexMatch to Your
-// Game (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html).
+// character type. A rule set is used by a MatchmakingConfiguration.
 //
-// Once created, matchmaking rule sets cannot be changed or deleted, so we recommend
-// checking the rule set syntax using ValidateMatchmakingRuleSet before creating
-// the rule set.
+// To create a matchmaking rule set, provide unique rule set name and the rule
+// set body in JSON format. Rule sets must be defined in the same region as
+// the matchmaking configuration they will be used with.
 //
-// To create a matchmaking rule set, provide the set of rules and a unique name.
-// Rule sets must be defined in the same region as the matchmaking configuration
-// they will be used with. Rule sets cannot be edited or deleted. If you need
-// to change a rule set, create a new one with the necessary edits and then
-// update matchmaking configurations to use the new rule set.
+// Since matchmaking rule sets cannot be edited, it is a good idea to check
+// the rule set syntax using ValidateMatchmakingRuleSet before creating a new
+// rule set.
 //
-// Operations related to match configurations and rule sets include:
+// Learn more
+//
+//    * Build a Rule Set (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html)
+//
+//    * Design a Matchmaker (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-configuration.html)
+//
+//    * Matchmaking with FlexMatch (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html)
+//
+// Related operations
 //
 //    * CreateMatchmakingConfiguration
 //
@@ -1121,6 +1102,8 @@ func (c *GameLift) CreateMatchmakingRuleSetRequest(input *CreateMatchmakingRuleS
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1169,7 +1152,7 @@ const opCreatePlayerSession = "CreatePlayerSession"
 // CreatePlayerSessionRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePlayerSession operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1218,8 +1201,6 @@ func (c *GameLift) CreatePlayerSessionRequest(input *CreatePlayerSessionInput) (
 // and a new PlayerSession object is returned. Player sessions cannot be updated.
 //
 // Available in Amazon GameLift Local.
-//
-// Player-session-related operations include:
 //
 //    * CreatePlayerSession
 //
@@ -1302,7 +1283,7 @@ const opCreatePlayerSessions = "CreatePlayerSessions"
 // CreatePlayerSessionsRequest generates a "aws/request.Request" representing the
 // client's request for the CreatePlayerSessions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1352,8 +1333,6 @@ func (c *GameLift) CreatePlayerSessionsRequest(input *CreatePlayerSessionsInput)
 // Player sessions cannot be updated.
 //
 // Available in Amazon GameLift Local.
-//
-// Player-session-related operations include:
 //
 //    * CreatePlayerSession
 //
@@ -1436,7 +1415,7 @@ const opCreateVpcPeeringAuthorization = "CreateVpcPeeringAuthorization"
 // CreateVpcPeeringAuthorizationRequest generates a "aws/request.Request" representing the
 // client's request for the CreateVpcPeeringAuthorization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1480,7 +1459,7 @@ func (c *GameLift) CreateVpcPeeringAuthorizationRequest(input *CreateVpcPeeringA
 // AWS account. VPC peering enables the game servers on your fleet to communicate
 // directly with other AWS resources. Once you've received authorization, call
 // CreateVpcPeeringConnection to establish the peering connection. For more
-// information, see VPC Peering with Amazon GameLift Fleets (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
+// information, see VPC Peering with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 //
 // You can peer with VPCs that are owned by any AWS account you have access
 // to, including the account that you use to manage your Amazon GameLift fleets.
@@ -1503,8 +1482,6 @@ func (c *GameLift) CreateVpcPeeringAuthorizationRequest(input *CreateVpcPeeringA
 // The authorization remains valid for 24 hours unless it is canceled by a call
 // to DeleteVpcPeeringAuthorization. You must create or delete the peering connection
 // while the authorization is valid.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -1569,7 +1546,7 @@ const opCreateVpcPeeringConnection = "CreateVpcPeeringConnection"
 // CreateVpcPeeringConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the CreateVpcPeeringConnection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1603,6 +1580,7 @@ func (c *GameLift) CreateVpcPeeringConnectionRequest(input *CreateVpcPeeringConn
 
 	output = &CreateVpcPeeringConnectionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1614,7 +1592,7 @@ func (c *GameLift) CreateVpcPeeringConnectionRequest(input *CreateVpcPeeringConn
 // AWS resources. You can peer with VPCs in any AWS account that you have access
 // to, including the account that you use to manage your Amazon GameLift fleets.
 // You cannot peer with VPCs that are in different regions. For more information,
-// see VPC Peering with Amazon GameLift Fleets (http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
+// see VPC Peering with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 //
 // Before calling this operation to establish the peering connection, you first
 // need to call CreateVpcPeeringAuthorization and identify the VPC you want
@@ -1631,8 +1609,6 @@ func (c *GameLift) CreateVpcPeeringConnectionRequest(input *CreateVpcPeeringConn
 // a VpcPeeringConnection request is created. You can use continuous polling
 // to track the request's status using DescribeVpcPeeringConnections, or by
 // monitoring fleet events for success or failure using DescribeFleetEvents.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -1697,7 +1673,7 @@ const opDeleteAlias = "DeleteAlias"
 // DeleteAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1731,8 +1707,7 @@ func (c *GameLift) DeleteAliasRequest(input *DeleteAliasInput) (req *request.Req
 
 	output = &DeleteAliasOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1741,8 +1716,6 @@ func (c *GameLift) DeleteAliasRequest(input *DeleteAliasInput) (req *request.Req
 // Deletes an alias. This action removes all record of the alias. Game clients
 // attempting to access a server process using the deleted alias receive an
 // error. To delete an alias, specify the alias ID to be deleted.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -1807,7 +1780,7 @@ const opDeleteBuild = "DeleteBuild"
 // DeleteBuildRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteBuild operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1841,8 +1814,7 @@ func (c *GameLift) DeleteBuildRequest(input *DeleteBuildInput) (req *request.Req
 
 	output = &DeleteBuildOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1855,7 +1827,11 @@ func (c *GameLift) DeleteBuildRequest(input *DeleteBuildInput) (req *request.Req
 // of any active fleets using the build, but you can no longer create new fleets
 // with the deleted build.
 //
-// Build-related operations include:
+// Learn more
+//
+// Working with Builds (https://docs.aws.amazon.com/gamelift/latest/developerguide/build-intro.html)
+//
+// Related operations
 //
 //    * CreateBuild
 //
@@ -1918,7 +1894,7 @@ const opDeleteFleet = "DeleteFleet"
 // DeleteFleetRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteFleet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -1952,8 +1928,7 @@ func (c *GameLift) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Req
 
 	output = &DeleteFleetOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -1965,7 +1940,11 @@ func (c *GameLift) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Req
 // This action removes the fleet's resources and the fleet record. Once a fleet
 // is deleted, you can no longer use that fleet.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -2061,7 +2040,7 @@ const opDeleteGameSessionQueue = "DeleteGameSessionQueue"
 // DeleteGameSessionQueueRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteGameSessionQueue operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2095,6 +2074,7 @@ func (c *GameLift) DeleteGameSessionQueueRequest(input *DeleteGameSessionQueueIn
 
 	output = &DeleteGameSessionQueueOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2103,8 +2083,6 @@ func (c *GameLift) DeleteGameSessionQueueRequest(input *DeleteGameSessionQueueIn
 // Deletes a game session queue. This action means that any StartGameSessionPlacement
 // requests that reference this queue will fail. To delete a queue, specify
 // the queue name.
-//
-// Queue-related operations include:
 //
 //    * CreateGameSessionQueue
 //
@@ -2165,7 +2143,7 @@ const opDeleteMatchmakingConfiguration = "DeleteMatchmakingConfiguration"
 // DeleteMatchmakingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteMatchmakingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2199,6 +2177,7 @@ func (c *GameLift) DeleteMatchmakingConfigurationRequest(input *DeleteMatchmakin
 
 	output = &DeleteMatchmakingConfigurationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2207,8 +2186,6 @@ func (c *GameLift) DeleteMatchmakingConfigurationRequest(input *DeleteMatchmakin
 // Permanently removes a FlexMatch matchmaking configuration. To delete, specify
 // the configuration name. A matchmaking configuration cannot be deleted if
 // it is being used in any active matchmaking tickets.
-//
-// Operations related to match configurations and rule sets include:
 //
 //    * CreateMatchmakingConfiguration
 //
@@ -2223,6 +2200,8 @@ func (c *GameLift) DeleteMatchmakingConfigurationRequest(input *DeleteMatchmakin
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2270,12 +2249,129 @@ func (c *GameLift) DeleteMatchmakingConfigurationWithContext(ctx aws.Context, in
 	return out, req.Send()
 }
 
+const opDeleteMatchmakingRuleSet = "DeleteMatchmakingRuleSet"
+
+// DeleteMatchmakingRuleSetRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteMatchmakingRuleSet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteMatchmakingRuleSet for more information on using the DeleteMatchmakingRuleSet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteMatchmakingRuleSetRequest method.
+//    req, resp := client.DeleteMatchmakingRuleSetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteMatchmakingRuleSet
+func (c *GameLift) DeleteMatchmakingRuleSetRequest(input *DeleteMatchmakingRuleSetInput) (req *request.Request, output *DeleteMatchmakingRuleSetOutput) {
+	op := &request.Operation{
+		Name:       opDeleteMatchmakingRuleSet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteMatchmakingRuleSetInput{}
+	}
+
+	output = &DeleteMatchmakingRuleSetOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteMatchmakingRuleSet API operation for Amazon GameLift.
+//
+// Deletes an existing matchmaking rule set. To delete the rule set, provide
+// the rule set name. Rule sets cannot be deleted if they are currently being
+// used by a matchmaking configuration.
+//
+// Learn more
+//
+//    * Build a Rule Set (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html)
+//
+// Related operations
+//
+//    * CreateMatchmakingConfiguration
+//
+//    * DescribeMatchmakingConfigurations
+//
+//    * UpdateMatchmakingConfiguration
+//
+//    * DeleteMatchmakingConfiguration
+//
+//    * CreateMatchmakingRuleSet
+//
+//    * DescribeMatchmakingRuleSets
+//
+//    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon GameLift's
+// API operation DeleteMatchmakingRuleSet for usage and error information.
+//
+// Returned Error Codes:
+//   * ErrCodeInvalidRequestException "InvalidRequestException"
+//   One or more parameter values in the request are invalid. Correct the invalid
+//   parameter values before retrying.
+//
+//   * ErrCodeInternalServiceException "InternalServiceException"
+//   The service encountered an unrecoverable internal failure while processing
+//   the request. Clients can retry such requests immediately or after a waiting
+//   period.
+//
+//   * ErrCodeUnsupportedRegionException "UnsupportedRegionException"
+//   The requested operation is not supported in the region specified.
+//
+//   * ErrCodeNotFoundException "NotFoundException"
+//   A service resource associated with the request could not be found. Clients
+//   should not retry such requests.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/gamelift-2015-10-01/DeleteMatchmakingRuleSet
+func (c *GameLift) DeleteMatchmakingRuleSet(input *DeleteMatchmakingRuleSetInput) (*DeleteMatchmakingRuleSetOutput, error) {
+	req, out := c.DeleteMatchmakingRuleSetRequest(input)
+	return out, req.Send()
+}
+
+// DeleteMatchmakingRuleSetWithContext is the same as DeleteMatchmakingRuleSet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteMatchmakingRuleSet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *GameLift) DeleteMatchmakingRuleSetWithContext(ctx aws.Context, input *DeleteMatchmakingRuleSetInput, opts ...request.Option) (*DeleteMatchmakingRuleSetOutput, error) {
+	req, out := c.DeleteMatchmakingRuleSetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDeleteScalingPolicy = "DeleteScalingPolicy"
 
 // DeleteScalingPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteScalingPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2309,8 +2405,7 @@ func (c *GameLift) DeleteScalingPolicyRequest(input *DeleteScalingPolicyInput) (
 
 	output = &DeleteScalingPolicyOutput{}
 	req = c.newRequest(op, input, output)
-	req.Handlers.Unmarshal.Remove(jsonrpc.UnmarshalHandler)
-	req.Handlers.Unmarshal.PushBackNamed(protocol.UnmarshalDiscardBodyHandler)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2322,8 +2417,6 @@ func (c *GameLift) DeleteScalingPolicyRequest(input *DeleteScalingPolicyInput) (
 //
 // To temporarily suspend scaling policies, call StopFleetActions. This operation
 // suspends all policies for the fleet.
-//
-// Operations related to fleet capacity scaling include:
 //
 //    * DescribeFleetCapacity
 //
@@ -2396,7 +2489,7 @@ const opDeleteVpcPeeringAuthorization = "DeleteVpcPeeringAuthorization"
 // DeleteVpcPeeringAuthorizationRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteVpcPeeringAuthorization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2430,6 +2523,7 @@ func (c *GameLift) DeleteVpcPeeringAuthorizationRequest(input *DeleteVpcPeeringA
 
 	output = &DeleteVpcPeeringAuthorizationOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2438,8 +2532,6 @@ func (c *GameLift) DeleteVpcPeeringAuthorizationRequest(input *DeleteVpcPeeringA
 // Cancels a pending VPC peering authorization for the specified VPC. If the
 // authorization has already been used to create a peering connection, call
 // DeleteVpcPeeringConnection to remove the connection.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -2504,7 +2596,7 @@ const opDeleteVpcPeeringConnection = "DeleteVpcPeeringConnection"
 // DeleteVpcPeeringConnectionRequest generates a "aws/request.Request" representing the
 // client's request for the DeleteVpcPeeringConnection operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2538,6 +2630,7 @@ func (c *GameLift) DeleteVpcPeeringConnectionRequest(input *DeleteVpcPeeringConn
 
 	output = &DeleteVpcPeeringConnectionOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -2552,8 +2645,6 @@ func (c *GameLift) DeleteVpcPeeringConnectionRequest(input *DeleteVpcPeeringConn
 // that is used to manage the Amazon GameLift fleets. Identify the connection
 // to delete by the connection ID and fleet ID. If successful, the connection
 // is removed.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -2618,7 +2709,7 @@ const opDescribeAlias = "DescribeAlias"
 // DescribeAliasRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2662,8 +2753,6 @@ func (c *GameLift) DescribeAliasRequest(input *DescribeAliasInput) (req *request
 //
 // To get alias properties, specify the alias ID. If successful, the requested
 // alias record is returned.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -2728,7 +2817,7 @@ const opDescribeBuild = "DescribeBuild"
 // DescribeBuildRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeBuild operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2770,7 +2859,11 @@ func (c *GameLift) DescribeBuildRequest(input *DescribeBuildInput) (req *request
 // Retrieves properties for a build. To request a build record, specify a build
 // ID. If successful, an object containing the build properties is returned.
 //
-// Build-related operations include:
+// Learn more
+//
+// Working with Builds (https://docs.aws.amazon.com/gamelift/latest/developerguide/build-intro.html)
+//
+// Related operations
 //
 //    * CreateBuild
 //
@@ -2833,7 +2926,7 @@ const opDescribeEC2InstanceLimits = "DescribeEC2InstanceLimits"
 // DescribeEC2InstanceLimitsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeEC2InstanceLimits operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -2882,7 +2975,11 @@ func (c *GameLift) DescribeEC2InstanceLimitsRequest(input *DescribeEC2InstanceLi
 // can be found in the AWS Management Console for Amazon GameLift (see the drop-down
 // list in the upper right corner).
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -2969,7 +3066,7 @@ const opDescribeFleetAttributes = "DescribeFleetAttributes"
 // DescribeFleetAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFleetAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3020,7 +3117,11 @@ func (c *GameLift) DescribeFleetAttributesRequest(input *DescribeFleetAttributes
 // If a request exceeds this limit, the request fails and the error message
 // includes the maximum allowed.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -3111,7 +3212,7 @@ const opDescribeFleetCapacity = "DescribeFleetCapacity"
 // DescribeFleetCapacityRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFleetCapacity operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3163,7 +3264,11 @@ func (c *GameLift) DescribeFleetCapacityRequest(input *DescribeFleetCapacityInpu
 // If a request exceeds this limit, the request fails and the error message
 // includes the maximum allowed.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -3254,7 +3359,7 @@ const opDescribeFleetEvents = "DescribeFleetEvents"
 // DescribeFleetEventsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFleetEvents operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3298,7 +3403,11 @@ func (c *GameLift) DescribeFleetEventsRequest(input *DescribeFleetEventsInput) (
 // results as a set of sequential pages. If successful, a collection of event
 // log entries matching the request are returned.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -3389,7 +3498,7 @@ const opDescribeFleetPortSettings = "DescribeFleetPortSettings"
 // DescribeFleetPortSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFleetPortSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3435,7 +3544,11 @@ func (c *GameLift) DescribeFleetPortSettingsRequest(input *DescribeFleetPortSett
 // objects is returned for the requested fleet ID. If the requested fleet has
 // been deleted, the result set is empty.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -3526,7 +3639,7 @@ const opDescribeFleetUtilization = "DescribeFleetUtilization"
 // DescribeFleetUtilizationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeFleetUtilization operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3576,7 +3689,11 @@ func (c *GameLift) DescribeFleetUtilizationRequest(input *DescribeFleetUtilizati
 // If a request exceeds this limit, the request fails and the error message
 // includes the maximum allowed.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -3667,7 +3784,7 @@ const opDescribeGameSessionDetails = "DescribeGameSessionDetails"
 // DescribeGameSessionDetailsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeGameSessionDetails operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3717,8 +3834,6 @@ func (c *GameLift) DescribeGameSessionDetailsRequest(input *DescribeGameSessionD
 // Use the pagination parameters to retrieve results as a set of sequential
 // pages. If successful, a GameSessionDetail object is returned for each session
 // matching the request.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -3798,7 +3913,7 @@ const opDescribeGameSessionPlacement = "DescribeGameSessionPlacement"
 // DescribeGameSessionPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeGameSessionPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3840,8 +3955,6 @@ func (c *GameLift) DescribeGameSessionPlacementRequest(input *DescribeGameSessio
 // Retrieves properties and current status of a game session placement request.
 // To get game session placement details, specify the placement ID. If successful,
 // a GameSessionPlacement object is returned.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -3914,7 +4027,7 @@ const opDescribeGameSessionQueues = "DescribeGameSessionQueues"
 // DescribeGameSessionQueuesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeGameSessionQueues operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -3958,8 +4071,6 @@ func (c *GameLift) DescribeGameSessionQueuesRequest(input *DescribeGameSessionQu
 // of sequential pages. If successful, a GameSessionQueue object is returned
 // for each requested queue. When specifying a list of queues, objects are returned
 // only for queues that currently exist in the region.
-//
-// Queue-related operations include:
 //
 //    * CreateGameSessionQueue
 //
@@ -4020,7 +4131,7 @@ const opDescribeGameSessions = "DescribeGameSessions"
 // DescribeGameSessionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeGameSessions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4071,8 +4182,6 @@ func (c *GameLift) DescribeGameSessionsRequest(input *DescribeGameSessionsInput)
 // the request.
 //
 // Available in Amazon GameLift Local.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -4152,7 +4261,7 @@ const opDescribeInstances = "DescribeInstances"
 // DescribeInstancesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeInstances operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4251,7 +4360,7 @@ const opDescribeMatchmaking = "DescribeMatchmaking"
 // DescribeMatchmakingRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMatchmaking operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4302,8 +4411,6 @@ func (c *GameLift) DescribeMatchmakingRequest(input *DescribeMatchmakingInput) (
 // To request matchmaking tickets, provide a list of up to 10 ticket IDs. If
 // the request is successful, a ticket object is returned for each requested
 // ID that currently exists.
-//
-// Matchmaking-related operations include:
 //
 //    * StartMatchmaking
 //
@@ -4362,7 +4469,7 @@ const opDescribeMatchmakingConfigurations = "DescribeMatchmakingConfigurations"
 // DescribeMatchmakingConfigurationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMatchmakingConfigurations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4410,8 +4517,6 @@ func (c *GameLift) DescribeMatchmakingConfigurationsRequest(input *DescribeMatch
 // When specifying a list of names, only configurations that currently exist
 // are returned.
 //
-// Operations related to match configurations and rule sets include:
-//
 //    * CreateMatchmakingConfiguration
 //
 //    * DescribeMatchmakingConfigurations
@@ -4425,6 +4530,8 @@ func (c *GameLift) DescribeMatchmakingConfigurationsRequest(input *DescribeMatch
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4473,7 +4580,7 @@ const opDescribeMatchmakingRuleSets = "DescribeMatchmakingRuleSets"
 // DescribeMatchmakingRuleSetsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeMatchmakingRuleSets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4518,7 +4625,11 @@ func (c *GameLift) DescribeMatchmakingRuleSetsRequest(input *DescribeMatchmaking
 // to retrieve results as a set of sequential pages. If successful, a rule set
 // is returned for each requested name.
 //
-// Operations related to match configurations and rule sets include:
+// Learn more
+//
+//    * Build a Rule Set (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html)
+//
+// Related operations
 //
 //    * CreateMatchmakingConfiguration
 //
@@ -4533,6 +4644,8 @@ func (c *GameLift) DescribeMatchmakingRuleSetsRequest(input *DescribeMatchmaking
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4585,7 +4698,7 @@ const opDescribePlayerSessions = "DescribePlayerSessions"
 // DescribePlayerSessionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribePlayerSessions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4637,8 +4750,6 @@ func (c *GameLift) DescribePlayerSessionsRequest(input *DescribePlayerSessionsIn
 // for each session matching the request.
 //
 // Available in Amazon GameLift Local.
-//
-// Player-session-related operations include:
 //
 //    * CreatePlayerSession
 //
@@ -4705,7 +4816,7 @@ const opDescribeRuntimeConfiguration = "DescribeRuntimeConfiguration"
 // DescribeRuntimeConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeRuntimeConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4748,7 +4859,11 @@ func (c *GameLift) DescribeRuntimeConfigurationRequest(input *DescribeRuntimeCon
 // run-time configuration tells Amazon GameLift how to launch server processes
 // on instances in the fleet.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -4839,7 +4954,7 @@ const opDescribeScalingPolicies = "DescribeScalingPolicies"
 // DescribeScalingPoliciesRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeScalingPolicies operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -4889,8 +5004,6 @@ func (c *GameLift) DescribeScalingPoliciesRequest(input *DescribeScalingPolicies
 // This action does not affect the status of the scaling policies, which remains
 // ACTIVE. To see whether a fleet's scaling policies are in force or suspended,
 // call DescribeFleetAttributes and check the stopped actions.
-//
-// Operations related to fleet capacity scaling include:
 //
 //    * DescribeFleetCapacity
 //
@@ -4963,7 +5076,7 @@ const opDescribeVpcPeeringAuthorizations = "DescribeVpcPeeringAuthorizations"
 // DescribeVpcPeeringAuthorizationsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVpcPeeringAuthorizations operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5005,8 +5118,6 @@ func (c *GameLift) DescribeVpcPeeringAuthorizationsRequest(input *DescribeVpcPee
 // Retrieves valid VPC peering authorizations that are pending for the AWS account.
 // This operation returns all VPC peering authorizations and requests for peering.
 // This includes those initiated and received by this account.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -5067,7 +5178,7 @@ const opDescribeVpcPeeringConnections = "DescribeVpcPeeringConnections"
 // DescribeVpcPeeringConnectionsRequest generates a "aws/request.Request" representing the
 // client's request for the DescribeVpcPeeringConnections operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5114,8 +5225,6 @@ func (c *GameLift) DescribeVpcPeeringConnectionsRequest(input *DescribeVpcPeerin
 // leave the parameter empty to retrieve all connection records. If successful,
 // the retrieved information includes both active and pending connections. Active
 // connections identify the IpV4 CIDR block that the VPC uses to connect.
-//
-// VPC peering connection operations include:
 //
 //    * CreateVpcPeeringAuthorization
 //
@@ -5180,7 +5289,7 @@ const opGetGameSessionLogUrl = "GetGameSessionLogUrl"
 // GetGameSessionLogUrlRequest generates a "aws/request.Request" representing the
 // client's request for the GetGameSessionLogUrl operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5224,11 +5333,9 @@ func (c *GameLift) GetGameSessionLogUrlRequest(input *GetGameSessionLogUrlInput)
 // logs in Amazon S3 and retains them for 14 days. Use this URL to download
 // the logs.
 //
-// See the AWS Service Limits (http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift)
+// See the AWS Service Limits (https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift)
 // page for maximum log file sizes. Log files that exceed this limit are not
 // saved.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -5301,7 +5408,7 @@ const opGetInstanceAccess = "GetInstanceAccess"
 // GetInstanceAccessRequest generates a "aws/request.Request" representing the
 // client's request for the GetInstanceAccess operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5351,11 +5458,12 @@ func (c *GameLift) GetInstanceAccessRequest(input *GetInstanceAccessInput) (req 
 // to a .pem file before using. If you're making this request using the AWS
 // CLI, saving the secret can be handled as part of the GetInstanceAccess request.
 // (See the example later in this topic). For more information on remote access,
-// see Remotely Accessing an Instance (http://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-remote-access.html).
+// see Remotely Accessing an Instance (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-remote-access.html).
 //
-// To request access to a specific instance, specify the IDs of the instance
-// and the fleet it belongs to. If successful, an InstanceAccess object is returned
-// containing the instance's IP address and a set of credentials.
+// To request access to a specific instance, specify the IDs of both the instance
+// and the fleet it belongs to. You can retrieve a fleet's instance IDs by calling
+// DescribeInstances. If successful, an InstanceAccess object is returned containing
+// the instance's IP address and a set of credentials.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5408,7 +5516,7 @@ const opListAliases = "ListAliases"
 // ListAliasesRequest generates a "aws/request.Request" representing the
 // client's request for the ListAliases operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5452,8 +5560,6 @@ func (c *GameLift) ListAliasesRequest(input *ListAliasesInput) (req *request.Req
 // to retrieve results in sequential pages.
 //
 // Returned aliases are not listed in any particular order.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -5514,7 +5620,7 @@ const opListBuilds = "ListBuilds"
 // ListBuildsRequest generates a "aws/request.Request" representing the
 // client's request for the ListBuilds operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5560,7 +5666,11 @@ func (c *GameLift) ListBuildsRequest(input *ListBuildsInput) (req *request.Reque
 //
 // Build records are not listed in any particular order.
 //
-// Build-related operations include:
+// Learn more
+//
+// Working with Builds (https://docs.aws.amazon.com/gamelift/latest/developerguide/build-intro.html)
+//
+// Related operations
 //
 //    * CreateBuild
 //
@@ -5619,7 +5729,7 @@ const opListFleets = "ListFleets"
 // ListFleetsRequest generates a "aws/request.Request" representing the
 // client's request for the ListFleets operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5664,7 +5774,11 @@ func (c *GameLift) ListFleetsRequest(input *ListFleetsInput) (req *request.Reque
 //
 // Fleet records are not listed in any particular order.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -5755,7 +5869,7 @@ const opPutScalingPolicy = "PutScalingPolicy"
 // PutScalingPolicyRequest generates a "aws/request.Request" representing the
 // client's request for the PutScalingPolicy operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5814,7 +5928,7 @@ func (c *GameLift) PutScalingPolicyRequest(input *PutScalingPolicyInput) (req *r
 // remove it, you must delete the policy with DeleteScalingPolicy.
 //
 // Learn more about how to work with auto-scaling in Set Up Fleet Automatic
-// Scaling (http://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-autoscaling.html).
+// Scaling (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-autoscaling.html).
 //
 // Target-based policy
 //
@@ -5868,8 +5982,6 @@ func (c *GameLift) PutScalingPolicyRequest(input *PutScalingPolicyInput) (req *r
 // is returned. Scaling policies are automatically in force as soon as they're
 // successfully created. If the fleet's auto-scaling actions are temporarily
 // suspended, the new policy will be in force once the fleet actions are restarted.
-//
-// Operations related to fleet capacity scaling include:
 //
 //    * DescribeFleetCapacity
 //
@@ -5942,7 +6054,7 @@ const opRequestUploadCredentials = "RequestUploadCredentials"
 // RequestUploadCredentialsRequest generates a "aws/request.Request" representing the
 // client's request for the RequestUploadCredentials operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -5988,6 +6100,22 @@ func (c *GameLift) RequestUploadCredentialsRequest(input *RequestUploadCredentia
 // To request new credentials, specify the build ID as returned with an initial
 // CreateBuild request. If successful, a new set of credentials are returned,
 // along with the S3 storage location associated with the build ID.
+//
+// Learn more
+//
+// Uploading Your Game (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-intro.html)
+//
+// Related operations
+//
+//    * CreateBuild
+//
+//    * ListBuilds
+//
+//    * DescribeBuild
+//
+//    * UpdateBuild
+//
+//    * DeleteBuild
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6040,7 +6168,7 @@ const opResolveAlias = "ResolveAlias"
 // ResolveAliasRequest generates a "aws/request.Request" representing the
 // client's request for the ResolveAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6080,8 +6208,6 @@ func (c *GameLift) ResolveAliasRequest(input *ResolveAliasInput) (req *request.R
 // ResolveAlias API operation for Amazon GameLift.
 //
 // Retrieves the fleet ID that a specified alias is currently pointing to.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -6153,7 +6279,7 @@ const opSearchGameSessions = "SearchGameSessions"
 // SearchGameSessionsRequest generates a "aws/request.Request" representing the
 // client's request for the SearchGameSessions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6242,8 +6368,6 @@ func (c *GameLift) SearchGameSessionsRequest(input *SearchGameSessionsInput) (re
 // the results. This search feature finds only game sessions that are in ACTIVE
 // status. To locate games in statuses other than active, use DescribeGameSessionDetails.
 //
-// Game-session-related operations include:
-//
 //    * CreateGameSession
 //
 //    * DescribeGameSessions
@@ -6322,7 +6446,7 @@ const opStartFleetActions = "StartFleetActions"
 // StartFleetActionsRequest generates a "aws/request.Request" representing the
 // client's request for the StartFleetActions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6356,6 +6480,7 @@ func (c *GameLift) StartFleetActionsRequest(input *StartFleetActionsInput) (req 
 
 	output = &StartFleetActionsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -6370,21 +6495,43 @@ func (c *GameLift) StartFleetActionsRequest(input *StartFleetActionsInput) (req 
 // actions on the fleet were never stopped, this operation will have no effect.
 // You can view a fleet's stopped actions using DescribeFleetAttributes.
 //
-// Operations related to fleet capacity scaling include:
+// Learn more
 //
-//    * DescribeFleetCapacity
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
 //
-//    * UpdateFleetCapacity
+// Related operations
 //
-//    * DescribeEC2InstanceLimits
+//    * CreateFleet
 //
-//    * Manage scaling policies:
+//    * ListFleets
 //
-// PutScalingPolicy (auto-scaling)
+//    * DeleteFleet
 //
-// DescribeScalingPolicies (auto-scaling)
+//    * Describe fleets:
 //
-// DeleteScalingPolicy (auto-scaling)
+// DescribeFleetAttributes
+//
+// DescribeFleetCapacity
+//
+// DescribeFleetPortSettings
+//
+// DescribeFleetUtilization
+//
+// DescribeRuntimeConfiguration
+//
+// DescribeEC2InstanceLimits
+//
+// DescribeFleetEvents
+//
+//    * Update fleets:
+//
+// UpdateFleetAttributes
+//
+// UpdateFleetCapacity
+//
+// UpdateFleetPortSettings
+//
+// UpdateRuntimeConfiguration
 //
 //    * Manage fleet actions:
 //
@@ -6443,7 +6590,7 @@ const opStartGameSessionPlacement = "StartGameSessionPlacement"
 // StartGameSessionPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the StartGameSessionPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6510,8 +6657,9 @@ func (c *GameLift) StartGameSessionPlacementRequest(input *StartGameSessionPlace
 //    * A unique ID (such as a UUID) for the placement. You use this ID to track
 //    the status of the placement request
 //
-//    * (Optional) A set of IDs and player data for each player you want to
-//    join to the new game session
+//    * (Optional) A set of player data and a unique player ID for each player
+//    that you are joining to the new game session (player data is optional,
+//    but if you include it, you must also provide a unique ID for each player)
 //
 //    * Latency data for all players (if you want to optimize game play for
 //    the players)
@@ -6523,8 +6671,6 @@ func (c *GameLift) StartGameSessionPlacementRequest(input *StartGameSessionPlace
 // has been created and a game session ARN and region are referenced. If the
 // placement request times out, you can resubmit the request or retry it with
 // a different queue.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -6597,7 +6743,7 @@ const opStartMatchBackfill = "StartMatchBackfill"
 // StartMatchBackfillRequest generates a "aws/request.Request" representing the
 // client's request for the StartMatchBackfill operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6650,7 +6796,7 @@ func (c *GameLift) StartMatchBackfillRequest(input *StartMatchBackfillInput) (re
 // ticket is created and returned with status set to QUEUED. The ticket is placed
 // in the matchmaker's ticket pool and processed. Track the status of the ticket
 // to respond as needed. For more detail how to set up backfilling, see  Backfill
-// Existing Games with FlexMatch (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-backfill.html).
+// Existing Games with FlexMatch (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-backfill.html).
 //
 // The process of finding backfill matches is essentially identical to the initial
 // matchmaking process. The matchmaker searches the pool and groups tickets
@@ -6660,9 +6806,7 @@ func (c *GameLift) StartMatchBackfillRequest(input *StartMatchBackfillInput) (re
 // game session's connection information, and the GameSession object is updated
 // to include matchmaker data on the new players. For more detail on how match
 // backfill requests are processed, see  How Amazon GameLift FlexMatch Works
-// (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html).
-//
-// Matchmaking-related operations include:
+// (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html).
 //
 //    * StartMatchmaking
 //
@@ -6725,7 +6869,7 @@ const opStartMatchmaking = "StartMatchmaking"
 // StartMatchmakingRequest generates a "aws/request.Request" representing the
 // client's request for the StartMatchmaking operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6774,7 +6918,7 @@ func (c *GameLift) StartMatchmakingRequest(input *StartMatchmakingInput) (req *r
 // fill the match. Match type, rules, and the queue used to place a new game
 // session are defined in a MatchmakingConfiguration. For complete information
 // on setting up and using FlexMatch, see the topic  Adding FlexMatch to Your
-// Game (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html).
+// Game (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html).
 //
 // To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration,
 // and include the players to be matched. You must also include a set of player
@@ -6825,8 +6969,6 @@ func (c *GameLift) StartMatchmakingRequest(input *StartMatchmakingInput) (req *r
 // COMPLETED status. Connection information (including game session endpoint
 // and player session) is added to the matchmaking tickets. Matched players
 // can use the connection information to join the game.
-//
-// Matchmaking-related operations include:
 //
 //    * StartMatchmaking
 //
@@ -6889,7 +7031,7 @@ const opStopFleetActions = "StopFleetActions"
 // StopFleetActionsRequest generates a "aws/request.Request" representing the
 // client's request for the StopFleetActions operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -6923,6 +7065,7 @@ func (c *GameLift) StopFleetActionsRequest(input *StopFleetActionsInput) (req *r
 
 	output = &StopFleetActionsOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -6938,6 +7081,50 @@ func (c *GameLift) StopFleetActionsRequest(input *StopFleetActionsInput) (req *r
 // When auto-scaling fleet actions are stopped, Amazon GameLift no longer initiates
 // scaling events except to maintain the fleet's desired instances setting (FleetCapacity.
 // Changes to the fleet's capacity must be done manually using UpdateFleetCapacity.
+//
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
+//
+//    * CreateFleet
+//
+//    * ListFleets
+//
+//    * DeleteFleet
+//
+//    * Describe fleets:
+//
+// DescribeFleetAttributes
+//
+// DescribeFleetCapacity
+//
+// DescribeFleetPortSettings
+//
+// DescribeFleetUtilization
+//
+// DescribeRuntimeConfiguration
+//
+// DescribeEC2InstanceLimits
+//
+// DescribeFleetEvents
+//
+//    * Update fleets:
+//
+// UpdateFleetAttributes
+//
+// UpdateFleetCapacity
+//
+// UpdateFleetPortSettings
+//
+// UpdateRuntimeConfiguration
+//
+//    * Manage fleet actions:
+//
+// StartFleetActions
+//
+// StopFleetActions
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -6990,7 +7177,7 @@ const opStopGameSessionPlacement = "StopGameSessionPlacement"
 // StopGameSessionPlacementRequest generates a "aws/request.Request" representing the
 // client's request for the StopGameSessionPlacement operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7032,8 +7219,6 @@ func (c *GameLift) StopGameSessionPlacementRequest(input *StopGameSessionPlaceme
 // Cancels a game session placement that is in PENDING status. To stop a placement,
 // provide the placement ID values. If successful, the placement is moved to
 // CANCELLED status.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -7106,7 +7291,7 @@ const opStopMatchmaking = "StopMatchmaking"
 // StopMatchmakingRequest generates a "aws/request.Request" representing the
 // client's request for the StopMatchmaking operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7140,6 +7325,7 @@ func (c *GameLift) StopMatchmakingRequest(input *StopMatchmakingInput) (req *req
 
 	output = &StopMatchmakingOutput{}
 	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
 	return
 }
 
@@ -7148,8 +7334,6 @@ func (c *GameLift) StopMatchmakingRequest(input *StopMatchmakingInput) (req *req
 // Cancels a matchmaking ticket that is currently being processed. To stop the
 // matchmaking operation, specify the ticket ID. If successful, work on the
 // ticket is stopped, and the ticket status is changed to CANCELLED.
-//
-// Matchmaking-related operations include:
 //
 //    * StartMatchmaking
 //
@@ -7212,7 +7396,7 @@ const opUpdateAlias = "UpdateAlias"
 // UpdateAliasRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateAlias operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7255,8 +7439,6 @@ func (c *GameLift) UpdateAliasRequest(input *UpdateAliasInput) (req *request.Req
 // ID to be updated and provide the information to be changed. To reassign an
 // alias to another fleet, provide an updated routing strategy. If successful,
 // the updated alias record is returned.
-//
-// Alias-related operations include:
 //
 //    * CreateAlias
 //
@@ -7321,7 +7503,7 @@ const opUpdateBuild = "UpdateBuild"
 // UpdateBuildRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateBuild operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7365,7 +7547,11 @@ func (c *GameLift) UpdateBuildRequest(input *UpdateBuildInput) (req *request.Req
 // values. If successful, a build object containing the updated metadata is
 // returned.
 //
-// Build-related operations include:
+// Learn more
+//
+// Working with Builds (https://docs.aws.amazon.com/gamelift/latest/developerguide/build-intro.html)
+//
+// Related operations
 //
 //    * CreateBuild
 //
@@ -7428,7 +7614,7 @@ const opUpdateFleetAttributes = "UpdateFleetAttributes"
 // UpdateFleetAttributesRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFleetAttributes operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7471,7 +7657,11 @@ func (c *GameLift) UpdateFleetAttributesRequest(input *UpdateFleetAttributesInpu
 // update metadata, specify the fleet ID and the property values that you want
 // to change. If successful, the fleet ID for the updated fleet is returned.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -7576,7 +7766,7 @@ const opUpdateFleetCapacity = "UpdateFleetCapacity"
 // UpdateFleetCapacityRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFleetCapacity operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7632,7 +7822,11 @@ func (c *GameLift) UpdateFleetCapacityRequest(input *UpdateFleetCapacityInput) (
 // If the desired instance count is higher than the instance type's limit, the
 // "Limit Exceeded" exception occurs.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -7737,7 +7931,7 @@ const opUpdateFleetPortSettings = "UpdateFleetPortSettings"
 // UpdateFleetPortSettingsRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateFleetPortSettings operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7783,7 +7977,11 @@ func (c *GameLift) UpdateFleetPortSettingsRequest(input *UpdateFleetPortSettings
 // match existing fleet permissions. If successful, the fleet ID for the updated
 // fleet is returned.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -7888,7 +8086,7 @@ const opUpdateGameSession = "UpdateGameSession"
 // UpdateGameSessionRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGameSession operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -7934,8 +8132,6 @@ func (c *GameLift) UpdateGameSessionRequest(input *UpdateGameSessionInput) (req 
 // the session. To update a game session, specify the game session ID and the
 // values you want to change. If successful, an updated GameSession object is
 // returned.
-//
-// Game-session-related operations include:
 //
 //    * CreateGameSession
 //
@@ -8018,7 +8214,7 @@ const opUpdateGameSessionQueue = "UpdateGameSessionQueue"
 // UpdateGameSessionQueueRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateGameSessionQueue operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8061,8 +8257,6 @@ func (c *GameLift) UpdateGameSessionQueueRequest(input *UpdateGameSessionQueueIn
 // session requests in the queue are processed. To update settings, specify
 // the queue name to be updated and provide the new settings. When updating
 // destinations, provide a complete list of destinations.
-//
-// Queue-related operations include:
 //
 //    * CreateGameSessionQueue
 //
@@ -8123,7 +8317,7 @@ const opUpdateMatchmakingConfiguration = "UpdateMatchmakingConfiguration"
 // UpdateMatchmakingConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateMatchmakingConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8165,8 +8359,6 @@ func (c *GameLift) UpdateMatchmakingConfigurationRequest(input *UpdateMatchmakin
 // Updates settings for a FlexMatch matchmaking configuration. To update settings,
 // specify the configuration name to be updated and provide the new settings.
 //
-// Operations related to match configurations and rule sets include:
-//
 //    * CreateMatchmakingConfiguration
 //
 //    * DescribeMatchmakingConfigurations
@@ -8180,6 +8372,8 @@ func (c *GameLift) UpdateMatchmakingConfigurationRequest(input *UpdateMatchmakin
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8232,7 +8426,7 @@ const opUpdateRuntimeConfiguration = "UpdateRuntimeConfiguration"
 // UpdateRuntimeConfigurationRequest generates a "aws/request.Request" representing the
 // client's request for the UpdateRuntimeConfiguration operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8288,7 +8482,11 @@ func (c *GameLift) UpdateRuntimeConfigurationRequest(input *UpdateRuntimeConfigu
 // processes shut down and new processes are launched in Amazon GameLift's normal
 // process recycling activity.
 //
-// Fleet-related operations include:
+// Learn more
+//
+// Working with Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/fleets-intro.html).
+//
+// Related operations
 //
 //    * CreateFleet
 //
@@ -8384,7 +8582,7 @@ const opValidateMatchmakingRuleSet = "ValidateMatchmakingRuleSet"
 // ValidateMatchmakingRuleSetRequest generates a "aws/request.Request" representing the
 // client's request for the ValidateMatchmakingRuleSet operation. The "output" return
 // value will be populated with the request's response once the request completes
-// successfuly.
+// successfully.
 //
 // Use "Send" method on the returned Request to send the API call to the service.
 // the "output" return value is not valid until after Send returns without error.
@@ -8424,10 +8622,15 @@ func (c *GameLift) ValidateMatchmakingRuleSetRequest(input *ValidateMatchmakingR
 // ValidateMatchmakingRuleSet API operation for Amazon GameLift.
 //
 // Validates the syntax of a matchmaking rule or rule set. This operation checks
-// that the rule set uses syntactically correct JSON and that it conforms to
-// allowed property expressions. To validate syntax, provide a rule set string.
+// that the rule set is using syntactically correct JSON and that it conforms
+// to allowed property expressions. To validate syntax, provide a rule set JSON
+// string.
 //
-// Operations related to match configurations and rule sets include:
+// Learn more
+//
+//    * Build a Rule Set (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html)
+//
+// Related operations
 //
 //    * CreateMatchmakingConfiguration
 //
@@ -8442,6 +8645,8 @@ func (c *GameLift) ValidateMatchmakingRuleSetRequest(input *ValidateMatchmakingR
 //    * DescribeMatchmakingRuleSets
 //
 //    * ValidateMatchmakingRuleSet
+//
+//    * DeleteMatchmakingRuleSet
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8573,8 +8778,6 @@ func (s AcceptMatchOutput) GoString() string {
 
 // Properties describing a fleet alias.
 //
-// Alias-related operations include:
-//
 //    * CreateAlias
 //
 //    * ListAliases
@@ -8597,14 +8800,14 @@ type Alias struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Human-readable description of an alias.
 	Description *string `type:"string"`
 
 	// Time stamp indicating when this data object was last modified. Format is
 	// a number expressed in Unix time as milliseconds (for example "1469498468.057").
-	LastUpdatedTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	LastUpdatedTime *time.Time `type:"timestamp"`
 
 	// Descriptive label that is associated with an alias. Alias names do not need
 	// to be unique.
@@ -8740,7 +8943,7 @@ func (s *AttributeValue) SetSL(v []*string) *AttributeValue {
 // GameLift. They are valid for a limited time. If they expire before you upload
 // your game build, get a new set by calling RequestUploadCredentials.
 type AwsCredentials struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// Temporary key allowing access to the Amazon GameLift S3 account.
 	AccessKeyId *string `min:"1" type:"string"`
@@ -8783,8 +8986,6 @@ func (s *AwsCredentials) SetSessionToken(v string) *AwsCredentials {
 
 // Properties describing a game build.
 //
-// Build-related operations include:
-//
 //    * CreateBuild
 //
 //    * ListBuilds
@@ -8802,7 +9003,7 @@ type Build struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Descriptive label that is associated with a build. Build names do not need
 	// to be unique. It can be set using CreateBuild or UpdateBuild.
@@ -9080,7 +9281,7 @@ type CreateBuildOutput struct {
 	// location. It contains credentials to use when you are uploading a build file
 	// to an Amazon S3 bucket that is owned by Amazon GameLift. Credentials have
 	// a limited life span. To refresh these credentials, call RequestUploadCredentials.
-	UploadCredentials *AwsCredentials `type:"structure"`
+	UploadCredentials *AwsCredentials `type:"structure" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -9148,19 +9349,27 @@ type CreateFleetInput struct {
 	// and keep them as long as you need them. Spot instances have lower prices,
 	// but spot pricing is variable, and while in use they can be interrupted (with
 	// a two-minute notification). Learn more about Amazon GameLift spot instances
-	// with at  Choose Computing Resources (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-ec2-instances.html).
+	// with at  Set up Access to External Services (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-credentials.html).
 	FleetType *string `type:"string" enum:"FleetType"`
+
+	// Unique identifier for an AWS IAM role that manages access to your AWS services.
+	// Any application that runs on an instance in this fleet can assume the role,
+	// including install scripts, server processs, daemons (background processes).
+	// Create a role or look up a role's ARN using the IAM dashboard (https://console.aws.amazon.com/iam/)
+	// in the AWS Management Console. Learn more about using on-box credentials
+	// for your game servers at  Access external resources from a game server (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html).
+	InstanceRoleArn *string `min:"1" type:"string"`
 
 	// This parameter is no longer used. Instead, to specify where Amazon GameLift
 	// should store log files once a server process shuts down, use the Amazon GameLift
 	// server API ProcessReady() and specify one or more directory paths in logParameters.
-	// See more information in the Server API Reference (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process).
+	// See more information in the Server API Reference (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api-ref.html#gamelift-sdk-server-api-ref-dataypes-process).
 	LogPaths []*string `type:"list"`
 
-	// Name of a metric group to add this fleet to. A metric group tracks metrics
-	// across all fleets in the group. Use an existing metric group name to add
-	// this fleet to the group, or use a new name to create a new metric group.
-	// A fleet can only be included in one metric group at a time.
+	// Name of an Amazon CloudWatch metric group to add this fleet to. A metric
+	// group aggregates the metrics for all fleets in the group. Specify an existing
+	// metric group name, or provide a new name to create a new metric group. A
+	// fleet can only be included in one metric group at a time.
 	MetricGroups []*string `type:"list"`
 
 	// Descriptive label that is associated with a fleet. Fleet names do not need
@@ -9189,8 +9398,9 @@ type CreateFleetInput struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	PeerVpcId *string `min:"1" type:"string"`
 
 	// Policy that limits the number of game sessions an individual player can create
@@ -9244,6 +9454,9 @@ func (s *CreateFleetInput) Validate() error {
 	}
 	if s.EC2InstanceType == nil {
 		invalidParams.Add(request.NewErrParamRequired("EC2InstanceType"))
+	}
+	if s.InstanceRoleArn != nil && len(*s.InstanceRoleArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("InstanceRoleArn", 1))
 	}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
@@ -9312,6 +9525,12 @@ func (s *CreateFleetInput) SetEC2InstanceType(v string) *CreateFleetInput {
 // SetFleetType sets the FleetType field's value.
 func (s *CreateFleetInput) SetFleetType(v string) *CreateFleetInput {
 	s.FleetType = &v
+	return s
+}
+
+// SetInstanceRoleArn sets the InstanceRoleArn field's value.
+func (s *CreateFleetInput) SetInstanceRoleArn(v string) *CreateFleetInput {
+	s.InstanceRoleArn = &v
 	return s
 }
 
@@ -9419,12 +9638,12 @@ type CreateGameSessionInput struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameSessionData *string `min:"1" type:"string"`
 
 	// This parameter is no longer preferred. Please use IdempotencyToken instead.
@@ -9727,19 +9946,19 @@ type CreateMatchmakingConfigurationInput struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameSessionData *string `min:"1" type:"string"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session queue and uniquely identifies it. Format
 	// is arn:aws:gamelift:<region>::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912.
 	// These queues are used when placing game sessions for matches that are created
@@ -9934,14 +10153,15 @@ func (s *CreateMatchmakingConfigurationOutput) SetConfiguration(v *MatchmakingCo
 type CreateMatchmakingRuleSetInput struct {
 	_ struct{} `type:"structure"`
 
-	// Unique identifier for a matchmaking rule set. This name is used to identify
-	// the rule set associated with a matchmaking configuration.
+	// Unique identifier for a matchmaking rule set. A matchmaking configuration
+	// identifies the rule set it uses by this name value. (Note: The rule set name
+	// is different from the optional "name" field in the rule set body.)
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
 
-	// Collection of matchmaking rules, formatted as a JSON string. (Note that comments
-	// are not allowed in JSON, but most elements support a description field.)
+	// Collection of matchmaking rules, formatted as a JSON string. Note that comments
+	// are not allowed in JSON, but most elements support a description field.
 	//
 	// RuleSetBody is a required field
 	RuleSetBody *string `min:"1" type:"string" required:"true"`
@@ -10221,8 +10441,9 @@ type CreateVpcPeeringAuthorizationInput struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	//
 	// PeerVpcId is a required field
 	PeerVpcId *string `min:"1" type:"string" required:"true"`
@@ -10315,8 +10536,9 @@ type CreateVpcPeeringConnectionInput struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	//
 	// PeerVpcId is a required field
 	PeerVpcId *string `min:"1" type:"string" required:"true"`
@@ -10662,6 +10884,64 @@ func (s DeleteMatchmakingConfigurationOutput) GoString() string {
 }
 
 // Represents the input for a request action.
+type DeleteMatchmakingRuleSetInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique identifier for a matchmaking rule set to be deleted. (Note: The rule
+	// set name is different from the optional "name" field in the rule set body.)
+	//
+	// Name is a required field
+	Name *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteMatchmakingRuleSetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteMatchmakingRuleSetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteMatchmakingRuleSetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteMatchmakingRuleSetInput"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.Name != nil && len(*s.Name) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *DeleteMatchmakingRuleSetInput) SetName(v string) *DeleteMatchmakingRuleSetInput {
+	s.Name = &v
+	return s
+}
+
+// Represents the returned data in response to a request action.
+type DeleteMatchmakingRuleSetOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteMatchmakingRuleSetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteMatchmakingRuleSetOutput) GoString() string {
+	return s.String()
+}
+
+// Represents the input for a request action.
 type DeleteScalingPolicyInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10745,8 +11025,9 @@ type DeleteVpcPeeringAuthorizationInput struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	//
 	// PeerVpcId is a required field
 	PeerVpcId *string `min:"1" type:"string" required:"true"`
@@ -11276,7 +11557,7 @@ type DescribeFleetEventsInput struct {
 	// Most recent date to retrieve event logs for. If no end time is specified,
 	// this call returns entries from the specified start time up to the present.
 	// Format is a number expressed in Unix time as milliseconds (ex: "1469498468.057").
-	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `type:"timestamp"`
 
 	// Unique identifier for a fleet to get event logs for.
 	//
@@ -11296,7 +11577,7 @@ type DescribeFleetEventsInput struct {
 	// this call returns entries starting from when the fleet was created to the
 	// specified end time. Format is a number expressed in Unix time as milliseconds
 	// (ex: "1469498468.057").
-	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -12282,8 +12563,9 @@ type DescribeMatchmakingRuleSetsInput struct {
 	// get results as a set of sequential pages.
 	Limit *int64 `min:"1" type:"integer"`
 
-	// Unique identifier for a matchmaking rule set. This name is used to identify
-	// the rule set associated with a matchmaking configuration.
+	// List of one or more matchmaking rule set names to retrieve details for. (Note:
+	// The rule set name is different from the optional "name" field in the rule
+	// set body.)
 	Names []*string `min:"1" type:"list"`
 
 	// Token that indicates the start of the next sequential page of results. Use
@@ -12857,8 +13139,6 @@ func (s *DesiredPlayerSession) SetPlayerId(v string) *DesiredPlayerSession {
 // an UpdateFleetCapacity request, or if access to resources is temporarily
 // affected.
 //
-// Fleet-related operations include:
-//
 //    * CreateFleet
 //
 //    * ListFleets
@@ -13100,8 +13380,8 @@ type Event struct {
 	//    provide additional detail. A common reason for peering failure is that
 	//    the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve
 	//    this, change the CIDR block for the VPC in your AWS account. For more
-	//    information on VPC peering failures, see http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html
-	//    (http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html)
+	//    information on VPC peering failures, see https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html
+	//    (https://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html)
 	//
 	//    * FLEET_VPC_PEERING_DELETED -- A VPC peering connection has been successfully
 	//    deleted.
@@ -13131,7 +13411,7 @@ type Event struct {
 
 	// Time stamp indicating when this event occurred. Format is a number expressed
 	// in Unix time as milliseconds (for example "1469498468.057").
-	EventTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	EventTime *time.Time `type:"timestamp"`
 
 	// Additional information related to the event.
 	Message *string `min:"1" type:"string"`
@@ -13193,8 +13473,6 @@ func (s *Event) SetResourceId(v string) *Event {
 
 // General properties describing a fleet.
 //
-// Fleet-related operations include:
-//
 //    * CreateFleet
 //
 //    * ListFleets
@@ -13240,7 +13518,7 @@ type FleetAttributes struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Human-readable description of the fleet.
 	Description *string `min:"1" type:"string"`
@@ -13255,6 +13533,14 @@ type FleetAttributes struct {
 	// in use may be interrupted with a two-minute notification.
 	FleetType *string `type:"string" enum:"FleetType"`
 
+	// Unique identifier for an AWS IAM role that manages access to your AWS services.
+	// Any application that runs on an instance in this fleet can assume the role,
+	// including install scripts, server processs, daemons (background processes).
+	// Create a role or look up a role's ARN using the IAM dashboard (https://console.aws.amazon.com/iam/)
+	// in the AWS Management Console. Learn more about using on-box credentials
+	// for your game servers at  Access external resources from a game server (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-resources.html).
+	InstanceRoleArn *string `min:"1" type:"string"`
+
 	// EC2 instance type indicating the computing resources of each instance in
 	// the fleet, including CPU, memory, storage, and networking capacity. See Amazon
 	// EC2 Instance Types (http://aws.amazon.com/ec2/instance-types/) for detailed
@@ -13264,7 +13550,7 @@ type FleetAttributes struct {
 	// Location of default log files. When a server process is shut down, Amazon
 	// GameLift captures and stores any log files in this location. These logs are
 	// in addition to game session logs; see more on game session logs in the Amazon
-	// GameLift Developer Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code).
+	// GameLift Developer Guide (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-api-server-code).
 	// If no default log path for a fleet is specified, Amazon GameLift automatically
 	// uploads logs that are stored on each instance at C:\game\logs (for Windows)
 	// or /local/game/logs (for Linux). Use the Amazon GameLift console to access
@@ -13337,7 +13623,7 @@ type FleetAttributes struct {
 
 	// Time stamp indicating when this data object was terminated. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	TerminationTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -13383,6 +13669,12 @@ func (s *FleetAttributes) SetFleetId(v string) *FleetAttributes {
 // SetFleetType sets the FleetType field's value.
 func (s *FleetAttributes) SetFleetType(v string) *FleetAttributes {
 	s.FleetType = &v
+	return s
+}
+
+// SetInstanceRoleArn sets the InstanceRoleArn field's value.
+func (s *FleetAttributes) SetInstanceRoleArn(v string) *FleetAttributes {
+	s.InstanceRoleArn = &v
 	return s
 }
 
@@ -13462,8 +13754,6 @@ func (s *FleetAttributes) SetTerminationTime(v time.Time) *FleetAttributes {
 // instances. By default, new fleets have a capacity of one instance, but can
 // be updated as needed. The maximum number of instances for a fleet is determined
 // by the fleet's instance type.
-//
-// Fleet-related operations include:
 //
 //    * CreateFleet
 //
@@ -13549,8 +13839,6 @@ func (s *FleetCapacity) SetInstanceType(v string) *FleetCapacity {
 
 // Current status of fleet utilization, including the number of game and player
 // sessions being hosted.
-//
-// Fleet-related operations include:
 //
 //    * CreateFleet
 //
@@ -13658,7 +13946,7 @@ func (s *FleetUtilization) SetMaximumPlayerSessionCount(v int64) *FleetUtilizati
 // mode, level, or map. Game properties are passed to the game server process
 // when initiating a new game session; the server process uses the properties
 // as appropriate. For more information, see the  Amazon GameLift Developer
-// Guide (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create).
+// Guide (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-client-api.html#gamelift-sdk-client-api-create).
 type GameProperty struct {
 	_ struct{} `type:"structure"`
 
@@ -13720,8 +14008,6 @@ func (s *GameProperty) SetValue(v string) *GameProperty {
 // means you can reuse idempotency token values after this time. Game session
 // logs are retained for 14 days.
 //
-// Game-session-related operations include:
-//
 //    * CreateGameSession
 //
 //    * DescribeGameSessions
@@ -13746,7 +14032,7 @@ type GameSession struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Unique identifier for a player. This ID is used to enforce a resource protection
 	// policy (if one exists), that limits the number of game sessions a player
@@ -13761,13 +14047,13 @@ type GameSession struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// You can search for active game sessions based on this custom data with SearchGameSessions.
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameSessionData *string `min:"1" type:"string"`
 
 	// Unique identifier for the game session. A game session ARN has the following
@@ -13783,7 +14069,7 @@ type GameSession struct {
 	// session. It is in JSON syntax, formatted as a string. In addition the matchmaking
 	// configuration used, it contains data on all players assigned to the match,
 	// including player attributes and team assignments. For more details on matchmaker
-	// data, see Match Data (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
+	// data, see Match Data (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
 	// Matchmaker data is useful when requesting match backfills, and is updated
 	// whenever new players are added during a successful backfill (see StartMatchBackfill).
 	MatchmakerData *string `min:"1" type:"string"`
@@ -13814,7 +14100,7 @@ type GameSession struct {
 
 	// Time stamp indicating when this data object was terminated. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	TerminationTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -13932,7 +14218,7 @@ func (s *GameSession) SetTerminationTime(v time.Time) *GameSession {
 type GameSessionConnectionInfo struct {
 	_ struct{} `type:"structure"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session and uniquely identifies it.
 	GameSessionArn *string `min:"1" type:"string"`
 
@@ -14038,11 +14324,11 @@ type GameSessionPlacement struct {
 
 	// Time stamp indicating when this request was completed, canceled, or timed
 	// out.
-	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `type:"timestamp"`
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameProperties []*GameProperty `type:"list"`
 
 	// Identifier for the game session created by this placement request. This value
@@ -14053,7 +14339,7 @@ type GameSessionPlacement struct {
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameSessionData *string `min:"1" type:"string"`
 
 	// Unique identifier for the game session. This value is set once the new game
@@ -14082,7 +14368,7 @@ type GameSessionPlacement struct {
 	// formatted as a string. It identifies the matchmaking configuration used to
 	// create the match, and contains data on all players assigned to the match,
 	// including player attributes and team assignments. For more details on matchmaker
-	// data, see Match Data (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
+	// data, see Match Data (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
 	MatchmakerData *string `min:"1" type:"string"`
 
 	// Maximum number of players that can be connected simultaneously to the game
@@ -14111,7 +14397,7 @@ type GameSessionPlacement struct {
 
 	// Time stamp indicating when this request was placed in the queue. Format is
 	// a number expressed in Unix time as milliseconds (for example "1469498468.057").
-	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `type:"timestamp"`
 
 	// Current status of the game session placement request.
 	//
@@ -14258,8 +14544,6 @@ func (s *GameSessionPlacement) SetStatus(v string) *GameSessionPlacement {
 //    high latencies, preventing game sessions from being placed where any individual
 //    player is reporting latency higher than a policy's maximum.
 //
-// Queue-related operations include:
-//
 //    * CreateGameSessionQueue
 //
 //    * DescribeGameSessionQueues
@@ -14275,7 +14559,7 @@ type GameSessionQueue struct {
 	// ARN. Destinations are listed in default preference order.
 	Destinations []*GameSessionQueueDestination `type:"list"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session queue and uniquely identifies it. Format
 	// is arn:aws:gamelift:<region>::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912.
 	GameSessionQueueArn *string `min:"1" type:"string"`
@@ -14343,8 +14627,6 @@ func (s *GameSessionQueue) SetTimeoutInSeconds(v int64) *GameSessionQueue {
 // Fleet designated in a game session queue. Requests for new game sessions
 // in the queue are fulfilled by starting a new game session on any destination
 // configured for a queue.
-//
-// Queue-related operations include:
 //
 //    * CreateGameSessionQueue
 //
@@ -14437,7 +14719,10 @@ func (s *GetGameSessionLogUrlInput) SetGameSessionId(v string) *GetGameSessionLo
 type GetGameSessionLogUrlOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Location of the requested game session logs, available for download.
+	// Location of the requested game session logs, available for download. This
+	// URL is valid for 15 minutes, after which S3 will reject any download request
+	// using this URL. You can request a new URL any time within the 14-day period
+	// that the logs are retained.
 	PreSignedUrl *string `min:"1" type:"string"`
 }
 
@@ -14546,7 +14831,7 @@ type Instance struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Unique identifier for a fleet that the instance is in.
 	FleetId *string `type:"string"`
@@ -14637,7 +14922,7 @@ type InstanceAccess struct {
 	_ struct{} `type:"structure"`
 
 	// Credentials required to access the instance.
-	Credentials *InstanceCredentials `type:"structure"`
+	Credentials *InstanceCredentials `type:"structure" sensitive:"true"`
 
 	// Unique identifier for a fleet containing the instance being accessed.
 	FleetId *string `type:"string"`
@@ -14696,7 +14981,7 @@ func (s *InstanceAccess) SetOperatingSystem(v string) *InstanceAccess {
 // are requested by calling GetInstanceAccess and returned in an InstanceAccess
 // object.
 type InstanceCredentials struct {
-	_ struct{} `type:"structure"`
+	_ struct{} `type:"structure" sensitive:"true"`
 
 	// Secret string. For Windows instances, the secret is a password for use with
 	// Windows Remote Desktop. For Linux instances, it is a private key (which must
@@ -15213,7 +15498,7 @@ type MatchmakingConfiguration struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Information to attached to all events related to the matchmaking configuration.
 	CustomEventData *string `type:"string"`
@@ -15223,19 +15508,19 @@ type MatchmakingConfiguration struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameSessionData *string `min:"1" type:"string"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session queue and uniquely identifies it. Format
 	// is arn:aws:gamelift:<region>::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912.
 	// These queues are used when placing game sessions for matches that are created
@@ -15354,7 +15639,7 @@ func (s *MatchmakingConfiguration) SetRuleSetName(v string) *MatchmakingConfigur
 //
 // A rule set may define the following elements for a match. For detailed information
 // and examples showing how to construct a rule set, see Build a FlexMatch Rule
-// Set (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html).
+// Set (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-rulesets.html).
 //
 //    * Teams -- Required. A rule set must define one or multiple teams for
 //    the match and set minimum and maximum team sizes. For example, a rule
@@ -15387,7 +15672,7 @@ type MatchmakingRuleSet struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Collection of matchmaking rules, formatted as a JSON string. (Note that comments14
 	// are not allowed in JSON, but most elements support a description field.)
@@ -15442,7 +15727,7 @@ type MatchmakingTicket struct {
 	// Time stamp indicating when this matchmaking request stopped being processed
 	// due to success, failure, or cancellation. Format is a number expressed in
 	// Unix time as milliseconds (for example "1469498468.057").
-	EndTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	EndTime *time.Time `type:"timestamp"`
 
 	// Average amount of time (in seconds) that players are currently waiting for
 	// a match. If there is not enough recent data, this property may be empty.
@@ -15461,7 +15746,7 @@ type MatchmakingTicket struct {
 
 	// Time stamp indicating when this matchmaking request was received. Format
 	// is a number expressed in Unix time as milliseconds (for example "1469498468.057").
-	StartTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	StartTime *time.Time `type:"timestamp"`
 
 	// Current status of the matchmaking request.
 	//
@@ -15580,8 +15865,6 @@ func (s *MatchmakingTicket) SetTicketId(v string) *MatchmakingTicket {
 // request. This object contains only the player ID and player session ID. To
 // retrieve full details on a player session, call DescribePlayerSessions with
 // the player session ID.
-//
-// Player-session-related operations include:
 //
 //    * CreatePlayerSession
 //
@@ -15789,8 +16072,6 @@ func (s *PlayerLatency) SetRegionIdentifier(v string) *PlayerLatency {
 // is reporting latency higher than the cap. Latency policies are only enforced
 // when the placement request contains player latency information.
 //
-// Queue-related operations include:
-//
 //    * CreateGameSessionQueue
 //
 //    * DescribeGameSessionQueues
@@ -15845,8 +16126,6 @@ func (s *PlayerLatencyPolicy) SetPolicyDurationSeconds(v int64) *PlayerLatencyPo
 // Once the session ends, the player session object is retained for 30 days
 // and then removed.
 //
-// Player-session-related operations include:
-//
 //    * CreatePlayerSession
 //
 //    * CreatePlayerSessions
@@ -15865,7 +16144,7 @@ type PlayerSession struct {
 
 	// Time stamp indicating when this data object was created. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Unique identifier for a fleet that the player's game session is running on.
 	FleetId *string `type:"string"`
@@ -15910,7 +16189,7 @@ type PlayerSession struct {
 
 	// Time stamp indicating when this data object was terminated. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	TerminationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	TerminationTime *time.Time `type:"timestamp"`
 }
 
 // String returns the string representation
@@ -16003,7 +16282,7 @@ type PutScalingPolicyInput struct {
 
 	// Name of the Amazon GameLift-defined metric that is used to trigger a scaling
 	// adjustment. For detailed descriptions of fleet metrics, see Monitor Amazon
-	// GameLift with Amazon CloudWatch (http://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html).
+	// GameLift with Amazon CloudWatch (https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html).
 	//
 	//    * ActivatingGameSessions -- Game sessions in the process of being created.
 	//
@@ -16252,7 +16531,7 @@ type RequestUploadCredentialsOutput struct {
 	// AWS credentials required when uploading a game build to the storage location.
 	// These credentials have a limited lifespan and are valid only for the build
 	// they were issued for.
-	UploadCredentials *AwsCredentials `type:"structure"`
+	UploadCredentials *AwsCredentials `type:"structure" sensitive:"true"`
 }
 
 // String returns the string representation
@@ -16386,8 +16665,6 @@ func (s *ResourceCreationLimitPolicy) SetPolicyPeriodInMinutes(v int64) *Resourc
 
 // Routing configuration for a fleet alias.
 //
-// Fleet-related operations include:
-//
 //    * CreateFleet
 //
 //    * ListFleets
@@ -16496,8 +16773,6 @@ func (s *RoutingStrategy) SetType(v string) *RoutingStrategy {
 // the total number of processes specified in a run-time configuration, add
 // the values of the ConcurrentExecutions parameter for each ServerProcess object
 // in the run-time configuration.
-//
-// Fleet-related operations include:
 //
 //    * CreateFleet
 //
@@ -16614,7 +16889,7 @@ func (s *RuntimeConfiguration) SetServerProcesses(v []*ServerProcess) *RuntimeCo
 // Location in Amazon Simple Storage Service (Amazon S3) where build files can
 // be stored for access by Amazon GameLift. This location is specified in a
 // CreateBuild request. For more details, see the Create a Build with Files
-// in Amazon S3 (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build).
+// in Amazon S3 (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-build-cli-uploading.html#gamelift-build-cli-uploading-create-build).
 type S3Location struct {
 	_ struct{} `type:"structure"`
 
@@ -16624,7 +16899,7 @@ type S3Location struct {
 	// Name of the zip file containing your build files.
 	Key *string `min:"1" type:"string"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// for the access role that allows Amazon GameLift to access your S3 bucket.
 	RoleArn *string `min:"1" type:"string"`
 }
@@ -16679,8 +16954,6 @@ func (s *S3Location) SetRoleArn(v string) *S3Location {
 // Rule that controls how a fleet is scaled. Scaling policies are uniquely identified
 // by the combination of name and fleet ID.
 //
-// Operations related to fleet capacity scaling include:
-//
 //    * DescribeFleetCapacity
 //
 //    * UpdateFleetCapacity
@@ -16716,7 +16989,7 @@ type ScalingPolicy struct {
 
 	// Name of the Amazon GameLift-defined metric that is used to trigger a scaling
 	// adjustment. For detailed descriptions of fleet metrics, see Monitor Amazon
-	// GameLift with Amazon CloudWatch (http://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html).
+	// GameLift with Amazon CloudWatch (https://docs.aws.amazon.com/gamelift/latest/developerguide/monitoring-cloudwatch.html).
 	//
 	//    * ActivatingGameSessions -- Game sessions in the process of being created.
 	//
@@ -17227,12 +17500,12 @@ type StartGameSessionPlacementInput struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	GameSessionData *string `min:"1" type:"string"`
 
 	// Descriptive label that is associated with a game session. Session names do
@@ -17423,7 +17696,7 @@ type StartMatchBackfillInput struct {
 	// ConfigurationName is a required field
 	ConfigurationName *string `min:"1" type:"string" required:"true"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session and uniquely identifies it.
 	//
 	// GameSessionArn is a required field
@@ -17437,7 +17710,7 @@ type StartMatchBackfillInput struct {
 	//    in the GameSession object, MatchmakerData property, for all players who
 	//    are currently assigned to the game session. The matchmaker data is in
 	//    JSON syntax, formatted as a string. For more details, see  Match Data
-	//    (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
+	//    (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-server.html#match-server-data).
 	//
 	//
 	//    * LatencyInMs -\\- If the matchmaker uses player latency, include a latency
@@ -17859,8 +18132,6 @@ func (s StopMatchmakingOutput) GoString() string {
 // capacity so that the metric returns to the target value. The target configuration
 // specifies settings as needed for the target based policy, including the target
 // value.
-//
-// Operations related to fleet capacity scaling include:
 //
 //    * DescribeFleetCapacity
 //
@@ -18687,19 +18958,19 @@ type UpdateMatchmakingConfigurationInput struct {
 
 	// Set of custom properties for a game session, formatted as key:value pairs.
 	// These properties are passed to a game server process in the GameSession object
-	// with a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// with a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameProperties []*GameProperty `type:"list"`
 
 	// Set of custom game session properties, formatted as a single string value.
 	// This data is passed to a game server process in the GameSession object with
-	// a request to start a new game session (see Start a Game Session (http://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
+	// a request to start a new game session (see Start a Game Session (https://docs.aws.amazon.com/gamelift/latest/developerguide/gamelift-sdk-server-api.html#gamelift-sdk-server-startsession)).
 	// This information is added to the new GameSession object that is created for
 	// a successful match.
 	GameSessionData *string `min:"1" type:"string"`
 
-	// Amazon Resource Name (ARN (http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
+	// Amazon Resource Name (ARN (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-arn-format.html))
 	// that is assigned to a game session queue and uniquely identifies it. Format
 	// is arn:aws:gamelift:<region>::fleet/fleet-a1234567-b8c9-0d1e-2fa3-b45c6d7e8912.
 	// These queues are used when placing game sessions for matches that are created
@@ -18712,7 +18983,7 @@ type UpdateMatchmakingConfigurationInput struct {
 	Name *string `min:"1" type:"string" required:"true"`
 
 	// SNS topic ARN that is set up to receive matchmaking notifications. See  Setting
-	// up Notifications for Matchmaking (http://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html)
+	// up Notifications for Matchmaking (https://docs.aws.amazon.com/gamelift/latest/developerguide/match-notification.html)
 	// for more information.
 	NotificationTarget *string `type:"string"`
 
@@ -19032,8 +19303,6 @@ func (s *ValidateMatchmakingRuleSetOutput) SetValid(v bool) *ValidateMatchmaking
 // to. This authorization must exist and be valid for the peering connection
 // to be established. Authorizations are valid for 24 hours after they are issued.
 //
-// VPC peering connection operations include:
-//
 //    * CreateVpcPeeringAuthorization
 //
 //    * DescribeVpcPeeringAuthorizations
@@ -19050,11 +19319,11 @@ type VpcPeeringAuthorization struct {
 
 	// Time stamp indicating when this authorization was issued. Format is a number
 	// expressed in Unix time as milliseconds (for example "1469498468.057").
-	CreationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	CreationTime *time.Time `type:"timestamp"`
 
 	// Time stamp indicating when this authorization expires (24 hours after issuance).
 	// Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").
-	ExpirationTime *time.Time `type:"timestamp" timestampFormat:"unix"`
+	ExpirationTime *time.Time `type:"timestamp"`
 
 	// Unique identifier for the AWS account that you use to manage your Amazon
 	// GameLift fleet. You can find your Account ID in the AWS Management Console
@@ -19065,8 +19334,9 @@ type VpcPeeringAuthorization struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	PeerVpcId *string `min:"1" type:"string"`
 }
 
@@ -19114,8 +19384,6 @@ func (s *VpcPeeringAuthorization) SetPeerVpcId(v string) *VpcPeeringAuthorizatio
 // and the VPC for your Amazon GameLift fleets. This record may be for an active
 // peering connection or a pending connection that has not yet been established.
 //
-// VPC peering connection operations include:
-//
 //    * CreateVpcPeeringAuthorization
 //
 //    * DescribeVpcPeeringAuthorizations
@@ -19146,8 +19414,9 @@ type VpcPeeringConnection struct {
 
 	// Unique identifier for a VPC with resources to be accessed by your Amazon
 	// GameLift fleet. The VPC must be in the same region where your fleet is deployed.
-	// To get VPC information, including IDs, use the Virtual Private Cloud service
-	// tools, including the VPC Dashboard in the AWS Management Console.
+	// Look up a VPC ID using the VPC Dashboard (https://console.aws.amazon.com/vpc/)
+	// in the AWS Management Console. Learn more about VPC peering in VPC Peering
+	// with Amazon GameLift Fleets (https://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html).
 	PeerVpcId *string `min:"1" type:"string"`
 
 	// Object that contains status information about the connection. Status indicates
@@ -19208,7 +19477,7 @@ func (s *VpcPeeringConnection) SetVpcPeeringConnectionId(v string) *VpcPeeringCo
 
 // Represents status information for a VPC peering connection. Status is associated
 // with a VpcPeeringConnection object. Status codes and messages are provided
-// from EC2 (see VpcPeeringConnectionStateReason (http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html)).
+// from EC2 (see VpcPeeringConnectionStateReason (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html)).
 // Connection status information is also communicated as a fleet Event.
 type VpcPeeringConnectionStatus struct {
 	_ struct{} `type:"structure"`

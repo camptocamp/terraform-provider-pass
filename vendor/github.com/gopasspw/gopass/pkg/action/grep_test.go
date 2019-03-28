@@ -13,6 +13,7 @@ import (
 	"github.com/gopasspw/gopass/tests/gptest"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli"
 )
 
@@ -23,7 +24,8 @@ func TestGrep(t *testing.T) {
 	ctx := context.Background()
 	ctx = ctxutil.WithAlwaysYes(ctx, true)
 	act, err := newMock(ctx, u)
-	assert.NoError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, act)
 
 	buf := &bytes.Buffer{}
 	out.Stdout = buf
@@ -36,11 +38,11 @@ func TestGrep(t *testing.T) {
 	assert.NoError(t, fs.Parse([]string{"foo"}))
 	c := cli.NewContext(app, fs, nil)
 
-	assert.NoError(t, act.Grep(ctx, c))
+	assert.Error(t, act.Grep(ctx, c))
 	buf.Reset()
 
 	// add some secret
 	assert.NoError(t, act.Store.Set(ctx, "foo", secret.New("foobar", "foobar")))
-	assert.NoError(t, act.Grep(ctx, c))
+	assert.Error(t, act.Grep(ctx, c))
 	buf.Reset()
 }

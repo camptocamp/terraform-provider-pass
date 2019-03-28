@@ -1,4 +1,4 @@
-// Copyright 2015 Garrett D'Amore
+// Copyright 2018 Garrett D'Amore
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -16,8 +16,6 @@ package encoding
 
 import (
 	"testing"
-
-	. "github.com/smartystreets/goconvey/convey"
 )
 
 type mapRange struct {
@@ -116,33 +114,33 @@ var mapRanges = []mapRange{
 	{250, 255, RuneError},
 }
 
-func TestEBDIC(t *testing.T) {
-	Convey("EBCDIC/ASCII identity values", t, func() {
-
-		for _, rng := range mapRanges {
-			if rng.r == RuneError {
-				continue
-			}
-			for j := 0; j <= int(rng.last-rng.first); j++ {
-				b := rng.first + byte(j)
-				r := rng.r + rune(j)
-				verifyMap(EBCDIC, b, r)
-			}
+func TestEBCDICvsASCII(t *testing.T) {
+	t.Logf("EBCDIC/ASCII identity values")
+	for _, rng := range mapRanges {
+		if rng.r == RuneError {
+			continue
 		}
-	})
-	Convey("EBCDIC invalid transforms", t, func() {
-		for _, rng := range mapRanges {
-			if rng.r != RuneError {
-				continue
-			}
-			for j := 0; j <= int(rng.last-rng.first); j++ {
-				b := rng.first + byte(j)
-				verifyToUTF(EBCDIC, b, RuneError)
-			}
+		for j := 0; j <= int(rng.last-rng.first); j++ {
+			b := rng.first + byte(j)
+			r := rng.r + rune(j)
+			verifyMap(t, EBCDIC, b, r)
 		}
-	})
+	}
+}
+func TestEBDICvsInvalid(t *testing.T) {
+	t.Logf("EBCDIC invalid transforms")
+	for _, rng := range mapRanges {
+		if rng.r != RuneError {
+			continue
+		}
+		for j := 0; j <= int(rng.last-rng.first); j++ {
+			b := rng.first + byte(j)
+			verifyToUTF(t, EBCDIC, b, RuneError)
+		}
+	}
+}
 
-	Convey("Large UTF maps to subst char", t, func() {
-		verifyFromUTF(EBCDIC, '\x3F', '㿿')
-	})
+func TestEBDICvsLargeUTF(t *testing.T) {
+	t.Logf("Large UTF maps to subst char")
+	verifyFromUTF(t, EBCDIC, '\x3F', '㿿')
 }

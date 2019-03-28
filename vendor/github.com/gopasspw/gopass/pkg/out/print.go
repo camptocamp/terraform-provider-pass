@@ -5,14 +5,20 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
+	"strings"
 
 	"github.com/gopasspw/gopass/pkg/ctxutil"
 
 	"github.com/fatih/color"
 )
 
-// Stdout is exported for tests
-var Stdout io.Writer = os.Stdout
+var (
+	// Stdout is exported for tests
+	Stdout io.Writer = os.Stdout
+	// Stderr is exported for tests
+	Stderr io.Writer = os.Stderr
+)
 
 func newline(ctx context.Context) string {
 	if HasNewline(ctx) {
@@ -34,7 +40,15 @@ func Debug(ctx context.Context, format string, args ...interface{}) {
 	if !ctxutil.IsDebug(ctx) {
 		return
 	}
-	fmt.Fprintf(Stdout, Prefix(ctx)+"[DEBUG] "+format+newline(ctx), args...)
+
+	var loc string
+	if _, file, line, ok := runtime.Caller(1); ok {
+		file = file[strings.Index(file, "pkg/"):]
+		file = strings.TrimPrefix(file, "pkg/")
+		loc = fmt.Sprintf("%s:%d ", file, line)
+	}
+
+	fmt.Fprintf(Stdout, Prefix(ctx)+"[DEBUG] "+loc+format+newline(ctx), args...)
 }
 
 // Black prints the string in black
@@ -83,6 +97,14 @@ func Red(ctx context.Context, format string, args ...interface{}) {
 		return
 	}
 	fmt.Fprint(Stdout, color.RedString(Prefix(ctx)+format+newline(ctx), args...))
+}
+
+// Error prints the string in red to stderr
+func Error(ctx context.Context, format string, args ...interface{}) {
+	if IsHidden(ctx) && !ctxutil.IsDebug(ctx) {
+		return
+	}
+	fmt.Fprint(Stderr, color.RedString(Prefix(ctx)+format+newline(ctx), args...))
 }
 
 // White prints the string in white

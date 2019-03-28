@@ -14,6 +14,7 @@ import (
 	"github.com/gopasspw/gopass/tests/gptest"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/urfave/cli"
 )
 
@@ -23,7 +24,8 @@ func TestConfig(t *testing.T) {
 
 	ctx := context.Background()
 	act, err := newMock(ctx, u)
-	assert.NoError(t, err)
+	require.NoError(t, err)
+	require.NotNil(t, act)
 
 	app := cli.NewApp()
 	c := cli.NewContext(app, flag.NewFlagSet("default", flag.ContinueOnError), nil)
@@ -42,6 +44,7 @@ func TestConfig(t *testing.T) {
   askformore: false
   autoclip: true
   autoimport: true
+  autoprint: false
   autosync: true
   check_recipient_hash: false
   cliptimeout: 45
@@ -87,6 +90,7 @@ foo/nopager: false`
   askformore: false
   autoclip: true
   autoimport: true
+  autoprint: false
   autosync: true
   check_recipient_hash: false
   cliptimeout: 45
@@ -136,6 +140,7 @@ mount 'foo' config:
 	want = `askformore
 autoclip
 autoimport
+autoprint
 autosync
 check_recipient_hash
 cliptimeout

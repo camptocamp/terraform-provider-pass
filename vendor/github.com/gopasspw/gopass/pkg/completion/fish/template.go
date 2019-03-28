@@ -31,7 +31,7 @@ function __fish_{{ $prog }}_print_entries
   {{ $prog }} ls --flat
 end
 
-function __fish_{{ $prog }}__print_dirs
+function __fish_{{ $prog }}_print_dir
   for i in ({{ $prog }} ls --flat)
 	  echo (dirname $i)
 	end | sort -u
@@ -40,13 +40,14 @@ end
 # erase any existing completions for {{ $prog }}
 complete -c $PROG -e
 complete -c $PROG -f -n '__fish_{{ $prog }}_needs_command' -a "(__fish_{{ $prog }}_print_entries)"
+complete -c $PROG -f -s c -l clip -r -a "(__fish_{{ $prog }}_print_entries)"
 {{- $gflags := .Flags -}}
 {{ range .Commands }}
 complete -c $PROG -f -n '__fish_{{ $prog }}_needs_command' -a {{ .Name }} -d 'Command: {{ .Usage }}'
 {{- $cmd := .Name -}}
-{{- if or (eq $cmd "copy") (eq $cmd "move") (eq $cmd "delete") (eq $cmd "show") }}
+{{- if or (eq $cmd "copy") (eq $cmd "cp") (eq $cmd "move") (eq $cmd "mv") (eq $cmd "delete") (eq $cmd "remove") (eq $cmd "rm") (eq $cmd "show") (eq $cmd "set") (eq $cmd "edit") }}
 complete -c $PROG -f -n '__fish_{{ $prog }}_uses_command {{ $cmd }}' -a "(__fish_{{ $prog }}_print_entries)"{{ end -}}
-{{- if or (eq $cmd "insert") (eq $cmd "generate") (eq $cmd "list") }}
+{{- if or (eq $cmd "insert") (eq $cmd "generate") (eq $cmd "list") (eq $cmd "ls") }}
 complete -c $PROG -f -n '__fish_{{ $prog }}_uses_command {{ $cmd }}' -a "(__fish_{{ $prog }}_print_dir)"{{ end -}}
 {{- range .Subcommands }}
 {{- $subcmd := .Name }}

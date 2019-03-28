@@ -1,5 +1,5 @@
 ---
-layout: "guides"
+layout: "extend"
 page_title: "Terraform Provider Development Program"
 sidebar_current: "guides-terraform-provider-development-program"
 description: This guide is intended for vendors who're interested in having their platform supported by Teraform. The guide walks vendors through the steps involved in creating a provider and applying for it to be included with Terraform.
@@ -14,9 +14,9 @@ self-serve, with links to information sources, clearly defined steps, and
 checkpoints.
 
 -> **Building your own provider?** If you're building your own provider and
-aren't interested in having HashiCorp officially approve and regularly test
-the provider, refer to the
-[Writing Custom Providers guide](/guides/writing-custom-terraform-providers.html).
+aren't interested in having HashiCorp officially approve and regularly test the
+provider, refer to the [Writing Custom Providers guide][writing] and the
+[Extending Terraform][extending] section.
 
 ## What is a Terraform Provider?
 
@@ -39,7 +39,7 @@ and tests a particular provider.
 -> **Note:** This document is primarily intended for the "HashiCorp/Vendors" row in
 the table above. Community contributors who’re interested in contributing to
 existing providers or building new providers should refer to the
-[Writing Custom Providers guide](/guides/writing-custom-terraform-providers.html).
+[Writing Custom Providers guide][writing].
 
 ## Provider Development Process
 
@@ -71,11 +71,11 @@ connect similar parties to avoid duplicate work.
 
 ### 2. Enable
 
-We’ve found the provider development to be fairly straightforward and simple
+We’ve found the provider development process to be fairly straightforward and simple
 when vendors pay close attention and follow to the resources below. Adopting
 the same structure and coding patterns helps expedite the review and release cycles.
 
-* Writing custom providers [guide](https://www.terraform.io/guides/writing-custom-terraform-providers.html)
+* [Writing custom providers guide][writing]
 * How-to build a provider [video](https://www.youtube.com/watch?v=2BvpqmFpchI)
 * Sample provider developed by [partner](http://container-solutions.com/write-terraform-provider-part-1/)
 * Example providers for reference: [AWS](https://github.com/terraform-providers/terraform-provider-aws), [OPC](https://github.com/terraform-providers/terraform-provider-opc)
@@ -86,13 +86,19 @@ the same structure and coding patterns helps expedite the review and release cyc
 
 Terraform providers are written in the [Go](https://golang.org/) programming
 language. The
-[Writing Custom Providers guide](/guides/writing-custom-terraform-providers.html)
+[Writing Custom Providers guide][writing]
 is a good resource for developers to begin writing a new provider.
 
-The best approach to building a new provider project is to use the
-[AWS provider](https://github.com/terraform-providers/terraform-provider-aws)
-as a reference.  Given the wide surface area of this provider, almost all
-resource types and preferred code constructs are covered in it.
+The best approach to building a new provider is to be familiar with both the
+[Writing Custom Providers][writing] guide and [Extending Terraform][extending]
+section. The guide will give you an introduction in code structure and the
+basics of authoring a plugin that Terraform can interact with. The Extending
+Terraform section contains guides, best practices, and API reference for
+developers writing Terraform plugins. Additionally developers are encouraged to
+use the [AWS
+provider](https://github.com/terraform-providers/terraform-provider-aws) as an
+implementation reference.  Given the wide surface area of this provider, almost
+all resource types and preferred code constructs are covered in it.
 
 It is recommended for vendors to first develop support for one or two resources
 and go through an initial review cycle before developing the code for the
@@ -224,3 +230,7 @@ in the section above.
 ## Contact Us
 
 For any questions or feedback please contact us at <terraform-provider-dev@hashicorp.com>.
+
+[writing]: /docs/extend/writing-custom-providers.html
+[extending]: /docs/extend/index.html
+

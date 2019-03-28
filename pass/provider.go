@@ -2,6 +2,7 @@ package pass
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 
@@ -52,8 +53,8 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		return nil, errors.Wrap(err, "error instantiating password store")
 	}
 
-	if !act.Store.Initialized(ctx) {
-		return nil, errors.New("password-store not initialized")
+	if ok, err := act.Store.Initialized(ctx); !ok || err != nil {
+		return nil, errors.New(fmt.Sprintf("password-store not initialized: %s", err))
 	}
 	st := act.Store
 

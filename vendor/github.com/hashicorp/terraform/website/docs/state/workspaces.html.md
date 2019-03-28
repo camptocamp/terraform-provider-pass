@@ -18,7 +18,7 @@ the backend has only one workspace, called "default", and thus there is only
 one Terraform state associated with that configuration.
 
 Certain backends support _multiple_ named workspaces, allowing multiple states
-to be associated with a single configuration. The configuration is still
+to be associated with a single configuration. The configuration still
 has only one backend, but multiple distinct instances of that configuration
 to be deployed without configuring a new backend or changing authentication
 credentials.
@@ -30,6 +30,7 @@ Multiple workspaces are currently supported by the following backends:
  * [GCS](/docs/backends/types/gcs.html)
  * [Local](/docs/backends/types/local.html)
  * [Manta](/docs/backends/types/manta.html)
+ * [Postgres](/docs/backends/types/pg.html)
  * [S3](/docs/backends/types/s3.html)
 
 In the 0.9 line of Terraform releases, this concept was known as "environment".
@@ -46,7 +47,7 @@ you've only ever worked on the "default" workspace.
 
 Workspaces are managed with the `terraform workspace` set of commands. To
 create a new workspace and switch to it, you can use `terraform workspace new`;
-to switch environments you can use `terraform workspace select`; etc.
+to switch workspaces you can use `terraform workspace select`; etc.
 
 For example, creating a new workspace:
 
@@ -175,7 +176,7 @@ aren't any more complex than that. Terraform wraps this simple notion with
 a set of protections and support for remote state.
 
 For local state, Terraform stores the workspace states in a directory called
-`terraform.tfstate.d`. This directory should be be treated similarly to
+`terraform.tfstate.d`. This directory should be treated similarly to
 local-only `terraform.tfstate`; some teams commit these files to version
 control, although using a remote backend instead is recommended when there are
 multiple collaborators.
@@ -183,7 +184,7 @@ multiple collaborators.
 For [remote state](/docs/state/remote.html), the workspaces are stored
 directly in the configured [backend](/docs/backends). For example, if you
 use [Consul](/docs/backends/types/consul.html), the workspaces are stored
-by appending the environment name to the state path. To ensure that
+by appending the workspace name to the state path. To ensure that
 workspace names are stored correctly and safely in all backends, the name
 must be valid to use in a URL path segment without escaping.
 

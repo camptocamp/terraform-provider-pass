@@ -51,13 +51,14 @@ Please see [docs/features.md](https://github.com/gopasspw/gopass/blob/master/doc
 | K/V and YAML support        | ❌      | ✔        | *alpha*   | Special handling for Key/Value and YAML content in secrets        |
 | password leak checker       | ❌      | ✔        | *alpha*   | Perform **offline** checks against known leaked passwords         |
 | PAGER support               | ❌      | ✔        | *stable*  | Automatically invoke a pager on long output                       |
-| JSON API                    | ❌      | ✔        | *alpha*   | Allow gopass to be used as a native extension for browser plugins |
+| JSON API                    | ❌      | ✔        | *stable*   | Allow gopass to be used as a native extension for browser plugins |
 | Automatic fuzzy search      | ❌      | ✔        | *stable*  | Automatically search for matching store entries if a literal entry was not found |
 | gopass sync                 | ❌      | ✔        | *beta*    | Easy to use syncing of remote repos and GPG keys |
 | Desktop Notifications       | ❌      | ✔        | *beta*    | Display desktop notifications and completing long running operations |
 | OTP support                 | (✔)    | ✔        | *stable*  | Generate HOTP/TOTP tokens based on the stored secret               |
 | Multiple Crypto Backends    | ❌      | ✔        | *alpha*   | Extensible crypto backend support (GPG, NaCl)                      |
 | Editing Recipients per Secret    | ❌      | ✔        | *beta*   | Select recipients per secret when encrypting |
+| Extensions                  | ✔      | ❌        |           | Extend gopass with custom commands |
 
 ## Installation
 
@@ -68,6 +69,16 @@ go get github.com/gopasspw/gopass
 ```
 
 Otherwise, please see [docs/setup.md](https://github.com/gopasspw/gopass/blob/master/docs/setup.md).
+
+
+## Upgrade
+
+To upgrade with Go installed, run:
+```bash
+go get -u github.com/gopasspw/gopass
+```
+
+Otherwise, use the setup docs mentioned in the installation section to reinstall the latest version.
 
 ## Development
 
@@ -83,7 +94,7 @@ Maintainers of this repository:
 
 * Christoph Oelmüller <christoph.oelmueller@justwatch.com> [@zwopir](https://github.com/zwopir)
 * Matthias Loibl <mail@matthiasloibl.com> [@metalmatze](https://github.com/metalmatze)
-* Dominik Schulz <dominik.schulz@justwatch.com> [@dominikschulz](https://github.com/dominikschulz)
+* Dominik Schulz <dominik.schulz@gmail.com> [@dominikschulz](https://github.com/dominikschulz)
 
 Please refer to the Git commit log for a complete list of contributors.
 

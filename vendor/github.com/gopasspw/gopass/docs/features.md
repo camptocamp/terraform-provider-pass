@@ -7,7 +7,10 @@ gopass supports.
 
 ### Data Organization
 
-Before you start using gopass, you should know a little bit about how it stores your data. It's actually really simple! Each password (or secret) will live in its own file. And you can stick related passwords (or secrets) together in a directory. So, for example, if you had 3 laptops and wanted to store the root passwords for all 3, then your file system might look something like the following:
+Before you start using gopass, you should know a little bit about how it stores your data.
+It's actually really simple! Each password (or secret) will live in its own file.
+And you can stick related passwords (or secrets) together in a directory.
+So, for example, if you had 3 laptops and wanted to store the root passwords for all 3, then your file system might look something like the following:
 
 ```
 .password-store
@@ -40,23 +43,26 @@ example2.com/john@doe.com
 
 ### Initializing a Password Store
 
-After installing gopass, the first thing you should do is initialize a password store. (If you are migrating to gopass from pass and already have a password store, you can skip this step.)
+After installing gopass, the first thing you should do is initialize a password store.
+(If you are migrating to gopass from pass and already have a password store, you can skip this step.)
 
-Note that this document uses the term *password store* to refer to a directory that is managed by gopass. This is entirely different from any OS-level credential store, your GPG key ring, or your SSH keys.
+Note that this document uses the term *password store* to refer to a directory that is managed by gopass.
+This is entirely different from any OS-level credential store, your GPG key ring, or your SSH keys.
 
-To initialize a password store, just do a:
+To initialize a password store, just do:
 
 ```bash
 gopass init
 ```
 
-This will prompt you for which GPG key you want to associate the store with. Then it will create a `.password-store` directory in your home directory.
+This will prompt you for which GPG key you want to associate the store with.
+Then it will create a `.password-store` directory in your home directory.
 
 If you don't want gopass to use this default directory, you can instead initialize a password store with:
 
 ```bash
 gopass init --path /custom/path/to/password/store
-````
+```
 
 If you don't want gopass to prompt you for the GPG key to use, you can specify it inline. For example, this might be useful if you have a huge number of GPG keys on the system or if you are initializing a password store from a script. You can do this in three different ways:
 
@@ -278,15 +284,15 @@ gopass audit hibp --api
 
 #### Using the Dumps
 
-First go to [haveibeenpwned.com/Passwords](https://haveibeenpwned.com/Passwords) and download the dumps. Then unpack the 7-zip archives somewhere. Note that full path to those files and provide it to gopass in the environment variable `HIBP_DUMPS`.
+First go to [haveibeenpwned.com/Passwords](https://haveibeenpwned.com/Passwords) and download the dumps. Then unpack the 7-zip archives somewhere. Note that full path to those files and provide it to gopass `--dumps` flag.
 
 ```bash
-$ HIBP_DUMPS=/tmp/pwned-passwords-1.0.txt gopass audit hibp
+$ gopass audit hibp --dumps /tmp/pwned-passwords-1.0.txt
 ```
 
 ### Support for Binary Content
 
-gopass provides secure and easy support for working with binary files through the `gopass binary` family of sub commands. One can copy or move secret from or to the store. gopass will attempt to securely overwrite and remove any secret moved to the store.
+gopass provides secure and easy support for working with binary files through the `gopass binary` family of sub-commands. One can copy or move secret from or to the store. gopass will attempt to securely overwrite and remove any secret moved to the store.
 
 ```bash
 # copy file "/some/file.jpg" to "some/secret.b64" in the store
@@ -426,7 +432,7 @@ To restrict the characters used in generated passwords set `GOPASS_CHARACTER_SET
 
 ### Using custom password generators
 
-To use an external password generator set `GOPASS_EXTERNAL_PWGEN` to any valid executeable with all required arguments. Please note that the command will be run as-is. Not parameters to control length or complexity can be passed. Any errors will be silently ignored and gopass will fall back to the internal password generator instead.
+To use an external password generator set `GOPASS_EXTERNAL_PWGEN` to any valid executable with all required arguments. Please note that the command will be run as-is. Not parameters to control length or complexity can be passed. Any errors will be silently ignored and gopass will fall back to the internal password generator instead.
 
 ### In-place updates to existing passwords
 
@@ -446,4 +452,4 @@ This makes it easy to use templates for certain kind of secrets such as database
 
 ### JSON API
 
-`gopass jsonapi` enables communication with gopass via JSON messages. This is particularly useful for browser plugins like [gopassbridge](https://github.com/martinhoefling/gopassbridge) running gopass as native app. More details can be found in [docs/jsonapi.md](docs/jsonapi.md).
+`gopass jsonapi` enables communication with gopass via JSON messages. This is particularly useful for browser plugins like [gopassbridge](https://github.com/gopasspw/gopassbridge) running gopass as native app. More details can be found in [docs/jsonapi.md](docs/jsonapi.md).

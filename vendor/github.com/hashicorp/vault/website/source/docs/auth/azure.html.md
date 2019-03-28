@@ -1,6 +1,7 @@
 ---
 layout: "docs"
 page_title: "Azure - Auth Methods"
+sidebar_title: "Azure"
 sidebar_current: "docs-auth-azure"
 description: |-
   The azure auth method plugin allows automated authentication of Azure Active
@@ -26,6 +27,11 @@ The following documentation assumes that the method has been
 * A configured [Azure AD application](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-integrating-applications) which is used as the resource for generating MSI access tokens.
 * Client credentials (shared secret) for accessing the Azure Resource Manager with read access to compute endpoints. See [Azure AD Service to Service Client Credentials](https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-protocols-oauth-service-to-service)
 
+Required Azure API permissions to be granted to Vault user:
+
+* `Microsoft.Compute/virtualMachines/*/read`
+* `Microsoft.Compute/virtualMachineScaleSets/*/read`
+
 If Vault is hosted on Azure, Vault can use MSI to access Azure instead of a shared secret.  MSI must be [enabled](https://docs.microsoft.com/en-us/azure/active-directory/managed-service-identity/qs-configure-portal-windows-vm) on the VMs hosting Vault. 
 
 The next sections review how the authN/Z workflows work. If you
@@ -50,7 +56,17 @@ $ vault write auth/azure/login \
     vm_name="test-vm"
 ```
 
-The `role` and `jwt` parameters are required. When using bound_service_pricipal_ids and bound_groups in the token roles, all the information is required in the JWT.  When using other bound_* parameters, calls to Azure APIs will be made and subscription id, resource group name, and vm name are all required and can be obtained through instance metadata.
+The `role` and `jwt` parameters are required. When using bound_service_principal_ids and bound_groups in the token roles, all the information is required in the JWT.  When using other bound_* parameters, calls to Azure APIs will be made and subscription id, resource group name, and vm name are all required and can be obtained through instance metadata.
+
+For example:
+
+```text
+$ vault write auth/azure/login role="dev-role" \
+     jwt="$(curl -s 'http://169.254.169.254/metadata/identity/oauth2/token?api-version=2018-02-01&resource=https%3A%2F%2Fvault.hashicorp.com%2F' -H Metadata:true | jq -r '.access_token')" \
+     subscription_id=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | jq -r '.compute | .subscriptionId')  \
+     resource_group_name=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | jq -r '.compute | .resourceGroupName') \
+     vm_name=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2017-08-01" | jq -r '.compute | .name')
+```
 
 ### Via the API
 
@@ -171,15 +187,15 @@ for your server at `path/to/plugins`:
 1. Enable the plugin in the catalog:
 
     ```text
-    $ vault write sys/plugins/catalog/azure-auth \
+    $ vault write sys/plugins/catalog/auth/azure-auth \
         command="vault-plugin-auth-azure" \
-        sha_256="..."
+        sha256="..."
     ```
 
 1. Enable the azure auth method as a plugin:
 
     ```text
-    $ vault auth enable -path=azure -plugin-name=azure-auth plugin
+    $ vault auth enable -path=azure azure-auth
     ```
 
 ## API

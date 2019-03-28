@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // AWS Elemental MediaLive.
 //    func myFunc(svc medialiveiface.MediaLiveAPI) bool {
-//        // Make svc.CreateChannel request
+//        // Make svc.BatchUpdateSchedule request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockMediaLiveClient struct {
 //        medialiveiface.MediaLiveAPI
 //    }
-//    func (m *mockMediaLiveClient) CreateChannel(input *medialive.CreateChannelInput) (*medialive.CreateChannelOutput, error) {
+//    func (m *mockMediaLiveClient) BatchUpdateSchedule(input *medialive.BatchUpdateScheduleInput) (*medialive.BatchUpdateScheduleOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type MediaLiveAPI interface {
+	BatchUpdateSchedule(*medialive.BatchUpdateScheduleInput) (*medialive.BatchUpdateScheduleOutput, error)
+	BatchUpdateScheduleWithContext(aws.Context, *medialive.BatchUpdateScheduleInput, ...request.Option) (*medialive.BatchUpdateScheduleOutput, error)
+	BatchUpdateScheduleRequest(*medialive.BatchUpdateScheduleInput) (*request.Request, *medialive.BatchUpdateScheduleOutput)
+
 	CreateChannel(*medialive.CreateChannelInput) (*medialive.CreateChannelOutput, error)
 	CreateChannelWithContext(aws.Context, *medialive.CreateChannelInput, ...request.Option) (*medialive.CreateChannelOutput, error)
 	CreateChannelRequest(*medialive.CreateChannelInput) (*request.Request, *medialive.CreateChannelOutput)
@@ -71,6 +75,10 @@ type MediaLiveAPI interface {
 	CreateInputSecurityGroup(*medialive.CreateInputSecurityGroupInput) (*medialive.CreateInputSecurityGroupOutput, error)
 	CreateInputSecurityGroupWithContext(aws.Context, *medialive.CreateInputSecurityGroupInput, ...request.Option) (*medialive.CreateInputSecurityGroupOutput, error)
 	CreateInputSecurityGroupRequest(*medialive.CreateInputSecurityGroupInput) (*request.Request, *medialive.CreateInputSecurityGroupOutput)
+
+	CreateTags(*medialive.CreateTagsInput) (*medialive.CreateTagsOutput, error)
+	CreateTagsWithContext(aws.Context, *medialive.CreateTagsInput, ...request.Option) (*medialive.CreateTagsOutput, error)
+	CreateTagsRequest(*medialive.CreateTagsInput) (*request.Request, *medialive.CreateTagsOutput)
 
 	DeleteChannel(*medialive.DeleteChannelInput) (*medialive.DeleteChannelOutput, error)
 	DeleteChannelWithContext(aws.Context, *medialive.DeleteChannelInput, ...request.Option) (*medialive.DeleteChannelOutput, error)
@@ -87,6 +95,10 @@ type MediaLiveAPI interface {
 	DeleteReservation(*medialive.DeleteReservationInput) (*medialive.DeleteReservationOutput, error)
 	DeleteReservationWithContext(aws.Context, *medialive.DeleteReservationInput, ...request.Option) (*medialive.DeleteReservationOutput, error)
 	DeleteReservationRequest(*medialive.DeleteReservationInput) (*request.Request, *medialive.DeleteReservationOutput)
+
+	DeleteTags(*medialive.DeleteTagsInput) (*medialive.DeleteTagsOutput, error)
+	DeleteTagsWithContext(aws.Context, *medialive.DeleteTagsInput, ...request.Option) (*medialive.DeleteTagsOutput, error)
+	DeleteTagsRequest(*medialive.DeleteTagsInput) (*request.Request, *medialive.DeleteTagsOutput)
 
 	DescribeChannel(*medialive.DescribeChannelInput) (*medialive.DescribeChannelOutput, error)
 	DescribeChannelWithContext(aws.Context, *medialive.DescribeChannelInput, ...request.Option) (*medialive.DescribeChannelOutput, error)
@@ -107,6 +119,13 @@ type MediaLiveAPI interface {
 	DescribeReservation(*medialive.DescribeReservationInput) (*medialive.DescribeReservationOutput, error)
 	DescribeReservationWithContext(aws.Context, *medialive.DescribeReservationInput, ...request.Option) (*medialive.DescribeReservationOutput, error)
 	DescribeReservationRequest(*medialive.DescribeReservationInput) (*request.Request, *medialive.DescribeReservationOutput)
+
+	DescribeSchedule(*medialive.DescribeScheduleInput) (*medialive.DescribeScheduleOutput, error)
+	DescribeScheduleWithContext(aws.Context, *medialive.DescribeScheduleInput, ...request.Option) (*medialive.DescribeScheduleOutput, error)
+	DescribeScheduleRequest(*medialive.DescribeScheduleInput) (*request.Request, *medialive.DescribeScheduleOutput)
+
+	DescribeSchedulePages(*medialive.DescribeScheduleInput, func(*medialive.DescribeScheduleOutput, bool) bool) error
+	DescribeSchedulePagesWithContext(aws.Context, *medialive.DescribeScheduleInput, func(*medialive.DescribeScheduleOutput, bool) bool, ...request.Option) error
 
 	ListChannels(*medialive.ListChannelsInput) (*medialive.ListChannelsOutput, error)
 	ListChannelsWithContext(aws.Context, *medialive.ListChannelsInput, ...request.Option) (*medialive.ListChannelsOutput, error)
@@ -142,6 +161,10 @@ type MediaLiveAPI interface {
 
 	ListReservationsPages(*medialive.ListReservationsInput, func(*medialive.ListReservationsOutput, bool) bool) error
 	ListReservationsPagesWithContext(aws.Context, *medialive.ListReservationsInput, func(*medialive.ListReservationsOutput, bool) bool, ...request.Option) error
+
+	ListTagsForResource(*medialive.ListTagsForResourceInput) (*medialive.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *medialive.ListTagsForResourceInput, ...request.Option) (*medialive.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*medialive.ListTagsForResourceInput) (*request.Request, *medialive.ListTagsForResourceOutput)
 
 	PurchaseOffering(*medialive.PurchaseOfferingInput) (*medialive.PurchaseOfferingOutput, error)
 	PurchaseOfferingWithContext(aws.Context, *medialive.PurchaseOfferingInput, ...request.Option) (*medialive.PurchaseOfferingOutput, error)

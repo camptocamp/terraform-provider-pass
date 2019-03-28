@@ -6,6 +6,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/hashicorp/terraform/addrs"
 	"github.com/hashicorp/terraform/helper/resource"
 	"github.com/hashicorp/terraform/terraform"
 )
@@ -24,9 +25,95 @@ resource "test_resource" "foo" {
 	}
 }
 				`),
-				Check: func(s *terraform.State) error {
-					return nil
-				},
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckNoResourceAttr(
+						"test_resource.foo", "list.#",
+					),
+				),
+			},
+		},
+	})
+}
+
+func TestResource_changedList(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required = "yep"
+	required_map = {
+	    key = "value"
+	}
+}
+				`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckNoResourceAttr(
+						"test_resource.foo", "list.#",
+					),
+				),
+			},
+			{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required = "yep"
+	required_map = {
+	    key = "value"
+	}
+	list = ["a"]
+}
+				`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.#", "1",
+					),
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.0", "a",
+					),
+				),
+			},
+			{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required = "yep"
+	required_map = {
+	    key = "value"
+	}
+	list = ["a", "b"]
+}
+				`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.#", "2",
+					),
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.0", "a",
+					),
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.1", "b",
+					),
+				),
+			},
+			{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required = "yep"
+	required_map = {
+	    key = "value"
+	}
+	list = ["b"]
+}
+				`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.#", "1",
+					),
+					resource.TestCheckResourceAttr(
+						"test_resource.foo", "list.0", "b",
+					),
+				),
 			},
 		},
 	})
@@ -66,7 +153,7 @@ func TestResource_ignoreChangesEmpty(t *testing.T) {
 			resource.TestStep{
 				Config: strings.TrimSpace(`
 resource "test_resource" "foo" {
-	required           = "yep"
+	required = "yep"
 	required_map = {
 	    key = "value"
 	}
@@ -83,8 +170,8 @@ resource "test_resource" "foo" {
 			resource.TestStep{
 				Config: strings.TrimSpace(`
 resource "test_resource" "foo" {
-	required           = "yep"
-	required_map {
+	required = "yep"
+	required_map = {
 	    key = "value"
 	}
 	optional_force_new = "two"
@@ -110,7 +197,7 @@ func TestResource_ignoreChangesForceNew(t *testing.T) {
 				Config: strings.TrimSpace(`
 resource "test_resource" "foo" {
 	required           = "yep"
-	required_map {
+	required_map = {
 	    key = "value"
 	}
 	optional_force_new = "one"
@@ -165,9 +252,6 @@ resource "test_resource" "foo" {
   }
 }
 				`),
-				Check: func(s *terraform.State) error {
-					return nil
-				},
 			},
 			resource.TestStep{
 				Config: strings.TrimSpace(`
@@ -191,61 +275,6 @@ resource "test_resource" "foo" {
 	})
 }
 
-// Reproduces plan-time panic described in GH-7170
-func TestResource_dataSourceListPlanPanic(t *testing.T) {
-	resource.UnitTest(t, resource.TestCase{
-		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckResourceDestroy,
-		Steps: []resource.TestStep{
-			resource.TestStep{
-				Config: strings.TrimSpace(`
-data "test_data_source" "foo" {}
-resource "test_resource" "foo" {
-  required = "${data.test_data_source.foo.list}"
-  required_map = {
-    key = "value"
-  }
-}
-				`),
-				ExpectError: regexp.MustCompile(`must be a single value, not a list`),
-				Check: func(s *terraform.State) error {
-					return nil
-				},
-			},
-		},
-	})
-}
-
-// Reproduces apply-time panic described in GH-7170
-func TestResource_dataSourceListApplyPanic(t *testing.T) {
-	resource.UnitTest(t, resource.TestCase{
-		Providers:    testAccProviders,
-		CheckDestroy: testAccCheckResourceDestroy,
-		Steps: []resource.TestStep{
-			resource.TestStep{
-				Config: strings.TrimSpace(`
-resource "test_resource" "foo" {
-  required = "ok"
-  required_map = {
-    key = "value"
-  }
-}
-resource "test_resource" "bar" {
-  required = "${test_resource.foo.computed_list}"
-  required_map = {
-    key = "value"
-  }
-}
-				`),
-				ExpectError: regexp.MustCompile(`must be a single value, not a list`),
-				Check: func(s *terraform.State) error {
-					return nil
-				},
-			},
-		},
-	})
-}
-
 func TestResource_ignoreChangesMap(t *testing.T) {
 	resource.UnitTest(t, resource.TestCase{
 		Providers:    testAccProviders,
@@ -258,7 +287,7 @@ resource "test_resource" "foo" {
 	required_map = {
 	  key = "value"
 	}
-	optional_computed_map {
+	optional_computed_map = {
 		foo = "bar"
 	}
 	lifecycle {
@@ -277,7 +306,7 @@ resource "test_resource" "foo" {
 	required_map = {
 	  key = "value"
 	}
-	optional_computed_map {
+	optional_computed_map = {
 		foo = "bar"
 		no  = "update"
 	}
@@ -304,7 +333,9 @@ func TestResource_ignoreChangesDependent(t *testing.T) {
 resource "test_resource" "foo" {
 	count = 2
 	required = "yep"
-	required_map { key = "value" }
+	required_map = {
+		key = "value"
+	}
 
 	optional_force_new = "one"
 	lifecycle {
@@ -314,7 +345,9 @@ resource "test_resource" "foo" {
 resource "test_resource" "bar" {
 	count = 2
 	required = "yep"
-	required_map { key = "value" }
+	required_map = {
+		key = "value"
+	}
 	optional = "${element(test_resource.foo.*.id, count.index)}"
 }
 				`),
@@ -327,7 +360,9 @@ resource "test_resource" "bar" {
 resource "test_resource" "foo" {
 	count = 2
 	required = "yep"
-	required_map { key = "value" }
+	required_map = {
+		key = "value"
+	}
 
 	optional_force_new = "two"
 	lifecycle {
@@ -337,7 +372,9 @@ resource "test_resource" "foo" {
 resource "test_resource" "bar" {
 	count = 2
 	required = "yep"
-	required_map { key = "value" }
+	required_map = {
+		key = "value"
+	}
 	optional = "${element(test_resource.foo.*.id, count.index)}"
 }
 				`),
@@ -464,7 +501,7 @@ output "value_from_map_from_list" {
 				`),
 				ExpectError: nil,
 				Check: func(s *terraform.State) error {
-					root := s.ModuleByPath(terraform.RootModulePath)
+					root := s.ModuleByPath(addrs.RootModuleInstance)
 					mapOut := root.Outputs["map_from_list"].Value
 					expectedMapOut := map[string]interface{}{
 						"a": "1",
@@ -489,4 +526,209 @@ output "value_from_map_from_list" {
 
 func testAccCheckResourceDestroy(s *terraform.State) error {
 	return nil
+}
+
+func TestResource_removeForceNew(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required           = "yep"
+	required_map = {
+	  key = "value"
+	}
+	optional_force_new = "here"
+}
+				`),
+			},
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required           = "yep"
+	required_map = {
+	  key = "value"
+	}
+}
+				`),
+			},
+		},
+	})
+}
+
+func TestResource_unknownFuncInMap(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required           = "ok"
+	required_map = {
+	  key = "${uuid()}"
+	}
+}
+				`),
+				ExpectNonEmptyPlan: true,
+			},
+		},
+	})
+}
+
+// Verify that we can destroy when a managed resource references something with
+// a count of 1.
+func TestResource_countRefDestroyError(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers: testAccProviders,
+		Steps: []resource.TestStep{
+			{
+				Config: strings.TrimSpace(`
+resource "test_resource" "one" {
+	count = 1
+	required     = "ok"
+	required_map = {
+	  key = "val"
+	}
+}
+
+resource "test_resource" "two" {
+	required     = test_resource.one[0].id
+	required_map = {
+	  key = "val"
+	}
+}
+				`),
+			},
+		},
+	})
+}
+
+func TestResource_emptyMapValue(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+	required     = "ok"
+	required_map = {
+		a = "a"
+		b = ""
+	}
+}
+				`),
+			},
+		},
+	})
+}
+
+func TestResource_updateError(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "first"
+  required_map = {
+    a = "a"
+  }
+}
+`),
+			},
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "second"
+  required_map = {
+    a = "a"
+  }
+  apply_error = "update_error"
+}
+`),
+				ExpectError: regexp.MustCompile("update_error"),
+			},
+		},
+	})
+}
+
+func TestResource_applyError(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "second"
+  required_map = {
+    a = "a"
+  }
+  apply_error = "apply_error"
+}
+`),
+				ExpectError: regexp.MustCompile("apply_error"),
+			},
+		},
+	})
+}
+
+func TestResource_emptyStrings(t *testing.T) {
+	resource.UnitTest(t, resource.TestCase{
+		Providers:    testAccProviders,
+		CheckDestroy: testAccCheckResourceDestroy,
+		Steps: []resource.TestStep{
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "second"
+  required_map = {
+    a = "a"
+  }
+
+  list = [""]
+}
+`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("test_resource.foo", "list.0", ""),
+				),
+			},
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "second"
+  required_map = {
+    a = "a"
+  }
+
+  list = ["", "b"]
+}
+`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("test_resource.foo", "list.0", ""),
+					resource.TestCheckResourceAttr("test_resource.foo", "list.1", "b"),
+				),
+			},
+			resource.TestStep{
+				Config: strings.TrimSpace(`
+resource "test_resource" "foo" {
+  required     = "second"
+  required_map = {
+    a = "a"
+  }
+
+  list = [""]
+}
+`),
+				Check: resource.ComposeTestCheckFunc(
+					resource.TestCheckResourceAttr("test_resource.foo", "list.0", ""),
+				),
+			},
+		},
+	})
 }

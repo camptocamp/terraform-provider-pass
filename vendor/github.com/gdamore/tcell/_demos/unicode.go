@@ -1,4 +1,4 @@
-// Copyright 2015 The TCell Authors
+// Copyright 2019 The TCell Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -22,7 +22,7 @@ import (
 
 	"github.com/gdamore/tcell"
 	"github.com/gdamore/tcell/encoding"
-	"github.com/mattn/go-runewidth"
+	runewidth "github.com/mattn/go-runewidth"
 )
 
 var row = 0
@@ -38,7 +38,22 @@ func puts(s tcell.Screen, style tcell.Style, x, y int, str string) {
 	i := 0
 	var deferred []rune
 	dwidth := 0
+	zwj := false
 	for _, r := range str {
+		if r == '\u200d' {
+			if len(deferred) == 0 {
+				deferred = append(deferred, ' ')
+				dwidth = 1
+			}
+			deferred = append(deferred, r)
+			zwj = true
+			continue
+		}
+		if zwj {
+			deferred = append(deferred, r)
+			zwj = false
+			continue
+		}
 		switch runewidth.RuneWidth(r) {
 		case 0:
 			if len(deferred) == 0 {
@@ -109,6 +124,10 @@ func main() {
 	putln(s, "Airplane:  \u2708 (fly away)")
 	putln(s, "Command:   \u2318 (mac clover key)")
 	putln(s, "Enclose:   !\u20e3 (should be enclosed exclamation)")
+	putln(s, "ZWJ:       \U0001f9db\u200d\u2640 (female vampire)")
+	putln(s, "ZWJ:       \U0001f9db\u200d\u2642 (male vampire)")
+	putln(s, "Family:    \U0001f469\u200d\U0001f467\u200d\U0001f467 (woman girl girl)\n")
+	putln(s, "Region:    \U0001f1fa\U0001f1f8 (USA! USA!)\n")
 	putln(s, "")
 	putln(s, "Box:")
 	putln(s, string([]rune{

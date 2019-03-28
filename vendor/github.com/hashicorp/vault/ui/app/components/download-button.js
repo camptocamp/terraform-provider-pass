@@ -1,10 +1,9 @@
-import Ember from 'ember';
+import Component from '@ember/component';
+import { computed } from '@ember/object';
 import hbs from 'htmlbars-inline-precompile';
 
-const { computed } = Ember;
-
-export default Ember.Component.extend({
-  layout: hbs`{{actionText}}`,
+export default Component.extend({
+  layout: hbs`{{#if hasBlock}} {{yield}} {{else}} {{actionText}} {{/if}}`,
   tagName: 'a',
   role: 'button',
   attributeBindings: ['role', 'download', 'href'],

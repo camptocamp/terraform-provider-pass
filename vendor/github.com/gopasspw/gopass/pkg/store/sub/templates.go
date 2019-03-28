@@ -21,8 +21,10 @@ const (
 )
 
 // LookupTemplate will lookup and return a template
-func (s *Store) LookupTemplate(ctx context.Context, name string) ([]byte, bool) {
-	// chop off one path element until we find something
+func (s *Store) LookupTemplate(ctx context.Context, name string) (string, []byte, bool) {
+	oName := name
+	// go upwards in the directory tree until we find a template
+	// by chopping off one path element by one.
 	for {
 		l1 := len(name)
 		name = filepath.Dir(name)
@@ -32,11 +34,12 @@ func (s *Store) LookupTemplate(ctx context.Context, name string) ([]byte, bool) 
 		tpl := filepath.Join(name, TemplateFile)
 		if s.storage.Exists(ctx, tpl) {
 			if content, err := s.storage.Get(ctx, tpl); err == nil {
-				return content, true
+				out.Debug(ctx, "Found template '%s' for '%s'", tpl, oName)
+				return tpl, content, true
 			}
 		}
 	}
-	return []byte{}, false
+	return "", []byte{}, false
 }
 
 // ListTemplates will list all templates in this store
@@ -70,7 +73,7 @@ func (s *Store) TemplateTree(ctx context.Context) (tree.Tree, error) {
 	root := simple.New("gopass")
 	for _, t := range s.ListTemplates(ctx, "") {
 		if err := root.AddFile(t, "gopass/template"); err != nil {
-			out.Red(ctx, "Failed to add template: %s", err)
+			out.Error(ctx, "Failed to add template: %s", err)
 		}
 	}
 
@@ -79,7 +82,7 @@ func (s *Store) TemplateTree(ctx context.Context) (tree.Tree, error) {
 
 // templatefile returns the name of the given template on disk
 func (s *Store) templatefile(name string) string {
-	return filepath.Join(name, TemplateFile)
+	return strings.TrimPrefix(filepath.Join(name, TemplateFile), string(filepath.Separator))
 }
 
 // HasTemplate returns true if the template exists

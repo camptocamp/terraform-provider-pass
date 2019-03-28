@@ -56,22 +56,24 @@ type Service struct {
 	// certain features are enabled by default for certain config versions.
 	// The latest config version is `3`.
 	ConfigVersion *wrappers.UInt32Value `protobuf:"bytes,20,opt,name=config_version,json=configVersion,proto3" json:"config_version,omitempty"`
-	// The DNS address at which this service is available,
-	// e.g. `calendar.googleapis.com`.
+	// The service name, which is a DNS-like logical identifier for the
+	// service, such as `calendar.googleapis.com`. The service name
+	// typically goes through DNS verification to make sure the owner
+	// of the service also owns the DNS name.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// A unique ID for a specific instance of this message, typically assigned
 	// by the client for tracking purpose. If empty, the server may choose to
-	// generate one instead.
+	// generate one instead. Must be no longer than 60 characters.
 	Id string `protobuf:"bytes,33,opt,name=id,proto3" json:"id,omitempty"`
 	// The product title for this service.
 	Title string `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	// The Google project that owns this service.
 	ProducerProjectId string `protobuf:"bytes,22,opt,name=producer_project_id,json=producerProjectId,proto3" json:"producer_project_id,omitempty"`
 	// A list of API interfaces exported by this service. Only the `name` field
-	// of the [google.protobuf.Api][google.protobuf.Api] needs to be provided by the configuration
-	// author, as the remaining fields will be derived from the IDL during the
-	// normalization process. It is an error to specify an API interface here
-	// which cannot be resolved against the associated IDL files.
+	// of the [google.protobuf.Api][google.protobuf.Api] needs to be provided by
+	// the configuration author, as the remaining fields will be derived from the
+	// IDL during the normalization process. It is an error to specify an API
+	// interface here which cannot be resolved against the associated IDL files.
 	Apis []*api.Api `protobuf:"bytes,3,rep,name=apis,proto3" json:"apis,omitempty"`
 	// A list of all proto message types included in this API service.
 	// Types referenced directly or indirectly by the `apis` are
@@ -115,7 +117,8 @@ type Service struct {
 	// Defines the metrics used by this service.
 	Metrics []*metric.MetricDescriptor `protobuf:"bytes,24,rep,name=metrics,proto3" json:"metrics,omitempty"`
 	// Defines the monitored resources used by this service. This is required
-	// by the [Service.monitoring][google.api.Service.monitoring] and [Service.logging][google.api.Service.logging] configurations.
+	// by the [Service.monitoring][google.api.Service.monitoring] and
+	// [Service.logging][google.api.Service.logging] configurations.
 	MonitoredResources []*monitoredres.MonitoredResourceDescriptor `protobuf:"bytes,25,rep,name=monitored_resources,json=monitoredResources,proto3" json:"monitored_resources,omitempty"`
 	// Billing configuration.
 	Billing *Billing `protobuf:"bytes,26,opt,name=billing,proto3" json:"billing,omitempty"`
@@ -138,7 +141,7 @@ func (m *Service) Reset()         { *m = Service{} }
 func (m *Service) String() string { return proto.CompactTextString(m) }
 func (*Service) ProtoMessage()    {}
 func (*Service) Descriptor() ([]byte, []int) {
-	return fileDescriptor_service_8a26972003166ec9, []int{0}
+	return fileDescriptor_service_7ba9b10e7153108c, []int{0}
 }
 func (m *Service) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_Service.Unmarshal(m, b)
@@ -344,9 +347,9 @@ func init() {
 	proto.RegisterType((*Service)(nil), "google.api.Service")
 }
 
-func init() { proto.RegisterFile("google/api/service.proto", fileDescriptor_service_8a26972003166ec9) }
+func init() { proto.RegisterFile("google/api/service.proto", fileDescriptor_service_7ba9b10e7153108c) }
 
-var fileDescriptor_service_8a26972003166ec9 = []byte{
+var fileDescriptor_service_7ba9b10e7153108c = []byte{
 	// 825 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x96, 0xdf, 0x6e, 0xdb, 0x36,
 	0x14, 0x87, 0x61, 0xd7, 0x6e, 0x16, 0x3a, 0xcd, 0x1a, 0xc6, 0x49, 0x19, 0xd7, 0x1b, 0xd2, 0xfd,

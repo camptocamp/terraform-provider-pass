@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/hashicorp/go-sockaddr"
+	sockaddr "github.com/hashicorp/go-sockaddr"
 )
 
 func TestSockAddr_IPv4Addr(t *testing.T) {
@@ -656,7 +656,7 @@ func TestSockAddr_IPv4Addr(t *testing.T) {
 				t.Errorf("[%d] Expected %+q's broadcast to be %+q, received %+q", idx, test.z00_input, test.z15_broadcast, b)
 			}
 
-			if p := ipv4.IPPort(); sockaddr.IPPort(p) != test.z16_portInt || sockaddr.IPPort(p) != test.z16_portInt {
+			if p := ipv4.IPPort(); sockaddr.IPPort(p) != test.z16_portInt {
 				t.Errorf("[%d] Expected %+q's port to be %d, received %d", idx, test.z00_input, test.z16_portInt, p)
 			}
 

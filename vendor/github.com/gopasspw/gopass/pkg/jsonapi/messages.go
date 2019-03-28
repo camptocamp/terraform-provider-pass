@@ -25,13 +25,26 @@ type getLoginMessage struct {
 	Entry string `json:"entry"`
 }
 
+type copyToClipboard struct {
+	Entry string `json:"entry"`
+	Key   string `json:"key"`
+}
+
 type loginResponse struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username    string                 `json:"username"`
+	Password    string                 `json:"password"`
+	LoginFields map[string]interface{} `json:"login_fields,omitempty"`
 }
 
 type getDataMessage struct {
 	Entry string `json:"entry"`
+}
+
+type getVersionMessage struct {
+	Version string `json:"version"`
+	Major   uint64 `json:"major"`
+	Minor   uint64 `json:"minor"`
+	Patch   uint64 `json:"patch"`
 }
 
 type createEntryMessage struct {
@@ -43,19 +56,23 @@ type createEntryMessage struct {
 	UseSymbols     bool   `json:"use_symbols"`
 }
 
+type statusResponse struct {
+	Status string `json:"status"`
+}
+
 type errorResponse struct {
 	Error string `json:"error"`
 }
 
 func readMessage(r io.Reader) ([]byte, error) {
-	stdin := bufio.NewReader(r)
+	input := bufio.NewReader(r)
 	lenBytes := make([]byte, 4)
-	count, err := stdin.Read(lenBytes)
+	count, err := input.Read(lenBytes)
 	if err != nil {
 		return nil, eofReturn(err)
 	}
 	if count != 4 {
-		return nil, fmt.Errorf("not enough bytes read to deterimine message size")
+		return nil, fmt.Errorf("not enough bytes read to determine message size")
 	}
 
 	length, err := getMessageLength(lenBytes)
@@ -64,7 +81,7 @@ func readMessage(r io.Reader) ([]byte, error) {
 	}
 
 	msgBytes := make([]byte, length)
-	count, err = stdin.Read(msgBytes)
+	count, err = input.Read(msgBytes)
 	if err != nil {
 		return nil, eofReturn(err)
 	}
@@ -94,7 +111,7 @@ func eofReturn(err error) error {
 
 func sendSerializedJSONMessage(message interface{}, w io.Writer) error {
 	// we can't use json.NewEncoder(w).Encode because we need to send the final
-	// message length before the actul JSON
+	// message length before the actual JSON
 	serialized, err := json.Marshal(message)
 	if err != nil {
 		return err

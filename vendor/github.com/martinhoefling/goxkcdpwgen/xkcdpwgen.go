@@ -14,6 +14,7 @@ var delim = flag.String("d", " ", "Delimiter to separate words")
 var lang = flag.String("l", "en", "Use non english language with custom list, currently only de = german is supported")
 var effshort = flag.Bool("s", false, "Use eff_short instead of eff_long as wordlist")
 var capitalize = flag.Bool("c", false, "Capitalize words")
+var pwcount = flag.Int("N", 1, "Number of passwords to generate")
 
 func main() {
 	flag.Parse()
@@ -29,5 +30,7 @@ func main() {
 			panic(err)
 		}
 	}
-	fmt.Println(g.GeneratePasswordString())
+	for i := 0; i < *pwcount; i++ {
+		fmt.Println(g.GeneratePasswordString())
+	}
 }

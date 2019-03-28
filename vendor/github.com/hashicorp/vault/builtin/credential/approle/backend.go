@@ -3,6 +3,7 @@ package approle
 import (
 	"context"
 	"sync"
+	"time"
 
 	"github.com/hashicorp/vault/helper/consts"
 	"github.com/hashicorp/vault/helper/locksutil"
@@ -56,6 +57,8 @@ type backend struct {
 	// secretIDListingLock is a dedicated lock for listing SecretIDAccessors
 	// for all the SecretIDs issued against an approle
 	secretIDListingLock sync.RWMutex
+
+	testTidyDelay time.Duration
 }
 
 func Factory(ctx context.Context, conf *logical.BackendConfig) (logical.Backend, error) {
@@ -156,8 +159,8 @@ func (b *backend) invalidate(_ context.Context, key string) {
 // to delay the removal of SecretIDs by a minute.
 func (b *backend) periodicFunc(ctx context.Context, req *logical.Request) error {
 	// Initiate clean-up of expired SecretID entries
-	if b.System().LocalMount() || !b.System().ReplicationState().HasState(consts.ReplicationPerformanceSecondary) {
-		b.tidySecretID(ctx, req.Storage)
+	if b.System().LocalMount() || !b.System().ReplicationState().HasState(consts.ReplicationPerformanceSecondary|consts.ReplicationPerformanceStandby) {
+		b.tidySecretID(ctx, req)
 	}
 	return nil
 }

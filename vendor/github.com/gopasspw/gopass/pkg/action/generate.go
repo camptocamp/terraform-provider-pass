@@ -18,7 +18,6 @@ import (
 	"github.com/gopasspw/gopass/pkg/store/secret"
 	"github.com/gopasspw/gopass/pkg/store/sub"
 	"github.com/gopasspw/gopass/pkg/termio"
-	"github.com/gopasspw/gopass/pkg/tpl"
 
 	"github.com/fatih/color"
 	"github.com/urfave/cli"
@@ -102,7 +101,7 @@ func keyAndLength(args argList) (string, string) {
 // generateCopyOrPrint will print the password to the screen or copy to the
 // clipboard
 func (s *Action) generateCopyOrPrint(ctx context.Context, c *cli.Context, name, key, password string) error {
-	if c.Bool("print") {
+	if ctxutil.IsAutoPrint(ctx) || c.Bool("print") {
 		if key != "" {
 			key = " " + key
 		}
@@ -111,13 +110,23 @@ func (s *Action) generateCopyOrPrint(ctx context.Context, c *cli.Context, name, 
 			"The generated password for %s%s is:\n%s", name, key,
 			color.YellowString(password),
 		)
-		return nil
 	}
+
 	if ctxutil.IsAutoClip(ctx) || c.Bool("clip") {
 		if err := clipboard.CopyTo(ctx, name, []byte(password)); err != nil {
 			return ExitError(ctx, ExitIO, err, "failed to copy to clipboard: %s", err)
 		}
 	}
+
+	if c.Bool("print") || c.Bool("clip") {
+		return nil
+	}
+
+	entry := name
+	if key != "" {
+		entry += ":" + key
+	}
+	out.Print(ctx, "Password for %s generated", entry)
 	return nil
 }
 
@@ -231,16 +240,14 @@ func (s *Action) generateSetPassword(ctx context.Context, name, key, password st
 	// generate a completely new secret
 	var err error
 	sec := secret.New(password, "")
-	if tmpl, found := s.Store.LookupTemplate(ctx, name); found {
-		content, err := tpl.Execute(ctx, string(tmpl), name, []byte(password), s.Store)
-		if err != nil {
-			return nil, ExitError(ctx, ExitUnknown, err, "failed to execute template: %s", err)
-		}
-		sec, err = secret.Parse(content)
-		if err != nil {
-			return nil, ExitError(ctx, ExitUnknown, err, "failed to parse secret: %s", err)
+
+	if content, found := s.renderTemplate(ctx, name, []byte(password)); found {
+		nSec, err := secret.Parse(content)
+		if err == nil {
+			sec = nSec
 		}
 	}
+
 	ctx, err = s.Store.SetContext(sub.WithReason(ctx, "Generated Password"), name, sec)
 	if err != nil {
 		return ctx, ExitError(ctx, ExitEncrypt, err, "failed to create '%s': %s", name, err)
@@ -262,7 +269,11 @@ func (s *Action) CompleteGenerate(ctx context.Context, c *cli.Context) {
 	}
 	needle := args[0]
 
-	s.Store.Initialized(ctx) // important to make sure the structs are not nil
+	_, err := s.Store.Initialized(ctx) // important to make sure the structs are not nil
+	if err != nil {
+		out.Error(ctx, "Store not initialized: %s", err)
+		return
+	}
 	list, err := s.Store.List(ctx, 0)
 	if err != nil {
 		return

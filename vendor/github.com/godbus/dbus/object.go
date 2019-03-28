@@ -13,7 +13,10 @@ type BusObject interface {
 	CallWithContext(ctx context.Context, method string, flags Flags, args ...interface{}) *Call
 	Go(method string, flags Flags, ch chan *Call, args ...interface{}) *Call
 	GoWithContext(ctx context.Context, method string, flags Flags, ch chan *Call, args ...interface{}) *Call
+	AddMatchSignal(iface, member string, options ...MatchOption) *Call
+	RemoveMatchSignal(iface, member string, options ...MatchOption) *Call
 	GetProperty(p string) (Variant, error)
+	SetProperty(p string, v interface{}) error
 	Destination() string
 	Path() ObjectPath
 }
@@ -35,13 +38,65 @@ func (o *Object) CallWithContext(ctx context.Context, method string, flags Flags
 	return <-o.createCall(ctx, method, flags, make(chan *Call, 1), args...).Done
 }
 
-// AddMatchSignal subscribes BusObject to signals from specified interface and
-// method (member).
-func (o *Object) AddMatchSignal(iface, member string) *Call {
-	return o.Call(
+// MatchOption specifies option for dbus routing match rule. Options can be constructed with WithMatch* helpers.
+// For full list of available options consult
+// https://dbus.freedesktop.org/doc/dbus-specification.html#message-bus-routing-match-rules
+type MatchOption struct {
+	key   string
+	value string
+}
+
+// WithMatchOption creates match option with given key and value
+func WithMatchOption(key, value string) MatchOption {
+	return MatchOption{key, value}
+}
+
+// WithMatchObjectPath creates match option that filters events based on given path
+func WithMatchObjectPath(path ObjectPath) MatchOption {
+	return MatchOption{"path", string(path)}
+}
+
+func formatMatchOptions(options []MatchOption) string {
+	items := make([]string, 0, len(options))
+	for _, option := range options {
+		items = append(items, option.key+"='"+option.value+"'")
+	}
+
+	return strings.Join(items, ",")
+}
+
+// AddMatchSignal subscribes BusObject to signals from specified interface,
+// method (member). Additional filter rules can be added via WithMatch* option constructors.
+// Note: To filter events by object path you have to specify this path via an option.
+func (o *Object) AddMatchSignal(iface, member string, options ...MatchOption) *Call {
+	base := []MatchOption{
+		{"type", "signal"},
+		{"interface", iface},
+		{"member", member},
+	}
+
+	options = append(base, options...)
+	return o.conn.BusObject().Call(
 		"org.freedesktop.DBus.AddMatch",
 		0,
-		"type='signal',interface='"+iface+"',member='"+member+"'",
+		formatMatchOptions(options),
+	)
+}
+
+// RemoveMatchSignal unsubscribes BusObject from signals from specified interface,
+// method (member). Additional filter rules can be added via WithMatch* option constructors
+func (o *Object) RemoveMatchSignal(iface, member string, options ...MatchOption) *Call {
+	base := []MatchOption{
+		{"type", "signal"},
+		{"interface", iface},
+		{"member", member},
+	}
+
+	options = append(base, options...)
+	return o.conn.BusObject().Call(
+		"org.freedesktop.DBus.RemoveMatch",
+		0,
+		formatMatchOptions(options),
 	)
 }
 
@@ -92,7 +147,7 @@ func (o *Object) createCall(ctx context.Context, method string, flags Flags, ch 
 	}
 	if msg.Flags&FlagNoReplyExpected == 0 {
 		if ch == nil {
-			ch = make(chan *Call, 10)
+			ch = make(chan *Call, 1)
 		} else if cap(ch) == 0 {
 			panic("dbus: unbuffered channel passed to (*Object).Go")
 		}
@@ -133,7 +188,7 @@ func (o *Object) createCall(ctx context.Context, method string, flags Flags, ch 
 	return call
 }
 
-// GetProperty calls org.freedesktop.DBus.Properties.GetProperty on the given
+// GetProperty calls org.freedesktop.DBus.Properties.Get on the given
 // object. The property name must be given in interface.member notation.
 func (o *Object) GetProperty(p string) (Variant, error) {
 	idx := strings.LastIndex(p, ".")
@@ -152,6 +207,20 @@ func (o *Object) GetProperty(p string) (Variant, error) {
 	}
 
 	return result, nil
+}
+
+// SetProperty calls org.freedesktop.DBus.Properties.Set on the given
+// object. The property name must be given in interface.member notation.
+func (o *Object) SetProperty(p string, v interface{}) error {
+	idx := strings.LastIndex(p, ".")
+	if idx == -1 || idx+1 == len(p) {
+		return errors.New("dbus: invalid property " + p)
+	}
+
+	iface := p[:idx]
+	prop := p[idx+1:]
+
+	return o.Call("org.freedesktop.DBus.Properties.Set", 0, iface, prop, v).Err
 }
 
 // Destination returns the destination that calls on (o *Object) are sent to.

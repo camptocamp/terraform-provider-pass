@@ -2,6 +2,7 @@ package root
 
 import (
 	"context"
+	"path/filepath"
 	"sort"
 
 	"github.com/gopasspw/gopass/pkg/out"
@@ -13,9 +14,12 @@ import (
 )
 
 // LookupTemplate will lookup and return a template
-func (r *Store) LookupTemplate(ctx context.Context, name string) ([]byte, bool) {
+func (r *Store) LookupTemplate(ctx context.Context, name string) (string, []byte, bool) {
+	oName := name
 	_, store, name := r.getStore(ctx, name)
-	return store.LookupTemplate(ctx, name)
+	tName, content, found := store.LookupTemplate(ctx, name)
+	tName = filepath.Join(r.MountPoint(oName), tName)
+	return tName, content, found
 }
 
 // TemplateTree returns a tree of all templates
@@ -25,7 +29,7 @@ func (r *Store) TemplateTree(ctx context.Context) (tree.Tree, error) {
 	for _, t := range r.store.ListTemplates(ctx, "") {
 		out.Debug(ctx, "[<root>] Adding template %s", t)
 		if err := root.AddFile(t, "gopass/template"); err != nil {
-			out.Red(ctx, "Failed to add file to tree: %s", err)
+			out.Error(ctx, "Failed to add file to tree: %s", err)
 		}
 	}
 
@@ -42,7 +46,7 @@ func (r *Store) TemplateTree(ctx context.Context) (tree.Tree, error) {
 		for _, t := range substore.ListTemplates(ctx, alias) {
 			out.Debug(ctx, "[%s] Adding template %s", alias, t)
 			if err := root.AddFile(t, "gopass/template"); err != nil {
-				out.Red(ctx, "Failed to add file to tree: %s", err)
+				out.Error(ctx, "Failed to add file to tree: %s", err)
 			}
 		}
 	}
