@@ -14,7 +14,7 @@ required = ["github.com/dominikschulz/github-releases", "github.com/muesli/gopro
 
 [[constraint]]
   name = "github.com/gopasspw/gopass"
-  version = "1.8.1"
+  version = "1.8.5"
 
 [[override]]
   name = "github.com/hashicorp/hcl2"

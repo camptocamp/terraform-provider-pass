@@ -8,6 +8,7 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/gopasspw/gopass/pkg/action"
+	_ "github.com/gopasspw/gopass/pkg/backend/storage"
 	"github.com/gopasspw/gopass/pkg/config"
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"

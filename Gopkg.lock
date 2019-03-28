@@ -52,6 +52,12 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/armon/go-metrics"
+  packages = ["."]
+  revision = "f0300d1749da6fa982027e449ec0c7a145510c3c"
+
+[[projects]]
   name = "github.com/armon/go-radix"
   packages = ["."]
   revision = "1a2de0c21c94309923825da3df33a4381872c795"
@@ -242,6 +248,9 @@
     "pkg/backend/rcs/git/cli",
     "pkg/backend/rcs/git/gogit",
     "pkg/backend/rcs/noop",
+    "pkg/backend/storage",
+    "pkg/backend/storage/fs",
+    "pkg/backend/storage/kv/consul",
     "pkg/backend/storage/kv/inmem",
     "pkg/clipboard",
     "pkg/completion/fish",
@@ -281,6 +290,12 @@
   version = "v1.8.5"
 
 [[projects]]
+  name = "github.com/hashicorp/consul"
+  packages = ["api"]
+  revision = "ea5210a30e154f4da9a4c8e729b45b8ce7b9b92c"
+  version = "v1.4.4"
+
+[[projects]]
   name = "github.com/hashicorp/errwrap"
   packages = ["."]
   revision = "8a6fb523712970c966eefc6b39ed2c5e74880354"
@@ -306,6 +321,12 @@
   packages = ["."]
   revision = "6907afbebd2eef854f0be9194eb79b0ba75d7b29"
   version = "v0.8.0"
+
+[[projects]]
+  name = "github.com/hashicorp/go-immutable-radix"
+  packages = ["."]
+  revision = "27df80928bb34bb1b0d6d0e01b9e679902e7a6b5"
+  version = "v1.0.0"
 
 [[projects]]
   name = "github.com/hashicorp/go-multierror"
@@ -415,6 +436,12 @@
   packages = ["."]
   revision = "a335183dfd075f638afcc820c90591ca3c97eba6"
   version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/hashicorp/serf"
+  packages = ["coordinate"]
+  revision = "b89a09ebd4b1b570e0076d5097272e67c10ac4f6"
+  version = "v0.8.2"
 
 [[projects]]
   name = "github.com/hashicorp/terraform"
@@ -1071,6 +1098,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "36a4132ac93446dc01e8900425c5377c0be83698f27a4dfd3aefc00f44e70bed"
+  inputs-digest = "15cf6d3dc987638bfe216f2e447f7976c58417fef6fb703b200c2827b683fedc"
   solver-name = "gps-cdcl"
   solver-version = 1
