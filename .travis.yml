@@ -1,0 +1,9 @@
+language: go
+go_import_path: github.com/camptocamp/terraform-provider-pass
+go:
+  - "1.11"
+
+script:
+  - make test
+  - make vet
+  - make build
