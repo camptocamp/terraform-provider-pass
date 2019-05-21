@@ -1,9 +1,0 @@
-language: go
-
-go:
-    - 1.x
-    - 1.8.x
-    - master
-
-before_install:
-  - go get -v github.com/stretchr/testify/assert
