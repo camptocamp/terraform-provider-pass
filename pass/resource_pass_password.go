@@ -92,7 +92,7 @@ func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
 	st := meta.(*root.Store)
 	sec, err := st.Get(context.Background(), path)
 	if err != nil {
-		errors.Wrapf(err, "failed to retrieve password at %s", path)
+		return errors.Wrapf(err, "failed to retrieve password at %s", path)
 	}
 
 	d.Set("password", sec.Password())
