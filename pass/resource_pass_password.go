@@ -9,7 +9,7 @@ import (
 
 	"github.com/gopasspw/gopass/pkg/store/root"
 	"github.com/gopasspw/gopass/pkg/store/secret"
-	"github.com/hashicorp/terraform/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/pkg/errors"
 )
 
