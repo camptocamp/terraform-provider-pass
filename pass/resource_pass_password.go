@@ -32,12 +32,14 @@ func passPasswordResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "secret password.",
+				Sensitive: true,
 			},
 
 			"data": &schema.Schema{
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Description: "additional secret data.",
+				Sensitive: true,
 			},
 		},
 	}
