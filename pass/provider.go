@@ -8,12 +8,20 @@ import (
 
 	"github.com/blang/semver"
 	"github.com/gopasspw/gopass/pkg/action"
+	"github.com/gopasspw/gopass/pkg/backend/crypto/gpg"
 	_ "github.com/gopasspw/gopass/pkg/backend/storage"
 	"github.com/gopasspw/gopass/pkg/config"
+	"github.com/gopasspw/gopass/pkg/store/root"
+	"github.com/gopasspw/gopass/pkg/store/sub"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/pkg/errors"
 )
+
+type passProvider struct {
+	st  *root.Store
+	ctx context.Context
+}
 
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
@@ -48,6 +56,8 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	os.Setenv("PASSWORD_STORE_DIR", d.Get("store_dir").(string))
 
 	ctx := context.Background()
+	ctx = gpg.WithAlwaysTrust(ctx, true)
+	ctx = sub.WithCheckRecipients(ctx, false)
 
 	act, err := action.New(ctx, config.Load(), semver.Version{})
 	if err != nil {
@@ -68,5 +78,5 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 		}
 	}
 
-	return st, nil
+	return &passProvider{st, ctx}, nil
 }

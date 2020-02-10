@@ -1,13 +1,11 @@
 package pass
 
 import (
-	"context"
 	"fmt"
 	"log"
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/gopasspw/gopass/pkg/store/root"
 	"github.com/gopasspw/gopass/pkg/store/secret"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/pkg/errors"
@@ -48,7 +46,9 @@ func passPasswordResource() *schema.Resource {
 func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
-	st := meta.(*root.Store)
+	pp := meta.(*passProvider)
+	st := pp.st
+	ctx := pp.ctx
 
 	passwd := d.Get("password").(string)
 
@@ -60,10 +60,10 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 
 	if len(data) == 0 {
 		sec := secret.New(passwd, fmt.Sprintf(""))
-		err = st.Set(context.Background(), path, sec)
+		err = st.Set(ctx, path, sec)
 	} else {
 		sec := secret.New(passwd, fmt.Sprintf("---\n%s", dataYaml))
-		err = st.Set(context.Background(), path, sec)
+		err = st.Set(ctx, path, sec)
 	}
 
 	if err != nil {
@@ -78,9 +78,11 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	st := meta.(*root.Store)
+	pp := meta.(*passProvider)
+	st := pp.st
+	ctx := pp.ctx
 	log.Printf("[DEBUG] Deleting generic Vault from %s", path)
-	err := st.Delete(context.Background(), path)
+	err := st.Delete(ctx, path)
 	if err != nil {
 		return errors.Wrapf(err, "failed to delete password at %s", path)
 	}
@@ -91,8 +93,10 @@ func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error 
 func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	st := meta.(*root.Store)
-	sec, err := st.Get(context.Background(), path)
+	pp := meta.(*passProvider)
+	st := pp.st
+	ctx := pp.ctx
+	sec, err := st.Get(ctx, path)
 	if err != nil {
 		return errors.Wrapf(err, "failed to retrieve password at %s", path)
 	}
