@@ -14,31 +14,31 @@ func passwordDataSource() *schema.Resource {
 		Read: passwordDataSourceRead,
 
 		Schema: map[string]*schema.Schema{
-			"path": &schema.Schema{
+			"path": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "Full path from which a password will be read.",
 			},
 
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "secret password.",
 			},
 
-			"data": &schema.Schema{
+			"data": {
 				Type:        schema.TypeMap,
 				Computed:    true,
 				Description: "additional secret data.",
 			},
 
-			"body": &schema.Schema{
+			"body": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "raw secret data if not YAML.",
 			},
 
-			"full": &schema.Schema{
+			"full": {
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "entire secret contents",
