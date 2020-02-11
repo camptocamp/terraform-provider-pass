@@ -12,7 +12,7 @@ func TestDataSourcePassword(t *testing.T) {
 	r.Test(t, r.TestCase{
 		Providers: testProviders,
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: testDataSourcePassword_config,
 				Check:  testDataSourcePassword_check,
 			},

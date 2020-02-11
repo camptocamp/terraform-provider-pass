@@ -13,11 +13,11 @@ func TestResourcePassword(t *testing.T) {
 		Providers: testProviders,
 		PreCheck:  func() { testAccPreCheck(t) },
 		Steps: []r.TestStep{
-			r.TestStep{
+			{
 				Config: testResourcePassword_initialConfig,
 				Check:  testResourcePassword_initialCheck,
 			},
-			r.TestStep{
+			{
 				Config: testResourcePassword_updateConfig,
 				Check:  testResourcePassword_updateCheck,
 			},

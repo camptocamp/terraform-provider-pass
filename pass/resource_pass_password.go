@@ -21,25 +21,25 @@ func passPasswordResource() *schema.Resource {
 		Read:   passPasswordResourceRead,
 
 		Schema: map[string]*schema.Schema{
-			"path": &schema.Schema{
+			"path": {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
 				Description: "Full path where the pass data will be written.",
 			},
 
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "secret password.",
-				Sensitive: true,
+				Sensitive:   true,
 			},
 
-			"data": &schema.Schema{
+			"data": {
 				Type:        schema.TypeMap,
 				Optional:    true,
 				Description: "additional secret data.",
-				Sensitive: true,
+				Sensitive:   true,
 			},
 		},
 	}

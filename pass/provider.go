@@ -18,13 +18,13 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"store_dir": &schema.Schema{
+			"store_dir": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("PASSWORD_STORE_DIR", ""),
 				Description: "Password storage directory to use.",
 			},
-			"refresh_store": &schema.Schema{
+			"refresh_store": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
