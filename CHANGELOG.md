@@ -1,3 +1,12 @@
+## 1.3.0 (July 24, 2020)
+
+ENHANCEMENTS:
+
+* Set password resources values as sensitive
+* Return ResourceRead errors
+* Fix build with Go 1.13
+* Use new Terraform plugin SDK
+
 ## 1.2.1 (June 05, 2019)
 
 ENHANCEMENTS:
