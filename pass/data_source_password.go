@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 
-	"github.com/gopasspw/gopass/pkg/store/root"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/pkg/errors"
 )
@@ -50,7 +49,10 @@ func passwordDataSource() *schema.Resource {
 func passwordDataSourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
-	st := meta.(*root.Store)
+	pp := meta.(*PassProvider)
+	pp.mutex.Lock()
+	defer pp.mutex.Unlock()
+	st := pp.store
 	log.Printf("[DEBUG] Reading %s from Pass", path)
 
 	sec, err := st.Get(context.Background(), path)
