@@ -1,6 +1,7 @@
 Pass Terraform Provider
 =======================
 
+[![Terraform Registry Version](https://img.shields.io/badge/dynamic/json?color=blue&label=registry&query=%24.version&url=https%3A%2F%2Fregistry.terraform.io%2Fv1%2Fproviders%2Fcamptocamp%2Fpass)](https://registry.terraform.io/providers/camptocamp/pass)
 [![Go Report Card](https://goreportcard.com/badge/github.com/camptocamp/terraform-provider-pass)](https://goreportcard.com/report/github.com/camptocamp/terraform-provider-pass)
 [![Build Status](https://travis-ci.org/camptocamp/terraform-provider-pass.svg?branch=master)](https://travis-ci.org/camptocamp/terraform-provider-pass)
 [![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
