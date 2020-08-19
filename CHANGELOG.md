@@ -1,3 +1,15 @@
+## 1.4.0 (Aug 19, 2020)
+
+ENHANCEMENTS:
+
+* Add mutex to protect against concurrent operations (GH #36)
+* Build on Go 1.13
+
+BUG FIXES:
+
+* Update gopass dependencies
+
+
 ## 1.3.0 (July 24, 2020)
 
 ENHANCEMENTS:
