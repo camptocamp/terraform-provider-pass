@@ -1,5 +1,10 @@
 Pass Terraform Provider
 =======================
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/camptocamp/terraform-provider-pass)](https://goreportcard.com/report/github.com/camptocamp/terraform-provider-pass)
+[![Build Status](https://travis-ci.org/camptocamp/terraform-provider-pass.svg?branch=master)](https://travis-ci.org/camptocamp/terraform-provider-pass)
+[![By Camptocamp](https://img.shields.io/badge/by-camptocamp-fb7047.svg)](http://www.camptocamp.com)
+
 This provider adds integration between Terraform and [Pass][] and [Gopass][] password stores.
 
 [Pass][] is a password store using gpg to encrypt password and git to version.
