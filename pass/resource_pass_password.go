@@ -7,7 +7,6 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/gopasspw/gopass/pkg/store/root"
 	"github.com/gopasspw/gopass/pkg/store/secret"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/pkg/errors"
@@ -48,7 +47,10 @@ func passPasswordResource() *schema.Resource {
 func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
 
-	st := meta.(*root.Store)
+	pp := meta.(*PassProvider)
+	pp.mutex.Lock()
+	defer pp.mutex.Unlock()
+	st := pp.store
 
 	passwd := d.Get("password").(string)
 
@@ -78,7 +80,10 @@ func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	st := meta.(*root.Store)
+	pp := meta.(*PassProvider)
+	pp.mutex.Lock()
+	defer pp.mutex.Unlock()
+	st := pp.store
 	log.Printf("[DEBUG] Deleting generic Vault from %s", path)
 	err := st.Delete(context.Background(), path)
 	if err != nil {
@@ -91,7 +96,10 @@ func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error 
 func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	st := meta.(*root.Store)
+	pp := meta.(*PassProvider)
+	pp.mutex.Lock()
+	defer pp.mutex.Unlock()
+	st := pp.store
 	sec, err := st.Get(context.Background(), path)
 	if err != nil {
 		return errors.Wrapf(err, "failed to retrieve password at %s", path)

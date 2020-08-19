@@ -13,7 +13,7 @@ require (
 	github.com/gdamore/tcell v0.0.0-20190319073105-ec71b09872d7 // indirect
 	github.com/godbus/dbus v0.0.0-20190326200341-f93dedc6ceb4 // indirect
 	github.com/gokyle/twofactor v1.0.1 // indirect
-	github.com/gopasspw/gopass v1.8.5
+	github.com/gopasspw/gopass v1.9.2
 	github.com/goreleaser/goreleaser v0.140.1 // indirect
 	github.com/hashicorp/consul v1.4.4 // indirect
 	github.com/hashicorp/go-rootcerts v1.0.1 // indirect
