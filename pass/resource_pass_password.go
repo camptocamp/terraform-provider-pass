@@ -1,14 +1,12 @@
 package pass
 
 import (
+	"bytes"
 	"context"
-	"fmt"
 	"log"
+	"text/template"
 
-	"gopkg.in/yaml.v2"
-
-	"github.com/gopasspw/gopass/pkg/store/secret"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/pkg/errors"
 )
 
@@ -24,21 +22,40 @@ func passPasswordResource() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				ForceNew:    true,
-				Description: "Full path where the pass data will be written.",
+				Description: "Full path where the pass data will be written",
 			},
 
 			"password": {
 				Type:        schema.TypeString,
-				Required:    true,
-				Description: "secret password.",
+				Optional:    true,
+				Description: "Secret password",
 				Sensitive:   true,
 			},
 
 			"data": {
 				Type:        schema.TypeMap,
 				Optional:    true,
-				Description: "additional secret data.",
+				Description: "Additional key-value data",
 				Sensitive:   true,
+			},
+
+			"yaml": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "YAML encoded data",
+				Sensitive:   true,
+			},
+
+			"body": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Body of the secret",
+			},
+
+			"full": {
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "Entire secret contents",
 			},
 		},
 	}
@@ -46,48 +63,60 @@ func passPasswordResource() *schema.Resource {
 
 func passPasswordResourceWrite(d *schema.ResourceData, meta interface{}) error {
 	path := d.Get("path").(string)
+	log.Printf("writing secret to path %s", path)
 
-	pp := meta.(*PassProvider)
+	pp := meta.(*passProvider)
 	pp.mutex.Lock()
 	defer pp.mutex.Unlock()
 	st := pp.store
 
-	passwd := d.Get("password").(string)
-
+	password := d.Get("password").(string)
 	data := d.Get("data").(map[string]interface{})
-	dataYaml, err := yaml.Marshal(&data)
-	if err != nil {
-		return errors.Wrapf(err, "failed to marshal data as YAML for %s", path)
+	yaml := d.Get("yaml").(string)
+
+	if len(data) != 0 && yaml != "" {
+		return errors.New("can't set data and yaml at the same time")
 	}
 
-	if len(data) == 0 {
-		sec := secret.New(passwd, fmt.Sprintf(""))
-		err = st.Set(context.Background(), path, sec)
+	value := password
+
+	if yaml != "" {
+		value += "\n---\n" + yaml
 	} else {
-		sec := secret.New(passwd, fmt.Sprintf("---\n%s", dataYaml))
-		err = st.Set(context.Background(), path, sec)
+		var result bytes.Buffer
+		tmpl, err := template.New("secret").Parse(`
+{{ range $key, $value := .Data }}
+{{ $key }}: {{ $value }}
+{{ end }}`)
+		err = tmpl.Execute(&result, &templateData{data})
+		if err != nil {
+			return errors.New("error when rendering secret template")
+		}
+		value += result.String()
 	}
+
+	container := secretContainer{value: value}
+	err := st.Set(context.Background(), path, container)
 
 	if err != nil {
 		return errors.Wrapf(err, "failed to write secret at %s", path)
 	}
 
 	d.SetId(path)
-
 	return nil
 }
 
 func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	pp := meta.(*PassProvider)
+	pp := meta.(*passProvider)
 	pp.mutex.Lock()
 	defer pp.mutex.Unlock()
 	st := pp.store
-	log.Printf("[DEBUG] Deleting generic Vault from %s", path)
-	err := st.Delete(context.Background(), path)
+	log.Printf("deleting secret at %s", path)
+	err := st.Remove(context.Background(), path)
 	if err != nil {
-		return errors.Wrapf(err, "failed to delete password at %s", path)
+		return errors.Wrapf(err, "failed to delete secret at %s", path)
 	}
 
 	return nil
@@ -96,17 +125,8 @@ func passPasswordResourceDelete(d *schema.ResourceData, meta interface{}) error 
 func passPasswordResourceRead(d *schema.ResourceData, meta interface{}) error {
 	path := d.Id()
 
-	pp := meta.(*PassProvider)
+	pp := meta.(*passProvider)
 	pp.mutex.Lock()
 	defer pp.mutex.Unlock()
-	st := pp.store
-	sec, err := st.Get(context.Background(), path)
-	if err != nil {
-		return errors.Wrapf(err, "failed to retrieve password at %s", path)
-	}
-
-	d.Set("password", sec.Password())
-	d.Set("data", sec.Data())
-
-	return nil
+	return populateResourceData(d, pp, path, false)
 }

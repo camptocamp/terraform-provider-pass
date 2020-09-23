@@ -4,23 +4,23 @@ import (
 	"fmt"
 	"testing"
 
-	r "github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestDataSourcePassword(t *testing.T) {
 	r.Test(t, r.TestCase{
-		Providers: testProviders,
+		Providers: testAccProviders,
 		Steps: []r.TestStep{
 			{
-				Config: testDataSourcePassword_config,
-				Check:  testDataSourcePassword_check,
+				Config: testDataSourcePasswordConfig,
+				Check:  testDataSourcePasswordCheck,
 			},
 		},
 	})
 }
 
-var testDataSourcePassword_config = `
+var testDataSourcePasswordConfig = `
 
 resource "pass_password" "test" {
     path = "secret/foo"
@@ -36,7 +36,7 @@ data "pass_password" "test" {
 
 `
 
-func testDataSourcePassword_check(s *terraform.State) error {
+func testDataSourcePasswordCheck(s *terraform.State) error {
 	resourceState := s.Modules[0].Resources["data.pass_password.test"]
 	if resourceState == nil {
 		return fmt.Errorf("resource not found in state %v", s.Modules[0].Resources)

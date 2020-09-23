@@ -1,31 +1,15 @@
 package pass
 
 import (
-	"testing"
-
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
-func TestProvider(t *testing.T) {
-	if err := Provider().(*schema.Provider).InternalValidate(); err != nil {
-		t.Fatalf("err: %s", err)
-	}
-}
-
-var testProvider *schema.Provider
-var testProviders map[string]terraform.ResourceProvider
+var testAccProvider *schema.Provider
+var testAccProviders map[string]*schema.Provider
 
 func init() {
-	testProvider = Provider().(*schema.Provider)
-	testProviders = map[string]terraform.ResourceProvider{
-		"pass": testProvider,
+	testAccProvider = Provider()
+	testAccProviders = map[string]*schema.Provider{
+		"pass": testAccProvider,
 	}
-}
-
-func TestProvider_impl(t *testing.T) {
-	var _ terraform.ResourceProvider = Provider()
-}
-
-func testAccPreCheck(t *testing.T) {
 }
