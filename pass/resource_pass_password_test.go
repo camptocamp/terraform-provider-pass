@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"testing"
 
-	r "github.com/hashicorp/terraform-plugin-sdk/helper/resource"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	r "github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/terraform"
 )
 
 func TestResourcePassword(t *testing.T) {
 	r.Test(t, r.TestCase{
-		Providers: testProviders,
-		PreCheck:  func() { testAccPreCheck(t) },
+		Providers: testAccProviders,
 		Steps: []r.TestStep{
 			{
 				Config: testResourcePassword_initialConfig,
@@ -81,5 +80,19 @@ resource "pass_password" "test" {
 `
 
 func testResourcePassword_updateCheck(s *terraform.State) error {
+	resourceState := s.Modules[0].Resources["pass_password.test"]
+	if resourceState == nil {
+		return fmt.Errorf("resource not found in state")
+	}
+
+	instanceState := resourceState.Primary
+	if instanceState == nil {
+		return fmt.Errorf("resource has no primary instance")
+	}
+
+	if got, want := instanceState.Attributes["data.zip"], "zoop"; got != want {
+		return fmt.Errorf("data on test instance contains %s; want %s", got, want)
+	}
+
 	return nil
 }
