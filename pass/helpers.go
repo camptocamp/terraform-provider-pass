@@ -39,18 +39,18 @@ func populateResourceData(d *schema.ResourceData, provider *passProvider, path s
 			log.Printf("populating data with keys")
 			var data = make(map[string]interface{})
 			for _, key := range keys {
-				data[key] = sec.Get(key)
+				data[key], _ = sec.Get(key)
 			}
 			d.Set("data", data)
 		}
 	}
 
-	if err := d.Set("password", sec.Get("Password")); err != nil {
+	if err := d.Set("password", sec.Password()); err != nil {
 		log.Printf("error when setting password: %v", err)
 		return err
 	}
 
-	if err := d.Set("body", sec.GetBody()); err != nil {
+	if err := d.Set("body", sec.Body()); err != nil {
 		log.Printf("error when setting body: %v", err)
 		return err
 	}

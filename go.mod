@@ -5,7 +5,7 @@ replace github.com/stretchr/testify => github.com/stretchrcom/testify v1.6.1
 require (
 	github.com/aws/aws-sdk-go v1.31.13 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
-	github.com/gopasspw/gopass v1.10.1
+	github.com/gopasspw/gopass v1.11.0
 	github.com/hashicorp/hcl/v2 v2.6.0 // indirect
 	github.com/hashicorp/terraform-plugin-sdk/v2 v2.0.3
 	github.com/kr/pretty v0.2.0 // indirect
