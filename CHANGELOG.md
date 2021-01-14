@@ -1,3 +1,10 @@
+## 2.0.0 (Jan 14, 2021)
+
+BREAKING CHANGES:
+
+* Port to gopass 1.10 (GH #45) then 1.11 (GH #46)
+
+
 ## 1.4.0 (Aug 19, 2020)
 
 ENHANCEMENTS:
