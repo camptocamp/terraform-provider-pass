@@ -38,11 +38,13 @@ After building the provider, install it using the Terraform instructions for [in
 ## Example
 
 ```hcl
-provider "pass" {
-  store_dir = "/srv/password-store"    # defaults to $PASSWORD_STORE_DIR
-  refresh_store = false                # do not call `git pull`
+terraform {
+  required_providers {
+    pass = {
+      source = "camptocamp/pass"
+    }
+  }
 }
-
 
 resource "pass_password" "test" {
   path = "secret/foo"

@@ -11,6 +11,7 @@ build-all: linux windows darwin
 
 install: fmtcheck
 	go install
+	go generate
 
 linux: fmtcheck
 	@mkdir -p bin/
