@@ -132,4 +132,4 @@ $ make testacc
 ```
 
 [pass]: https://www.passwordstore.org/
-[gopass]: https://www.justwatch.com/gopass/
+[gopass]: https://www.gopass.pw
