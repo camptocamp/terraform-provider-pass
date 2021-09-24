@@ -4,6 +4,7 @@ import (
 	"context"
 	"sync"
 
+	"github.com/gopasspw/gopass/pkg/ctxutil"
 	"github.com/gopasspw/gopass/pkg/gopass/api"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/pkg/errors"
@@ -29,7 +30,7 @@ func Provider() *schema.Provider {
 func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	ctx := context.Background()
 
-	store, err := api.New(ctx)
+	store, err := api.New(ctxutil.WithShowParsing(ctx, false))
 	if err != nil {
 		return nil, errors.Wrap(err, "error instantiating password store")
 	}
