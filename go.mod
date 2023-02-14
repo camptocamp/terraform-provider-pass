@@ -3,7 +3,7 @@ module github.com/camptocamp/terraform-provider-pass
 replace github.com/stretchr/testify => github.com/stretchrcom/testify v1.6.1
 
 require (
-	github.com/aws/aws-sdk-go v1.31.13 // indirect
+	github.com/aws/aws-sdk-go v1.34.0 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/gopasspw/gopass v1.11.0
 	github.com/hashicorp/hcl/v2 v2.6.0 // indirect
