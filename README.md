@@ -12,8 +12,8 @@ This provider adds integration between Terraform and [Pass][] and [Gopass][] pas
 
 ## Requirements
 
-- [Terraform](https://www.terraform.io/downloads.html) 0.10.x
-- [Go](https://golang.org/doc/install) 1.10 and [dep](https://golang.github.io/dep/) (to build the provider plugin)
+- [Terraform](https://www.terraform.io/downloads.html) 1.5.x
+- [Go](https://golang.org/doc/install) 1.21 and [dep](https://golang.github.io/dep/) (to build the provider plugin)
 
 ## Building The Provider
 
@@ -106,7 +106,7 @@ The following attributes are exported:
 
 ## Developing the Provider
 
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.8+ is _required_). You'll also need to correctly setup a [GOPATH](http://golang.org/doc/code.html#GOPATH), as well as adding `$GOPATH/bin` to your `$PATH`.
+If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.21+ is _required_). You'll also need to correctly setup a [GOPATH](http://golang.org/doc/code.html#GOPATH), as well as adding `$GOPATH/bin` to your `$PATH`.
 
 To compile the provider, run `make build`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
 
